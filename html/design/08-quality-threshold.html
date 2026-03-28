@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Quality Threshold: Why Capability Doesn't Scale Linearly · outheis</title>
+  <link rel="icon" type="image/png" href="../favicon-96x96.png" sizes="96x96">
+  <link rel="icon" type="image/svg+xml" href="../favicon.svg">
+  <link rel="shortcut icon" href="../favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="../apple-touch-icon.png">
+  <link rel="manifest" href="../site.webmanifest">
+  <style>
+    @font-face {
+      font-family: 'Inter';
+      src: url('../assets/fonts/InterVariable.woff2') format('woff2'),
+           url('../assets/fonts/InterVariable.ttf') format('truetype');
+      font-weight: 100 900;
+      font-style: normal;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'Inter';
+      src: url('../assets/fonts/InterVariable-Italic.woff2') format('woff2');
+      font-weight: 100 900;
+      font-style: italic;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'Inter var';
+      src: url('../assets/fonts/InterVariable.woff2') format('woff2'),
+           url('../assets/fonts/InterVariable.ttf') format('truetype');
+      font-weight: 100 900;
+      font-style: normal;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'Inter var';
+      src: url('../assets/fonts/InterVariable-Italic.woff2') format('woff2');
+      font-weight: 100 900;
+      font-style: italic;
+      font-display: swap;
+    }
+  </style>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --font-body: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-ui: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-mono: SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      --color-text: #1a1a1a;
+      --color-text-muted: #666;
+      --color-text-faint: #999;
+      --color-border: #e0e0e0;
+      --color-bg-code: #f5f5f5;
+      --header-height: 52px;
+      --subnav-height: 40px;
+    }
+
+    @supports (font-variation-settings: normal) {
+      :root { --font-body: "Inter var", sans-serif; --font-ui: "Inter var", sans-serif; }
+    }
+
+    html, body {
+      width: 100%;
+      min-height: 100vh;
+      background: #fff;
+      font-family: var(--font-body);
+      font-size: 15px;
+      line-height: 1.6;
+      color: var(--color-text);
+    }
+
+    /* ── Header ── */
+
+    .header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: #fff;
+      border-bottom: 1px solid var(--color-border);
+    }
+
+    .header-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0 2rem;
+      height: var(--header-height);
+      gap: 2rem;
+    }
+
+    .logo-link {
+      display: flex;
+      align-items: center;
+      text-decoration: none;
+      flex-shrink: 0;
+    }
+
+    .site-name {
+      font-family: var(--font-ui);
+      font-size: 20px;
+      font-weight: 600;
+      color: var(--color-text);
+      letter-spacing: -0.01em;
+    }
+
+    .topnav {
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
+    }
+
+    .topnav a {
+      font-family: var(--font-ui);
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--color-text-muted);
+      text-decoration: none;
+      padding: 0.3rem 0.65rem;
+      border-radius: 4px;
+      white-space: nowrap;
+    }
+
+    .topnav a:hover { color: var(--color-text); background: var(--color-bg-code); }
+    .topnav a.active { color: var(--color-text); font-weight: 600; }
+    .topnav a.external { color: var(--color-text-faint); }
+
+    /* ── Sub-nav ── */
+
+    .subnav-bar {
+      border-bottom: 1px solid var(--color-border);
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+    .subnav-bar::-webkit-scrollbar { display: none; }
+    .subnav-bar:empty,
+    .subnav-bar.hidden { display: none; }
+
+    .subnav-inner {
+      display: flex;
+      align-items: center;
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0 2rem;
+      gap: 0.1rem;
+      height: var(--subnav-height);
+    }
+
+    .subnav-inner a {
+      font-family: var(--font-ui);
+      font-size: 13px;
+      color: var(--color-text-muted);
+      text-decoration: none;
+      padding: 0.25rem 0.6rem;
+      border-radius: 3px;
+      white-space: nowrap;
+    }
+
+    .subnav-inner a:hover { color: var(--color-text); background: var(--color-bg-code); }
+    .subnav-inner a.active { color: var(--color-text); font-weight: 500; }
+
+    /* ── Content ── */
+
+    .content {
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 2.5rem 2rem 4rem;
+    }
+
+    .content > *:first-child { margin-top: 0; }
+
+    .content h1 { font-family: var(--font-ui); font-size: 28px; font-weight: 600; margin-bottom: 0.5rem; letter-spacing: -0.02em; }
+    .content h2 { font-family: var(--font-ui); font-size: 18px; font-weight: 600; margin-top: 2rem; margin-bottom: 1.25rem; }
+    .content h3 { font-family: var(--font-ui); font-size: 15px; font-weight: 600; margin-top: 1.5rem; margin-bottom: 0.75rem; }
+    .content p { margin-bottom: 1rem; }
+    .content a { color: var(--color-text-muted); }
+    .content a:hover { color: var(--color-text); }
+    .content ul, .content ol { margin-bottom: 1rem; padding-left: 1.5rem; }
+    .content li { margin-bottom: 0.4rem; }
+
+    .content table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; font-family: var(--font-ui); font-size: 13px; }
+    .content th, .content td { text-align: left; padding: 0.5rem 0.75rem; border-bottom: 1px solid var(--color-border); }
+    .content th { font-weight: 500; font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--color-text-muted); }
+
+    .content code { font-family: var(--font-mono); font-size: 14px; background: var(--color-bg-code); padding: 0.15em 0.4em; border-radius: 3px; }
+    .content pre { background: var(--color-bg-code); padding: 1rem 1.25rem; overflow-x: auto; margin: 1.5rem 0; font-size: 13px; border-radius: 4px; line-height: 1.5; }
+    .content pre code { background: none; padding: 0; border-radius: 0; }
+
+    .content hr { border: none; border-top: 1px solid var(--color-border); margin: 1.5rem 0; }
+    .content strong { font-weight: 500; }
+    .content em { font-style: italic; }
+    .content blockquote { border-left: 2px solid var(--color-border); padding-left: 1.25rem; margin: 1.5rem 0; color: var(--color-text-muted); font-style: italic; }
+    .content .lead { font-style: italic; color: var(--color-text-muted); margin-bottom: 2rem; }
+    .content .footer { font-size: 12px; color: var(--color-text-faint); font-style: italic; }
+
+    /* ── Mobile ── */
+
+    /* ── Language switch ── */
+
+    .lang-switch {
+      font-family: var(--font-ui);
+      font-size: 13px;
+      color: var(--color-text-muted);
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .lang-switch .lang-active {
+      color: var(--color-text);
+      font-weight: 500;
+    }
+
+    .lang-switch a.lang-link {
+      color: var(--color-text-muted);
+      text-decoration: none;
+    }
+
+    .lang-switch a.lang-link:hover { color: var(--color-text); }
+
+    /* ── Mobile ── */
+
+    @media (max-width: 640px) {
+      .header-inner { padding: 0 1.25rem; gap: 1rem; }
+      .topnav { gap: 0; }
+      .topnav a { padding: 0.3rem 0.5rem; font-size: 13px; }
+      .topnav a.external { display: none; }
+      .subnav-inner { padding: 0 1.25rem; }
+      .content { padding: 2rem 1.25rem 3rem; }
+      .content h1 { font-size: 24px; }
+      .content h2 { font-size: 16px; }
+    }
+  </style>
+</head>
+<body>
+  <header class="header">
+    <div class="header-inner">
+      <a href="../index.html" class="logo-link">
+        <span class="site-name">οὐθείς</span>
+      </a>
+      <nav class="topnav">
+        <a href="../foundations/index.html">Foundations</a>
+        <a href="../design/index.html" class="active">Design</a>
+        <a href="../implementation/architecture.html">Implementation</a>
+        <a href="../installation/release-notes.html">Installation</a>
+        <a href="../workflows/index.html">Workflows</a>
+        <a href="https://github.com/outheis-labs/outheis-beta" class="external">GitHub ↗</a>
+      </nav>
+      <div class="lang-switch"><span class="lang-active">EN</span> · <a href="../de/design/08-quality-threshold.html" class="lang-link">DE</a></div>
+    </div>
+  </header>
+  <div class="subnav-bar">
+    <div class="subnav-inner">
+      <a href="../design/index.html">Overview</a>
+      <a href="../design/01-why-os-principles.html">OS Principles</a>
+      <a href="../design/02-systems-survey.html">Systems Survey</a>
+      <a href="../design/03-architecture.html">Architecture</a>
+      <a href="../design/04-data-formats.html">Data Formats</a>
+      <a href="../design/05-related-work.html">Related Work</a>
+      <a href="../design/06-agent-prompts.html">Agent Prompts</a>
+      <a href="../design/07-hybrid-memory-stack.html">Hybrid Memory Stack</a>
+      <a href="../design/08-quality-threshold.html" class="active">Quality Threshold</a>
+    </div>
+  </div>
+  <main class="content">
+    <h1 id="the-quality-threshold-why-capability-doesnt-scale-linearly">The Quality Threshold: Why Capability Doesn't Scale Linearly</h1>
+<p><em>On emergent abilities, the limits of parallelism, and the minimum viable model.</em></p>
+<hr />
+<h2 id="the-intuition-that-fails">The Intuition That Fails</h2>
+<p>When a model is too small for a task, the instinct is to compensate: use more models, run more passes, add more structure. If one 3B model can't reliably produce a tool call, perhaps three of them — voting, checking each other, retrying — can approximate the reliability of a single capable model.</p>
+<p>This intuition is wrong. It fails not for engineering reasons, but for reasons intrinsic to how language models develop capability. Understanding why requires looking at what "capability" actually means at these scales.</p>
+<hr />
+<h2 id="emergent-abilities-and-the-threshold-effect">Emergent Abilities and the Threshold Effect</h2>
+<p>Large language models do not scale smoothly. Certain abilities are absent at small scale and appear abruptly as scale increases — not as gradual improvements, but as phase transitions.</p>
+<p>Wei et al. (2022) documented this across a range of tasks: few-shot arithmetic, logical reasoning, multi-step inference, instruction following. At small scales, performance is near chance. At a threshold — different for each capability, typically in the range of 10–100 billion parameters — performance jumps discontinuously. The models are not gradually getting better at these tasks; they are not doing them at all, and then they are.</p>
+<p>The relevant threshold for outheis is <strong>structured tool dispatch</strong>: producing a valid JSON tool call with correct argument names and types, derived from a natural-language query. This is not pattern matching against training examples. It requires:</p>
+<ol>
+<li>Understanding the query semantically</li>
+<li>Identifying which tool satisfies the intent</li>
+<li>Extracting the correct arguments from context</li>
+<li>Producing syntactically valid structured output</li>
+</ol>
+<p>Models below the threshold fail on step 1 or 3. They produce plausible-looking output — often structurally valid JSON — but with wrong tool names, hallucinated arguments, or complete non sequiturs. The failures are not graceful degradations; they are category errors.</p>
+<hr />
+<h2 id="why-parallelism-does-not-help">Why Parallelism Does Not Help</h2>
+<p>If capability is absent below the threshold, adding more below-threshold models does not produce it. This is not a resource argument. It is an argument about the nature of what is missing.</p>
+<p>Consider what it would mean for three 3B models to "vote" on a tool call. Each produces its best guess. Voting requires comparing outputs and finding a majority — but if none of the outputs is correct, majority vote returns the most common error, not a correct result. Worse: the errors from similar small models are correlated. They fail in the same ways because they have the same limitations. Ensemble methods gain from <em>diverse</em> failures, not from <em>identical</em> failures.</p>
+<p>More passes don't help either. A model that cannot derive the correct argument from the query on the first pass will not derive it on the third. The pass is not where the capability lives; the capability would need to live in the weights, and the weights don't have it.</p>
+<p>The engineering parallel: you cannot implement a feature in software by running buggy code faster. The bug must be fixed. For language models, below the threshold, there is no equivalent of "fixing the bug" without retraining. The model is what it is.</p>
+<hr />
+<h2 id="the-structural-argument">The Structural Argument</h2>
+<p>There is a deeper reason why the threshold cannot be bypassed. Transformer models process a query in a single forward pass through all layers. Each layer refines the representation of the query, building increasingly abstract features. The final layer produces the output distribution.</p>
+<p>The capability to follow a complex instruction depends on having enough layers, enough heads, and enough parameters to represent the necessary intermediate abstractions. A small model does not have a degraded version of this ability; it has a different architecture that reaches a lower ceiling. You can run it more times, but the ceiling does not move.</p>
+<p>Larger models also have more capacity to represent what is not said — inference from context, disambiguation, recognition of unstated intent. This is exactly what tool dispatch requires: "check my agenda" must be resolved to an <code>agenda_query</code> call, not a <code>file_read</code> or <code>memory_lookup</code>. The resolution requires contextual inference that a small model cannot reliably perform.</p>
+<hr />
+<h2 id="the-practical-threshold-for-outheis">The Practical Threshold for outheis</h2>
+<p>Empirically, the 7B boundary holds reliably for instruction-following in outheis's context. Below it:</p>
+<ul>
+<li>Tool call syntax is correct; tool selection is wrong</li>
+<li>Arguments are plausible-sounding but don't correspond to actual parameters</li>
+<li>Multi-step reasoning (which tool, then which arguments) collapses</li>
+</ul>
+<p>At 7B with instruction tuning, the threshold is crossed for routing-class tasks (relay). At 12–14B, it holds for tool-use agents (zeno, cato) if verified. Below 7B, no amount of prompt engineering, retrying, or structural scaffolding produces reliable results — because the capability the scaffold assumes is not there.</p>
+<p>This means the relevant question when selecting a model is not "how small can I go?" but "is this model past the threshold for the task?" It is a binary, not a gradient. Testing confirms this: <code>test_ollama_tool_use.py</code> produces ✓ or ✗, not a score. A ✗ model cannot be provisionally used with more care.</p>
+<hr />
+<h2 id="what-this-means-for-outheis-design">What This Means for outheis Design</h2>
+<p><strong>One capable agent beats many weak ones.</strong> outheis is built around a small number of specialized agents, each with a focused tool set and a model that has crossed the relevant capability threshold. This is not a concession to practical limitations; it is a structural property of how these systems work.</p>
+<p><strong>The boundary is a quality threshold, not a resource threshold.</strong> The decision to require a minimum model size is not about running costs or latency. It is about whether the capability required by the task exists in the model at all. A model that fails the tool-use test is not a slower or cheaper version of one that passes; it is a different category of tool.</p>
+<p><strong>Verification is mandatory before deployment.</strong> Because capability is threshold-based and not inferrable from parameter count alone (different architectures, different training regimes, different fine-tuning), empirical testing is required. The parameter count is a heuristic for where to start looking; the test result is the ground truth.</p>
+<p><strong>Disable rather than degrade.</strong> When no model past the threshold is available for a given agent role, the correct response is to disable that agent's scheduled tasks, not to run them with a below-threshold model. A nightly pattern inference run that produces hallucinated memories is worse than no run: it injects false data into the knowledge base. A failed run leaves the system unchanged. A degraded run corrupts it.</p>
+<hr />
+<h2 id="further-reading">Further Reading</h2>
+<ul>
+<li>Wei, J. et al. "Emergent Abilities of Large Language Models." <em>Transactions on Machine Learning Research</em>, 2022. — The systematic documentation of threshold effects across capability dimensions.</li>
+<li>Kaplan, J. et al. "Scaling Laws for Neural Language Models." <em>arXiv</em>, 2020. — Power-law relationships in loss; the baseline from which emergence departures are measured.</li>
+<li>Schaeffer, R. et al. "Are Emergent Abilities of Large Language Models a Mirage?" <em>NeurIPS</em>, 2023. — The challenge: some apparent emergence may be an artifact of metric choice. Worth reading alongside Wei et al. for an accurate picture.</li>
+<li>Srivastava, A. et al. "Beyond the Imitation Game: Quantifying and Extrapolating the Capabilities of Language Models." <em>Transactions on Machine Learning Research</em>, 2023. — The BIG-Bench benchmark; large-scale empirical evidence for capability emergence across 200+ tasks.</li>
+</ul>
+    <hr>
+    <p class="footer">Open source under AGPL-3.0 · <a href="https://github.com/outheis-labs/outheis-beta">Code on GitHub</a></p>
+  </main>
+</body>
+</html>

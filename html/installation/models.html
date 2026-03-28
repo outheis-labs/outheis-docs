@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Model Selection · outheis</title>
+  <link rel="icon" type="image/png" href="../favicon-96x96.png" sizes="96x96">
+  <link rel="icon" type="image/svg+xml" href="../favicon.svg">
+  <link rel="shortcut icon" href="../favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="../apple-touch-icon.png">
+  <link rel="manifest" href="../site.webmanifest">
+  <style>
+    @font-face {
+      font-family: 'Inter';
+      src: url('../assets/fonts/InterVariable.woff2') format('woff2'),
+           url('../assets/fonts/InterVariable.ttf') format('truetype');
+      font-weight: 100 900;
+      font-style: normal;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'Inter';
+      src: url('../assets/fonts/InterVariable-Italic.woff2') format('woff2');
+      font-weight: 100 900;
+      font-style: italic;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'Inter var';
+      src: url('../assets/fonts/InterVariable.woff2') format('woff2'),
+           url('../assets/fonts/InterVariable.ttf') format('truetype');
+      font-weight: 100 900;
+      font-style: normal;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'Inter var';
+      src: url('../assets/fonts/InterVariable-Italic.woff2') format('woff2');
+      font-weight: 100 900;
+      font-style: italic;
+      font-display: swap;
+    }
+  </style>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --font-body: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-ui: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-mono: SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      --color-text: #1a1a1a;
+      --color-text-muted: #666;
+      --color-text-faint: #999;
+      --color-border: #e0e0e0;
+      --color-bg-code: #f5f5f5;
+      --header-height: 52px;
+      --subnav-height: 40px;
+    }
+
+    @supports (font-variation-settings: normal) {
+      :root { --font-body: "Inter var", sans-serif; --font-ui: "Inter var", sans-serif; }
+    }
+
+    html, body {
+      width: 100%;
+      min-height: 100vh;
+      background: #fff;
+      font-family: var(--font-body);
+      font-size: 15px;
+      line-height: 1.6;
+      color: var(--color-text);
+    }
+
+    /* ── Header ── */
+
+    .header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: #fff;
+      border-bottom: 1px solid var(--color-border);
+    }
+
+    .header-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0 2rem;
+      height: var(--header-height);
+      gap: 2rem;
+    }
+
+    .logo-link {
+      display: flex;
+      align-items: center;
+      text-decoration: none;
+      flex-shrink: 0;
+    }
+
+    .site-name {
+      font-family: var(--font-ui);
+      font-size: 20px;
+      font-weight: 600;
+      color: var(--color-text);
+      letter-spacing: -0.01em;
+    }
+
+    .topnav {
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
+    }
+
+    .topnav a {
+      font-family: var(--font-ui);
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--color-text-muted);
+      text-decoration: none;
+      padding: 0.3rem 0.65rem;
+      border-radius: 4px;
+      white-space: nowrap;
+    }
+
+    .topnav a:hover { color: var(--color-text); background: var(--color-bg-code); }
+    .topnav a.active { color: var(--color-text); font-weight: 600; }
+    .topnav a.external { color: var(--color-text-faint); }
+
+    /* ── Sub-nav ── */
+
+    .subnav-bar {
+      border-bottom: 1px solid var(--color-border);
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+    .subnav-bar::-webkit-scrollbar { display: none; }
+    .subnav-bar:empty,
+    .subnav-bar.hidden { display: none; }
+
+    .subnav-inner {
+      display: flex;
+      align-items: center;
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0 2rem;
+      gap: 0.1rem;
+      height: var(--subnav-height);
+    }
+
+    .subnav-inner a {
+      font-family: var(--font-ui);
+      font-size: 13px;
+      color: var(--color-text-muted);
+      text-decoration: none;
+      padding: 0.25rem 0.6rem;
+      border-radius: 3px;
+      white-space: nowrap;
+    }
+
+    .subnav-inner a:hover { color: var(--color-text); background: var(--color-bg-code); }
+    .subnav-inner a.active { color: var(--color-text); font-weight: 500; }
+
+    /* ── Content ── */
+
+    .content {
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 2.5rem 2rem 4rem;
+    }
+
+    .content > *:first-child { margin-top: 0; }
+
+    .content h1 { font-family: var(--font-ui); font-size: 28px; font-weight: 600; margin-bottom: 0.5rem; letter-spacing: -0.02em; }
+    .content h2 { font-family: var(--font-ui); font-size: 18px; font-weight: 600; margin-top: 2rem; margin-bottom: 1.25rem; }
+    .content h3 { font-family: var(--font-ui); font-size: 15px; font-weight: 600; margin-top: 1.5rem; margin-bottom: 0.75rem; }
+    .content p { margin-bottom: 1rem; }
+    .content a { color: var(--color-text-muted); }
+    .content a:hover { color: var(--color-text); }
+    .content ul, .content ol { margin-bottom: 1rem; padding-left: 1.5rem; }
+    .content li { margin-bottom: 0.4rem; }
+
+    .content table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; font-family: var(--font-ui); font-size: 13px; }
+    .content th, .content td { text-align: left; padding: 0.5rem 0.75rem; border-bottom: 1px solid var(--color-border); }
+    .content th { font-weight: 500; font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--color-text-muted); }
+
+    .content code { font-family: var(--font-mono); font-size: 14px; background: var(--color-bg-code); padding: 0.15em 0.4em; border-radius: 3px; }
+    .content pre { background: var(--color-bg-code); padding: 1rem 1.25rem; overflow-x: auto; margin: 1.5rem 0; font-size: 13px; border-radius: 4px; line-height: 1.5; }
+    .content pre code { background: none; padding: 0; border-radius: 0; }
+
+    .content hr { border: none; border-top: 1px solid var(--color-border); margin: 1.5rem 0; }
+    .content strong { font-weight: 500; }
+    .content em { font-style: italic; }
+    .content blockquote { border-left: 2px solid var(--color-border); padding-left: 1.25rem; margin: 1.5rem 0; color: var(--color-text-muted); font-style: italic; }
+    .content .lead { font-style: italic; color: var(--color-text-muted); margin-bottom: 2rem; }
+    .content .footer { font-size: 12px; color: var(--color-text-faint); font-style: italic; }
+
+    /* ── Mobile ── */
+
+    /* ── Language switch ── */
+
+    .lang-switch {
+      font-family: var(--font-ui);
+      font-size: 13px;
+      color: var(--color-text-muted);
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .lang-switch .lang-active {
+      color: var(--color-text);
+      font-weight: 500;
+    }
+
+    .lang-switch a.lang-link {
+      color: var(--color-text-muted);
+      text-decoration: none;
+    }
+
+    .lang-switch a.lang-link:hover { color: var(--color-text); }
+
+    /* ── Mobile ── */
+
+    @media (max-width: 640px) {
+      .header-inner { padding: 0 1.25rem; gap: 1rem; }
+      .topnav { gap: 0; }
+      .topnav a { padding: 0.3rem 0.5rem; font-size: 13px; }
+      .topnav a.external { display: none; }
+      .subnav-inner { padding: 0 1.25rem; }
+      .content { padding: 2rem 1.25rem 3rem; }
+      .content h1 { font-size: 24px; }
+      .content h2 { font-size: 16px; }
+    }
+  </style>
+</head>
+<body>
+  <header class="header">
+    <div class="header-inner">
+      <a href="../index.html" class="logo-link">
+        <span class="site-name">οὐθείς</span>
+      </a>
+      <nav class="topnav">
+        <a href="../foundations/index.html">Foundations</a>
+        <a href="../design/index.html">Design</a>
+        <a href="../implementation/architecture.html">Implementation</a>
+        <a href="../installation/release-notes.html" class="active">Installation</a>
+        <a href="../workflows/index.html">Workflows</a>
+        <a href="https://github.com/outheis-labs/outheis-beta" class="external">GitHub ↗</a>
+      </nav>
+      <div class="lang-switch"><span class="lang-active">EN</span> · <a href="../de/installation/models.html" class="lang-link">DE</a></div>
+    </div>
+  </header>
+  <div class="subnav-bar">
+    <div class="subnav-inner">
+      <a href="../installation/release-notes.html">Release Notes</a>
+      <a href="../implementation/guide.html">Getting Started</a>
+      <a href="../installation/models.html" class="active">Models</a>
+      <a href="../installation/communication.html">Communication</a>
+      <a href="../implementation/config.html">Configuration</a>
+      <a href="../implementation/migration.html">Migration</a>
+      <a href="../implementation/webui.html">Web UI</a>
+    </div>
+  </div>
+  <main class="content">
+    <h1 id="model-selection">Model Selection</h1>
+<p><em>Which LLM to use with outheis — and for which agent.</em></p>
+<p>outheis supports three model providers: Anthropic (cloud), Ollama (local), and OpenAI (cloud). Each agent has a model alias (<code>fast</code>, <code>capable</code>, <code>reasoning</code>, or a custom name) that maps to a concrete model in <code>config.json</code>.</p>
+<hr />
+<h2 id="anthropic">Anthropic</h2>
+<p>Recommended starting point. No additional setup beyond an API key.</p>
+<table>
+<thead>
+<tr>
+<th>Model</th>
+<th>ID</th>
+<th>Speed</th>
+<th>Cost</th>
+<th>Context</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Claude Haiku 4.5</td>
+<td><code>claude-haiku-4-5-20251001</code></td>
+<td>Fast</td>
+<td>Low</td>
+<td>200k</td>
+</tr>
+<tr>
+<td>Claude Sonnet 4.5</td>
+<td><code>claude-sonnet-4-5</code></td>
+<td>Medium</td>
+<td>Medium</td>
+<td>200k</td>
+</tr>
+<tr>
+<td>Claude Opus 4.5</td>
+<td><code>claude-opus-4-5</code></td>
+<td>Slow</td>
+<td>High</td>
+<td>200k</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Tool-use reliability:</strong> Excellent across all models.</p>
+<p><strong>Recommendation for outheis:</strong>
+- <code>fast</code> alias → Haiku — for relay, data, agenda (high-frequency, tool-heavy)
+- <code>capable</code> alias → Sonnet — for pattern, action (reasoning-heavy tasks)
+- <code>reasoning</code> alias → Opus — optional, for complex multi-step analysis</p>
+<hr />
+<h2 id="ollama-local">Ollama (local)</h2>
+<p>Runs entirely on your hardware. No API costs, no data leaves the system. Requires <code>ollama</code> installed and <code>pip install openai</code>.</p>
+<blockquote>
+<p><strong>Test environment:</strong> All benchmarks were measured on Apple M4, 24 GB unified memory. Results are a good basis for estimating performance on comparable hardware.</p>
+</blockquote>
+<p><strong>GPU acceleration:</strong> On Apple Silicon (M-series), Ollama uses Metal automatically — no configuration needed. On Linux/Windows, Vulkan support is available for AMD and Intel GPUs via <code>OLLAMA_VULKAN=1</code> (experimental). Environment variables for the Ollama server can be stored in outheis config under <code>llm.providers.ollama.env_vars</code> and are shown in the Web UI as a reference.</p>
+<p><strong>Multiple models simultaneously:</strong> By default, Ollama loads only one model at a time (<code>OLLAMA_MAX_LOADED_MODELS=1</code>). If different agents are configured with different model names (e.g., <code>gemma4:e4b</code> for relay, <code>voytas26/...</code> for agenda), every agent handoff triggers a model swap — unloading one model and loading the other. This causes a delay of several seconds per swap and effectively nullifies the <code>run_mode: persistent</code> setting.</p>
+<p>To keep two models loaded at the same time, set <code>OLLAMA_MAX_LOADED_MODELS=2</code> <strong>on the Ollama server process</strong> before it starts. On macOS with the Ollama app:</p>
+<pre><code class="language-sh">launchctl setenv OLLAMA_MAX_LOADED_MODELS 2
+# then restart Ollama (quit from menubar or pkill Ollama)
+</code></pre>
+<p>This setting is lost on reboot. For a permanent solution, add it to <code>~/.zshrc</code> or <code>~/.profile</code> and ensure Ollama is started from a login shell, or set it in <code>~/Library/LaunchAgents/com.ollama.ollama.plist</code>.</p>
+<blockquote>
+<p><strong>Note:</strong> <code>llm.providers.ollama.env_vars</code> in <code>config.json</code> is reference storage — outheis displays these values in the Web UI but does not inject them into the Ollama server process. The server must be started with the variable set in its own environment.</p>
+</blockquote>
+<h3 id="code-agent-alan">Code Agent (alan)</h3>
+<p>Alan's system prompt contains only source root, role, and open proposals — no user memory. Tool-use reliability is the main requirement. Models are tested via the Ollama OpenAI-compatible endpoint with realistic tool schemas.</p>
+<table>
+<thead>
+<tr>
+<th>Model</th>
+<th>Size</th>
+<th>Tool-use</th>
+<th>Speed</th>
+<th>Verdict</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>llama3.2:3b</strong></td>
+<td>3B</td>
+<td>✓ Reliable</td>
+<td>~2s</td>
+<td>Good — fast, correct tool calls</td>
+</tr>
+<tr>
+<td><strong>llama3.1:8b</strong></td>
+<td>8B</td>
+<td>✓ Reliable</td>
+<td>~10s</td>
+<td>Good — solid tool-use</td>
+</tr>
+<tr>
+<td><strong>mistral-nemo:12b</strong></td>
+<td>12B</td>
+<td>✓ Reliable</td>
+<td>~13s</td>
+<td>Good — accurate answers</td>
+</tr>
+<tr>
+<td><strong>devstral-small-2:24b</strong></td>
+<td>24B</td>
+<td>✓ Reliable</td>
+<td>~28s</td>
+<td>Best quality, slowest</td>
+</tr>
+<tr>
+<td>qwen3:14b</td>
+<td>14B</td>
+<td>✗ None</td>
+<td>~22s</td>
+<td>Not suitable</td>
+</tr>
+<tr>
+<td>qwen2.5-coder:14b</td>
+<td>14B</td>
+<td>✗ None</td>
+<td>~12s</td>
+<td>Not suitable — outputs JSON as text</td>
+</tr>
+<tr>
+<td>mistral:7b</td>
+<td>7B</td>
+<td>✗ None</td>
+<td>~9s</td>
+<td>Not suitable</td>
+</tr>
+<tr>
+<td>deepseek-coder:6.7b</td>
+<td>6.7B</td>
+<td>Error</td>
+<td>—</td>
+<td>Tools API not supported</td>
+</tr>
+<tr>
+<td>qwen3:4b</td>
+<td>4B</td>
+<td>✗ None</td>
+<td>~7s</td>
+<td>Not suitable</td>
+</tr>
+<tr>
+<td>gemma4:e4b</td>
+<td>4B</td>
+<td>✗ Unreliable</td>
+<td>—</td>
+<td>Not suitable</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Hardware requirements:</strong> 24B models require approximately 16 GB RAM. 8B models run on 8–10 GB. 3B models run on 2–4 GB.</p>
+<p><strong>Recommendation for alan:</strong> <code>llama3.1:8b</code> is the best balance of speed and reliability. <code>llama3.2:3b</code> works if RAM is limited. <code>devstral-small-2:24b</code> gives the best quality if you have the RAM.</p>
+<p><strong>Test tool:</strong> <code>python tools/test_ollama_tool_use.py</code> from the outheis-beta repository.</p>
+<h3 id="generic-agents-relay-data-agenda">Generic Agents (relay, data, agenda)</h3>
+<p>Generic agents run with full system prompts: user memory, vault context, language settings, skills, and rules. The bar is higher than raw tool-use — the model must route correctly between agents, synthesize results across multiple tool calls, and report "no results" without inventing data.</p>
+<p>Models tested using <code>tools/test_agent_capability.py</code> (9 scenarios: relay routing, vault search, file read, error recovery, hallucination detection, agenda read and add):</p>
+<table>
+<thead>
+<tr>
+<th>Model</th>
+<th>Size</th>
+<th>OK</th>
+<th>Partial</th>
+<th>Fail</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>voytas26/openclaw-oss-20b-deterministic</strong></td>
+<td>20B</td>
+<td>6/9</td>
+<td>2</td>
+<td>1</td>
+<td>Best routing and error recovery</td>
+</tr>
+<tr>
+<td><strong>gpt-oss:20b</strong></td>
+<td>20B</td>
+<td>6/9</td>
+<td>2</td>
+<td>1</td>
+<td>Strong error recovery</td>
+</tr>
+<tr>
+<td><strong>glm-4.7-flash-32k</strong></td>
+<td>17B</td>
+<td>6/9</td>
+<td>1</td>
+<td>2</td>
+<td>Slowest (~180s total for all scenarios)</td>
+</tr>
+<tr>
+<td><strong>gemma4:e4b</strong></td>
+<td>MoE/4B active</td>
+<td>6/9</td>
+<td>1</td>
+<td>2</td>
+<td>hallucinates on empty input; empty response on no-tool query; ~133s total</td>
+</tr>
+<tr>
+<td>devstral-small-2:24b</td>
+<td>24B</td>
+<td>5/9</td>
+<td>3</td>
+<td>1</td>
+<td>hallucinates on empty-results test</td>
+</tr>
+<tr>
+<td>mistral-nemo:12b</td>
+<td>12B</td>
+<td>3/9</td>
+<td>4</td>
+<td>2</td>
+<td>Routing: no tool calls</td>
+</tr>
+<tr>
+<td>llama3.1:8b</td>
+<td>8B</td>
+<td>2/9</td>
+<td>4</td>
+<td>3</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<p><strong>The 20B class shows a clear step up.</strong> Routing, multi-step result synthesis, and error recovery work reliably. Consistent weakness across all models: date arithmetic in agenda operations (computing "tomorrow" from the system prompt date).</p>
+<p><code>gemma4:e4b</code> is a Mixture-of-Experts model: 9.6 GB on disk, ~4B active parameters per token. It scores 6/9 — matching the 20B class — but has two failures: it hallucinates on the empty-results scenario (invents file names), and produces an empty response on a no-tool-needed query (no text when no tool call was appropriate). At ~15s per scenario on M4/24 GB it is the most efficient model tested at this score level. The larger gemma4 variants are worth evaluating on M5 hardware.</p>
+<p><code>devstral-small-2:24b</code> hallucinates on the empty-results scenario — the model reported a filename that appeared only in the "no results" explanation, not as an actual match.</p>
+<p>No model scores fully correct on all scenarios. The 20B class (and gemma4:e4b) is the current lower bound for practical use as generic agents.</p>
+<p><strong>Privacy note:</strong> If data privacy is a concern, all agents that process personal vault content (relay, data, agenda) must use local models — not just the code agent. This currently requires a cloud provider or a hardware upgrade that enables 20B+ inference at acceptable speed.</p>
+<p><strong>Re-evaluation on M5:</strong> The 20B class will run significantly faster on M5 hardware. Use <code>python tools/test_agent_capability.py</code> to re-test after a hardware upgrade — and extend to 32B+ models, and larger gemma4 variants.</p>
+<h3 id="pattern-agent-rumi">Pattern Agent (rumi)</h3>
+<p>rumi runs nightly with no user waiting — latency is irrelevant. The bar is quality: extract memory entries without hallucination, consolidate duplicates and contradictions, distill skills from mature memory, promote stable patterns to rules, and reflect on meta-learning.</p>
+<p>Tested with <code>tools/test_pattern_agent.py</code> — 10 scenarios across all 5 phases of <code>run_scheduled()</code>:</p>
+<table>
+<thead>
+<tr>
+<th>Model</th>
+<th>Size</th>
+<th>OK</th>
+<th>Partial</th>
+<th>Fail</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>gemma4:26b</td>
+<td>26B</td>
+<td>6/10</td>
+<td>2</td>
+<td>2</td>
+<td>hallucinates on extract_empty; distill_quality failure; ~270s total</td>
+</tr>
+</tbody>
+</table>
+<p><code>gemma4:26b</code> is a dense 26B model (all parameters active per token). It scores 6/10 with two failures: it hallucinates on the empty-extraction scenario (invents a memory entry from casual chat where none should be extracted), and fails to distill when the memory is clearly ready. The consolidate phase finds 0 of 2 duplicates (partial). At ~270s total for all 10 scenarios on M4/24 GB, nightly runtime is acceptable — but the hallucination issue means rumi would occasionally create false memory entries. Not yet suitable for production use as a local rumi.</p>
+<p><strong>Test tool:</strong> <code>python tools/test_pattern_agent.py</code> from the outheis-beta repository.</p>
+<hr />
+<h2 id="openai">OpenAI</h2>
+<p>Supported as a provider. Configuration is identical to Anthropic — set <code>"provider": "openai"</code> and provide an API key.</p>
+<table>
+<thead>
+<tr>
+<th>Model</th>
+<th>ID</th>
+<th>Speed</th>
+<th>Cost</th>
+<th>Context</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>GPT-4o</td>
+<td><code>gpt-4o</code></td>
+<td>Fast</td>
+<td>Medium</td>
+<td>128k</td>
+</tr>
+<tr>
+<td>GPT-4o mini</td>
+<td><code>gpt-4o-mini</code></td>
+<td>Very fast</td>
+<td>Low</td>
+<td>128k</td>
+</tr>
+<tr>
+<td>o1</td>
+<td><code>o1</code></td>
+<td>Slow</td>
+<td>High</td>
+<td>200k</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Tool-use reliability:</strong> Good (GPT-4o, GPT-4o mini). o1 has limited tool support.</p>
+<p><strong>Recommendation:</strong> Viable alternative to Anthropic. GPT-4o mini maps well to the <code>fast</code> alias. Not tested extensively with outheis — Anthropic remains the primary supported provider.</p>
+<hr />
+<h2 id="local-fallback">Local Fallback</h2>
+<p>outheis can automatically switch to a local Ollama model when a cloud provider becomes unavailable due to exhausted credits or an invalid API key.</p>
+<p><strong>How it works:</strong></p>
+<ol>
+<li>At startup, outheis probes the configured cloud provider with a minimal call. If billing fails, fallback mode activates immediately.</li>
+<li>During operation, any <code>BillingError</code> (HTTP 402/401, or error messages matching credit/quota patterns) triggers the same switch mid-conversation.</li>
+<li>On activation: relay, data, agenda, pattern, and code agents are switched to the fallback model. The user is notified in the current chat and via Signal (if configured). The Web UI status dot turns yellow and the overview shows the active fallback model and reason.</li>
+</ol>
+<p><strong>Configuration:</strong></p>
+<pre><code class="language-json">&quot;llm&quot;: {
+  &quot;local_fallback&quot;: &quot;llama3.1:8b&quot;,
+  &quot;providers&quot;: { ... },
+  &quot;models&quot;: { ... }
+}
+</code></pre>
+<p><code>local_fallback</code> is a model alias — it must be defined in <code>llm.models</code> and point to an Ollama model. The recommended convention is to name both the alias and the model entry <code>local-fallback</code>, which makes the intent self-documenting:</p>
+<pre><code class="language-json">&quot;llm&quot;: {
+  &quot;local_fallback&quot;: &quot;local-fallback&quot;,
+  &quot;models&quot;: {
+    &quot;local-fallback&quot;: { &quot;provider&quot;: &quot;ollama&quot;, &quot;name&quot;: &quot;llama3.1:8b&quot; },
+    ...
+  }
+}
+</code></pre>
+<p>Changing the target model later only requires updating the <code>name</code> field inside <code>local-fallback</code> — the alias reference stays stable.</p>
+<p>If <code>local_fallback</code> is not set, outheis logs the billing error but does not switch — requests will continue to fail until credits are restored.</p>
+<p><strong>Limitations:</strong> Fallback mode is not automatically cleared when credits are restored. Restart the daemon to return to cloud models.</p>
+    <hr>
+    <p class="footer">Open source under AGPL-3.0 · <a href="https://github.com/outheis-labs/outheis-beta">Code on GitHub</a></p>
+  </main>
+</body>
+</html>

@@ -1,0 +1,793 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Architecture · outheis</title>
+  <link rel="icon" type="image/png" href="../favicon-96x96.png" sizes="96x96">
+  <link rel="icon" type="image/svg+xml" href="../favicon.svg">
+  <link rel="shortcut icon" href="../favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="../apple-touch-icon.png">
+  <link rel="manifest" href="../site.webmanifest">
+  <style>
+    @font-face {
+      font-family: 'Inter';
+      src: url('../assets/fonts/InterVariable.woff2') format('woff2'),
+           url('../assets/fonts/InterVariable.ttf') format('truetype');
+      font-weight: 100 900;
+      font-style: normal;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'Inter';
+      src: url('../assets/fonts/InterVariable-Italic.woff2') format('woff2');
+      font-weight: 100 900;
+      font-style: italic;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'Inter var';
+      src: url('../assets/fonts/InterVariable.woff2') format('woff2'),
+           url('../assets/fonts/InterVariable.ttf') format('truetype');
+      font-weight: 100 900;
+      font-style: normal;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'Inter var';
+      src: url('../assets/fonts/InterVariable-Italic.woff2') format('woff2');
+      font-weight: 100 900;
+      font-style: italic;
+      font-display: swap;
+    }
+  </style>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --font-body: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-ui: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-mono: SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      --color-text: #1a1a1a;
+      --color-text-muted: #666;
+      --color-text-faint: #999;
+      --color-border: #e0e0e0;
+      --color-bg-code: #f5f5f5;
+      --header-height: 52px;
+      --subnav-height: 40px;
+    }
+
+    @supports (font-variation-settings: normal) {
+      :root { --font-body: "Inter var", sans-serif; --font-ui: "Inter var", sans-serif; }
+    }
+
+    html, body {
+      width: 100%;
+      min-height: 100vh;
+      background: #fff;
+      font-family: var(--font-body);
+      font-size: 15px;
+      line-height: 1.6;
+      color: var(--color-text);
+    }
+
+    /* ── Header ── */
+
+    .header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: #fff;
+      border-bottom: 1px solid var(--color-border);
+    }
+
+    .header-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0 2rem;
+      height: var(--header-height);
+      gap: 2rem;
+    }
+
+    .logo-link {
+      display: flex;
+      align-items: center;
+      text-decoration: none;
+      flex-shrink: 0;
+    }
+
+    .site-name {
+      font-family: var(--font-ui);
+      font-size: 20px;
+      font-weight: 600;
+      color: var(--color-text);
+      letter-spacing: -0.01em;
+    }
+
+    .topnav {
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
+    }
+
+    .topnav a {
+      font-family: var(--font-ui);
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--color-text-muted);
+      text-decoration: none;
+      padding: 0.3rem 0.65rem;
+      border-radius: 4px;
+      white-space: nowrap;
+    }
+
+    .topnav a:hover { color: var(--color-text); background: var(--color-bg-code); }
+    .topnav a.active { color: var(--color-text); font-weight: 600; }
+    .topnav a.external { color: var(--color-text-faint); }
+
+    /* ── Sub-nav ── */
+
+    .subnav-bar {
+      border-bottom: 1px solid var(--color-border);
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+    .subnav-bar::-webkit-scrollbar { display: none; }
+    .subnav-bar:empty,
+    .subnav-bar.hidden { display: none; }
+
+    .subnav-inner {
+      display: flex;
+      align-items: center;
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0 2rem;
+      gap: 0.1rem;
+      height: var(--subnav-height);
+    }
+
+    .subnav-inner a {
+      font-family: var(--font-ui);
+      font-size: 13px;
+      color: var(--color-text-muted);
+      text-decoration: none;
+      padding: 0.25rem 0.6rem;
+      border-radius: 3px;
+      white-space: nowrap;
+    }
+
+    .subnav-inner a:hover { color: var(--color-text); background: var(--color-bg-code); }
+    .subnav-inner a.active { color: var(--color-text); font-weight: 500; }
+
+    /* ── Content ── */
+
+    .content {
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 2.5rem 2rem 4rem;
+    }
+
+    .content > *:first-child { margin-top: 0; }
+
+    .content h1 { font-family: var(--font-ui); font-size: 28px; font-weight: 600; margin-bottom: 0.5rem; letter-spacing: -0.02em; }
+    .content h2 { font-family: var(--font-ui); font-size: 18px; font-weight: 600; margin-top: 2rem; margin-bottom: 1.25rem; }
+    .content h3 { font-family: var(--font-ui); font-size: 15px; font-weight: 600; margin-top: 1.5rem; margin-bottom: 0.75rem; }
+    .content p { margin-bottom: 1rem; }
+    .content a { color: var(--color-text-muted); }
+    .content a:hover { color: var(--color-text); }
+    .content ul, .content ol { margin-bottom: 1rem; padding-left: 1.5rem; }
+    .content li { margin-bottom: 0.4rem; }
+
+    .content table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; font-family: var(--font-ui); font-size: 13px; }
+    .content th, .content td { text-align: left; padding: 0.5rem 0.75rem; border-bottom: 1px solid var(--color-border); }
+    .content th { font-weight: 500; font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--color-text-muted); }
+
+    .content code { font-family: var(--font-mono); font-size: 14px; background: var(--color-bg-code); padding: 0.15em 0.4em; border-radius: 3px; }
+    .content pre { background: var(--color-bg-code); padding: 1rem 1.25rem; overflow-x: auto; margin: 1.5rem 0; font-size: 13px; border-radius: 4px; line-height: 1.5; }
+    .content pre code { background: none; padding: 0; border-radius: 0; }
+
+    .content hr { border: none; border-top: 1px solid var(--color-border); margin: 1.5rem 0; }
+    .content strong { font-weight: 500; }
+    .content em { font-style: italic; }
+    .content blockquote { border-left: 2px solid var(--color-border); padding-left: 1.25rem; margin: 1.5rem 0; color: var(--color-text-muted); font-style: italic; }
+    .content .lead { font-style: italic; color: var(--color-text-muted); margin-bottom: 2rem; }
+    .content .footer { font-size: 12px; color: var(--color-text-faint); font-style: italic; }
+
+    /* ── Mobile ── */
+
+    /* ── Language switch ── */
+
+    .lang-switch {
+      font-family: var(--font-ui);
+      font-size: 13px;
+      color: var(--color-text-muted);
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .lang-switch .lang-active {
+      color: var(--color-text);
+      font-weight: 500;
+    }
+
+    .lang-switch a.lang-link {
+      color: var(--color-text-muted);
+      text-decoration: none;
+    }
+
+    .lang-switch a.lang-link:hover { color: var(--color-text); }
+
+    /* ── Mobile ── */
+
+    @media (max-width: 640px) {
+      .header-inner { padding: 0 1.25rem; gap: 1rem; }
+      .topnav { gap: 0; }
+      .topnav a { padding: 0.3rem 0.5rem; font-size: 13px; }
+      .topnav a.external { display: none; }
+      .subnav-inner { padding: 0 1.25rem; }
+      .content { padding: 2rem 1.25rem 3rem; }
+      .content h1 { font-size: 24px; }
+      .content h2 { font-size: 16px; }
+    }
+  </style>
+</head>
+<body>
+  <header class="header">
+    <div class="header-inner">
+      <a href="../index.html" class="logo-link">
+        <span class="site-name">οὐθείς</span>
+      </a>
+      <nav class="topnav">
+        <a href="../foundations/index.html">Foundations</a>
+        <a href="../design/index.html">Design</a>
+        <a href="../implementation/architecture.html" class="active">Implementation</a>
+        <a href="../installation/release-notes.html">Installation</a>
+        <a href="../workflows/index.html">Workflows</a>
+        <a href="https://github.com/outheis-labs/outheis-beta" class="external">GitHub ↗</a>
+      </nav>
+      <div class="lang-switch"><span class="lang-active">EN</span> · <a href="../de/implementation/architecture.html" class="lang-link">DE</a></div>
+    </div>
+  </header>
+  <div class="subnav-bar">
+    <div class="subnav-inner">
+      <a href="../implementation/architecture.html" class="active">Current State</a>
+      <a href="../implementation/memory.html">Memory & Rules</a>
+      <a href="../implementation/agenda.html">Agenda</a>
+      <a href="../implementation/skills.html">Skills</a>
+      <a href="../implementation/alan.html">Code Agent</a>
+      <a href="../implementation/hiro.html">Action Agent</a>
+      <a href="../implementation/signal.html">Signal</a>
+      <a href="../implementation/annotation-feedback.html">Annotation Feedback</a>
+    </div>
+  </div>
+  <main class="content">
+    <h1 id="architecture">Architecture</h1>
+<p><em>How the pieces fit together.</em></p>
+<h2 id="overview">Overview</h2>
+<pre><code>┌─────────────────────────────────────────────────────┐
+│                    Dispatcher                        │
+│                  (Microkernel)                       │
+│  ┌─────────┐    ┌─────────┐    ┌───────────┐        │
+│  │ Watcher │    │  Lock   │    │ Scheduler │        │
+│  │         │    │ Manager │    │           │        │
+│  └─────────┘    └─────────┘    └───────────┘        │
+└──────────────────────┬──────────────────────────────┘
+                       │
+    ┌──────────────────┼──────────────┬──────────────┐
+    ▼                  ▼              ▼              ▼
+┌───────┐    ┌───────┐    ┌───────┐    ┌───────┐  ┌───────┐
+│  ou   │    │ zeno  │    │ cato  │    │ rumi  │  │ alan  │
+│ relay │    │ data  │    │agenda │    │pattern│  │ code  │
+└───┬───┘    └───┬───┘    └───┬───┘    └───┬───┘  └───┬───┘
+    │            │             │             │          │
+    ▼            ▼             ▼             ▼          ▼
+┌─────────┐  ┌───────┐   ┌────────┐   ┌────────┐  ┌────────┐
+│   LLM   │  │ Vault │   │ Agenda │   │ Memory │  │ Source │
+│ (Haiku) │  │       │   │  dir   │   │        │  │  code  │
+└─────────┘  └───────┘   └────────┘   └────────┘  └────────┘
+</code></pre>
+<h2 id="dispatcher">Dispatcher</h2>
+<p>The dispatcher is the microkernel. It:</p>
+<ul>
+<li><strong>Watches</strong> the message queue for changes</li>
+<li><strong>Manages locks</strong> for shared resources</li>
+<li><strong>Schedules</strong> periodic tasks (pattern analysis, index rebuild)</li>
+<li><strong>Recovers</strong> pending operations on startup</li>
+</ul>
+<p>The dispatcher contains no LLM calls. It's deterministic, testable, fast.</p>
+<h2 id="agents">Agents</h2>
+<p>Six agents, each with a name and role:</p>
+<table>
+<thead>
+<tr>
+<th>Role</th>
+<th>Name</th>
+<th>When used</th>
+<th>Reads</th>
+<th>Writes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>relay</td>
+<td>ou</td>
+<td>All messages — decides routing</td>
+<td>Memory, Context</td>
+<td>Messages</td>
+</tr>
+<tr>
+<td>data</td>
+<td>zeno</td>
+<td>Vault search (via tool)</td>
+<td>Vault, Memory</td>
+<td>—</td>
+</tr>
+<tr>
+<td>agenda</td>
+<td>cato</td>
+<td>Schedule queries (via tool)</td>
+<td>Agenda/</td>
+<td>Agenda/</td>
+</tr>
+<tr>
+<td>action</td>
+<td>hiro</td>
+<td>External actions, background jobs</td>
+<td>Task registry</td>
+<td>External</td>
+</tr>
+<tr>
+<td>pattern</td>
+<td>rumi</td>
+<td>Scheduled (04:00), 7-tool autonomous loop</td>
+<td>Messages, Memory</td>
+<td>Memory, Rules, Skills</td>
+</tr>
+<tr>
+<td>code</td>
+<td>alan</td>
+<td>Code questions (development only)</td>
+<td>Source code</td>
+<td>vault/Codebase/</td>
+</tr>
+</tbody>
+</table>
+<h3 id="routing">Routing</h3>
+<p>Relay (ou) handles all user messages. It uses Haiku with tools:</p>
+<ul>
+<li><strong>search_vault</strong> → delegates to Data agent (zeno)</li>
+<li><strong>check_agenda</strong> → delegates to Agenda agent (cato)</li>
+<li><strong>refresh_agenda</strong> → triggers manual agenda update</li>
+</ul>
+<p>No separate classification step. Relay decides intelligently based on the question and Memory.</p>
+<p>Explicit mentions (@zeno, @cato, @hiro, @rumi, @alan) still work for direct delegation.</p>
+<h3 id="data-agent-zeno">Data Agent (zeno)</h3>
+<p>The Data agent handles vault queries. For simple questions, it answers directly without LLM calls:</p>
+<table>
+<thead>
+<tr>
+<th>Query Type</th>
+<th>Example</th>
+<th>Response</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>File existence</td>
+<td>"Habe ich X?"</td>
+<td><code>Ja, die Datei existiert: /path/to/X</code></td>
+</tr>
+<tr>
+<td>Stats</td>
+<td>"Wie viele PDFs?"</td>
+<td><code>Du hast 12 PDF-Dateien im Vault.</code></td>
+</tr>
+<tr>
+<td>List</td>
+<td>"Welche PDFs?"</td>
+<td>List of matching files</td>
+</tr>
+<tr>
+<td>Path lookup</td>
+<td>"Wo ist X?"</td>
+<td>Direct path or fuzzy matches</td>
+</tr>
+</tbody>
+</table>
+<p>Complex queries still use LLM for intelligent search and synthesis.</p>
+<h3 id="agenda-agent-cato">Agenda Agent (cato)</h3>
+<p>The Agenda agent manages three files in <code>vault/Agenda/</code>:</p>
+<table>
+<thead>
+<tr>
+<th>File</th>
+<th>Direction</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Agenda.md</td>
+<td>Bidirectional</td>
+<td>Today's schedule, tasks, notes</td>
+</tr>
+<tr>
+<td>Inbox.md</td>
+<td>User → System</td>
+<td>Quick capture, unprocessed items</td>
+</tr>
+<tr>
+<td>Exchange.md</td>
+<td>System ↔ User</td>
+<td>Async questions, no pressure to respond</td>
+</tr>
+<tr>
+<td>Shadow.md</td>
+<td>System → User</td>
+<td>Chronological vault index (auto-generated)</td>
+</tr>
+<tr>
+<td>Backlog.md</td>
+<td>System → User</td>
+<td>Priority-sorted view of Shadow.md (on-demand)</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Commands:</strong></p>
+<ul>
+<li>"aktualisiere daily" / "update agenda" → triggers manual refresh</li>
+<li>Processes Inbox items, checks Exchange responses, updates Daily</li>
+</ul>
+<p><strong>Hourly Review (conditional):</strong></p>
+<ul>
+<li>
+<p>Runs at xx:55 (configurable)</p>
+</li>
+<li>
+<p>Checks file hashes before processing — no changes = no LLM call</p>
+</li>
+<li>
+<p>Unconditional at start (04:55) and end (23:55) of day</p>
+</li>
+<li>
+<p>Only runs within configured hours (default 04:55-23:55)</p>
+</li>
+</ul>
+<h3 id="pattern-agent-rumi">Pattern Agent (rumi)</h3>
+<p>The Pattern agent runs nightly and:
+1. Extracts memories from recent conversations
+2. Consolidates duplicates, resolves contradictions
+3. Promotes stable patterns to User Rules
+4. Validates own extraction strategies (learns how to learn)</p>
+<p><strong><code>pattern_infer</code> vs <code>memory_migrate</code>:</strong> These are distinct operations. <code>pattern_infer</code> runs nightly and extracts/consolidates patterns from recent conversations into memory, rules, and skills. <code>memory_migrate</code> is a separate task (disabled by default) that processes structured seed files placed in <code>vault/Migration/</code> — typically used to import existing notes or contact data on initial setup. See <a href="migration.md">Migration</a>.</p>
+<h3 id="action-agent-hiro">Action Agent (hiro)</h3>
+<p>The Action agent executes tasks and background jobs. Currently in development with these planned capabilities:</p>
+<table>
+<thead>
+<tr>
+<th>Capability</th>
+<th>Status</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Task scheduling</td>
+<td>Planned</td>
+<td>Schedule one-time or recurring actions</td>
+</tr>
+<tr>
+<td>Email sending</td>
+<td>Planned</td>
+<td>Send emails via configured SMTP</td>
+</tr>
+<tr>
+<td>Calendar events</td>
+<td>Planned</td>
+<td>Create/modify calendar entries</td>
+</tr>
+<tr>
+<td>File operations</td>
+<td>Planned</td>
+<td>Move, copy, archive files</td>
+</tr>
+<tr>
+<td>External commands</td>
+<td>Planned</td>
+<td>Run whitelisted shell commands</td>
+</tr>
+</tbody>
+</table>
+<p>Action is disabled by default (<code>enabled: false</code>). When enabled, it:</p>
+<ul>
+<li>Receives tasks from other agents or scheduled jobs</li>
+<li>Executes actions with explicit confirmation for destructive operations</li>
+<li>Reports results back via message queue</li>
+</ul>
+<p><strong>Security model:</strong> Action has a whitelist of permitted operations. Unknown commands require explicit user approval in Exchange.md.</p>
+<h3 id="code-agent-alan">Code Agent (alan)</h3>
+<p>The Code agent provides development-time intelligence. See <a href="alan.md">Code Agent (alan)</a> for full documentation.</p>
+<p>Summary:</p>
+<ul>
+<li>
+<p><strong>Introspection</strong>: Answer questions about outheis implementation</p>
+</li>
+<li>
+<p><strong>Proposals</strong>: Suggest improvements via <code>vault/Codebase/Exchange.md</code></p>
+</li>
+<li>
+<p><strong>Search</strong>: Find patterns and implementations in source code</p>
+</li>
+<li>
+<p><strong>Isolation</strong>: Write access restricted to <code>vault/Codebase/</code> only</p>
+</li>
+</ul>
+<p><strong>alan is development-only.</strong> Disabled by default, never loaded in production.</p>
+<h2 id="knowledge-stores">Knowledge Stores</h2>
+<h3 id="memory">Memory</h3>
+<p>Meta-knowledge about the user:</p>
+<table>
+<thead>
+<tr>
+<th>Type</th>
+<th>Purpose</th>
+<th>Decay</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>user</code></td>
+<td>Personal facts</td>
+<td>Permanent</td>
+</tr>
+<tr>
+<td><code>feedback</code></td>
+<td>Working preferences</td>
+<td>Permanent</td>
+</tr>
+<tr>
+<td><code>context</code></td>
+<td>Current focus</td>
+<td>14 days</td>
+</tr>
+</tbody>
+</table>
+<p>Stored in <code>~/.outheis/human/memory/</code>. See <a href="memory.md">Memory</a> for details.</p>
+<h3 id="rules">Rules</h3>
+<p>External instructions to agents — what to observe:</p>
+<ul>
+<li>
+<p>User-defined: "Respond in German"</p>
+</li>
+<li>
+<p>Pattern-promoted: "User prefers short answers"</p>
+</li>
+</ul>
+<p>Stored in <code>~/.outheis/human/rules/</code>. See <a href="memory.md">Memory</a> for details.</p>
+<h3 id="skills">Skills</h3>
+<p>Internal capabilities — how agents act:</p>
+<ul>
+<li>
+<p>System skills: Base capabilities (in package)</p>
+</li>
+<li>
+<p>Learned skills: Refined through use and correction</p>
+</li>
+</ul>
+<p>Stored in <code>src/outheis/agents/skills/</code> (system) and <code>~/.outheis/human/skills/</code> (learned). See <a href="skills.md">Skills</a> for details.</p>
+<h3 id="vault">Vault</h3>
+<p>The vault is a directory of Markdown files with YAML frontmatter:</p>
+<pre><code>vault/
+├── Agenda/
+│   ├── Agenda.md     # Today's schedule
+│   ├── Inbox.md      # Unprocessed items
+│   ├── Exchange.md   # Async communication
+│   ├── Shadow.md     # Chronological vault index (auto-generated)
+│   └── Backlog.md    # Priority-sorted Shadow view (on-demand)
+├── projects/
+│   └── *.md
+└── notes/
+    └── *.md
+</code></pre>
+<p>The Data agent maintains a search index in <code>~/.outheis/human/cache/index/</code>.</p>
+<h2 id="message-queue">Message Queue</h2>
+<p>All communication flows through <code>messages.jsonl</code>:</p>
+<pre><code class="language-json">{&quot;v&quot;:1,&quot;id&quot;:&quot;msg_abc&quot;,&quot;conversation_id&quot;:&quot;conv_xyz&quot;,&quot;to&quot;:&quot;dispatcher&quot;,...}
+{&quot;v&quot;:1,&quot;id&quot;:&quot;msg_def&quot;,&quot;conversation_id&quot;:&quot;conv_xyz&quot;,&quot;to&quot;:&quot;transport&quot;,...}
+</code></pre>
+<p>Append-only. Versioned. Recoverable.</p>
+<h2 id="file-layout">File Layout</h2>
+<pre><code>~/.outheis/
+├── .dispatcher.pid       # PID file
+├── .dispatcher.sock      # Lock manager socket
+└── human/
+    ├── config.json       # Configuration (includes schedule)
+    ├── messages.jsonl    # Message queue
+    ├── memory/           # Persistent memory
+    │   ├── user.json
+    │   ├── feedback.json
+    │   ├── context.json
+    │   └── pattern/      # Pattern agent's learning
+    │       └── strategies.md
+    ├── cache/            # Regenerable working data
+    │   ├── index/        # Search indices
+    │   │   └── Vault.jsonl
+    │   ├── agenda/       # Agenda file state
+    │   │   ├── hashes.json       # Quick change detection
+    │   │   ├── Daily.md.prev     # For diff
+    │   │   ├── Inbox.md.prev
+    │   │   └── Exchange.md.prev
+    │   └── sessions/     # Session replay logs
+    ├── rules/            # User-defined rules (external)
+    │   ├── common.md
+    │   ├── relay.md
+    │   ├── agenda.md
+    │   └── data.md
+    ├── skills/           # Learned skills (internal)
+    │   ├── common.md
+    │   ├── relay.md
+    │   ├── agenda.md
+    │   └── data.md
+    ├── vault/            # Primary vault (default)
+    │   └── Migration/    # Temporary migration dir (user creates)
+    │       ├── data.md           # Files to import
+    │       └── Migration.md      # outheis creates
+    └── archive/          # Archived messages
+</code></pre>
+<h3 id="cache-vs-memory-vs-vault-vs-rules-vs-skills">Cache vs. Memory vs. Vault vs. Rules vs. Skills</h3>
+<table>
+<thead>
+<tr>
+<th>Directory</th>
+<th>What</th>
+<th>Who writes</th>
+<th>Deletable?</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>memory/</code></td>
+<td>Facts about user</td>
+<td>Pattern Agent</td>
+<td>Lose learnings</td>
+</tr>
+<tr>
+<td><code>rules/</code></td>
+<td>Instructions to agents</td>
+<td>User, Pattern</td>
+<td>Lose preferences</td>
+</tr>
+<tr>
+<td><code>skills/</code></td>
+<td>Agent capabilities</td>
+<td>Agent, Pattern</td>
+<td>Lose refinements</td>
+</tr>
+<tr>
+<td><code>cache/</code></td>
+<td>Working state</td>
+<td>System</td>
+<td>Safe — rebuilds</td>
+</tr>
+<tr>
+<td><code>vault/</code></td>
+<td>User's content</td>
+<td>User</td>
+<td>User's responsibility</td>
+</tr>
+</tbody>
+</table>
+<p>The cache directory is explicitly regenerable. Delete it anytime — outheis rebuilds what it needs.</p>
+<h2 id="scheduled-tasks">Scheduled Tasks</h2>
+<p>The dispatcher runs periodic tasks via built-in scheduler. All times configurable in <code>config.json</code>:</p>
+<table>
+<thead>
+<tr>
+<th>Task</th>
+<th>Default Time</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>pattern_infer</code></td>
+<td>04:00</td>
+<td>Extract memories, consolidate, promote rules</td>
+</tr>
+<tr>
+<td><code>memory_migrate</code></td>
+<td>04:00 (disabled)</td>
+<td>Process seed files from vault/Migration/</td>
+</tr>
+<tr>
+<td><code>index_rebuild</code></td>
+<td>04:30</td>
+<td>Rebuild vault search indices</td>
+</tr>
+<tr>
+<td><code>archive_rotation</code></td>
+<td>05:00</td>
+<td>Archive old messages</td>
+</tr>
+<tr>
+<td><code>shadow_scan</code></td>
+<td>03:30</td>
+<td>Scan vault for chronological entries → Shadow.md</td>
+</tr>
+<tr>
+<td><code>agenda_review</code></td>
+<td>xx:55 (04-23)</td>
+<td>Parse Agenda files (conditional on changes)</td>
+</tr>
+<tr>
+<td><code>agenda_midnight</code></td>
+<td>00:00</td>
+<td>Regenerate Agenda.md for the new day</td>
+</tr>
+<tr>
+<td><code>action_tasks</code></td>
+<td>every 15 min</td>
+<td>Run due scheduled tasks</td>
+</tr>
+<tr>
+<td><code>session_summary</code></td>
+<td>every 6 hours</td>
+<td>Extract session insights</td>
+</tr>
+<tr>
+<td><code>tag_scan</code></td>
+<td>on demand</td>
+<td>Scan vault for #tags, update cache — triggered from WebUI</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Resource efficiency:</strong> Agenda review checks file hashes before processing. If nothing changed, no LLM call is made. Morning (04:55) and evening (23:55) runs are unconditional to ensure day boundaries are handled.</p>
+<h3 id="schedule-configuration">Schedule Configuration</h3>
+<p>In <code>config.json</code>:</p>
+<pre><code class="language-json">{
+  &quot;schedule&quot;: {
+    &quot;pattern_infer&quot;:   {&quot;enabled&quot;: true, &quot;time&quot;: [&quot;04:00&quot;]},
+    &quot;index_rebuild&quot;:   {&quot;enabled&quot;: true, &quot;time&quot;: [&quot;04:30&quot;]},
+    &quot;archive_rotation&quot;:{&quot;enabled&quot;: true, &quot;time&quot;: [&quot;05:00&quot;]},
+    &quot;shadow_scan&quot;:     {&quot;enabled&quot;: true, &quot;time&quot;: [&quot;03:30&quot;]},
+    &quot;agenda_review&quot;: {
+      &quot;enabled&quot;: true,
+      &quot;time&quot;: [&quot;04:55&quot;,&quot;05:55&quot;,&quot;06:55&quot;,&quot;07:55&quot;,&quot;08:55&quot;,&quot;09:55&quot;,
+               &quot;10:55&quot;,&quot;11:55&quot;,&quot;12:55&quot;,&quot;13:55&quot;,&quot;14:55&quot;,&quot;15:55&quot;,
+               &quot;16:55&quot;,&quot;17:55&quot;,&quot;18:55&quot;,&quot;19:55&quot;,&quot;20:55&quot;,&quot;21:55&quot;,
+               &quot;22:55&quot;,&quot;23:55&quot;]
+    }
+  }
+}
+</code></pre>
+<p>Each task can be disabled independently. Tasks run in daemon threads — a running task blocks a second start of the same task but not others.</p>
+<h2 id="the-scaling-problem">The Scaling Problem</h2>
+<p>As a vault grows, agents can't hold everything in context. This is addressed through abstraction, not by adding more read-tools.</p>
+<p><strong>Wrong:</strong> more tools</p>
+<pre><code>read_file_1(), read_file_2(), ... read_file_n()
+</code></pre>
+<p><strong>Right:</strong> better abstractions — an index the agent can query, with on-demand detail.</p>
+<p>Four strategies in use or planned:</p>
+<p><strong>1. Index with recency weighting</strong> — The Data agent maintains a search index. Agents see a compact index, not raw files. The index includes access frequency and recency signals.</p>
+<p><strong>2. Shadow.md as chronological pre-filter</strong> — The Data agent runs a nightly vault scan and writes all time-relevant entries into a single structured file (<code>Agenda/Shadow.md</code>). The Agenda agent loads this instead of scanning the full vault on every hourly review.</p>
+<p><strong>3. Progressive loading</strong> — Overview first, detail on demand. The <code>load_skill(topic)</code> mechanism works like controlled demand paging: the agent has a summary in context and requests detail only when needed.</p>
+<p><strong>4. Skill-based compression</strong> — Skills replace lengthy instructions. "Use ISO dates" instead of ten examples. Better skills mean smaller prompts and more room for user content.</p>
+<hr />
+<h2 id="further-reading">Further Reading</h2>
+<ul>
+<li><a href="memory.md">Memory</a> — How persistent memory works</li>
+<li><a href="agenda.md">Agenda</a> — Time management with Daily, Inbox, Exchange</li>
+<li><a href="migration.md">Migration</a> — Seeding memory from external sources</li>
+<li><a href="alan.md">Code Agent (alan)</a> — Development-time code intelligence</li>
+<li><a href="webui.md">Web UI</a> — Browser-based administration interface</li>
+<li><a href="../foundations/">Foundations</a> — Why this architecture</li>
+</ul>
+    <hr>
+    <p class="footer">Open source under AGPL-3.0 · <a href="https://github.com/outheis-labs/outheis-beta">Code on GitHub</a></p>
+  </main>
+</body>
+</html>
