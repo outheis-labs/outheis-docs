@@ -119,11 +119,32 @@ Append-only. Versioned. Recoverable.
     ├── memory/           # Persistent memory
     │   ├── user.json
     │   ├── feedback.json
-    │   └── context.json
-    ├── .pending/         # Write-ahead log
-    ├── vault/            # Primary vault
-    └── rules/            # User-defined rules
+    │   ├── context.json
+    │   └── pattern/      # Pattern agent's learning
+    │       └── strategies.md
+    ├── cache/            # Regenerable working data
+    │   ├── index/        # Search indices
+    │   │   └── Vault.jsonl
+    │   ├── agenda/       # Agenda file diffs
+    │   │   ├── Daily.md.prev
+    │   │   ├── Inbox.md.prev
+    │   │   └── Exchange.md.prev
+    │   └── sessions/     # Session replay logs
+    ├── rules/            # User-defined rules
+    ├── vault/            # Primary vault (default)
+    └── archive/          # Archived messages
 ```
+
+### Cache vs. Memory vs. Vault
+
+| Directory | Purpose | Deletable? |
+|-----------|---------|------------|
+| `memory/` | What we know about the user | Lose learnings |
+| `cache/` | Working state, indices | Safe to delete — rebuilds |
+| `vault/` | User's actual content | User's responsibility |
+| `rules/` | Behavioral guidelines | Lose preferences |
+
+The cache directory is explicitly regenerable. Delete it anytime — outheis rebuilds what it needs.
 
 ## Scheduled Tasks
 
@@ -131,11 +152,15 @@ The dispatcher runs periodic tasks via built-in scheduler:
 
 | Task | Time | Purpose |
 |------|------|---------|
-| `pattern` | 04:00 | Extract memories from conversations |
+| `pattern` | 04:00 | Extract memories, consolidate, promote rules |
 | `index_rebuild` | 04:30 | Rebuild vault search indices |
 | `archive_rotation` | 05:00 | Archive old messages |
+| `agenda_review` | hourly (xx:55) | Parse Agenda files, process Inbox, check Exchange |
+| `action_tasks` | every 15 min | Run due scheduled tasks |
+| `session_summary` | every 6 hours | Extract session insights |
 
 ## Further Reading
 
 - [Memory](memory.md) — How persistent memory works
+- [Agenda](agenda.md) — Time management with Daily, Inbox, Exchange
 - [Philosophy](../philosophy/) — Why this architecture
