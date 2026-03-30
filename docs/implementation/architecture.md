@@ -104,15 +104,9 @@ The Pattern agent runs nightly and:
 1. Extracts memories from recent conversations
 2. Consolidates duplicates, resolves contradictions
 3. Promotes stable patterns to User Rules
-4. Processes seed files for memory migration
-5. Validates own extraction strategies (learns how to learn)
+4. Validates own extraction strategies (learns how to learn)
 
-**Seed Processing:**
-- Reads `~/.outheis/human/memory/seed/*.json`
-- Stages new entries in `seed.json` for approval
-- Renames processed files with `x-` prefix
-- User approves/rejects in `seed.json`
-- Notifies via Exchange.md (if Agenda enabled)
+**Memory Migration** is handled via chat commands ("memory migrate") through Relay, not Pattern agent. See [Migration](migration.md).
 
 ## Knowledge Stores
 
@@ -170,10 +164,6 @@ Append-only. Versioned. Recoverable.
     │   ├── user.json
     │   ├── feedback.json
     │   ├── context.json
-    │   ├── seed/         # Migration files (*.json)
-    │   │   ├── mydata.json       # Unprocessed
-    │   │   └── x-mydata.json     # Processed
-    │   ├── seed.json     # Staging for approval
     │   └── pattern/      # Pattern agent's learning
     │       └── strategies.md
     ├── cache/            # Regenerable working data
@@ -190,6 +180,9 @@ Append-only. Versioned. Recoverable.
     │   ├── agenda.md
     │   └── data.md
     ├── vault/            # Primary vault (default)
+    │   └── Migration/    # Temporary migration dir (user creates)
+    │       ├── data.md           # Files to import
+    │       └── Migration.md      # outheis creates
     └── archive/          # Archived messages
 ```
 
@@ -210,7 +203,7 @@ The dispatcher runs periodic tasks via built-in scheduler. All times configurabl
 
 | Task | Default Time | Purpose |
 |------|--------------|---------|
-| `pattern_nightly` | 04:00 | Extract memories, consolidate, process seeds |
+| `pattern_nightly` | 04:00 | Extract memories, consolidate, promote rules |
 | `index_rebuild` | 04:30 | Rebuild vault search indices |
 | `archive_rotation` | 05:00 | Archive old messages |
 | `agenda_review` | xx:55 (04-23) | Parse Agenda files (conditional on changes) |

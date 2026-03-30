@@ -1,8 +1,8 @@
 ---
-title: Migrating Personal Rules
+title: Migration
 ---
 
-# Migrating Personal Rules
+# Migration
 
 *How to bring your existing knowledge into outheis.*
 
@@ -11,294 +11,263 @@ title: Migrating Personal Rules
 outheis learns through:
 1. **Direct interaction** — conversations with you
 2. **Pattern extraction** — Pattern agent observes and promotes rules
-3. **Manual seeding** — you can pre-populate memory and rules
+3. **Manual migration** — import existing knowledge via vault
 
-This guide covers option 3: manually adding your existing knowledge so outheis starts smarter.
+This guide covers option 3: migrating data from Claude.ai or other sources.
 
-## Seed Files (Recommended)
+## The Migration Directory
 
-The seed workflow lets you stage entries for manual approval before they're added to memory.
-
-### Directory Structure
+Place files to migrate in your vault:
 
 ```
-~/.outheis/human/memory/
-├── user.json           # Canonical memory (Pattern writes here)
-├── feedback.json       # Canonical memory
-├── context.json        # Canonical memory
-├── seed/               # Your migration files
-│   ├── my-facts.json       # Unprocessed (will be read)
-│   └── x-my-facts.json     # Processed (ignored)
-└── seed.json           # Staging file (Pattern creates this)
+vault/Migration/
+├── claude-export.json    # Your data
+├── preferences.md        # Your rules/preferences
+├── data.md               # Rules for Data agent
+└── Migration.md          # ← Created by outheis
 ```
 
-### Seed File Format
+This directory is **temporary** — create it when you have something to migrate, delete it when done.
 
-Place `.json` files in `~/.outheis/human/memory/seed/`:
+## Chat Commands
+
+All migration happens through natural conversation:
+
+| You say | What happens |
+|---------|--------------|
+| "memory migrate" | Process Migration/ files, create Migration.md |
+| "migriere memory" | Same, in German |
+| "memory traits" | Show current memory and rules |
+| "zeige traits" | Same, in German |
+| "was weißt du über mich" | Same, conversational |
+| "schreibe regel: ..." | Add rule directly, bypassing Pattern agent |
+
+No CLI commands needed. Just talk to outheis.
+
+## File Formats
+
+### JSON Files
 
 ```json
 {
   "entries": [
     {
-      "content": "User works remotely on Fridays",
+      "content": "User arbeitet bei senswork",
       "type": "user"
     },
     {
-      "content": "Prefers concise responses without excessive formality",
+      "content": "Antworte knapp und direkt",
       "type": "feedback"
     },
     {
-      "content": "Currently focused on quarterly planning",
+      "content": "Arbeitet gerade an outheis",
       "type": "context"
-    },
-    {
-      "content": "User speaks German and English fluently"
     }
   ]
 }
 ```
 
 **Types:**
-- `user` — Facts about you (roles, relationships, preferences)
-- `feedback` — How you want outheis to behave
-- `context` — Temporary focus (will decay after 14 days)
+- `user` — Facts about you (permanent)
+- `feedback` — How you want outheis to behave (permanent)
+- `context` — Current focus (decays after 14 days)
 
-If `type` is omitted, Pattern agent infers it from content using heuristics:
-- Starts with "User prefers/wants/likes" → `feedback`
-- Contains "working on/focused on/currently" → `context`
-- Otherwise → `user`
+If `type` is omitted, outheis infers from content.
 
-### Processing Workflow
-
-```
-┌─────────────────┐     ┌─────────────────┐     ┌─────────────────┐
-│  seed/*.json    │ ──▶ │   seed.json     │ ──▶ │  user.json      │
-│  (your files)   │     │   (staging)     │     │  feedback.json  │
-└─────────────────┘     └─────────────────┘     │  context.json   │
-        │                      │                └─────────────────┘
-        │                      │
-        ▼                      ▼
-┌─────────────────┐     ┌─────────────────┐
-│  x-*.json       │     │  Exchange.md    │
-│  (processed)    │     │  (notification) │
-└─────────────────┘     └─────────────────┘
-```
-
-1. **Place files** in `~/.outheis/human/memory/seed/`
-2. **Pattern Agent runs** (nightly at 04:00, or manually via `outheis pattern run`)
-3. **Agent reads** each `*.json` file (ignores `x-*.json`)
-4. **Compares** with existing memory for duplicates and conflicts
-5. **New entries** are staged in `seed.json` with `status: null`
-6. **Processed files** are renamed with `x-` prefix
-7. **Notification** written to Exchange.md (if Agenda enabled)
-8. **You review** entries in `seed.json`, set status
-9. **Next run** applies approved, discards rejected, keeps null
-
-### Staging File Format
-
-After processing, `seed.json` looks like:
-
-```json
-{
-  "entries": [
-    {
-      "content": "User works remotely on Fridays",
-      "type": "user",
-      "source_file": "my-facts.json",
-      "status": null,
-      "conflict_with": null
-    },
-    {
-      "content": "User is 36 years old",
-      "type": "user",
-      "source_file": "my-facts.json",
-      "status": null,
-      "conflict_with": "User is 35 years old"
-    }
-  ]
-}
-```
-
-### Approving Entries
-
-Edit `seed.json` and set `status`:
-
-| Status | Effect |
-|--------|--------|
-| `null` | Keep waiting (no action) |
-| `"approved"` | Add to memory, remove from staging |
-| `"rejected"` | Discard, remove from staging |
-
-For conflicts:
-- **Approve** → new entry replaces existing
-- **Reject** → keep existing entry
-- **Null** → defer decision
-
-Example approval:
-
-```json
-{
-  "content": "User works remotely on Fridays",
-  "type": "user",
-  "source_file": "my-facts.json",
-  "status": "approved",
-  "conflict_with": null
-}
-```
-
-### Notifications
-
-If Agenda agent is enabled, Pattern agent writes to Exchange.md:
+### Markdown Files
 
 ```markdown
-## 2026-03-30T04:15:00 – Seed Review
+# Preferences
 
-> 5 new memory entries from my-facts.json need your review.
-> 
-> Please check ~/.outheis/human/memory/seed.json and set status to "approved" or "rejected".
+## user
+- Lebt in München
+- Arbeitet als Software-Entwickler
 
-**Your response:**
+## feedback
+- Antworte immer auf Deutsch
+- Bevorzuge kurze Antworten
 
+## rule:agenda
+- MAX 10 Items in Daily.md
+- Keine Meetings vor 10 Uhr
+
+## rule:data
+- Durchsuche auch PDF-Dateien
 ```
 
-No pressure to respond immediately — entries stay in staging until you decide.
+Sections map to memory types or rules:
+- `## user`, `## feedback`, `## context` → Memory
+- `## rule:agenda`, `## rule:data`, `## rule:relay` → Rules files
 
-## User Rules (Direct)
+## Workflow
 
-User Rules are markdown files that agents read directly. No approval needed — they're active immediately.
+### 1. Create Migration Directory
 
-### Directory
-
-```
-~/.outheis/human/rules/
-├── relay.md      # Rules for Relay agent (conversation style)
-├── agenda.md     # Rules for Agenda agent (scheduling)
-├── data.md       # Rules for Data agent (search behavior)
-└── pattern.md    # Rules for Pattern agent (extraction)
+```bash
+mkdir ~/Documents/Vault/Migration
 ```
 
-### Format
+### 2. Add Your Files
+
+Copy your data:
+- Export from Claude.ai → `claude-export.json`
+- Your preferences → `preferences.md`
+- Agent-specific rules → `agenda.md`, `data.md`
+
+### 3. Say "memory migrate"
+
+In chat with outheis:
+
+```
+Du: memory migrate
+Ou: Migration verarbeitet:
+    - 3 Dateien geparst
+    - 12 Einträge warten auf Bestätigung
+    
+    Prüfe vault/Migration/Migration.md
+```
+
+### 4. Review Migration.md
+
+outheis creates `Migration.md`:
 
 ```markdown
-# User Rules: Agenda
+# Migration
 
-## Daily.md Format
+*Zuletzt aktualisiert: 2026-03-30 14:30*
 
-- MAX 10-12 items total
-- Dated items have priority
-- Use 🔴 for time-bound, 🟠 for flexible
+Markiere Einträge:
+- `[x]` → übernehmen
+- `[-]` → ablehnen
+- `[ ]` → noch offen
 
-## Processing
+---
 
-- Items from Inbox → Daily.md
-- Unclear items → Exchange.md (ask, don't guess)
-- Honor user's emoji conventions
+## Offen
 
-## Language
+- [ ] User arbeitet bei senswork [user]
+- [ ] Antworte knapp und direkt [feedback]
+- [ ] MAX 10 Items in Daily.md [rule:agenda]
+- [ ] User ist 35 Jahre alt [user]
 
-- Respond in user's language
-- Keep task descriptions concise
+---
+
+## Statistik
+
+- Übernommen: 0
+- Abgelehnt: 0
 ```
 
-Rules are merged with system rules. User rules take precedence for behavioral preferences; system rules define capabilities and boundaries.
-
-### Rule Promotion
-
-Stable patterns in feedback memory can be promoted to rules by the Pattern agent:
-
-1. Pattern agent notices consistent feedback ("User always prefers X")
-2. Checks if pattern has been stable over multiple weeks
-3. Writes rule to appropriate `rules/{agent}.md` with timestamp comment
-4. Optionally notifies via Exchange.md
-
-Example promoted rule:
+Edit the file — mark entries:
 
 ```markdown
-- Respond in German unless user writes in English  <!-- 2026-03-28 promoted from feedback -->
+- [x] User arbeitet bei senswork [user]
+- [x] Antworte knapp und direkt [feedback]
+- [x] MAX 10 Items in Daily.md [rule:agenda]
+- [-] User ist 35 Jahre alt [user]
+```
+
+### 5. Say "memory migrate" Again
+
+```
+Du: memory migrate
+Ou: Migration verarbeitet:
+    - 3 übernommen
+    - 1 abgelehnt
+    - 0 noch offen
+```
+
+Adopted entries are now in memory/rules. Rejected entries are discarded.
+
+### 6. Delete Migration Directory
+
+When done:
+
+```bash
+rm -rf ~/Documents/Vault/Migration
+```
+
+outheis doesn't mind — the directory is purely transient.
+
+## Processed Files
+
+After parsing, files get an `x-` prefix:
+
+```
+vault/Migration/
+├── x-claude-export.json    # Processed
+├── x-preferences.md        # Processed
+├── Migration.md            # Still active
+```
+
+This prevents re-processing. Delete the `x-` files yourself when ready.
+
+## Direct Rule Writing
+
+To add a rule immediately without the Migration workflow:
+
+```
+Du: schreibe regel: antworte immer auf Deutsch
+Ou: ✓ Regel hinzugefügt zu relay: antworte immer auf Deutsch
+```
+
+Or specify the agent:
+
+```
+Du: schreibe regel für agenda: keine Meetings vor 10 Uhr
+Ou: ✓ Regel hinzugefügt zu agenda: keine Meetings vor 10 Uhr
+```
+
+This bypasses Pattern agent and writes directly to `~/.outheis/human/rules/{agent}.md`.
+
+## Viewing Current State
+
+To see what outheis knows:
+
+```
+Du: memory traits
+
+Ou: Erkannte Eigenschaften:
+
+    ## Identität
+      • User arbeitet bei senswork
+      • User lebt in München
+    
+    ## Präferenzen
+      • Antworte knapp und direkt
+      • Bevorzuge deutsche Sprache
+    
+    ## Etablierte Regeln
+      • agenda: 2 Regeln
+      • relay: 1 Regel
+```
+
+Or more conversationally:
+
+```
+Du: was weißt du über mich?
 ```
 
 ## Memory vs Rules
 
-| Aspect | Memory (seed) | Rules |
-|--------|---------------|-------|
-| What | Facts, observations | Behavioral guidelines |
+| Aspect | Memory | Rules |
+|--------|--------|-------|
+| Location | `~/.outheis/human/memory/` | `~/.outheis/human/rules/` |
 | Format | JSON | Markdown |
-| Approval | Required (seed.json) | None (direct) |
-| Volatility | Can change, can decay | Stable once set |
-| Example | "User is 35 years old" | "Always respond in German" |
+| Volatility | Can change, context decays | Stable once set |
+| Example | "User ist 35" | "Antworte auf Deutsch" |
 
 Memory = "what I know about you"
-Rules = "how I should behave for you"
+Rules = "how I should behave"
 
-## Verifying Migration
+Both are populated through Migration or through ongoing conversation.
 
-After placing seed files:
+## Privacy
 
-```bash
-# Check seed directory
-ls ~/.outheis/human/memory/seed/
-
-# Trigger Pattern agent manually (or wait for 04:00)
-outheis pattern run
-
-# Check what was staged
-cat ~/.outheis/human/memory/seed.json | jq .
-
-# Edit seed.json, set status to "approved" or "rejected"
-
-# Run again to apply
-outheis pattern run
-
-# Verify memory
-outheis memory show
-```
-
-### Checking Status
-
-```bash
-# See processed seed files
-ls ~/.outheis/human/memory/seed/x-*
-
-# Check canonical memory
-cat ~/.outheis/human/memory/user.json | jq .entries
-
-# Check rules
-cat ~/.outheis/human/rules/relay.md
-```
-
-## Example: Claude.ai Migration
-
-If you have knowledge in Claude.ai you want to transfer:
-
-1. **Create seed file** from your Claude.ai memories:
-
-```json
-{
-  "entries": [
-    {"content": "User is a software engineer", "type": "user"},
-    {"content": "User has two children", "type": "user"},
-    {"content": "Prefers technical depth over simplification", "type": "feedback"},
-    {"content": "Working on quarterly planning", "type": "context"}
-  ]
-}
-```
-
-2. **Save as** `~/.outheis/human/memory/seed/claude-export.json`
-
-3. **Run Pattern agent:** `outheis pattern run`
-
-4. **Review** `seed.json`, approve entries
-
-5. **Run again** to apply
-
-6. **Verify:** `outheis memory show`
-
-## Privacy Note
-
-All data in `~/.outheis/human/` stays local:
-- Nothing is transmitted to external services
-- Memory files are plain JSON you can read and edit
-- Seed files remain on your machine (never uploaded)
-- You control what outheis knows
+All data stays local:
+- Migration files are in your vault
+- Memory is in `~/.outheis/human/memory/`
+- Rules are in `~/.outheis/human/rules/`
+- Nothing is transmitted externally
 
 Delete any file at any time — outheis adapts to what remains.
