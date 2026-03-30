@@ -14,7 +14,7 @@ outheis maintains two separate knowledge stores:
 |---|--------|-------|
 | **Purpose** | Meta-knowledge about you | Your work content |
 | **Contains** | Facts, preferences, context | Documents, notes, projects |
-| **Updated by** | Pattern agent, explicit markers | You directly |
+| **Updated by** | Agents during interaction, Pattern agent, explicit markers | You directly |
 | **Format** | Structured JSON | Markdown files |
 
 **Memory** answers: *Who is this person? How do they want me to work?*
@@ -59,34 +59,57 @@ Examples:
 
 ## How Memory is Created
 
-### Explicit Marker
+Memory is written through three channels:
+
+### 1. Explicit Marker (`!`)
 
 Prefix any message with `!` to store it immediately:
 
 ```
 ! I am 35 years old
-→ Stored in user memory
+→ Stored in user memory, agent responds with this knowledge
 
 ! please always give short answers
-→ Stored in feedback memory
+→ Stored in feedback memory, agent adapts immediately
 
 ! I'm currently working on Project Alpha
 → Stored in context memory (14 day decay)
 ```
 
-Classification happens automatically based on content.
+Classification happens automatically based on content. The `!` marker is a shorthand — it's equivalent to saying "remember this" but shorter. The agent both stores the information AND uses it immediately in the current conversation.
 
-### Pattern Agent Extraction
+### 2. Agents During Interaction
+
+Agents can recognize when you share something worth remembering:
+
+- You mention your birthday → agent may store it
+- You express a preference → agent may store it
+- You describe a current project → agent may store it as context
+
+This happens through judgment, not rigid rules. Agents are instructed to notice relevant information but not to over-extract. Not every statement becomes a memory — only what seems genuinely useful for future interactions.
+
+### 3. Pattern Agent Extraction
 
 The Pattern agent (rumi) runs nightly at 04:00 and:
 
 1. Reviews recent conversations
-2. Extracts memorable information
-3. Avoids duplicates with existing memory
+2. Extracts memorable information agents may have missed
+3. Consolidates duplicates and resolves contradictions
 4. Assigns confidence scores
 5. Cleans up expired entries
+6. Considers promoting stable patterns to User Rules
 
 You can trigger this manually: `outheis pattern`
+
+## Memory Consolidation
+
+Over time, memory can accumulate duplicates or contradictory entries. The Pattern agent handles this during its scheduled run:
+
+- **Duplicates**: "Has pending tasks: X, Y" and "Current pending tasks: X, Y" → keeps the newer one
+- **Contradictions**: "User is 35" and "User is 36" → keeps the more recent or explicitly-marked one
+- **Superseded entries**: Context that's been updated → removes the older version
+
+This is not a mechanical process — the Pattern agent uses judgment to decide what to consolidate, erring on the side of keeping information when uncertain.
 
 ## Temporal Awareness
 
@@ -101,7 +124,7 @@ Not everything should be remembered forever.
 - "User is tired"
 - "User is stressed about deadline"
 
-The Pattern agent is instructed to distinguish stable traits from temporary moods. Emotional states from a bad day won't become part of your permanent profile.
+All agents are instructed to distinguish stable traits from temporary moods. A frustrated message isn't a personality trait — it's a moment.
 
 ## Viewing and Editing Memory
 
@@ -148,10 +171,12 @@ Markers:
 ~/.outheis/human/memory/
 ├── user.json
 ├── feedback.json
-└── context.json
+├── context.json
+└── pattern/          # Pattern agent's own learning (see below)
+    └── strategies.md
 ```
 
-Each file contains timestamped entries with metadata:
+Each memory file contains timestamped entries with metadata:
 
 ```json
 {
@@ -170,6 +195,16 @@ Each file contains timestamped entries with metadata:
   ]
 }
 ```
+
+### Pattern Agent Meta-Memory
+
+The Pattern agent has its own memory in `~/.outheis/human/memory/pattern/`. This is where it stores:
+
+- What extraction strategies work for this user
+- Patterns in communication style
+- Meta-insights about its own process
+
+This memory doesn't decay — it's how the Pattern agent gets better over time at understanding what matters to you.
 
 ## Integration with Agents
 
@@ -199,7 +234,7 @@ If outheis has wrong information:
 2. **CLI edit:** `outheis memory --clear user` then re-add
 3. **Direct file edit:** Modify JSON in `~/.outheis/human/memory/`
 
-The Pattern agent respects explicit (`!`) entries and won't override them with lower-confidence extractions.
+Explicit (`!`) entries take precedence — agents won't override them with lower-confidence extractions.
 
 ---
 
@@ -222,21 +257,22 @@ Rules are the stable distillation of memory — behavioral principles that shape
 
 ### How User Rules Emerge
 
-User rules aren't written by you directly. They emerge from memory through the Pattern agent:
+User rules aren't written by you directly. They emerge from memory through the Pattern agent.
 
-```
-Day 1: "Please give me shorter answers"
-Day 3: "That's too long, can you be more concise?"
-Day 7: "Keep it brief"
-Day 12: "Shorter please"
-Day 15: "Just the essentials"
-        ↓
-Pattern agent detects: 5 requests for brevity
-        ↓
-User Rule created: "User prefers concise responses"
-```
+The Pattern agent reviews memory during its nightly run and looks for patterns that have become stable enough to codify as rules. This isn't a mechanical process with fixed thresholds — the agent uses judgment:
 
-The threshold is deliberately high (≥5 occurrences, spread over multiple days) to prevent temporary moods from becoming permanent rules.
+- A strong preference stated clearly once might become a rule
+- Something mentioned many times casually might not
+- Explicit corrections always matter more than inferences
+
+When the Pattern agent identifies a stable pattern, it writes it to `~/.outheis/human/rules/{agent}.md`:
+
+```markdown
+# User Rules for Relay Agent
+
+- User prefers concise responses  <!-- 2026-03-30 -->
+- Respond in German unless the user writes in English  <!-- 2026-03-28 -->
+```
 
 ### Memory vs. Rules
 
