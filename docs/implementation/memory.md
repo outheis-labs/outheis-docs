@@ -169,10 +169,14 @@ Markers:
 
 ```
 ~/.outheis/human/memory/
-├── user.json
-├── feedback.json
-├── context.json
-└── pattern/          # Pattern agent's own learning (see below)
+├── user.json           # Personal facts
+├── feedback.json       # Working preferences
+├── context.json        # Current focus
+├── seed/               # Migration files (see below)
+│   ├── mydata.json         # Unprocessed
+│   └── x-mydata.json       # Processed
+├── seed.json           # Staging for approval
+└── pattern/            # Pattern agent's learning
     └── strategies.md
 ```
 
@@ -195,6 +199,121 @@ Each memory file contains timestamped entries with metadata:
   ]
 }
 ```
+
+## Seed-Based Migration
+
+When migrating from Claude.ai or another system, you can seed outheis memory with existing knowledge. This bypasses gradual extraction and gives outheis a head start.
+
+### Seed Directory
+
+Place JSON files in `~/.outheis/human/memory/seed/`. Any filename works:
+
+```
+seed/
+├── claude-export.json     # Exported from Claude.ai
+├── my-preferences.json    # Manual entries
+└── work-context.json      # Current projects
+```
+
+### Seed File Format
+
+Each file contains entries with optional type hints:
+
+```json
+{
+  "entries": [
+    {
+      "content": "User is a software engineer",
+      "type": "user"
+    },
+    {
+      "content": "Prefers concise responses",
+      "type": "feedback"
+    },
+    {
+      "content": "Working on Project Alpha",
+      "type": "context"
+    },
+    {
+      "content": "Lives in Munich"
+    }
+  ]
+}
+```
+
+If `type` is omitted, Pattern agent infers it from content.
+
+### Processing Workflow
+
+1. **Pattern agent reads seed files** during nightly run (04:00)
+2. **Compares with existing memory** — identifies new, duplicate, conflicting entries
+3. **Stages entries in `seed.json`** with `status: null`:
+
+```json
+{
+  "entries": [
+    {
+      "content": "User is a software engineer",
+      "type": "user",
+      "source_file": "claude-export.json",
+      "status": null,
+      "conflict_with": null
+    },
+    {
+      "content": "User is 36 years old",
+      "type": "user",
+      "source_file": "claude-export.json",
+      "status": null,
+      "conflict_with": "User is 35 years old"
+    }
+  ]
+}
+```
+
+4. **Renames processed files** with `x-` prefix (`x-claude-export.json`)
+5. **Notifies via Exchange.md** if Agenda agent is enabled:
+
+```markdown
+## 2026-03-30T04:15:00 – Seed Review
+
+> 5 new memory entries from claude-export.json need your review.
+> 
+> Please check ~/.outheis/human/memory/seed.json and set status to "approved" or "rejected".
+
+**Your response:**
+
+```
+
+### Approval
+
+Edit `seed.json` and set `status`:
+
+```json
+{
+  "content": "User is a software engineer",
+  "status": "approved"
+}
+```
+
+```json
+{
+  "content": "User is 36 years old",
+  "status": "rejected"
+}
+```
+
+On next Pattern agent run:
+- `approved` → merged into appropriate memory file
+- `rejected` → discarded
+- `null` → stays in staging
+
+### Conflict Resolution
+
+When a seed entry conflicts with existing memory, you decide:
+
+- **Approve seed** → replaces existing entry
+- **Reject seed** → keeps existing entry
+- **Leave null** → defer decision
 
 ### Pattern Agent Meta-Memory
 
