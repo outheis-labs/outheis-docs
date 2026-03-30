@@ -178,15 +178,25 @@ If frontmatter is absent, agents derive metadata from:
 - Created/Modified: Filesystem timestamps
 - Tags: Inline tags in content
 
-### Inline Tags
+### Tags
 
-Tags can appear anywhere in content:
+Tags can come from **two sources** (both work, combined automatically):
 
+1. **YAML frontmatter** (optional):
+```yaml
+---
+tags: [project/alpha, important]
+---
+```
+
+2. **Inline #tags** in body text (preferred):
 ```markdown
 This is an #important note about #project/alpha.
 
 Meeting scheduled for tomorrow #deadline #priority-high.
 ```
+
+outheis extracts tags from both sources and deduplicates them.
 
 ### Tag Formats
 
@@ -195,11 +205,14 @@ Meeting scheduled for tomorrow #deadline #priority-high.
 | Single | `#important` | Simple flag |
 | Key-value | `#priority-high` | Attribute with value |
 | Hierarchical | `#project/alpha` | Nested namespace |
-| Deep nesting | `#company/acme/sales` | Multiple levels |
+| Date | `#date-2026-03-24` | Specific date |
+| Status | `#status-active` | State indicator |
+
+**User's format is preserved.** outheis learns whether you use `-` or `/` as separator.
 
 ### Tag Normalization
 
-Agents normalize tags for indexing:
+For indexing and search, tags are normalized:
 
 ```
 #Important     → important
@@ -208,10 +221,28 @@ Agents normalize tags for indexing:
 ```
 
 Rules:
-- Lowercase
-- Preserve hyphens
-- Preserve hierarchy separators (`/`)
+- Lowercase for matching
+- Preserve hyphens and slashes
 - Strip leading `#`
+
+### Tag Analysis
+
+outheis tracks tag usage and can report:
+
+- **Top tags** — most frequently used
+- **Tag hierarchies** — prefixes like `status-*`, `project/*`
+- **Singular tags** — used only once (cleanup candidates)
+
+Ask in chat: "welche tags habe ich?" or "tag-analyse"
+
+### Tag Philosophy
+
+**outheis does not invent tags.** It uses your tags, learns your format, and may:
+- Suggest cleanup for singular tags
+- Warn about inconsistent formats
+- Propose similar existing tags when you create new ones
+
+You control the vocabulary.
 
 ### Links
 
