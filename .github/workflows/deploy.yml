@@ -1,4 +1,4 @@
-name: Deploy to outheis-minimal Pages
+name: Deploy to GitHub Pages
 
 on:
   push:
@@ -27,22 +27,15 @@ jobs:
           python-version: '3.12'
 
       - name: Install dependencies
-        run: pip install markdown pyyaml
+        run: pip install markdown
 
       - name: Build site
         run: python scripts/build-site.py
 
-      - name: Setup Pages
-        uses: actions/configure-pages@v5
-
-      - name: Build with Jekyll
-        uses: actions/jekyll-build-pages@v1
-        with:
-          source: ./html
-          destination: ./_site
-
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
+        with:
+          path: html
 
   deploy:
     environment:

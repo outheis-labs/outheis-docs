@@ -2,133 +2,159 @@
 """
 Build the outheis website from docs/.
 
-Reads markdown files from docs/, adds Jekyll frontmatter,
-generates navigation, and outputs to html/.
+Reads Markdown from docs/, converts to HTML, wraps in the layout template,
+and outputs to html/. Run locally or via GitHub Actions.
 
 Usage:
     python scripts/build-site.py
 """
 
-import os
 import re
 import shutil
 from pathlib import Path
+import markdown
 
 ROOT = Path(__file__).parent.parent
 DOCS = ROOT / "docs"
 HTML = ROOT / "html"
+TEMPLATES = ROOT / "templates"
 
-# Navigation structure (order matters)
-NAV_STRUCTURE = [
-    ("Home", "/", "index.md"),
-    ("Philosophy", "/philosophy/", "philosophy/index.md"),
-    ("Design", "/design/", "design/index.md", [
-        ("Overview", "/design/", "design/index.md"),
-        ("OS Principles", "/design/01-why-os-principles", "design/01-why-os-principles.md"),
-        ("Systems Survey", "/design/02-systems-survey", "design/02-systems-survey.md"),
-        ("Architecture", "/design/03-architecture", "design/03-architecture.md"),
-        ("Data Formats", "/design/04-data-formats", "design/04-data-formats.md"),
-        ("Related Work", "/design/05-related-work", "design/05-related-work.md"),
-        ("Agent Prompts", "/design/06-agent-prompts", "design/06-agent-prompts.md"),
-    ]),
-    ("Implementation", "/implementation/", "implementation/index.md", [
-        ("Current State", "/implementation/architecture", "implementation/architecture.md"),
-        ("Memory & Rules", "/implementation/memory", "implementation/memory.md"),
-        ("CLI Guide", "/implementation/guide", "implementation/guide.md"),
-    ]),
+SITE_TITLE = "outheis"
+
+# Navigation definition — order matters
+NAV_ITEMS = [
+    {"label": "Home",          "url": "/",                                    "match": "^index\\.html$"},
+    {"section": "Philosophy"},
+    {"label": "Why outheis",   "url": "/philosophy/",                         "match": "philosophy"},
+    {"section": "Design"},
+    {"label": "Overview",      "url": "/design/",                             "match": "^design/index\\.html$"},
+    {"label": "OS Principles", "url": "/design/01-why-os-principles.html",    "match": "01-why-os"},
+    {"label": "Systems Survey","url": "/design/02-systems-survey.html",       "match": "02-systems"},
+    {"label": "Architecture",  "url": "/design/03-architecture.html",         "match": "03-architecture"},
+    {"label": "Data Formats",  "url": "/design/04-data-formats.html",         "match": "04-data"},
+    {"label": "Related Work",  "url": "/design/05-related-work.html",         "match": "05-related"},
+    {"label": "Agent Prompts", "url": "/design/06-agent-prompts.html",        "match": "06-agent"},
+    {"section": "Implementation"},
+    {"label": "Current State", "url": "/implementation/architecture.html",    "match": "implementation/architecture"},
+    {"label": "Memory & Rules","url": "/implementation/memory.html",          "match": "implementation/memory"},
+    {"label": "Agenda",        "url": "/implementation/agenda.html",          "match": "implementation/agenda"},
+    {"label": "Skills",        "url": "/implementation/skills.html",          "match": "implementation/skills"},
+    {"label": "Migration",     "url": "/implementation/migration.html",       "match": "implementation/migration"},
+    {"label": "Config",        "url": "/implementation/config.html",          "match": "implementation/config"},
+    {"label": "CLI Guide",     "url": "/implementation/guide.html",           "match": "implementation/guide"},
+    {"section": ""},
+    {"label": "GitHub ↗",      "url": "https://github.com/outheis-labs/outheis-minimal", "external": True},
 ]
 
 
+def build_nav(current_rel: str) -> str:
+    """Build sidebar nav HTML with active class for current page."""
+    items = []
+    for item in NAV_ITEMS:
+        if "section" in item:
+            items.append(f'<li class="nav-section">{item["section"]}</li>')
+        elif item.get("external"):
+            items.append(
+                f'<li><a href="{item["url"]}" class="nav-external">{item["label"]}</a></li>'
+            )
+        else:
+            match = item.get("match", "")
+            is_active = bool(re.search(match, current_rel)) if match else False
+            active = ' class="active"' if is_active else ''
+            items.append(f'<li><a href="{item["url"]}"{active}>{item["label"]}</a></li>')
+    return "\n          ".join(items)
+
+
 def extract_title(content: str, filepath: Path) -> str:
-    """Extract title from first H1 or filename."""
+    """Extract title from first H1 or derive from filename."""
     match = re.search(r'^#\s+(.+)$', content, re.MULTILINE)
     if match:
         return match.group(1).strip()
     return filepath.stem.replace('-', ' ').title()
 
 
-def has_frontmatter(content: str) -> bool:
-    """Check if content already has YAML frontmatter."""
-    return content.startswith('---\n')
+def strip_frontmatter(content: str) -> str:
+    """Remove YAML frontmatter if present."""
+    if content.startswith('---\n'):
+        end = content.find('\n---\n', 4)
+        if end != -1:
+            return content[end + 5:]
+    return content
 
 
-def add_frontmatter(content: str, title: str) -> str:
-    """Add Jekyll frontmatter if not present."""
-    if has_frontmatter(content):
-        return content
-    return f'---\ntitle: "{title}"\n---\n\n{content}'
+def md_to_html(content: str) -> str:
+    """Convert Markdown to HTML."""
+    return markdown.markdown(
+        content,
+        extensions=['tables', 'fenced_code', 'attr_list', 'toc'],
+        extension_configs={
+            'toc': {'permalink': False}
+        }
+    )
 
 
-def process_markdown(src: Path, dst: Path):
-    """Process a markdown file: add frontmatter, copy to html/."""
-    content = src.read_text(encoding='utf-8')
-    title = extract_title(content, src)
-    content = add_frontmatter(content, title)
-    
+def output_path(src: Path) -> Path:
+    """Determine output path: docs/foo/bar.md -> html/foo/bar.html"""
+    rel = src.relative_to(DOCS)
+    return HTML / rel.with_suffix('.html')
+
+
+def build_page(src: Path, template: str):
+    """Build one page: Markdown → HTML → wrapped in template."""
+    raw = src.read_text(encoding='utf-8')
+    content_md = strip_frontmatter(raw)
+    title = extract_title(content_md, src)
+    content_html = md_to_html(content_md)
+
+    dst = output_path(src)
+    rel = str(dst.relative_to(HTML))
+
+    nav_html = build_nav(rel)
+    page = (template
+            .replace('<!-- TITLE -->', f'{title} · {SITE_TITLE}' if title != SITE_TITLE else SITE_TITLE)
+            .replace('<!-- NAV -->', nav_html)
+            .replace('<!-- CONTENT -->', content_html))
+
     dst.parent.mkdir(parents=True, exist_ok=True)
-    dst.write_text(content, encoding='utf-8')
+    dst.write_text(page, encoding='utf-8')
     print(f"  {src.relative_to(DOCS)} → {dst.relative_to(HTML)}")
 
 
 def copy_assets():
-    """Copy assets to html/."""
+    """Copy assets from docs/_assets/ to html/."""
     assets_src = DOCS / "_assets"
-    
     if not assets_src.exists():
         return
-    
-    # Copy logo to assets/
+
+    logo_dst = HTML / "assets" / "logo.svg"
+    logo_dst.parent.mkdir(parents=True, exist_ok=True)
     logo_src = assets_src / "logo.svg"
     if logo_src.exists():
-        dst = HTML / "assets" / "logo.svg"
-        dst.parent.mkdir(parents=True, exist_ok=True)
-        shutil.copy(logo_src, dst)
-        print(f"  _assets/logo.svg → assets/logo.svg")
-    
-    # Copy favicons to root
-    for f in assets_src.glob("favicon*"):
+        shutil.copy(logo_src, logo_dst)
+        print("  _assets/logo.svg → assets/logo.svg")
+
+    for f in assets_src.iterdir():
+        if f.name == "logo.svg":
+            continue
         shutil.copy(f, HTML / f.name)
         print(f"  _assets/{f.name} → {f.name}")
-    
-    for f in assets_src.glob("*.png"):
-        if f.name != "logo.svg":
-            shutil.copy(f, HTML / f.name)
-            print(f"  _assets/{f.name} → {f.name}")
-    
-    webmanifest = assets_src / "site.webmanifest"
-    if webmanifest.exists():
-        shutil.copy(webmanifest, HTML / "site.webmanifest")
-        print(f"  _assets/site.webmanifest → site.webmanifest")
 
 
-def build_docs():
-    """Build all documentation."""
-    print("Building docs → html/")
-    print()
-    
-    # Process markdown files
-    for md_file in DOCS.rglob("*.md"):
-        if md_file.parent.name.startswith("_"):
+def main():
+    template = (TEMPLATES / "default.html").read_text(encoding='utf-8')
+
+    HTML.mkdir(exist_ok=True)
+
+    print("Building docs/ → html/")
+    for md_file in sorted(DOCS.rglob("*.md")):
+        if any(part.startswith('_') for part in md_file.parts):
             continue
-        
-        rel_path = md_file.relative_to(DOCS)
-        
-        # Convert index.md to directory structure for Jekyll
-        if md_file.name == "index.md":
-            dst = HTML / rel_path
-        else:
-            # Non-index files: keep as-is for now
-            dst = HTML / rel_path
-        
-        process_markdown(md_file, dst)
-    
-    print()
-    print("Copying assets...")
+        build_page(md_file, template)
+
+    print("\nCopying assets...")
     copy_assets()
-    
-    print()
-    print("Done.")
+    print("\nDone.")
 
 
 if __name__ == "__main__":
-    build_docs()
+    main()
