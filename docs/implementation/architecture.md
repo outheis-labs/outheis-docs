@@ -122,6 +122,24 @@ Meta-knowledge about the user:
 
 Stored in `~/.outheis/human/memory/`. See [Memory](memory.md) for details.
 
+### Rules
+
+External instructions to agents — what to observe:
+
+- User-defined: "Respond in German"
+- Pattern-promoted: "User prefers short answers"
+
+Stored in `~/.outheis/human/rules/`. See [Memory](memory.md) for details.
+
+### Skills
+
+Internal capabilities — how agents act:
+
+- System skills: Base capabilities (in package)
+- Learned skills: Refined through use and correction
+
+Stored in `src/outheis/agents/skills/` (system) and `~/.outheis/human/skills/` (learned). See [Skills](skills.md) for details.
+
 ### Vault
 
 The vault is a directory of Markdown files with YAML frontmatter:
@@ -175,7 +193,13 @@ Append-only. Versioned. Recoverable.
     │   │   ├── Inbox.md.prev
     │   │   └── Exchange.md.prev
     │   └── sessions/     # Session replay logs
-    ├── rules/            # User-defined rules
+    ├── rules/            # User-defined rules (external)
+    │   ├── common.md
+    │   ├── relay.md
+    │   ├── agenda.md
+    │   └── data.md
+    ├── skills/           # Learned skills (internal)
+    │   ├── common.md
     │   ├── relay.md
     │   ├── agenda.md
     │   └── data.md
@@ -186,14 +210,15 @@ Append-only. Versioned. Recoverable.
     └── archive/          # Archived messages
 ```
 
-### Cache vs. Memory vs. Vault
+### Cache vs. Memory vs. Vault vs. Rules vs. Skills
 
-| Directory | Purpose | Deletable? |
-|-----------|---------|------------|
-| `memory/` | What we know about the user | Lose learnings |
-| `cache/` | Working state, indices | Safe to delete — rebuilds |
-| `vault/` | User's actual content | User's responsibility |
-| `rules/` | Behavioral guidelines | Lose preferences |
+| Directory | What | Who writes | Deletable? |
+|-----------|------|------------|------------|
+| `memory/` | Facts about user | Pattern Agent | Lose learnings |
+| `rules/` | Instructions to agents | User, Pattern | Lose preferences |
+| `skills/` | Agent capabilities | Agent, Pattern | Lose refinements |
+| `cache/` | Working state | System | Safe — rebuilds |
+| `vault/` | User's content | User | User's responsibility |
 
 The cache directory is explicitly regenerable. Delete it anytime — outheis rebuilds what it needs.
 

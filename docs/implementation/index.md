@@ -14,7 +14,11 @@ Complete `config.json` reference: providers, models, agents, schedules.
 
 ### [Memory & Rules](memory.md)
 
-How outheis remembers: memory types, explicit markers, seed-based migration, pattern extraction, rules emergence.
+How outheis remembers: memory types, explicit markers, pattern extraction, rules emergence.
+
+### [Skills](skills.md)
+
+How agents know what to do: system skills, learned skills, the difference between skills and rules.
 
 ### [Agenda](agenda.md)
 
@@ -22,7 +26,7 @@ Time management through Daily.md, Inbox.md, Exchange.md. Hourly review, manual r
 
 ### [Migration](migration.md)
 
-Bringing existing knowledge into outheis: seed files, approval workflow, user rules.
+Bringing existing knowledge into outheis: vault/Migration workflow, approval via checkboxes.
 
 ### [CLI Guide](guide.md)
 
