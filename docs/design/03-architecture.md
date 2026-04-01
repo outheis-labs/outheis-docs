@@ -745,7 +745,7 @@ Conflicts and urgent items must surface in `Daily.md`, not hidden in Exchange.
 
 ## Importance of Attention
 
-The transformer architecture's core insight — that attention mechanisms direct processing to what matters — applies directly to outheis. This isn't metaphor; it's the same principle at a different level.
+The transformer architecture's core insight from "Attention Is All You Need" (Vaswani et al., 2017) — that attention mechanisms direct processing to what matters — applies directly to outheis. This isn't metaphor; it's the same principle at a different level.
 
 ### The Learning Architecture
 
@@ -819,15 +819,13 @@ Skill: "Dates: Always ISO format (YYYY-MM-DD)"
 
 The LLM reads the skill and applies it. No code changes needed when preferences change. The system learns by refining skills, not by adding branches.
 
-### Scaling Through Compression
+### Scaling Through Abstraction
 
 As context grows, naive approaches fail:
 
 **Wrong:** Add more tools to fetch more data
 
-**Right:** Better compression through skills — one principle replaces ten examples
-
-This mirrors how trained weights compress training data. A model doesn't store all training examples; it learns patterns. Similarly, outheis doesn't keep all observations; it distills principles.
+**Right:** Better skills — one principle replaces ten examples, directing attention to what matters
 
 ### Pattern Agent as Optimizer
 
