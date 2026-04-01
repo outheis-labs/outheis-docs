@@ -819,13 +819,20 @@ Skill: "Dates: Always ISO format (YYYY-MM-DD)"
 
 The LLM reads the skill and applies it. No code changes needed when preferences change. The system learns by refining skills, not by adding branches.
 
-### Scaling Through Abstraction
+### Scaling Through Semantic Compression
 
 As context grows, naive approaches fail:
 
 **Wrong:** Add more tools to fetch more data
 
-**Right:** Better skills — one principle replaces ten examples, directing attention to what matters
+**Right:** Semantic compression — the Pattern Agent distills many specific observations into few general principles
+
+```
+3x "User corrected date format"  →  "Dates: Always ISO format"
+5x "User prefers short answers"  →  "Brevity: be concise"
+```
+
+The meaning is preserved, the redundancy disappears. One skill replaces ten memory entries, directing attention to what matters.
 
 ### Pattern Agent as Optimizer
 
