@@ -743,6 +743,105 @@ Conflicts and urgent items must surface in `Daily.md`, not hidden in Exchange.
 
 ---
 
+## Importance of Attention
+
+The transformer architecture's core insight — that attention mechanisms direct processing to what matters — applies directly to outheis. This isn't metaphor; it's the same principle at a different level.
+
+### The Learning Architecture
+
+```
+Skills (highest density)
+   │  condensed principles
+   │  "Dates: Always ISO format"
+   │  direct attention BEFORE processing
+   │
+Memory (medium density)
+   │  facts, observations
+   │  "User corrected date format 3x"
+   │  raw material for distillation
+   │
+Rules (lowest density)
+      hard constraints
+      "Never delete without confirmation"
+      override everything, rarely change
+```
+
+### The Mapping
+
+| LLM Concept | outheis Equivalent |
+|-------------|-------------------|
+| Trained weights | Skills (distilled principles) |
+| Context window | Memory (current observations) |
+| Query | User message |
+| Training loop | Pattern Agent (nightly) |
+
+### How Learning Works
+
+```
+User interacts with agents
+        ↓
+Corrections, preferences observed
+        ↓
+Stored in Memory (feedback type)
+        ↓
+Pattern Agent runs (nightly)
+        ↓
+Recognizes patterns (3+ similar observations)
+        ↓
+Distills into Skill (condensed principle)
+        ↓
+Deletes redundant Memory entries
+        ↓
+Next agent invocation: Skill directs attention
+        ↓
+Agent behaves differently (learned)
+```
+
+This is gradient descent at the system level. Each correction adjusts the "weights" (skills). Over time, the system needs less explicit context because skills direct attention efficiently.
+
+### Why Not More Code?
+
+The anti-pattern is solving learning with hardcoded logic:
+
+**Wrong:**
+```python
+def format_date(date):
+    if user_prefers_iso:
+        return date.isoformat()
+    elif user_prefers_german:
+        return date.strftime("%d.%m.%Y")
+```
+
+**Right:**
+```
+Skill: "Dates: Always ISO format (YYYY-MM-DD)"
+```
+
+The LLM reads the skill and applies it. No code changes needed when preferences change. The system learns by refining skills, not by adding branches.
+
+### Scaling Through Compression
+
+As context grows, naive approaches fail:
+
+**Wrong:** Add more tools to fetch more data
+
+**Right:** Better compression through skills — one principle replaces ten examples
+
+This mirrors how trained weights compress training data. A model doesn't store all training examples; it learns patterns. Similarly, outheis doesn't keep all observations; it distills principles.
+
+### Pattern Agent as Optimizer
+
+The Pattern Agent is the optimizer of this system:
+
+1. **Observes gradients** — user corrections indicate error
+2. **Accumulates updates** — memory stores observations
+3. **Applies batch update** — nightly distillation
+4. **Prunes redundancy** — deletes obsolete memory
+
+The goal: a system that improves not by adding code, but by refining attention. The longer it runs, the less context it needs.
+
+---
+
 ## Design Principles Summary
 
 | Principle | Implementation |
