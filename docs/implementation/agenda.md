@@ -221,7 +221,8 @@ outheis reads your Agenda files and responds naturally.
 vault/Agenda/
 ├── Daily.md              # Your working file
 ├── Inbox.md              # Quick capture
-└── Exchange.md           # Async dialogue
+├── Exchange.md           # Async dialogue
+└── Shadow.md             # Chronological entries from vault (auto-generated)
 
 ~/.outheis/human/cache/agenda/
 ├── hashes.json           # SHA256 hashes for change detection
@@ -231,6 +232,76 @@ vault/Agenda/
 ```
 
 The cache is regenerable — delete it anytime and outheis will rebuild.
+
+## Shadow.md
+
+A staging area for chronological entries detected across your vault.
+
+### Purpose
+
+Your vault contains dates scattered across many files: project deadlines, birthdays in contact notes, recurring events in project docs. Shadow.md collects these automatically so Agenda can surface them at the right time.
+
+### How It Works
+
+The Data Agent (zeno) runs a nightly scan at 03:30 (configurable):
+
+1. **Scan vault** — Parse all files for date-relevant content
+2. **Detect patterns** — Deadlines, birthdays, appointments, recurring events
+3. **Append new entries** — Add to Shadow.md without overwriting existing content
+4. **Source tracking** — Each entry links back to its origin file
+
+### Format
+
+```markdown
+# Shadow
+
+*Chronological entries detected from vault. Auto-updated nightly.*
+
+---
+
+## Scan 2026-03-30 03:30
+
+- ⏰ **2026-04-15** Project Alpha deadline `← projects/alpha.md`
+- 🎂 **2026-05-12** Emma's birthday `← contacts/family.md`
+- 🔄 **every Monday** Team standup `← work/routines.md`
+- 📅 **2026-04-01** Tax filing deadline `← admin/taxes.md`
+
+## Scan 2026-03-29 03:30
+
+- ☐ **2026-03-31** Send quarterly report `← work/q1.md`
+```
+
+### Icons
+
+| Icon | Type | Example |
+|------|------|---------|
+| ⏰ | Deadline | Project due dates |
+| 🎂 | Birthday | Contact birthdays |
+| 📅 | Appointment | Fixed calendar events |
+| 🔄 | Recurring | Weekly/monthly events |
+| ☐ | Task | Time-bound tasks |
+
+### Integration with Daily
+
+Agenda agent reads Shadow.md and can surface relevant entries in Daily.md. When you ask "was steht diese Woche an?", outheis checks both your explicit schedule and Shadow's detected dates.
+
+### Configuration
+
+```json
+{
+  "schedule": {
+    "shadow_scan": {
+      "enabled": true,
+      "hour": 3,
+      "minute": 30
+    }
+  }
+}
+```
+
+### Manual Trigger
+
+You can ask: "scanne den vault nach terminen" or "aktualisiere shadow" to run the scan immediately.
 
 ## Configuration
 
