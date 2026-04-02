@@ -1,29 +1,29 @@
 # outheis-docs
 
-Documentation for [outheis](https://github.com/outheis-labs/outheis-minimal) — a multi-agent personal AI assistant.
+Documentation for [outheis](https://github.com/outheis-labs/outheis-minimal) — a privacy-first multi-agent personal AI assistant.
+
+**📖 [Read the documentation](https://outheis-labs.github.io/outheis-docs/)**
 
 ## Structure
 
 ```
 outheis-docs/
-├── docs/           # Source markdown files
-├── html/           # Generated Jekyll site (ready for GitHub Pages)
+├── docs/              # Source (Markdown)
+├── html/              # Built site (HTML)
+├── templates/         # Page template
 └── scripts/
-    └── build-site.py
+    └── build-site.py  # Build script
 ```
 
-## Building
+## Building locally
 
 ```bash
+pip install markdown
 python scripts/build-site.py
 ```
 
-This reads from `docs/` and generates `html/`.
+Generates `html/` from `docs/`.
 
 ## Deployment
 
-The `html/` directory is ready for GitHub Pages or any static hosting.
-
-## Live Site
-
-https://outheis-labs.github.io/outheis-minimal/
+GitHub Pages serves from `html/` on push to `main`.
