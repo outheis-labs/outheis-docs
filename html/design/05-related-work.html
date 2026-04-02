@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Related Work · outheis</title>
+  <link rel="icon" type="image/png" href="../favicon-96x96.png" sizes="96x96">
+  <link rel="icon" type="image/svg+xml" href="../favicon.svg">
+  <link rel="shortcut icon" href="../favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="../apple-touch-icon.png">
+  <link rel="manifest" href="../site.webmanifest">
+  <link rel="preconnect" href="https://rsms.me/">
+  <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --font-body: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-ui: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-mono: SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      --color-text: #1a1a1a;
+      --color-text-muted: #666;
+      --color-text-faint: #999;
+      --color-border: #e0e0e0;
+      --color-bg-code: #f5f5f5;
+    }
+
+    @supports (font-variation-settings: normal) {
+      :root { --font-body: "Inter var", sans-serif; --font-ui: "Inter var", sans-serif; }
+    }
+
+    html, body {
+      width: 100%;
+      min-height: 100vh;
+      background: #fff;
+      font-family: var(--font-body);
+      font-size: 15px;
+      line-height: 1.6;
+      color: var(--color-text);
+    }
+
+    .container {
+      display: flex;
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 2rem;
+      gap: 3rem;
+    }
+
+    .sidebar {
+      flex: 0 0 200px;
+      position: sticky;
+      top: 2rem;
+      height: fit-content;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      align-self: flex-start;
+    }
+
+    .sidebar-logo-link {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
+      text-decoration: none;
+      margin-bottom: 2rem;
+    }
+
+    .sidebar-logo {
+      display: block;
+      width: 120px;
+      height: auto;
+      margin-bottom: 0.5rem;
+    }
+
+    .sidebar-title {
+      font-family: var(--font-ui);
+      font-size: 14px;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      color: var(--color-text);
+    }
+
+    .sidebar-nav {
+      list-style: none;
+      width: 100%;
+    }
+
+    .sidebar-nav li {
+      margin-bottom: 0.75rem;
+    }
+
+    .sidebar-nav a {
+      font-family: var(--font-ui);
+      color: var(--color-text-muted);
+      text-decoration: none;
+      font-size: 15px;
+      font-weight: 600;
+    }
+
+    .sidebar-nav a:hover { color: var(--color-text); }
+    .sidebar-nav a.active { color: var(--color-text); }
+
+    .sidebar-nav .nav-section {
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--color-text-faint);
+      margin-top: 1.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .sidebar-nav .nav-section:first-of-type { margin-top: 0; }
+
+    .sidebar-nav .nav-external {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--color-text-faint);
+    }
+
+    .content {
+      flex: 1;
+      min-width: 0;
+      max-width: 600px;
+      align-self: flex-start;
+    }
+
+    .content > *:first-child { margin-top: 0; }
+
+    .content h1 { font-family: var(--font-ui); font-size: 28px; font-weight: 600; margin-bottom: 0.5rem; letter-spacing: -0.02em; }
+    .content h2 { font-family: var(--font-ui); font-size: 18px; font-weight: 600; margin-top: 2rem; margin-bottom: 1.25rem; }
+    .content h3 { font-family: var(--font-ui); font-size: 15px; font-weight: 600; margin-top: 1.5rem; margin-bottom: 0.75rem; }
+    .content p { margin-bottom: 1rem; }
+    .content a { color: var(--color-text-muted); }
+    .content a:hover { color: var(--color-text); }
+    .content ul, .content ol { margin-bottom: 1rem; padding-left: 1.5rem; }
+    .content li { margin-bottom: 0.4rem; }
+
+    .content table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; font-family: var(--font-ui); font-size: 13px; }
+    .content th, .content td { text-align: left; padding: 0.5rem 0.75rem; border-bottom: 1px solid var(--color-border); }
+    .content th { font-weight: 500; font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--color-text-muted); }
+
+    .content code { font-family: var(--font-mono); font-size: 14px; background: var(--color-bg-code); padding: 0.15em 0.4em; border-radius: 3px; }
+    .content pre { background: var(--color-bg-code); padding: 1rem 1.25rem; overflow-x: auto; margin: 1.5rem 0; font-size: 13px; border-radius: 4px; line-height: 1.5; }
+    .content pre code { background: none; padding: 0; border-radius: 0; }
+
+    .content hr { border: none; border-top: 1px solid var(--color-border); margin: 1.5rem 0; }
+    .content strong { font-weight: 500; }
+    .content em { font-style: italic; }
+    .content blockquote { border-left: 2px solid var(--color-border); padding-left: 1.25rem; margin: 1.5rem 0; color: var(--color-text-muted); font-style: italic; }
+    .content .lead { font-style: italic; color: var(--color-text-muted); margin-bottom: 2rem; }
+    .content .footer { font-size: 12px; color: var(--color-text-muted); font-style: italic; }
+
+    @media (max-width: 700px) {
+      .container { flex-direction: column; padding: 1.5rem; gap: 1.5rem; }
+      .sidebar { position: static; flex: none; flex-direction: row; flex-wrap: wrap; align-items: center; gap: 1rem; }
+      .sidebar-logo { width: 48px; height: 48px; margin-bottom: 0; }
+      .sidebar-title { margin-bottom: 0; flex: 1; }
+      .sidebar-nav { width: 100%; display: flex; flex-wrap: wrap; gap: 0.5rem 1.25rem; }
+      .sidebar-nav li { margin-bottom: 0; }
+      .content h1 { font-size: 24px; }
+      .content h2 { font-size: 16px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <aside class="sidebar">
+      <a href="../index.html" class="sidebar-logo-link">
+        <img src="../assets/logo.svg" alt="outheis" class="sidebar-logo">
+        <span class="sidebar-title">outheis</span>
+      </a>
+      <nav>
+        <ul class="sidebar-nav">
+          <li><a href="../index.html">Home</a></li>
+          <li class="nav-section">Philosophy</li>
+          <li><a href="../philosophy/index.html">Why outheis</a></li>
+          <li class="nav-section">Design</li>
+          <li><a href="../design/index.html">Overview</a></li>
+          <li><a href="../design/01-why-os-principles.html">OS Principles</a></li>
+          <li><a href="../design/02-systems-survey.html">Systems Survey</a></li>
+          <li><a href="../design/03-architecture.html">Architecture</a></li>
+          <li><a href="../design/04-data-formats.html">Data Formats</a></li>
+          <li><a href="../design/05-related-work.html" class="active">Related Work</a></li>
+          <li><a href="../design/06-agent-prompts.html">Agent Prompts</a></li>
+          <li class="nav-section">Implementation</li>
+          <li><a href="../implementation/architecture.html">Current State</a></li>
+          <li><a href="../implementation/memory.html">Memory & Rules</a></li>
+          <li><a href="../implementation/agenda.html">Agenda</a></li>
+          <li><a href="../implementation/skills.html">Skills</a></li>
+          <li><a href="../implementation/migration.html">Migration</a></li>
+          <li><a href="../implementation/config.html">Config</a></li>
+          <li><a href="../implementation/guide.html">CLI Guide</a></li>
+          <li><a href="../implementation/webui.html">Web UI</a></li>
+          <li><a href="../implementation/alan.html">Code Agent</a></li>
+          <li class="nav-section"></li>
+          <li><a href="https://github.com/outheis-labs/outheis-minimal" class="nav-external">GitHub ↗</a></li>
+        </ul>
+      </nav>
+    </aside>
+    <main class="content">
+      <h1 id="related-work">Related Work</h1>
+<p>This document surveys existing research on applying operating system principles to AI agent architectures.</p>
+<hr />
+<h2 id="the-emerging-field">The Emerging Field</h2>
+<p>The application of OS concepts to AI agent systems is a nascent but growing research area. Recent work recognizes that agent architectures face challenges operating systems solved decades ago.</p>
+<p>As one recent paper observes: "Today's agent architectures resemble the pre-OS era of computing—a chaos of duplicated solutions lacking fundamental abstractions for resource management, isolation, and coordination."</p>
+<hr />
+<h2 id="key-publications">Key Publications</h2>
+<h3 id="aios-llm-agent-operating-system">AIOS: LLM Agent Operating System</h3>
+<p><strong>Source</strong>: arXiv 2403.16971, COLM 2025</p>
+<p>The most directly relevant work. AIOS proposes an OS kernel for LLM-based agents with:</p>
+<ul>
+<li>Scheduler for dispatching agent requests</li>
+<li>Context manager with snapshot/restoration (analogous to process context switching)</li>
+<li>Memory manager for runtime operations</li>
+<li>Storage manager for persistence</li>
+<li>Access control for agent permissions</li>
+</ul>
+<p>Key insight: LLMs are treated as cores, analogous to CPU cores, with a unified interface for diverse LLM endpoints.</p>
+<p><strong>Difference from outheis</strong>: AIOS focuses on multi-tenant agent serving with performance optimization. outheis focuses on personal assistant with privacy guarantees and plaintext data architecture.</p>
+<h3 id="agent-operating-systems-agent-os">Agent Operating Systems (Agent-OS)</h3>
+<p><strong>Source</strong>: Preprints.org, 2025</p>
+<p>Proposes a layered architecture:</p>
+<ol>
+<li>Kernel plane</li>
+<li>Resource &amp; Service plane</li>
+<li>Agent Runtime plane</li>
+<li>Orchestration &amp; Workflow plane</li>
+<li>User &amp; Application plane</li>
+</ol>
+<p>Emphasizes real-time guarantees and security primitives for autonomous systems.</p>
+<p><strong>Difference from outheis</strong>: Agent-OS targets enterprise/SmartTech scenarios with formal verification. outheis targets personal use with simplicity and transparency.</p>
+<h3 id="multi-agent-memory-from-a-computer-architecture-perspective">Multi-Agent Memory from a Computer Architecture Perspective</h3>
+<p><strong>Source</strong>: arXiv 2603.10062, 2026</p>
+<p>Frames multi-agent memory as a computer architecture problem:</p>
+<ul>
+<li>Distinguishes shared vs. distributed memory paradigms</li>
+<li>Proposes three-layer hierarchy: I/O, cache, memory</li>
+<li>Identifies cache sharing and memory consistency as critical gaps</li>
+</ul>
+<p>Key insight: "Agent performance is an end-to-end data movement problem."</p>
+<p><strong>Relevance to outheis</strong>: Validates our index-based access strategy and the distinction between hot (messages.jsonl) and cold (archive/) storage.</p>
+<h3 id="integrating-ai-into-operating-systems-a-survey">Integrating AI into Operating Systems: A Survey</h3>
+<p><strong>Source</strong>: arXiv 2407.14567, 2025</p>
+<p>Comprehensive survey covering two directions:</p>
+<ol>
+<li><strong>AI for OS</strong>: ML/LLM techniques to enhance OS (scheduling, memory, security)</li>
+<li><strong>OS for AI</strong>: OS architecture innovations to support AI workloads</li>
+</ol>
+<p>Identifies three paradigms:
+- Kernel-level AI integration
+- Agent-mediated workflows
+- LLM-as-OS abstraction</p>
+<p><strong>Relevance to outheis</strong>: Confirms the validity of applying OS principles to agent design; provides vocabulary and framing.</p>
+<h3 id="modeling-an-operating-system-based-on-agents">Modeling an Operating System Based on Agents</h3>
+<p><strong>Source</strong>: Springer HAIS 2012</p>
+<p>Early work proposing OS modeling with multi-agent paradigms, considering interaction-based computing and cloud computing.</p>
+<p><strong>Relevance to outheis</strong>: Shows this is not an entirely new idea, but predates the LLM era.</p>
+<h3 id="the-orchestration-of-multi-agent-systems">The Orchestration of Multi-Agent Systems</h3>
+<p><strong>Source</strong>: arXiv 2601.13671, 2026</p>
+<p>Technical blueprint for enterprise multi-agent systems:</p>
+<ul>
+<li>Model Context Protocol (MCP) for tool access</li>
+<li>Agent-to-Agent (A2A) protocol for peer coordination</li>
+<li>Governance frameworks and observability</li>
+</ul>
+<p><strong>Difference from outheis</strong>: Focuses on enterprise orchestration with complex protocols. outheis uses simple message passing with append-only queue.</p>
+<hr />
+<h2 id="conceptual-parallels">Conceptual Parallels</h2>
+<table>
+<thead>
+<tr>
+<th>OS Concept</th>
+<th>AIOS</th>
+<th>Agent-OS</th>
+<th>outheis</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Kernel</td>
+<td>LLM kernel with modules</td>
+<td>Layered planes</td>
+<td>Dispatcher (no LLM)</td>
+</tr>
+<tr>
+<td>Scheduling</td>
+<td>FIFO, Round Robin</td>
+<td>Real-time guarantees</td>
+<td>Priority + keywords</td>
+</tr>
+<tr>
+<td>Memory</td>
+<td>K-LRU eviction</td>
+<td>Three-layer hierarchy</td>
+<td>Index + lazy load</td>
+</tr>
+<tr>
+<td>IPC</td>
+<td>System calls</td>
+<td>Protocols (MCP, A2A)</td>
+<td>Message queue (JSONL)</td>
+</tr>
+<tr>
+<td>Access Control</td>
+<td>Privilege groups</td>
+<td>Security primitives</td>
+<td>Capabilities (pledge/unveil)</td>
+</tr>
+<tr>
+<td>Context Switch</td>
+<td>Logits-based snapshot</td>
+<td>Not specified</td>
+<td>Conversation archival</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="what-distinguishes-outheis">What Distinguishes outheis</h2>
+<h3 id="1-privacy-first-architecture">1. Privacy-First Architecture</h3>
+<p>Most related work assumes multi-tenant cloud deployment. outheis targets two modes: Personal Assistant (single-user, local-first) and Domain Expert Assistant (specialized knowledge service). Both prioritize privacy:</p>
+<ul>
+<li>User data only in <code>human/</code> and <code>vault/</code></li>
+<li>Removing <code>human/</code> erases all user traces</li>
+<li>No telemetry, no cloud dependency (optional)</li>
+</ul>
+<h3 id="2-plaintext-data-philosophy">2. Plaintext Data Philosophy</h3>
+<p>Related work typically uses databases or specialized storage. outheis uses:</p>
+<ul>
+<li>Markdown files with tags (prospective information architecture)</li>
+<li>JSONL for structured data (messages, index, imports)</li>
+<li>Human-readable, tool-agnostic formats</li>
+</ul>
+<p>This draws from Unix philosophy rather than database tradition.</p>
+<h3 id="3-simplicity-over-performance">3. Simplicity Over Performance</h3>
+<p>AIOS optimizes for throughput (2.1x faster execution). outheis optimizes for:</p>
+<ul>
+<li>Understandability (static dispatcher, no LLM in routing)</li>
+<li>Auditability (append-only log)</li>
+<li>Deployment flexibility (cloud minimal to local maximal)</li>
+</ul>
+<h3 id="4-personal-agency">4. Personal Agency</h3>
+<p>The Agenda agent concept—enabling user agency through intelligent filtering—is not present in enterprise-focused related work.</p>
+<hr />
+<h2 id="theoretical-foundations">Theoretical Foundations</h2>
+<p>The related work draws primarily from:</p>
+<ul>
+<li><strong>Distributed systems</strong>: Message passing, consensus, fault tolerance</li>
+<li><strong>Operating systems</strong>: Scheduling, memory hierarchy, access control</li>
+<li><strong>Software architecture</strong>: Microservices, event sourcing</li>
+</ul>
+<p>outheis additionally draws from:</p>
+<ul>
+<li><strong>Information science</strong>: Prospective vs. retrospective architecture</li>
+<li><strong>Unix philosophy</strong>: Plaintext, small tools, composability</li>
+<li><strong>Erlang/OTP</strong>: Actor model, supervision, let-it-crash</li>
+</ul>
+<hr />
+<h2 id="open-research-questions">Open Research Questions</h2>
+<p>The literature identifies several open problems relevant to outheis:</p>
+<ol>
+<li><strong>Memory consistency</strong> in multi-agent systems</li>
+<li><strong>Cache sharing</strong> protocols across agents</li>
+<li><strong>Context management</strong> for long-running conversations</li>
+<li><strong>Tag harmonization</strong> via LLM (addressed in our theoretical work)</li>
+</ol>
+<hr />
+<h2 id="references">References</h2>
+<ol>
+<li>
+<p>Mei, K., Li, Z., et al. (2024). AIOS: LLM Agent Operating System. arXiv:2403.16971. COLM 2025.</p>
+</li>
+<li>
+<p>Agent Operating Systems (Agent-OS): A Foundational Specification. Preprints.org, 2025.</p>
+</li>
+<li>
+<p>Multi-Agent Memory from a Computer Architecture Perspective. arXiv:2603.10062, 2026.</p>
+</li>
+<li>
+<p>Integrating Artificial Intelligence into Operating Systems: A Survey. arXiv:2407.14567, 2025.</p>
+</li>
+<li>
+<p>Cámara, J.P., et al. (2012). Modeling an Operating System Based on Agents. HAIS 2012, Springer.</p>
+</li>
+<li>
+<p>The Orchestration of Multi-Agent Systems: Architectures, Protocols, and Enterprise Adoption. arXiv:2601.13671, 2026.</p>
+</li>
+<li>
+<p>Ge, Y., et al. (2023). LLM as OS, Agents as Apps: Envisioning AIOS, Agents and the AIOS-Agent Ecosystem.</p>
+</li>
+</ol>
+<hr />
+<h2 id="conclusion">Conclusion</h2>
+<p>The application of OS principles to AI agent architecture is an active research area. Existing work focuses primarily on performance optimization for enterprise multi-agent systems. outheis contributes a complementary perspective: privacy-first personal assistant architecture with plaintext data philosophy and emphasis on user agency.</p>
+<p>The theoretical foundation linking prospective information architecture to agent design (see: <a href="https://github.com/outheis-labs/research-base/blob/main/temporalization-of-order/temporalization-of-order.md">Temporalization of Order</a>) appears to be novel and not addressed in current literature.</p>
+      <hr>
+      <p class="footer">Open source under AGPL-3.0 · <a href="https://github.com/outheis-labs/outheis-minimal">Code on GitHub</a></p>
+    </main>
+  </div>
+</body>
+</html>

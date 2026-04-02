@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Migration · outheis</title>
+  <link rel="icon" type="image/png" href="../favicon-96x96.png" sizes="96x96">
+  <link rel="icon" type="image/svg+xml" href="../favicon.svg">
+  <link rel="shortcut icon" href="../favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="../apple-touch-icon.png">
+  <link rel="manifest" href="../site.webmanifest">
+  <link rel="preconnect" href="https://rsms.me/">
+  <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --font-body: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-ui: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-mono: SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      --color-text: #1a1a1a;
+      --color-text-muted: #666;
+      --color-text-faint: #999;
+      --color-border: #e0e0e0;
+      --color-bg-code: #f5f5f5;
+    }
+
+    @supports (font-variation-settings: normal) {
+      :root { --font-body: "Inter var", sans-serif; --font-ui: "Inter var", sans-serif; }
+    }
+
+    html, body {
+      width: 100%;
+      min-height: 100vh;
+      background: #fff;
+      font-family: var(--font-body);
+      font-size: 15px;
+      line-height: 1.6;
+      color: var(--color-text);
+    }
+
+    .container {
+      display: flex;
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 2rem;
+      gap: 3rem;
+    }
+
+    .sidebar {
+      flex: 0 0 200px;
+      position: sticky;
+      top: 2rem;
+      height: fit-content;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      align-self: flex-start;
+    }
+
+    .sidebar-logo-link {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
+      text-decoration: none;
+      margin-bottom: 2rem;
+    }
+
+    .sidebar-logo {
+      display: block;
+      width: 120px;
+      height: auto;
+      margin-bottom: 0.5rem;
+    }
+
+    .sidebar-title {
+      font-family: var(--font-ui);
+      font-size: 14px;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      color: var(--color-text);
+    }
+
+    .sidebar-nav {
+      list-style: none;
+      width: 100%;
+    }
+
+    .sidebar-nav li {
+      margin-bottom: 0.75rem;
+    }
+
+    .sidebar-nav a {
+      font-family: var(--font-ui);
+      color: var(--color-text-muted);
+      text-decoration: none;
+      font-size: 15px;
+      font-weight: 600;
+    }
+
+    .sidebar-nav a:hover { color: var(--color-text); }
+    .sidebar-nav a.active { color: var(--color-text); }
+
+    .sidebar-nav .nav-section {
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--color-text-faint);
+      margin-top: 1.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .sidebar-nav .nav-section:first-of-type { margin-top: 0; }
+
+    .sidebar-nav .nav-external {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--color-text-faint);
+    }
+
+    .content {
+      flex: 1;
+      min-width: 0;
+      max-width: 600px;
+      align-self: flex-start;
+    }
+
+    .content > *:first-child { margin-top: 0; }
+
+    .content h1 { font-family: var(--font-ui); font-size: 28px; font-weight: 600; margin-bottom: 0.5rem; letter-spacing: -0.02em; }
+    .content h2 { font-family: var(--font-ui); font-size: 18px; font-weight: 600; margin-top: 2rem; margin-bottom: 1.25rem; }
+    .content h3 { font-family: var(--font-ui); font-size: 15px; font-weight: 600; margin-top: 1.5rem; margin-bottom: 0.75rem; }
+    .content p { margin-bottom: 1rem; }
+    .content a { color: var(--color-text-muted); }
+    .content a:hover { color: var(--color-text); }
+    .content ul, .content ol { margin-bottom: 1rem; padding-left: 1.5rem; }
+    .content li { margin-bottom: 0.4rem; }
+
+    .content table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; font-family: var(--font-ui); font-size: 13px; }
+    .content th, .content td { text-align: left; padding: 0.5rem 0.75rem; border-bottom: 1px solid var(--color-border); }
+    .content th { font-weight: 500; font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--color-text-muted); }
+
+    .content code { font-family: var(--font-mono); font-size: 14px; background: var(--color-bg-code); padding: 0.15em 0.4em; border-radius: 3px; }
+    .content pre { background: var(--color-bg-code); padding: 1rem 1.25rem; overflow-x: auto; margin: 1.5rem 0; font-size: 13px; border-radius: 4px; line-height: 1.5; }
+    .content pre code { background: none; padding: 0; border-radius: 0; }
+
+    .content hr { border: none; border-top: 1px solid var(--color-border); margin: 1.5rem 0; }
+    .content strong { font-weight: 500; }
+    .content em { font-style: italic; }
+    .content blockquote { border-left: 2px solid var(--color-border); padding-left: 1.25rem; margin: 1.5rem 0; color: var(--color-text-muted); font-style: italic; }
+    .content .lead { font-style: italic; color: var(--color-text-muted); margin-bottom: 2rem; }
+    .content .footer { font-size: 12px; color: var(--color-text-muted); font-style: italic; }
+
+    @media (max-width: 700px) {
+      .container { flex-direction: column; padding: 1.5rem; gap: 1.5rem; }
+      .sidebar { position: static; flex: none; flex-direction: row; flex-wrap: wrap; align-items: center; gap: 1rem; }
+      .sidebar-logo { width: 48px; height: 48px; margin-bottom: 0; }
+      .sidebar-title { margin-bottom: 0; flex: 1; }
+      .sidebar-nav { width: 100%; display: flex; flex-wrap: wrap; gap: 0.5rem 1.25rem; }
+      .sidebar-nav li { margin-bottom: 0; }
+      .content h1 { font-size: 24px; }
+      .content h2 { font-size: 16px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <aside class="sidebar">
+      <a href="../index.html" class="sidebar-logo-link">
+        <img src="../assets/logo.svg" alt="outheis" class="sidebar-logo">
+        <span class="sidebar-title">outheis</span>
+      </a>
+      <nav>
+        <ul class="sidebar-nav">
+          <li><a href="../index.html">Home</a></li>
+          <li class="nav-section">Philosophy</li>
+          <li><a href="../philosophy/index.html">Why outheis</a></li>
+          <li class="nav-section">Design</li>
+          <li><a href="../design/index.html">Overview</a></li>
+          <li><a href="../design/01-why-os-principles.html">OS Principles</a></li>
+          <li><a href="../design/02-systems-survey.html">Systems Survey</a></li>
+          <li><a href="../design/03-architecture.html">Architecture</a></li>
+          <li><a href="../design/04-data-formats.html">Data Formats</a></li>
+          <li><a href="../design/05-related-work.html">Related Work</a></li>
+          <li><a href="../design/06-agent-prompts.html">Agent Prompts</a></li>
+          <li class="nav-section">Implementation</li>
+          <li><a href="../implementation/architecture.html">Current State</a></li>
+          <li><a href="../implementation/memory.html">Memory & Rules</a></li>
+          <li><a href="../implementation/agenda.html">Agenda</a></li>
+          <li><a href="../implementation/skills.html">Skills</a></li>
+          <li><a href="../implementation/migration.html" class="active">Migration</a></li>
+          <li><a href="../implementation/config.html">Config</a></li>
+          <li><a href="../implementation/guide.html">CLI Guide</a></li>
+          <li><a href="../implementation/webui.html">Web UI</a></li>
+          <li><a href="../implementation/alan.html">Code Agent</a></li>
+          <li class="nav-section"></li>
+          <li><a href="https://github.com/outheis-labs/outheis-minimal" class="nav-external">GitHub ↗</a></li>
+        </ul>
+      </nav>
+    </aside>
+    <main class="content">
+      <h1 id="migration">Migration</h1>
+<p><em>How to bring your existing knowledge into outheis.</em></p>
+<h2 id="overview">Overview</h2>
+<p>outheis learns through:
+1. <strong>Direct interaction</strong> — conversations with you
+2. <strong>Pattern extraction</strong> — Pattern agent observes and promotes rules
+3. <strong>Manual migration</strong> — import existing knowledge via vault</p>
+<p>This guide covers option 3: migrating data from Claude.ai or other sources.</p>
+<h2 id="the-migration-directory">The Migration Directory</h2>
+<p>Place files to migrate in your vault:</p>
+<pre><code>vault/Migration/
+├── claude-export.json    # Your data
+├── preferences.md        # Your rules/preferences
+├── data.md               # Rules for Data agent
+└── Migration.md          # ← Created by outheis
+</code></pre>
+<p>This directory is <strong>temporary</strong> — create it when you have something to migrate, delete it when done.</p>
+<h2 id="chat-commands">Chat Commands</h2>
+<p>All migration happens through natural conversation:</p>
+<table>
+<thead>
+<tr>
+<th>You say</th>
+<th>What happens</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>"memory migrate"</td>
+<td>Process Migration/ files, create Migration.md</td>
+</tr>
+<tr>
+<td>"migriere memory"</td>
+<td>Same, in German</td>
+</tr>
+<tr>
+<td>"memory traits"</td>
+<td>Show current memory and rules</td>
+</tr>
+<tr>
+<td>"zeige traits"</td>
+<td>Same, in German</td>
+</tr>
+<tr>
+<td>"was weißt du über mich"</td>
+<td>Same, conversational</td>
+</tr>
+<tr>
+<td>"schreibe regel: ..."</td>
+<td>Add rule directly, bypassing Pattern agent</td>
+</tr>
+</tbody>
+</table>
+<p>No CLI commands needed. Just talk to outheis.</p>
+<h2 id="file-formats">File Formats</h2>
+<h3 id="json-files">JSON Files</h3>
+<pre><code class="language-json">{
+  &quot;entries&quot;: [
+    {
+      &quot;content&quot;: &quot;User arbeitet bei senswork&quot;,
+      &quot;type&quot;: &quot;user&quot;
+    },
+    {
+      &quot;content&quot;: &quot;Antworte knapp und direkt&quot;,
+      &quot;type&quot;: &quot;feedback&quot;
+    },
+    {
+      &quot;content&quot;: &quot;Arbeitet gerade an outheis&quot;,
+      &quot;type&quot;: &quot;context&quot;
+    }
+  ]
+}
+</code></pre>
+<p><strong>Types:</strong>
+- <code>user</code> — Facts about you (permanent)
+- <code>feedback</code> — How you want outheis to behave (permanent)
+- <code>context</code> — Current focus (decays after 14 days)</p>
+<p>If <code>type</code> is omitted, outheis infers from content.</p>
+<h3 id="markdown-files">Markdown Files</h3>
+<pre><code class="language-markdown"># Preferences
+
+## user
+- Lebt in München
+- Arbeitet als Software-Entwickler
+
+## feedback
+- Antworte immer auf Deutsch
+- Bevorzuge kurze Antworten
+
+## rule:agenda
+- MAX 10 Items in Daily.md
+- Keine Meetings vor 10 Uhr
+
+## rule:data
+- Durchsuche auch PDF-Dateien
+</code></pre>
+<p>Sections map to memory types or rules:
+- <code>## user</code>, <code>## feedback</code>, <code>## context</code> → Memory
+- <code>## rule:agenda</code>, <code>## rule:data</code>, <code>## rule:relay</code> → Rules files</p>
+<h2 id="workflow">Workflow</h2>
+<h3 id="1-create-migration-directory">1. Create Migration Directory</h3>
+<pre><code class="language-bash">mkdir ~/Documents/Vault/Migration
+</code></pre>
+<h3 id="2-add-your-files">2. Add Your Files</h3>
+<p>Copy your data:
+- Export from Claude.ai → <code>claude-export.json</code>
+- Your preferences → <code>preferences.md</code>
+- Agent-specific rules → <code>agenda.md</code>, <code>data.md</code></p>
+<h3 id="3-say-memory-migrate">3. Say "memory migrate"</h3>
+<p>In chat with outheis:</p>
+<pre><code>Du: memory migrate
+Ou: Migration verarbeitet:
+    - 3 Dateien geparst
+    - 12 Einträge warten auf Bestätigung
+
+    Prüfe vault/Migration/Migration.md
+</code></pre>
+<h3 id="4-review-migrationmd">4. Review Migration.md</h3>
+<p>outheis creates <code>Migration.md</code>:</p>
+<pre><code class="language-markdown"># Migration
+
+*Zuletzt aktualisiert: 2026-03-30 14:30*
+
+Markiere Einträge:
+- `[x]` → übernehmen
+- `[-]` → ablehnen
+- `[ ]` → noch offen
+
+---
+
+## Offen
+
+- [ ] User arbeitet bei senswork [user]
+- [ ] Antworte knapp und direkt [feedback]
+- [ ] MAX 10 Items in Daily.md [rule:agenda]
+- [ ] User ist 35 Jahre alt [user]
+
+---
+
+## Statistik
+
+- Übernommen: 0
+- Abgelehnt: 0
+</code></pre>
+<p>Edit the file — mark entries:</p>
+<pre><code class="language-markdown">- [x] User arbeitet bei senswork [user]
+- [x] Antworte knapp und direkt [feedback]
+- [x] MAX 10 Items in Daily.md [rule:agenda]
+- [-] User ist 35 Jahre alt [user]
+</code></pre>
+<h3 id="5-say-memory-migrate-again">5. Say "memory migrate" Again</h3>
+<pre><code>Du: memory migrate
+Ou: Migration verarbeitet:
+    - 3 übernommen
+    - 1 abgelehnt
+    - 0 noch offen
+</code></pre>
+<p>Adopted entries are now in memory/rules. Rejected entries are discarded.</p>
+<h3 id="6-delete-migration-directory">6. Delete Migration Directory</h3>
+<p>When done:</p>
+<pre><code class="language-bash">rm -rf ~/Documents/Vault/Migration
+</code></pre>
+<p>outheis doesn't mind — the directory is purely transient.</p>
+<h2 id="processed-files">Processed Files</h2>
+<p>After parsing, files get an <code>x-</code> prefix:</p>
+<pre><code>vault/Migration/
+├── x-claude-export.json    # Processed
+├── x-preferences.md        # Processed
+├── Migration.md            # Still active
+</code></pre>
+<p>This prevents re-processing. Delete the <code>x-</code> files yourself when ready.</p>
+<h2 id="direct-rule-writing">Direct Rule Writing</h2>
+<p>To add a rule immediately without the Migration workflow:</p>
+<pre><code>Du: schreibe regel: antworte immer auf Deutsch
+Ou: ✓ Regel hinzugefügt zu relay: antworte immer auf Deutsch
+</code></pre>
+<p>Or specify the agent:</p>
+<pre><code>Du: schreibe regel für agenda: keine Meetings vor 10 Uhr
+Ou: ✓ Regel hinzugefügt zu agenda: keine Meetings vor 10 Uhr
+</code></pre>
+<p>This bypasses Pattern agent and writes directly to <code>~/.outheis/human/rules/{agent}.md</code>.</p>
+<h2 id="viewing-current-state">Viewing Current State</h2>
+<p>To see what outheis knows:</p>
+<pre><code>Du: memory traits
+
+Ou: Erkannte Eigenschaften:
+
+    ## Identität
+      • User arbeitet bei senswork
+      • User lebt in München
+
+    ## Präferenzen
+      • Antworte knapp und direkt
+      • Bevorzuge deutsche Sprache
+
+    ## Etablierte Regeln
+      • agenda: 2 Regeln
+      • relay: 1 Regel
+</code></pre>
+<p>Or more conversationally:</p>
+<pre><code>Du: was weißt du über mich?
+</code></pre>
+<h2 id="memory-vs-rules">Memory vs Rules</h2>
+<table>
+<thead>
+<tr>
+<th>Aspect</th>
+<th>Memory</th>
+<th>Rules</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Location</td>
+<td><code>~/.outheis/human/memory/</code></td>
+<td><code>~/.outheis/human/rules/</code></td>
+</tr>
+<tr>
+<td>Format</td>
+<td>JSON</td>
+<td>Markdown</td>
+</tr>
+<tr>
+<td>Volatility</td>
+<td>Can change, context decays</td>
+<td>Stable once set</td>
+</tr>
+<tr>
+<td>Example</td>
+<td>"User ist 35"</td>
+<td>"Antworte auf Deutsch"</td>
+</tr>
+</tbody>
+</table>
+<p>Memory = "what I know about you"
+Rules = "how I should behave"</p>
+<p>Both are populated through Migration or through ongoing conversation.</p>
+<h2 id="privacy">Privacy</h2>
+<p>All data stays local:
+- Migration files are in your vault
+- Memory is in <code>~/.outheis/human/memory/</code>
+- Rules are in <code>~/.outheis/human/rules/</code>
+- Nothing is transmitted externally</p>
+<p>Delete any file at any time — outheis adapts to what remains.</p>
+      <hr>
+      <p class="footer">Open source under AGPL-3.0 · <a href="https://github.com/outheis-labs/outheis-minimal">Code on GitHub</a></p>
+    </main>
+  </div>
+</body>
+</html>

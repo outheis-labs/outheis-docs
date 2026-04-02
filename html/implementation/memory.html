@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Memory · outheis</title>
+  <link rel="icon" type="image/png" href="../favicon-96x96.png" sizes="96x96">
+  <link rel="icon" type="image/svg+xml" href="../favicon.svg">
+  <link rel="shortcut icon" href="../favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="../apple-touch-icon.png">
+  <link rel="manifest" href="../site.webmanifest">
+  <link rel="preconnect" href="https://rsms.me/">
+  <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --font-body: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-ui: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-mono: SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      --color-text: #1a1a1a;
+      --color-text-muted: #666;
+      --color-text-faint: #999;
+      --color-border: #e0e0e0;
+      --color-bg-code: #f5f5f5;
+    }
+
+    @supports (font-variation-settings: normal) {
+      :root { --font-body: "Inter var", sans-serif; --font-ui: "Inter var", sans-serif; }
+    }
+
+    html, body {
+      width: 100%;
+      min-height: 100vh;
+      background: #fff;
+      font-family: var(--font-body);
+      font-size: 15px;
+      line-height: 1.6;
+      color: var(--color-text);
+    }
+
+    .container {
+      display: flex;
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 2rem;
+      gap: 3rem;
+    }
+
+    .sidebar {
+      flex: 0 0 200px;
+      position: sticky;
+      top: 2rem;
+      height: fit-content;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      align-self: flex-start;
+    }
+
+    .sidebar-logo-link {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
+      text-decoration: none;
+      margin-bottom: 2rem;
+    }
+
+    .sidebar-logo {
+      display: block;
+      width: 120px;
+      height: auto;
+      margin-bottom: 0.5rem;
+    }
+
+    .sidebar-title {
+      font-family: var(--font-ui);
+      font-size: 14px;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      color: var(--color-text);
+    }
+
+    .sidebar-nav {
+      list-style: none;
+      width: 100%;
+    }
+
+    .sidebar-nav li {
+      margin-bottom: 0.75rem;
+    }
+
+    .sidebar-nav a {
+      font-family: var(--font-ui);
+      color: var(--color-text-muted);
+      text-decoration: none;
+      font-size: 15px;
+      font-weight: 600;
+    }
+
+    .sidebar-nav a:hover { color: var(--color-text); }
+    .sidebar-nav a.active { color: var(--color-text); }
+
+    .sidebar-nav .nav-section {
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--color-text-faint);
+      margin-top: 1.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .sidebar-nav .nav-section:first-of-type { margin-top: 0; }
+
+    .sidebar-nav .nav-external {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--color-text-faint);
+    }
+
+    .content {
+      flex: 1;
+      min-width: 0;
+      max-width: 600px;
+      align-self: flex-start;
+    }
+
+    .content > *:first-child { margin-top: 0; }
+
+    .content h1 { font-family: var(--font-ui); font-size: 28px; font-weight: 600; margin-bottom: 0.5rem; letter-spacing: -0.02em; }
+    .content h2 { font-family: var(--font-ui); font-size: 18px; font-weight: 600; margin-top: 2rem; margin-bottom: 1.25rem; }
+    .content h3 { font-family: var(--font-ui); font-size: 15px; font-weight: 600; margin-top: 1.5rem; margin-bottom: 0.75rem; }
+    .content p { margin-bottom: 1rem; }
+    .content a { color: var(--color-text-muted); }
+    .content a:hover { color: var(--color-text); }
+    .content ul, .content ol { margin-bottom: 1rem; padding-left: 1.5rem; }
+    .content li { margin-bottom: 0.4rem; }
+
+    .content table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; font-family: var(--font-ui); font-size: 13px; }
+    .content th, .content td { text-align: left; padding: 0.5rem 0.75rem; border-bottom: 1px solid var(--color-border); }
+    .content th { font-weight: 500; font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--color-text-muted); }
+
+    .content code { font-family: var(--font-mono); font-size: 14px; background: var(--color-bg-code); padding: 0.15em 0.4em; border-radius: 3px; }
+    .content pre { background: var(--color-bg-code); padding: 1rem 1.25rem; overflow-x: auto; margin: 1.5rem 0; font-size: 13px; border-radius: 4px; line-height: 1.5; }
+    .content pre code { background: none; padding: 0; border-radius: 0; }
+
+    .content hr { border: none; border-top: 1px solid var(--color-border); margin: 1.5rem 0; }
+    .content strong { font-weight: 500; }
+    .content em { font-style: italic; }
+    .content blockquote { border-left: 2px solid var(--color-border); padding-left: 1.25rem; margin: 1.5rem 0; color: var(--color-text-muted); font-style: italic; }
+    .content .lead { font-style: italic; color: var(--color-text-muted); margin-bottom: 2rem; }
+    .content .footer { font-size: 12px; color: var(--color-text-muted); font-style: italic; }
+
+    @media (max-width: 700px) {
+      .container { flex-direction: column; padding: 1.5rem; gap: 1.5rem; }
+      .sidebar { position: static; flex: none; flex-direction: row; flex-wrap: wrap; align-items: center; gap: 1rem; }
+      .sidebar-logo { width: 48px; height: 48px; margin-bottom: 0; }
+      .sidebar-title { margin-bottom: 0; flex: 1; }
+      .sidebar-nav { width: 100%; display: flex; flex-wrap: wrap; gap: 0.5rem 1.25rem; }
+      .sidebar-nav li { margin-bottom: 0; }
+      .content h1 { font-size: 24px; }
+      .content h2 { font-size: 16px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <aside class="sidebar">
+      <a href="../index.html" class="sidebar-logo-link">
+        <img src="../assets/logo.svg" alt="outheis" class="sidebar-logo">
+        <span class="sidebar-title">outheis</span>
+      </a>
+      <nav>
+        <ul class="sidebar-nav">
+          <li><a href="../index.html">Home</a></li>
+          <li class="nav-section">Philosophy</li>
+          <li><a href="../philosophy/index.html">Why outheis</a></li>
+          <li class="nav-section">Design</li>
+          <li><a href="../design/index.html">Overview</a></li>
+          <li><a href="../design/01-why-os-principles.html">OS Principles</a></li>
+          <li><a href="../design/02-systems-survey.html">Systems Survey</a></li>
+          <li><a href="../design/03-architecture.html">Architecture</a></li>
+          <li><a href="../design/04-data-formats.html">Data Formats</a></li>
+          <li><a href="../design/05-related-work.html">Related Work</a></li>
+          <li><a href="../design/06-agent-prompts.html">Agent Prompts</a></li>
+          <li class="nav-section">Implementation</li>
+          <li><a href="../implementation/architecture.html">Current State</a></li>
+          <li><a href="../implementation/memory.html" class="active">Memory & Rules</a></li>
+          <li><a href="../implementation/agenda.html">Agenda</a></li>
+          <li><a href="../implementation/skills.html">Skills</a></li>
+          <li><a href="../implementation/migration.html">Migration</a></li>
+          <li><a href="../implementation/config.html">Config</a></li>
+          <li><a href="../implementation/guide.html">CLI Guide</a></li>
+          <li><a href="../implementation/webui.html">Web UI</a></li>
+          <li><a href="../implementation/alan.html">Code Agent</a></li>
+          <li class="nav-section"></li>
+          <li><a href="https://github.com/outheis-labs/outheis-minimal" class="nav-external">GitHub ↗</a></li>
+        </ul>
+      </nav>
+    </aside>
+    <main class="content">
+      <h1 id="memory">Memory</h1>
+<p><em>What outheis remembers about you — and how.</em></p>
+<h2 id="memory-vs-vault">Memory vs. Vault</h2>
+<p>outheis maintains two separate knowledge stores:</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Memory</th>
+<th>Vault</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Purpose</strong></td>
+<td>Meta-knowledge about you</td>
+<td>Your work content</td>
+</tr>
+<tr>
+<td><strong>Contains</strong></td>
+<td>Facts, preferences, context</td>
+<td>Documents, notes, projects</td>
+</tr>
+<tr>
+<td><strong>Updated by</strong></td>
+<td>Agents during interaction, Pattern agent, explicit markers</td>
+<td>You directly</td>
+</tr>
+<tr>
+<td><strong>Format</strong></td>
+<td>Structured JSON</td>
+<td>Markdown files</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Memory</strong> answers: <em>Who is this person? How do they want me to work?</em></p>
+<p><strong>Vault</strong> answers: <em>What information do they have?</em></p>
+<h2 id="memory-types">Memory Types</h2>
+<h3 id="user">user</h3>
+<p>Personal facts that don't change often.</p>
+<p>Examples:
+- "User is 35 years old"
+- "Children: Leo (8) and Emma (5)"
+- "Lives in Munich"
+- "Works as a software engineer"</p>
+<p><strong>Decay:</strong> Permanent (until corrected)</p>
+<h3 id="feedback">feedback</h3>
+<p>How you want outheis to behave.</p>
+<p>Examples:
+- "Prefers short, direct answers"
+- "Respond in German unless asked otherwise"
+- "Don't explain technical concepts — user is an expert"</p>
+<p><strong>Decay:</strong> Permanent (until corrected)</p>
+<h3 id="context">context</h3>
+<p>What you're currently focused on.</p>
+<p>Examples:
+- "Working on Project Alpha mobile app"
+- "Preparing for conference talk next week"
+- "Learning Japanese"</p>
+<p><strong>Decay:</strong> 14 days by default (fades when no longer relevant)</p>
+<h2 id="how-memory-is-created">How Memory is Created</h2>
+<p>Memory is written through three channels:</p>
+<h3 id="1-explicit-marker">1. Explicit Marker (<code>!</code>)</h3>
+<p>Prefix any message with <code>!</code> to store it immediately:</p>
+<pre><code>! I am 35 years old
+→ Stored in user memory, agent responds with this knowledge
+
+! please always give short answers
+→ Stored in feedback memory, agent adapts immediately
+
+! I'm currently working on Project Alpha
+→ Stored in context memory (14 day decay)
+</code></pre>
+<p>Classification happens automatically based on content. The <code>!</code> marker is a shorthand — it's equivalent to saying "remember this" but shorter. The agent both stores the information AND uses it immediately in the current conversation.</p>
+<h3 id="2-agents-during-interaction">2. Agents During Interaction</h3>
+<p>Agents can recognize when you share something worth remembering:</p>
+<ul>
+<li>You mention your birthday → agent may store it</li>
+<li>You express a preference → agent may store it</li>
+<li>You describe a current project → agent may store it as context</li>
+</ul>
+<p>This happens through judgment, not rigid rules. Agents are instructed to notice relevant information but not to over-extract. Not every statement becomes a memory — only what seems genuinely useful for future interactions.</p>
+<h3 id="3-pattern-agent-extraction">3. Pattern Agent Extraction</h3>
+<p>The Pattern agent (rumi) runs nightly at 04:00 and:</p>
+<ol>
+<li>Reviews recent conversations</li>
+<li>Extracts memorable information agents may have missed</li>
+<li>Consolidates duplicates and resolves contradictions</li>
+<li>Assigns confidence scores</li>
+<li>Cleans up expired entries</li>
+<li>Considers promoting stable patterns to User Rules</li>
+</ol>
+<p>You can trigger this manually: <code>outheis pattern</code></p>
+<h2 id="memory-consolidation">Memory Consolidation</h2>
+<p>Over time, memory can accumulate duplicates or contradictory entries. The Pattern agent handles this during its scheduled run:</p>
+<ul>
+<li><strong>Duplicates</strong>: "Has pending tasks: X, Y" and "Current pending tasks: X, Y" → keeps the newer one</li>
+<li><strong>Contradictions</strong>: "User is 35" and "User is 36" → keeps the more recent or explicitly-marked one</li>
+<li><strong>Superseded entries</strong>: Context that's been updated → removes the older version</li>
+</ul>
+<p>This is not a mechanical process — the Pattern agent uses judgment to decide what to consolidate, erring on the side of keeping information when uncertain.</p>
+<h2 id="temporal-awareness">Temporal Awareness</h2>
+<p>Not everything should be remembered forever.</p>
+<p><strong>Stored as permanent fact:</strong>
+- "User has two children"
+- "Prefers formal communication"</p>
+<p><strong>NOT stored (temporary state):</strong>
+- "User seems frustrated today"
+- "User is tired"
+- "User is stressed about deadline"</p>
+<p>All agents are instructed to distinguish stable traits from temporary moods. A frustrated message isn't a personality trait — it's a moment.</p>
+<h2 id="viewing-and-editing-memory">Viewing and Editing Memory</h2>
+<h3 id="cli">CLI</h3>
+<pre><code class="language-bash"># View all memory
+outheis memory
+
+# Add entry manually
+outheis memory --add &quot;user:My birthday is March 15&quot;
+
+# Clear a type
+outheis memory --clear context
+</code></pre>
+<h3 id="display-format">Display Format</h3>
+<pre><code>Memory
+----------------------------------------
+
+[user] (3 entries)
+  1. User is 35 years old
+  2. Children: Leo (8), Emma (5) [!]
+  3. Lives in Munich [90%]
+
+[feedback] (1 entries)
+  1. Prefers short answers [!]
+
+[context] (2 entries)
+  1. Working on Project Alpha [↓12d]
+  2. Preparing conference talk [↓5d]
+</code></pre>
+<p>Markers:
+- <code>[!]</code> — Explicitly stored via <code>!</code> marker
+- <code>[90%]</code> — Confidence below 100%
+- <code>[↓12d]</code> — Expires in 12 days</p>
+<h2 id="storage">Storage</h2>
+<pre><code>~/.outheis/human/memory/
+├── user.json           # Personal facts
+├── feedback.json       # Working preferences
+├── context.json        # Current focus
+└── pattern/            # Pattern agent's learning
+    └── strategies.md
+</code></pre>
+<p>Each memory file contains timestamped entries with metadata:</p>
+<pre><code class="language-json">{
+  &quot;type&quot;: &quot;user&quot;,
+  &quot;updated_at&quot;: &quot;2025-03-28T14:30:00&quot;,
+  &quot;entries&quot;: [
+    {
+      &quot;content&quot;: &quot;User is 35 years old&quot;,
+      &quot;created_at&quot;: &quot;2025-03-28T14:30:00&quot;,
+      &quot;updated_at&quot;: &quot;2025-03-28T14:30:00&quot;,
+      &quot;confidence&quot;: 1.0,
+      &quot;source_count&quot;: 1,
+      &quot;decay_days&quot;: null,
+      &quot;is_explicit&quot;: true
+    }
+  ]
+}
+</code></pre>
+<h2 id="migration">Migration</h2>
+<p>To import existing knowledge from Claude.ai or other sources, use the Migration workflow. See <a href="migration.md">Migration</a> for details.</p>
+<p>Quick summary:
+1. Create <code>vault/Migration/</code> with your <code>.json</code> or <code>.md</code> files
+2. Say "memory migrate" in chat
+3. Review and mark entries in <code>Migration.md</code>
+4. Say "memory migrate" again to apply
+5. Delete <code>vault/Migration/</code> when done</p>
+<h2 id="pattern-agent-meta-memory">Pattern Agent Meta-Memory</h2>
+<p>The Pattern agent has its own memory in <code>~/.outheis/human/memory/pattern/</code>. This is where it stores:</p>
+<ul>
+<li>What extraction strategies work for this user</li>
+<li>Patterns in communication style</li>
+<li>Meta-insights about its own process</li>
+</ul>
+<p>This memory doesn't decay — it's how the Pattern agent gets better over time at understanding what matters to you.</p>
+<h2 id="integration-with-agents">Integration with Agents</h2>
+<p>Memory is injected into agent system prompts automatically:</p>
+<pre><code># Memory
+
+## About the user
+- User is 35 years old
+- Children: Leo (8), Emma (5)
+
+## Working preferences
+- Prefers short answers
+
+## Current context
+- Working on Project Alpha
+</code></pre>
+<p>Agents use this naturally — they don't announce "I remember that..." but simply know.</p>
+<h2 id="correction">Correction</h2>
+<p>If outheis has wrong information:</p>
+<ol>
+<li><strong>Explicit correction:</strong> <code>! I'm 36, not 35</code></li>
+<li><strong>CLI edit:</strong> <code>outheis memory --clear user</code> then re-add</li>
+<li><strong>Direct file edit:</strong> Modify JSON in <code>~/.outheis/human/memory/</code></li>
+</ol>
+<p>Explicit (<code>!</code>) entries take precedence — agents won't override them with lower-confidence extractions.</p>
+<hr />
+<h2 id="rules">Rules</h2>
+<p>Rules are the stable distillation of memory — behavioral principles that shape how outheis works with you.</p>
+<h3 id="two-layers">Two Layers</h3>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>System Rules</th>
+<th>User Rules</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Source</strong></td>
+<td>Developers</td>
+<td>Emergent from interaction</td>
+</tr>
+<tr>
+<td><strong>Purpose</strong></td>
+<td>Boundaries, capabilities</td>
+<td>Style, preferences</td>
+</tr>
+<tr>
+<td><strong>Location</strong></td>
+<td><code>src/outheis/agents/rules/</code></td>
+<td><code>~/.outheis/human/rules/</code></td>
+</tr>
+<tr>
+<td><strong>Mutability</strong></td>
+<td>Changes with code updates</td>
+<td>Grows over time</td>
+</tr>
+</tbody>
+</table>
+<p><strong>System rules</strong> define what an agent <em>can</em> do — architectural constraints.</p>
+<p><strong>User rules</strong> define how an agent <em>should</em> do it — your working style.</p>
+<h3 id="how-user-rules-emerge">How User Rules Emerge</h3>
+<p>User rules aren't written by you directly. They emerge from memory through the Pattern agent.</p>
+<p>The Pattern agent reviews memory during its nightly run and looks for patterns that have become stable enough to codify as rules. This isn't a mechanical process with fixed thresholds — the agent uses judgment:</p>
+<ul>
+<li>A strong preference stated clearly once might become a rule</li>
+<li>Something mentioned many times casually might not</li>
+<li>Explicit corrections always matter more than inferences</li>
+</ul>
+<p>When the Pattern agent identifies a stable pattern, it writes it to <code>~/.outheis/human/rules/{agent}.md</code>:</p>
+<pre><code class="language-markdown"># User Rules for Relay Agent
+
+- User prefers concise responses  &lt;!-- 2026-03-30 --&gt;
+- Respond in German unless the user writes in English  &lt;!-- 2026-03-28 --&gt;
+</code></pre>
+<h3 id="memory-vs-rules">Memory vs. Rules</h3>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Memory</th>
+<th>Rules</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Timescale</strong></td>
+<td>Days to weeks</td>
+<td>Months to years</td>
+</tr>
+<tr>
+<td><strong>Volatility</strong></td>
+<td>Can expire, frequently updated</td>
+<td>Stable once established</td>
+</tr>
+<tr>
+<td><strong>Content</strong></td>
+<td>Facts, observations</td>
+<td>Principles, patterns</td>
+</tr>
+<tr>
+<td><strong>Example</strong></td>
+<td>"User is 35 years old"</td>
+<td>"User prefers brevity"</td>
+</tr>
+</tbody>
+</table>
+<p>Memory is <em>what we know</em>. Rules are <em>how we work</em>.</p>
+<h3 id="storage_1">Storage</h3>
+<pre><code>~/.outheis/human/rules/
+├── common.md      # Applies to all agents
+├── relay.md       # Conversation style
+├── data.md        # Search behavior
+├── agenda.md      # Scheduling preferences
+└── pattern.md     # Extraction behavior
+</code></pre>
+<h3 id="cli_1">CLI</h3>
+<pre><code class="language-bash"># View all rules
+outheis rules
+
+# View rules for specific agent
+outheis rules relay
+
+# View only user rules (emergent)
+outheis rules --user
+
+# View only system rules (architectural)
+outheis rules --system
+</code></pre>
+<h3 id="coherent-personality">Coherent Personality</h3>
+<p>Although outheis consists of five agents, you experience one assistant. Rules maintain this coherence:</p>
+<ul>
+<li><strong>Common rules</strong> ensure consistent behavior across all agents</li>
+<li><strong>Agent-specific rules</strong> allow appropriate specialization</li>
+<li><strong>User rules</strong> adapt the entire system to your working style</li>
+</ul>
+<p>Over time, outheis develops a stable personality — not programmed, but grown from working together.</p>
+      <hr>
+      <p class="footer">Open source under AGPL-3.0 · <a href="https://github.com/outheis-labs/outheis-minimal">Code on GitHub</a></p>
+    </main>
+  </div>
+</body>
+</html>

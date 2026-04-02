@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Architecture · outheis</title>
+  <link rel="icon" type="image/png" href="../favicon-96x96.png" sizes="96x96">
+  <link rel="icon" type="image/svg+xml" href="../favicon.svg">
+  <link rel="shortcut icon" href="../favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="../apple-touch-icon.png">
+  <link rel="manifest" href="../site.webmanifest">
+  <link rel="preconnect" href="https://rsms.me/">
+  <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --font-body: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-ui: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-mono: SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      --color-text: #1a1a1a;
+      --color-text-muted: #666;
+      --color-text-faint: #999;
+      --color-border: #e0e0e0;
+      --color-bg-code: #f5f5f5;
+    }
+
+    @supports (font-variation-settings: normal) {
+      :root { --font-body: "Inter var", sans-serif; --font-ui: "Inter var", sans-serif; }
+    }
+
+    html, body {
+      width: 100%;
+      min-height: 100vh;
+      background: #fff;
+      font-family: var(--font-body);
+      font-size: 15px;
+      line-height: 1.6;
+      color: var(--color-text);
+    }
+
+    .container {
+      display: flex;
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 2rem;
+      gap: 3rem;
+    }
+
+    .sidebar {
+      flex: 0 0 200px;
+      position: sticky;
+      top: 2rem;
+      height: fit-content;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      align-self: flex-start;
+    }
+
+    .sidebar-logo-link {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
+      text-decoration: none;
+      margin-bottom: 2rem;
+    }
+
+    .sidebar-logo {
+      display: block;
+      width: 120px;
+      height: auto;
+      margin-bottom: 0.5rem;
+    }
+
+    .sidebar-title {
+      font-family: var(--font-ui);
+      font-size: 14px;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      color: var(--color-text);
+    }
+
+    .sidebar-nav {
+      list-style: none;
+      width: 100%;
+    }
+
+    .sidebar-nav li {
+      margin-bottom: 0.75rem;
+    }
+
+    .sidebar-nav a {
+      font-family: var(--font-ui);
+      color: var(--color-text-muted);
+      text-decoration: none;
+      font-size: 15px;
+      font-weight: 600;
+    }
+
+    .sidebar-nav a:hover { color: var(--color-text); }
+    .sidebar-nav a.active { color: var(--color-text); }
+
+    .sidebar-nav .nav-section {
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--color-text-faint);
+      margin-top: 1.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .sidebar-nav .nav-section:first-of-type { margin-top: 0; }
+
+    .sidebar-nav .nav-external {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--color-text-faint);
+    }
+
+    .content {
+      flex: 1;
+      min-width: 0;
+      max-width: 600px;
+      align-self: flex-start;
+    }
+
+    .content > *:first-child { margin-top: 0; }
+
+    .content h1 { font-family: var(--font-ui); font-size: 28px; font-weight: 600; margin-bottom: 0.5rem; letter-spacing: -0.02em; }
+    .content h2 { font-family: var(--font-ui); font-size: 18px; font-weight: 600; margin-top: 2rem; margin-bottom: 1.25rem; }
+    .content h3 { font-family: var(--font-ui); font-size: 15px; font-weight: 600; margin-top: 1.5rem; margin-bottom: 0.75rem; }
+    .content p { margin-bottom: 1rem; }
+    .content a { color: var(--color-text-muted); }
+    .content a:hover { color: var(--color-text); }
+    .content ul, .content ol { margin-bottom: 1rem; padding-left: 1.5rem; }
+    .content li { margin-bottom: 0.4rem; }
+
+    .content table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; font-family: var(--font-ui); font-size: 13px; }
+    .content th, .content td { text-align: left; padding: 0.5rem 0.75rem; border-bottom: 1px solid var(--color-border); }
+    .content th { font-weight: 500; font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--color-text-muted); }
+
+    .content code { font-family: var(--font-mono); font-size: 14px; background: var(--color-bg-code); padding: 0.15em 0.4em; border-radius: 3px; }
+    .content pre { background: var(--color-bg-code); padding: 1rem 1.25rem; overflow-x: auto; margin: 1.5rem 0; font-size: 13px; border-radius: 4px; line-height: 1.5; }
+    .content pre code { background: none; padding: 0; border-radius: 0; }
+
+    .content hr { border: none; border-top: 1px solid var(--color-border); margin: 1.5rem 0; }
+    .content strong { font-weight: 500; }
+    .content em { font-style: italic; }
+    .content blockquote { border-left: 2px solid var(--color-border); padding-left: 1.25rem; margin: 1.5rem 0; color: var(--color-text-muted); font-style: italic; }
+    .content .lead { font-style: italic; color: var(--color-text-muted); margin-bottom: 2rem; }
+    .content .footer { font-size: 12px; color: var(--color-text-muted); font-style: italic; }
+
+    @media (max-width: 700px) {
+      .container { flex-direction: column; padding: 1.5rem; gap: 1.5rem; }
+      .sidebar { position: static; flex: none; flex-direction: row; flex-wrap: wrap; align-items: center; gap: 1rem; }
+      .sidebar-logo { width: 48px; height: 48px; margin-bottom: 0; }
+      .sidebar-title { margin-bottom: 0; flex: 1; }
+      .sidebar-nav { width: 100%; display: flex; flex-wrap: wrap; gap: 0.5rem 1.25rem; }
+      .sidebar-nav li { margin-bottom: 0; }
+      .content h1 { font-size: 24px; }
+      .content h2 { font-size: 16px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <aside class="sidebar">
+      <a href="../index.html" class="sidebar-logo-link">
+        <img src="../assets/logo.svg" alt="outheis" class="sidebar-logo">
+        <span class="sidebar-title">outheis</span>
+      </a>
+      <nav>
+        <ul class="sidebar-nav">
+          <li><a href="../index.html">Home</a></li>
+          <li class="nav-section">Philosophy</li>
+          <li><a href="../philosophy/index.html">Why outheis</a></li>
+          <li class="nav-section">Design</li>
+          <li><a href="../design/index.html">Overview</a></li>
+          <li><a href="../design/01-why-os-principles.html">OS Principles</a></li>
+          <li><a href="../design/02-systems-survey.html">Systems Survey</a></li>
+          <li><a href="../design/03-architecture.html">Architecture</a></li>
+          <li><a href="../design/04-data-formats.html">Data Formats</a></li>
+          <li><a href="../design/05-related-work.html">Related Work</a></li>
+          <li><a href="../design/06-agent-prompts.html">Agent Prompts</a></li>
+          <li class="nav-section">Implementation</li>
+          <li><a href="../implementation/architecture.html" class="active">Current State</a></li>
+          <li><a href="../implementation/memory.html">Memory & Rules</a></li>
+          <li><a href="../implementation/agenda.html">Agenda</a></li>
+          <li><a href="../implementation/skills.html">Skills</a></li>
+          <li><a href="../implementation/migration.html">Migration</a></li>
+          <li><a href="../implementation/config.html">Config</a></li>
+          <li><a href="../implementation/guide.html">CLI Guide</a></li>
+          <li><a href="../implementation/webui.html">Web UI</a></li>
+          <li><a href="../implementation/alan.html">Code Agent</a></li>
+          <li class="nav-section"></li>
+          <li><a href="https://github.com/outheis-labs/outheis-minimal" class="nav-external">GitHub ↗</a></li>
+        </ul>
+      </nav>
+    </aside>
+    <main class="content">
+      <h1 id="architecture">Architecture</h1>
+<p><em>How the pieces fit together.</em></p>
+<h2 id="overview">Overview</h2>
+<pre><code>┌─────────────────────────────────────────┐
+│              Dispatcher                  │
+│            (Microkernel)                 │
+│  ┌─────────┐ ┌─────────┐ ┌───────────┐  │
+│  │ Watcher │ │  Lock   │ │ Scheduler │  │
+│  │         │ │ Manager │ │           │  │
+│  └─────────┘ └─────────┘ └───────────┘  │
+└─────────────────┬───────────────────────┘
+                  │
+    ┌─────────────┼─────────────┬─────────────┐
+    ▼             ▼             ▼             ▼
+┌───────┐    ┌───────┐    ┌───────┐    ┌───────┐
+│  ou   │    │ zeno  │    │ cato  │    │ rumi  │
+│ relay │    │ data  │    │agenda │    │pattern│
+└───┬───┘    └───┬───┘    └───┬───┘    └───┬───┘
+    │            │             │             │
+    ▼            ▼             ▼             ▼
+┌─────────┐  ┌───────┐   ┌────────┐   ┌────────┐
+│   LLM   │  │ Vault │   │ Agenda │   │ Memory │
+│ (Haiku) │  │       │   │  dir   │   │        │
+└─────────┘  └───────┘   └────────┘   └────────┘
+</code></pre>
+<h2 id="dispatcher">Dispatcher</h2>
+<p>The dispatcher is the microkernel. It:
+- <strong>Watches</strong> the message queue for changes
+- <strong>Manages locks</strong> for shared resources
+- <strong>Schedules</strong> periodic tasks (pattern analysis, index rebuild)
+- <strong>Recovers</strong> pending operations on startup</p>
+<p>The dispatcher contains no LLM calls. It's deterministic, testable, fast.</p>
+<h2 id="agents">Agents</h2>
+<p>Six agents, each with a name and role:</p>
+<table>
+<thead>
+<tr>
+<th>Role</th>
+<th>Name</th>
+<th>When used</th>
+<th>Reads</th>
+<th>Writes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>relay</td>
+<td>ou</td>
+<td>All messages — decides routing</td>
+<td>Memory, Context</td>
+<td>Messages</td>
+</tr>
+<tr>
+<td>data</td>
+<td>zeno</td>
+<td>Vault search (via tool)</td>
+<td>Vault, Memory</td>
+<td>—</td>
+</tr>
+<tr>
+<td>agenda</td>
+<td>cato</td>
+<td>Schedule queries (via tool)</td>
+<td>Agenda/</td>
+<td>Agenda/</td>
+</tr>
+<tr>
+<td>action</td>
+<td>hiro</td>
+<td>External actions, background jobs</td>
+<td>Task registry</td>
+<td>External</td>
+</tr>
+<tr>
+<td>pattern</td>
+<td>rumi</td>
+<td>Scheduled (04:00)</td>
+<td>Messages, Seed</td>
+<td>Memory, Rules</td>
+</tr>
+<tr>
+<td>code</td>
+<td>alan</td>
+<td>Code questions (development only)</td>
+<td>Source code</td>
+<td>vault/Codebase/</td>
+</tr>
+</tbody>
+</table>
+<h3 id="routing">Routing</h3>
+<p>Relay (ou) handles all user messages. It uses Haiku with tools:
+- <strong>search_vault</strong> → delegates to Data agent (zeno)
+- <strong>check_agenda</strong> → delegates to Agenda agent (cato)
+- <strong>refresh_agenda</strong> → triggers manual agenda update</p>
+<p>No separate classification step. Relay decides intelligently based on the question and Memory.</p>
+<p>Explicit mentions (@zeno, @cato) still work for direct delegation.</p>
+<h3 id="data-agent-zeno">Data Agent (zeno)</h3>
+<p>The Data agent handles vault queries. For simple questions, it answers directly without LLM calls:</p>
+<table>
+<thead>
+<tr>
+<th>Query Type</th>
+<th>Example</th>
+<th>Response</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>File existence</td>
+<td>"Habe ich X?"</td>
+<td><code>Ja, die Datei existiert: /path/to/X</code></td>
+</tr>
+<tr>
+<td>Stats</td>
+<td>"Wie viele PDFs?"</td>
+<td><code>Du hast 12 PDF-Dateien im Vault.</code></td>
+</tr>
+<tr>
+<td>List</td>
+<td>"Welche PDFs?"</td>
+<td>List of matching files</td>
+</tr>
+<tr>
+<td>Path lookup</td>
+<td>"Wo ist X?"</td>
+<td>Direct path or fuzzy matches</td>
+</tr>
+</tbody>
+</table>
+<p>Complex queries still use LLM for intelligent search and synthesis.</p>
+<h3 id="agenda-agent-cato">Agenda Agent (cato)</h3>
+<p>The Agenda agent manages three files in <code>vault/Agenda/</code>:</p>
+<table>
+<thead>
+<tr>
+<th>File</th>
+<th>Direction</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Daily.md</td>
+<td>Bidirectional</td>
+<td>Today's schedule, tasks, notes</td>
+</tr>
+<tr>
+<td>Inbox.md</td>
+<td>User → System</td>
+<td>Quick capture, unprocessed items</td>
+</tr>
+<tr>
+<td>Exchange.md</td>
+<td>System ↔ User</td>
+<td>Async questions, no pressure to respond</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Commands:</strong>
+- "aktualisiere daily" / "update agenda" → triggers manual refresh
+- Processes Inbox items, checks Exchange responses, updates Daily</p>
+<p><strong>Hourly Review (conditional):</strong>
+- Runs at xx:55 (configurable)
+- Checks file hashes before processing — no changes = no LLM call
+- Unconditional at start (04:55) and end (23:55) of day
+- Only runs within configured hours (default 04:55-23:55)</p>
+<h3 id="pattern-agent-rumi">Pattern Agent (rumi)</h3>
+<p>The Pattern agent runs nightly and:
+1. Extracts memories from recent conversations
+2. Consolidates duplicates, resolves contradictions
+3. Promotes stable patterns to User Rules
+4. Validates own extraction strategies (learns how to learn)</p>
+<p><strong>Memory Migration</strong> is handled via chat commands ("memory migrate") through Relay, not Pattern agent. See <a href="migration.md">Migration</a>.</p>
+<h3 id="action-agent-hiro">Action Agent (hiro)</h3>
+<p>The Action agent executes tasks and background jobs. Currently in development with these planned capabilities:</p>
+<table>
+<thead>
+<tr>
+<th>Capability</th>
+<th>Status</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Task scheduling</td>
+<td>Planned</td>
+<td>Schedule one-time or recurring actions</td>
+</tr>
+<tr>
+<td>Email sending</td>
+<td>Planned</td>
+<td>Send emails via configured SMTP</td>
+</tr>
+<tr>
+<td>Calendar events</td>
+<td>Planned</td>
+<td>Create/modify calendar entries</td>
+</tr>
+<tr>
+<td>File operations</td>
+<td>Planned</td>
+<td>Move, copy, archive files</td>
+</tr>
+<tr>
+<td>External commands</td>
+<td>Planned</td>
+<td>Run whitelisted shell commands</td>
+</tr>
+</tbody>
+</table>
+<p>Action is disabled by default (<code>enabled: false</code>). When enabled, it:
+- Receives tasks from other agents or scheduled jobs
+- Executes actions with explicit confirmation for destructive operations
+- Reports results back via message queue</p>
+<p><strong>Security model:</strong> Action has a whitelist of permitted operations. Unknown commands require explicit user approval in Exchange.md.</p>
+<h3 id="code-agent-alan">Code Agent (alan)</h3>
+<p>The Code agent provides development-time intelligence. See <a href="alan.md">Code Agent (alan)</a> for full documentation.</p>
+<p>Summary:
+- <strong>Introspection</strong>: Answer questions about outheis implementation
+- <strong>Proposals</strong>: Suggest improvements via <code>vault/Codebase/Exchange.md</code>
+- <strong>Search</strong>: Find patterns and implementations in source code
+- <strong>Isolation</strong>: Write access restricted to <code>vault/Codebase/</code> only</p>
+<p><strong>alan is development-only.</strong> Disabled by default, never loaded in production.</p>
+<h2 id="knowledge-stores">Knowledge Stores</h2>
+<h3 id="memory">Memory</h3>
+<p>Meta-knowledge about the user:</p>
+<table>
+<thead>
+<tr>
+<th>Type</th>
+<th>Purpose</th>
+<th>Decay</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>user</code></td>
+<td>Personal facts</td>
+<td>Permanent</td>
+</tr>
+<tr>
+<td><code>feedback</code></td>
+<td>Working preferences</td>
+<td>Permanent</td>
+</tr>
+<tr>
+<td><code>context</code></td>
+<td>Current focus</td>
+<td>14 days</td>
+</tr>
+</tbody>
+</table>
+<p>Stored in <code>~/.outheis/human/memory/</code>. See <a href="memory.md">Memory</a> for details.</p>
+<h3 id="rules">Rules</h3>
+<p>External instructions to agents — what to observe:</p>
+<ul>
+<li>User-defined: "Respond in German"</li>
+<li>Pattern-promoted: "User prefers short answers"</li>
+</ul>
+<p>Stored in <code>~/.outheis/human/rules/</code>. See <a href="memory.md">Memory</a> for details.</p>
+<h3 id="skills">Skills</h3>
+<p>Internal capabilities — how agents act:</p>
+<ul>
+<li>System skills: Base capabilities (in package)</li>
+<li>Learned skills: Refined through use and correction</li>
+</ul>
+<p>Stored in <code>src/outheis/agents/skills/</code> (system) and <code>~/.outheis/human/skills/</code> (learned). See <a href="skills.md">Skills</a> for details.</p>
+<h3 id="vault">Vault</h3>
+<p>The vault is a directory of Markdown files with YAML frontmatter:</p>
+<pre><code>vault/
+├── Agenda/
+│   ├── Daily.md      # Today's schedule
+│   ├── Inbox.md      # Unprocessed items
+│   └── Exchange.md   # Async communication
+├── projects/
+│   └── *.md
+└── notes/
+    └── *.md
+</code></pre>
+<p>The Data agent maintains a search index in <code>~/.outheis/human/cache/index/</code>.</p>
+<h2 id="message-queue">Message Queue</h2>
+<p>All communication flows through <code>messages.jsonl</code>:</p>
+<pre><code class="language-json">{&quot;v&quot;:1,&quot;id&quot;:&quot;msg_abc&quot;,&quot;conversation_id&quot;:&quot;conv_xyz&quot;,&quot;to&quot;:&quot;dispatcher&quot;,...}
+{&quot;v&quot;:1,&quot;id&quot;:&quot;msg_def&quot;,&quot;conversation_id&quot;:&quot;conv_xyz&quot;,&quot;to&quot;:&quot;transport&quot;,...}
+</code></pre>
+<p>Append-only. Versioned. Recoverable.</p>
+<h2 id="file-layout">File Layout</h2>
+<pre><code>~/.outheis/
+├── .dispatcher.pid       # PID file
+├── .dispatcher.sock      # Lock manager socket
+└── human/
+    ├── config.json       # Configuration (includes schedule)
+    ├── messages.jsonl    # Message queue
+    ├── memory/           # Persistent memory
+    │   ├── user.json
+    │   ├── feedback.json
+    │   ├── context.json
+    │   └── pattern/      # Pattern agent's learning
+    │       └── strategies.md
+    ├── cache/            # Regenerable working data
+    │   ├── index/        # Search indices
+    │   │   └── Vault.jsonl
+    │   ├── agenda/       # Agenda file state
+    │   │   ├── hashes.json       # Quick change detection
+    │   │   ├── Daily.md.prev     # For diff
+    │   │   ├── Inbox.md.prev
+    │   │   └── Exchange.md.prev
+    │   └── sessions/     # Session replay logs
+    ├── rules/            # User-defined rules (external)
+    │   ├── common.md
+    │   ├── relay.md
+    │   ├── agenda.md
+    │   └── data.md
+    ├── skills/           # Learned skills (internal)
+    │   ├── common.md
+    │   ├── relay.md
+    │   ├── agenda.md
+    │   └── data.md
+    ├── vault/            # Primary vault (default)
+    │   └── Migration/    # Temporary migration dir (user creates)
+    │       ├── data.md           # Files to import
+    │       └── Migration.md      # outheis creates
+    └── archive/          # Archived messages
+</code></pre>
+<h3 id="cache-vs-memory-vs-vault-vs-rules-vs-skills">Cache vs. Memory vs. Vault vs. Rules vs. Skills</h3>
+<table>
+<thead>
+<tr>
+<th>Directory</th>
+<th>What</th>
+<th>Who writes</th>
+<th>Deletable?</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>memory/</code></td>
+<td>Facts about user</td>
+<td>Pattern Agent</td>
+<td>Lose learnings</td>
+</tr>
+<tr>
+<td><code>rules/</code></td>
+<td>Instructions to agents</td>
+<td>User, Pattern</td>
+<td>Lose preferences</td>
+</tr>
+<tr>
+<td><code>skills/</code></td>
+<td>Agent capabilities</td>
+<td>Agent, Pattern</td>
+<td>Lose refinements</td>
+</tr>
+<tr>
+<td><code>cache/</code></td>
+<td>Working state</td>
+<td>System</td>
+<td>Safe — rebuilds</td>
+</tr>
+<tr>
+<td><code>vault/</code></td>
+<td>User's content</td>
+<td>User</td>
+<td>User's responsibility</td>
+</tr>
+</tbody>
+</table>
+<p>The cache directory is explicitly regenerable. Delete it anytime — outheis rebuilds what it needs.</p>
+<h2 id="scheduled-tasks">Scheduled Tasks</h2>
+<p>The dispatcher runs periodic tasks via built-in scheduler. All times configurable in <code>config.json</code>:</p>
+<table>
+<thead>
+<tr>
+<th>Task</th>
+<th>Default Time</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>pattern_nightly</code></td>
+<td>04:00</td>
+<td>Extract memories, consolidate, promote rules</td>
+</tr>
+<tr>
+<td><code>index_rebuild</code></td>
+<td>04:30</td>
+<td>Rebuild vault search indices</td>
+</tr>
+<tr>
+<td><code>archive_rotation</code></td>
+<td>05:00</td>
+<td>Archive old messages</td>
+</tr>
+<tr>
+<td><code>agenda_review</code></td>
+<td>xx:55 (04-23)</td>
+<td>Parse Agenda files (conditional on changes)</td>
+</tr>
+<tr>
+<td><code>action_tasks</code></td>
+<td>every 15 min</td>
+<td>Run due scheduled tasks</td>
+</tr>
+<tr>
+<td><code>session_summary</code></td>
+<td>every 6 hours</td>
+<td>Extract session insights</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Resource efficiency:</strong> Agenda review checks file hashes before processing. If nothing changed, no LLM call is made. Morning (04:55) and evening (23:55) runs are unconditional to ensure day boundaries are handled.</p>
+<h3 id="schedule-configuration">Schedule Configuration</h3>
+<p>In <code>config.json</code>:</p>
+<pre><code class="language-json">{
+  &quot;schedule&quot;: {
+    &quot;pattern_nightly&quot;: {&quot;enabled&quot;: true, &quot;hour&quot;: 4, &quot;minute&quot;: 0},
+    &quot;index_rebuild&quot;: {&quot;enabled&quot;: true, &quot;hour&quot;: 4, &quot;minute&quot;: 30},
+    &quot;archive_rotation&quot;: {&quot;enabled&quot;: true, &quot;hour&quot;: 5, &quot;minute&quot;: 0},
+    &quot;agenda_review&quot;: {
+      &quot;enabled&quot;: true,
+      &quot;hourly_at_minute&quot;: 55,
+      &quot;start_hour&quot;: 4,
+      &quot;end_hour&quot;: 23
+    },
+    &quot;action_tasks&quot;: {&quot;enabled&quot;: true},
+    &quot;session_summary&quot;: {&quot;enabled&quot;: true}
+  }
+}
+</code></pre>
+<p>Each task can be disabled independently. Agents run sequentially in the early morning to avoid conflicts.</p>
+<h2 id="further-reading">Further Reading</h2>
+<ul>
+<li><a href="memory.md">Memory</a> — How persistent memory works</li>
+<li><a href="agenda.md">Agenda</a> — Time management with Daily, Inbox, Exchange</li>
+<li><a href="migration.md">Migration</a> — Seeding memory from external sources</li>
+<li><a href="alan.md">Code Agent (alan)</a> — Development-time code intelligence</li>
+<li><a href="webui.md">Web UI</a> — Browser-based administration interface</li>
+<li><a href="../philosophy/">Philosophy</a> — Why this architecture</li>
+</ul>
+      <hr>
+      <p class="footer">Open source under AGPL-3.0 · <a href="https://github.com/outheis-labs/outheis-minimal">Code on GitHub</a></p>
+    </main>
+  </div>
+</body>
+</html>

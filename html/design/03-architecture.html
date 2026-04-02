@@ -1,0 +1,1260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Architecture · outheis</title>
+  <link rel="icon" type="image/png" href="../favicon-96x96.png" sizes="96x96">
+  <link rel="icon" type="image/svg+xml" href="../favicon.svg">
+  <link rel="shortcut icon" href="../favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="../apple-touch-icon.png">
+  <link rel="manifest" href="../site.webmanifest">
+  <link rel="preconnect" href="https://rsms.me/">
+  <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --font-body: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-ui: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-mono: SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      --color-text: #1a1a1a;
+      --color-text-muted: #666;
+      --color-text-faint: #999;
+      --color-border: #e0e0e0;
+      --color-bg-code: #f5f5f5;
+    }
+
+    @supports (font-variation-settings: normal) {
+      :root { --font-body: "Inter var", sans-serif; --font-ui: "Inter var", sans-serif; }
+    }
+
+    html, body {
+      width: 100%;
+      min-height: 100vh;
+      background: #fff;
+      font-family: var(--font-body);
+      font-size: 15px;
+      line-height: 1.6;
+      color: var(--color-text);
+    }
+
+    .container {
+      display: flex;
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 2rem;
+      gap: 3rem;
+    }
+
+    .sidebar {
+      flex: 0 0 200px;
+      position: sticky;
+      top: 2rem;
+      height: fit-content;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      align-self: flex-start;
+    }
+
+    .sidebar-logo-link {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
+      text-decoration: none;
+      margin-bottom: 2rem;
+    }
+
+    .sidebar-logo {
+      display: block;
+      width: 120px;
+      height: auto;
+      margin-bottom: 0.5rem;
+    }
+
+    .sidebar-title {
+      font-family: var(--font-ui);
+      font-size: 14px;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      color: var(--color-text);
+    }
+
+    .sidebar-nav {
+      list-style: none;
+      width: 100%;
+    }
+
+    .sidebar-nav li {
+      margin-bottom: 0.75rem;
+    }
+
+    .sidebar-nav a {
+      font-family: var(--font-ui);
+      color: var(--color-text-muted);
+      text-decoration: none;
+      font-size: 15px;
+      font-weight: 600;
+    }
+
+    .sidebar-nav a:hover { color: var(--color-text); }
+    .sidebar-nav a.active { color: var(--color-text); }
+
+    .sidebar-nav .nav-section {
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--color-text-faint);
+      margin-top: 1.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .sidebar-nav .nav-section:first-of-type { margin-top: 0; }
+
+    .sidebar-nav .nav-external {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--color-text-faint);
+    }
+
+    .content {
+      flex: 1;
+      min-width: 0;
+      max-width: 600px;
+      align-self: flex-start;
+    }
+
+    .content > *:first-child { margin-top: 0; }
+
+    .content h1 { font-family: var(--font-ui); font-size: 28px; font-weight: 600; margin-bottom: 0.5rem; letter-spacing: -0.02em; }
+    .content h2 { font-family: var(--font-ui); font-size: 18px; font-weight: 600; margin-top: 2rem; margin-bottom: 1.25rem; }
+    .content h3 { font-family: var(--font-ui); font-size: 15px; font-weight: 600; margin-top: 1.5rem; margin-bottom: 0.75rem; }
+    .content p { margin-bottom: 1rem; }
+    .content a { color: var(--color-text-muted); }
+    .content a:hover { color: var(--color-text); }
+    .content ul, .content ol { margin-bottom: 1rem; padding-left: 1.5rem; }
+    .content li { margin-bottom: 0.4rem; }
+
+    .content table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; font-family: var(--font-ui); font-size: 13px; }
+    .content th, .content td { text-align: left; padding: 0.5rem 0.75rem; border-bottom: 1px solid var(--color-border); }
+    .content th { font-weight: 500; font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--color-text-muted); }
+
+    .content code { font-family: var(--font-mono); font-size: 14px; background: var(--color-bg-code); padding: 0.15em 0.4em; border-radius: 3px; }
+    .content pre { background: var(--color-bg-code); padding: 1rem 1.25rem; overflow-x: auto; margin: 1.5rem 0; font-size: 13px; border-radius: 4px; line-height: 1.5; }
+    .content pre code { background: none; padding: 0; border-radius: 0; }
+
+    .content hr { border: none; border-top: 1px solid var(--color-border); margin: 1.5rem 0; }
+    .content strong { font-weight: 500; }
+    .content em { font-style: italic; }
+    .content blockquote { border-left: 2px solid var(--color-border); padding-left: 1.25rem; margin: 1.5rem 0; color: var(--color-text-muted); font-style: italic; }
+    .content .lead { font-style: italic; color: var(--color-text-muted); margin-bottom: 2rem; }
+    .content .footer { font-size: 12px; color: var(--color-text-muted); font-style: italic; }
+
+    @media (max-width: 700px) {
+      .container { flex-direction: column; padding: 1.5rem; gap: 1.5rem; }
+      .sidebar { position: static; flex: none; flex-direction: row; flex-wrap: wrap; align-items: center; gap: 1rem; }
+      .sidebar-logo { width: 48px; height: 48px; margin-bottom: 0; }
+      .sidebar-title { margin-bottom: 0; flex: 1; }
+      .sidebar-nav { width: 100%; display: flex; flex-wrap: wrap; gap: 0.5rem 1.25rem; }
+      .sidebar-nav li { margin-bottom: 0; }
+      .content h1 { font-size: 24px; }
+      .content h2 { font-size: 16px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <aside class="sidebar">
+      <a href="../index.html" class="sidebar-logo-link">
+        <img src="../assets/logo.svg" alt="outheis" class="sidebar-logo">
+        <span class="sidebar-title">outheis</span>
+      </a>
+      <nav>
+        <ul class="sidebar-nav">
+          <li><a href="../index.html">Home</a></li>
+          <li class="nav-section">Philosophy</li>
+          <li><a href="../philosophy/index.html">Why outheis</a></li>
+          <li class="nav-section">Design</li>
+          <li><a href="../design/index.html">Overview</a></li>
+          <li><a href="../design/01-why-os-principles.html">OS Principles</a></li>
+          <li><a href="../design/02-systems-survey.html">Systems Survey</a></li>
+          <li><a href="../design/03-architecture.html" class="active">Architecture</a></li>
+          <li><a href="../design/04-data-formats.html">Data Formats</a></li>
+          <li><a href="../design/05-related-work.html">Related Work</a></li>
+          <li><a href="../design/06-agent-prompts.html">Agent Prompts</a></li>
+          <li class="nav-section">Implementation</li>
+          <li><a href="../implementation/architecture.html">Current State</a></li>
+          <li><a href="../implementation/memory.html">Memory & Rules</a></li>
+          <li><a href="../implementation/agenda.html">Agenda</a></li>
+          <li><a href="../implementation/skills.html">Skills</a></li>
+          <li><a href="../implementation/migration.html">Migration</a></li>
+          <li><a href="../implementation/config.html">Config</a></li>
+          <li><a href="../implementation/guide.html">CLI Guide</a></li>
+          <li><a href="../implementation/webui.html">Web UI</a></li>
+          <li><a href="../implementation/alan.html">Code Agent</a></li>
+          <li class="nav-section"></li>
+          <li><a href="https://github.com/outheis-labs/outheis-minimal" class="nav-external">GitHub ↗</a></li>
+        </ul>
+      </nav>
+    </aside>
+    <main class="content">
+      <h1 id="architecture">Architecture</h1>
+<p>This document describes the outheis architecture derived from the operating system principles surveyed in the previous documents.</p>
+<hr />
+<h2 id="overview">Overview</h2>
+<p>outheis is a multi-agent system where specialized agents communicate via message passing. A transport daemon handles external interfaces, a dispatcher routes messages and manages agent lifecycle, and agents process requests.</p>
+<pre><code>┌─────────────────────────────────────────────────────────────┐
+│                      External World                          │
+│                  (Signal, CLI, API)                          │
+└─────────────────────────────┬───────────────────────────────┘
+                              │
+                              ▼
+┌─────────────────────────────────────────────────────────────┐
+│                    Transport (daemon)                        │
+│                     (static, no LLM)                         │
+│          receives, converts, sends — no understanding        │
+└─────────────────────────────┬───────────────────────────────┘
+                              │
+                              ▼
+                       messages.jsonl
+                              │
+                              ▼
+┌─────────────────────────────────────────────────────────────┐
+│                        Dispatcher                            │
+│                     (static, no LLM)                         │
+│                                                              │
+│  1. Explicit: &quot;@ou&quot;, &quot;@zeno&quot;, &quot;@cato&quot;, &quot;@hiro&quot;, &quot;@rumi&quot;       │
+│  2. Keywords + Scoring → Agent (if above threshold)          │
+│  3. Fallback → Relay (LLM decides)                           │
+└─────────────────────────────┬───────────────────────────────┘
+                              │
+    ┌──────────┬──────────┬───┴───┬──────────┬──────────┐
+    ▼          ▼          ▼       ▼          ▼          ▼
+ Relay      Data      Agenda   Action    Pattern
+ (route,   (vault,   (user    (execute, (reflect,
+ compose)  aggregate) filter)  import)   insight)
+</code></pre>
+<hr />
+<h2 id="directory-structure">Directory Structure</h2>
+<pre><code>~/.outheis/                      # System directory
+├── agents/                      # Agent implementations
+├── transport/                   # Transport daemon
+├── dispatcher/                  # Dispatcher
+├── web/                         # Web UI (localhost-only)
+└── human/                       # ALL user-specific data
+    ├── config.json              # User configuration
+    ├── insights.jsonl           # Pattern agent output
+    ├── rules/                   # Agenda agent rules
+    ├── messages.jsonl           # Message queue (append-only)
+    ├── archive/                 # Cold storage
+    │   ├── messages-2025-01.jsonl
+    │   └── ...
+    ├── index.jsonl              # Search index (across all vaults)
+    ├── tag-weights.jsonl        # Learned tag importance
+    ├── cache/                   # Cached data
+    │   └── agenda/              # Previous versions for diff
+    ├── imports/                 # Imported external data
+    │   ├── calendar/
+    │   ├── email/
+    │   └── ...
+    └── vault/                   # Minimal starter vault
+
+~/Documents/MyVault/             # External vault (user-managed, anywhere)
+├── Agenda/
+│   ├── Daily.md
+│   ├── Inbox.md
+│   └── Exchange.md
+├── notes/
+├── projects/
+└── ...
+</code></pre>
+<h3 id="privacy-guarantee">Privacy Guarantee</h3>
+<p>Removing <code>human/</code> erases ALL user-specific data: configuration, messages, insights, imports, cache. The system retains no knowledge of the user.</p>
+<hr />
+<h2 id="components">Components</h2>
+<h3 id="transport-daemon-no-llm">Transport (daemon, no LLM)</h3>
+<p>Handles external interfaces. Converts between protocols and internal message format.</p>
+<table>
+<thead>
+<tr>
+<th>Interface</th>
+<th>Function</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Signal</td>
+<td>Receive/send messages</td>
+</tr>
+<tr>
+<td>CLI</td>
+<td>Local interaction</td>
+</tr>
+<tr>
+<td>API</td>
+<td>Programmatic access (future)</td>
+</tr>
+</tbody>
+</table>
+<p>Transport does not understand content. It only converts and forwards.</p>
+<pre><code>Signal message → JSON → messages.jsonl
+messages.jsonl → JSON → Signal message
+</code></pre>
+<h3 id="dispatcher-daemon-no-llm">Dispatcher (daemon, no LLM)</h3>
+<p>Observes message queue (via filewatch: <code>inotify</code>/<code>kqueue</code>), routes messages, spawns/notifies agents.</p>
+<h4 id="routing-logic">Routing Logic</h4>
+<pre><code class="language-python">msg = read_next()
+
+if msg.to == &quot;transport&quot;:
+    notify(transport)
+elif msg.to != &quot;dispatcher&quot;:
+    # Explicit target
+    agent = get_or_spawn(msg.to)
+    notify(agent)
+else:
+    # Dispatcher decides
+    target = route(msg)
+    if target:
+        agent = get_or_spawn(target)
+        notify(agent)
+    else:
+        # Fallback: Relay decides
+        notify(relay)
+</code></pre>
+<h4 id="scoring">Scoring</h4>
+<pre><code class="language-python">def route(msg) -&gt; AgentId | None:
+    text = msg.payload.text.lower()
+
+    # Explicit mention → immediate
+    if &quot;@ou&quot; in text: return &quot;relay&quot;
+    if &quot;@zeno&quot; in text: return &quot;data&quot;
+    if &quot;@cato&quot; in text: return &quot;agenda&quot;
+    if &quot;@hiro&quot; in text: return &quot;action&quot;
+    if &quot;@rumi&quot; in text: return &quot;pattern&quot;
+
+    # Scoring
+    scores = {
+        &quot;data&quot;:   score(text, config.routing.data),
+        &quot;agenda&quot;: score(text, config.routing.agenda),
+        &quot;action&quot;: score(text, config.routing.action),
+    }
+
+    best = max(scores, key=scores.get)
+
+    if scores[best] &gt;= config.routing.threshold:
+        return best
+
+    return None  # → Relay
+</code></pre>
+<p>Keywords and threshold are configurable. Can be empty (all goes to Relay).</p>
+<h4 id="lock-manager">Lock Manager</h4>
+<p>The Dispatcher owns queue access via a Unix socket lock manager. All writers must acquire a lock before writing to <code>messages.jsonl</code>.</p>
+<p><strong>Socket:</strong> <code>~/.outheis/.dispatcher.sock</code></p>
+<p><strong>Priority Scheduling:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Priority</th>
+<th>Requester</th>
+<th>Rationale</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>HIGH (0)</td>
+<td>transport</td>
+<td>User is waiting</td>
+</tr>
+<tr>
+<td>NORMAL (1)</td>
+<td>relay, data, agenda, action</td>
+<td>Agent work</td>
+</tr>
+<tr>
+<td>LOW (2)</td>
+<td>pattern</td>
+<td>Background processing</td>
+</tr>
+</tbody>
+</table>
+<p>Within each priority class: FIFO.</p>
+<p><strong>Protocol:</strong></p>
+<pre><code class="language-json">// Request lock
+→ {&quot;cmd&quot;: &quot;request&quot;, &quot;requester&quot;: &quot;relay&quot;}
+← {&quot;status&quot;: &quot;granted&quot;}
+← {&quot;status&quot;: &quot;queued&quot;, &quot;position&quot;: 2}
+
+// Release lock
+→ {&quot;cmd&quot;: &quot;release&quot;}
+← {&quot;status&quot;: &quot;released&quot;}
+
+// Query status
+→ {&quot;cmd&quot;: &quot;status&quot;}
+← {&quot;holder&quot;: &quot;client_123&quot;, &quot;queue_length&quot;: 2, &quot;queue&quot;: [...]}
+</code></pre>
+<p><strong>Behavior:</strong>
+- Lock granted immediately if queue empty
+- On release, next-in-queue is notified
+- Client disconnect → automatic release, cleanup
+- Priorities are architectural, not configurable</p>
+<h4 id="file-locking">File Locking</h4>
+<p>For files other than <code>messages.jsonl</code>, simple <code>flock</code> is used:</p>
+<table>
+<thead>
+<tr>
+<th>File</th>
+<th>Writers</th>
+<th>Lock</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>messages.jsonl</code></td>
+<td>Transport, all Agents</td>
+<td>Socket (prioritized)</td>
+</tr>
+<tr>
+<td><code>session_notes.jsonl</code></td>
+<td>All Agents</td>
+<td><code>flock</code></td>
+</tr>
+<tr>
+<td><code>config.json</code></td>
+<td>CLI, Web UI</td>
+<td><code>flock</code></td>
+</tr>
+<tr>
+<td>Vault files</td>
+<td>Data Agent</td>
+<td><code>flock</code></td>
+</tr>
+</tbody>
+</table>
+<h4 id="write-ahead-logging">Write-Ahead Logging</h4>
+<p>All queue writes use write-ahead for crash safety:</p>
+<pre><code>~/.outheis/human/.pending/
+├── msg_abc123.json
+└── msg_def456.json
+</code></pre>
+<p><strong>Write sequence:</strong>
+1. Write message to <code>.pending/{msg_id}.json</code>
+2. <code>flock</code> + append to <code>messages.jsonl</code>
+3. Delete from <code>.pending/</code></p>
+<p><strong>Recovery (Dispatcher startup):</strong>
+1. Scan <code>.pending/</code>
+2. Check for duplicates (last 100 IDs in queue)
+3. Append missing messages, skip duplicates
+4. Delete recovered pending files</p>
+<p>If a process dies while waiting for the lock, the message survives in <code>.pending/</code> and is recovered when Dispatcher (re)starts.</p>
+<h3 id="web-ui-localhost-only">Web UI (localhost-only)</h3>
+<p>Simple web interface for configuration. No chat functionality.</p>
+<table>
+<thead>
+<tr>
+<th>Function</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Agents</td>
+<td>Model, run mode, enabled</td>
+</tr>
+<tr>
+<td>Models</td>
+<td>Provider, name, local/remote</td>
+</tr>
+<tr>
+<td>Dispatcher</td>
+<td>Keywords, threshold</td>
+</tr>
+<tr>
+<td>Human</td>
+<td>Name, language, vault paths</td>
+</tr>
+<tr>
+<td>System</td>
+<td>Log level</td>
+</tr>
+<tr>
+<td>Status</td>
+<td>Agent status, logs</td>
+</tr>
+</tbody>
+</table>
+<p>Access: <code>http://localhost:&lt;port&gt;</code> only. No external exposure.</p>
+<hr />
+<h2 id="agents">Agents</h2>
+<h3 id="roles-and-responsibilities">Roles and Responsibilities</h3>
+<table>
+<thead>
+<tr>
+<th>Role</th>
+<th>Responsibility</th>
+<th>Run Mode</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Relay</strong></td>
+<td>Classify, route, compose, ask user</td>
+<td>daemon</td>
+</tr>
+<tr>
+<td><strong>Data</strong></td>
+<td>Knowledge management, aggregation, synthesis</td>
+<td>on-demand</td>
+</tr>
+<tr>
+<td><strong>Agenda</strong></td>
+<td>Personal secretary: filter, prioritize, learn user</td>
+<td>on-demand</td>
+</tr>
+<tr>
+<td><strong>Action</strong></td>
+<td>Task execution, external imports</td>
+<td>on-demand</td>
+</tr>
+<tr>
+<td><strong>Pattern</strong></td>
+<td>Reflection, insight extraction</td>
+<td>scheduled</td>
+</tr>
+</tbody>
+</table>
+<h3 id="relay-agent">Relay Agent</h3>
+<p>Routes unclear requests, composes responses, asks for clarification when needed.</p>
+<ul>
+<li>Receives messages Dispatcher cannot route</li>
+<li>Classifies intent</li>
+<li>Routes to appropriate agent</li>
+<li>Composes final response from agent outputs</li>
+<li>Formats output for each channel (Signal, CLI, API)</li>
+</ul>
+<h3 id="agenda-agent-personal-mode">Agenda Agent (Personal Mode)</h3>
+<p>Acts as a personal secretary. The name reflects both meanings: managing your agenda (schedule, priorities) and enabling your agency (capacity to act).</p>
+<p><strong>Problem it solves</strong>: 47 calendar entries, 23 emails, 14 tasks—presented raw, this creates cognitive overhead. The agenda agent reduces mental friction by filtering and prioritizing based on learned preferences.</p>
+<pre><code>Raw data (overwhelming)
+  │
+  ▼
+Data Agent (complete, neutral)
+  │
+  ▼
+Agenda Agent (filtered, prioritized, personal)
+  │
+  ▼
+User (only what matters, when it matters)
+</code></pre>
+<p><strong>What Agenda does</strong>:
+- Learns user rules ("Monday mornings: no meetings")
+- Understands priorities ("family over work, except deadlines")
+- Filters noise ("this email can wait, that one cannot")
+- Presents relevance, not completeness</p>
+<p><strong>Where rules live</strong>: <code>human/rules/</code> directory—only Agenda reads them.</p>
+<p>In Domain Expert Mode, Agenda is disabled. Data delivers directly to Relay.</p>
+<h3 id="data-agent">Data Agent</h3>
+<p>Central knowledge manager:</p>
+<ol>
+<li><strong>Vault Access</strong>: Reads and writes to vault</li>
+<li><strong>Aggregation</strong>: Combines information from multiple sources</li>
+<li><strong>Synthesis</strong>: Answers complex queries requiring reasoning</li>
+<li><strong>Coordination</strong>: Requests external data from Action when needed</li>
+</ol>
+<pre><code>User question: &quot;How does X compare to current developments?&quot;
+                              │
+                              ▼
+                         Data Agent
+                              │
+              ┌───────────────┴───────────────┐
+              ▼                               ▼
+         vault                          Action Agent
+      (internal)                     (fetches external)
+              │                               │
+              └───────────────┬───────────────┘
+                              │
+                         Data aggregates
+                              │
+                              ▼
+                          Response
+</code></pre>
+<h3 id="ownership-model">Ownership Model</h3>
+<p>Each agent owns its domain exclusively. Others request access via messages.</p>
+<table>
+<thead>
+<tr>
+<th>Agent</th>
+<th>Owns</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Relay</td>
+<td>Routing decisions, response composition, channel formatting</td>
+</tr>
+<tr>
+<td>Agenda</td>
+<td>User preferences, rules, Daily/Inbox/Exchange</td>
+</tr>
+<tr>
+<td>Data</td>
+<td>Vault, knowledge synthesis, index</td>
+</tr>
+<tr>
+<td>Action</td>
+<td>Task execution, external imports</td>
+</tr>
+<tr>
+<td>Pattern</td>
+<td>Insights generation, tag learning</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="message-protocol">Message Protocol</h2>
+<h3 id="message-schema">Message Schema</h3>
+<pre><code>{
+  id:              string       // Snowflake ID (contains timestamp)
+  conversation_id: string       // Groups multi-turn exchanges
+
+  from: {
+    agent?:        AgentId      // If from agent
+    user?: {
+      channel:     string       // &quot;signal&quot;, &quot;cli&quot;, &quot;api&quot;
+      identity:    string       // Phone, username, key
+      name?:       string       // Display name
+    }
+  }
+
+  to:              AgentId | &quot;dispatcher&quot; | &quot;transport&quot;
+
+  type:            &quot;request&quot; | &quot;response&quot; | &quot;event&quot;
+  intent?:         string       // e.g., &quot;data.query&quot;, &quot;action.execute&quot;
+  payload:         any
+
+  reply_to?:       string       // Message ID for responses
+}
+</code></pre>
+<h3 id="message-flow-example">Message Flow Example</h3>
+<pre><code>User sends &quot;What's on my agenda tomorrow?&quot; via Signal
+
+1. Transport receives from Signal
+   → writes {to: &quot;dispatcher&quot;, ...} to queue
+
+2. Dispatcher reads, matches keyword &quot;agenda&quot;
+   → notifies Agenda Agent
+
+3. Agenda queries Data, filters, prioritizes
+   → writes {to: &quot;relay&quot;, ...} to queue
+
+4. Dispatcher notifies Relay
+   → Relay composes human-readable response
+   → writes {to: &quot;transport&quot;, ...} to queue
+
+5. Transport sends via Signal
+</code></pre>
+<hr />
+<h2 id="queue">Queue</h2>
+<h3 id="implementation">Implementation</h3>
+<p>The message queue is an append-only JSONL file:</p>
+<pre><code>~/.outheis/human/messages.jsonl
+</code></pre>
+<ul>
+<li><strong>Append-only</strong>: Messages are never modified or deleted</li>
+<li><strong>Single file</strong>: Simplicity over performance</li>
+<li><strong>File locking</strong>: Simple <code>fcntl</code> locking for concurrent access</li>
+</ul>
+<pre><code class="language-python">import fcntl
+import json
+
+def append_message(path: str, msg: dict) -&gt; None:
+    with open(path, 'a') as f:
+        fcntl.flock(f, fcntl.LOCK_EX)
+        f.write(json.dumps(msg) + '\n')
+        fcntl.flock(f, fcntl.LOCK_UN)
+</code></pre>
+<h3 id="benefits-event-sourcing">Benefits (Event Sourcing)</h3>
+<ul>
+<li><strong>Audit trail</strong>: Complete history of all interactions</li>
+<li><strong>Replay</strong>: Reconstruct any past state</li>
+<li><strong>Debugging</strong>: See exactly what happened</li>
+<li><strong>Recovery</strong>: Resume from last processed message</li>
+</ul>
+<hr />
+<h2 id="deployment-spectrum">Deployment Spectrum</h2>
+<p>The system scales from minimal (cloud, cost-conscious) to maximal (local, all daemon):</p>
+<h3 id="minimal-cloud-sparse">Minimal (Cloud, Sparse)</h3>
+<pre><code class="language-json">{
+  &quot;dispatcher&quot;: {
+    &quot;routing&quot;: {
+      &quot;threshold&quot;: 0.3,
+      &quot;data&quot;:   [&quot;vault&quot;, &quot;search&quot;, &quot;find&quot;],
+      &quot;agenda&quot;: [&quot;appointment&quot;, &quot;calendar&quot;, &quot;tomorrow&quot;],
+      &quot;action&quot;: [&quot;send&quot;, &quot;email&quot;, &quot;open&quot;]
+    }
+  },
+  &quot;agents&quot;: {
+    &quot;instances&quot;: {
+      &quot;relay&quot;:   { &quot;model&quot;: &quot;fast&quot;,      &quot;run_mode&quot;: &quot;daemon&quot; },
+      &quot;data&quot;:    { &quot;model&quot;: &quot;capable&quot;,   &quot;run_mode&quot;: &quot;on-demand&quot; },
+      &quot;agenda&quot;:  { &quot;model&quot;: &quot;capable&quot;,   &quot;run_mode&quot;: &quot;on-demand&quot; },
+      &quot;action&quot;:  { &quot;model&quot;: &quot;capable&quot;,   &quot;run_mode&quot;: &quot;on-demand&quot; },
+      &quot;pattern&quot;: { &quot;model&quot;: &quot;strategic&quot;, &quot;run_mode&quot;: &quot;scheduled&quot; }
+    },
+    &quot;models&quot;: {
+      &quot;fast&quot;:      { &quot;provider&quot;: &quot;anthropic&quot;, &quot;name&quot;: &quot;...&quot; },
+      &quot;capable&quot;:   { &quot;provider&quot;: &quot;anthropic&quot;, &quot;name&quot;: &quot;...&quot; },
+      &quot;strategic&quot;: { &quot;provider&quot;: &quot;anthropic&quot;, &quot;name&quot;: &quot;...&quot; }
+    }
+  }
+}
+</code></pre>
+<p>Strategy: Strict keywords, high threshold → minimize LLM calls.</p>
+<h3 id="maximal-local-all-daemon">Maximal (Local, All Daemon)</h3>
+<pre><code class="language-json">{
+  &quot;dispatcher&quot;: {
+    &quot;routing&quot;: {
+      &quot;threshold&quot;: 0.0,
+      &quot;data&quot;:   [],
+      &quot;agenda&quot;: [],
+      &quot;action&quot;: []
+    }
+  },
+  &quot;agents&quot;: {
+    &quot;instances&quot;: {
+      &quot;relay&quot;:   { &quot;model&quot;: &quot;local&quot;, &quot;run_mode&quot;: &quot;daemon&quot; },
+      &quot;data&quot;:    { &quot;model&quot;: &quot;local&quot;, &quot;run_mode&quot;: &quot;daemon&quot; },
+      &quot;agenda&quot;:  { &quot;model&quot;: &quot;local&quot;, &quot;run_mode&quot;: &quot;daemon&quot; },
+      &quot;action&quot;:  { &quot;model&quot;: &quot;local&quot;, &quot;run_mode&quot;: &quot;daemon&quot; },
+      &quot;pattern&quot;: { &quot;model&quot;: &quot;local&quot;, &quot;run_mode&quot;: &quot;daemon&quot; }
+    },
+    &quot;models&quot;: {
+      &quot;local&quot;: { &quot;provider&quot;: &quot;ollama&quot;, &quot;name&quot;: &quot;...&quot; }
+    }
+  }
+}
+</code></pre>
+<p>Strategy: Empty keywords, zero threshold → Relay routes everything (free locally).</p>
+<h3 id="hybrid">Hybrid</h3>
+<p>Mix of local and remote models. Fast/cheap models locally, capable models remote.</p>
+<hr />
+<h2 id="access-control">Access Control</h2>
+<h3 id="dynamic-restriction-openbsd-inspired">Dynamic Restriction (OpenBSD-inspired)</h3>
+<p>Agents declare capabilities at startup and progressively restrict themselves:</p>
+<pre><code class="language-python">class DataAgent:
+    def __init__(self):
+        self.pledge([&quot;vault:read&quot;, &quot;vault:write&quot;])
+        self.unveil([&quot;vault/&quot;])
+        # From here: cannot access human/, cannot make network calls
+</code></pre>
+<h3 id="capability-matrix">Capability Matrix</h3>
+<table>
+<thead>
+<tr>
+<th>Agent</th>
+<th>vault</th>
+<th>human/insights</th>
+<th>human/rules</th>
+<th>network</th>
+<th>execute</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Relay</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+</tr>
+<tr>
+<td>Agenda</td>
+<td>read</td>
+<td>read</td>
+<td>read</td>
+<td>-</td>
+<td>-</td>
+</tr>
+<tr>
+<td>Data</td>
+<td>read, write</td>
+<td>read</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+</tr>
+<tr>
+<td>Action</td>
+<td>write (import)</td>
+<td>read</td>
+<td>-</td>
+<td>✓</td>
+<td>✓</td>
+</tr>
+<tr>
+<td>Pattern</td>
+<td>read</td>
+<td>read, write</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+</tr>
+</tbody>
+</table>
+<p>Note: Agents request services from other agents via messages. Data can ask Action to fetch external data; Agenda asks Data for aggregated information.</p>
+<hr />
+<h2 id="error-handling">Error Handling</h2>
+<p>When an agent fails:</p>
+<pre><code>1. Log error (always)
+2. Inform user via Relay
+3. Retry with clarification if applicable
+4. If persistent failure: escalate to user
+</code></pre>
+<h3 id="error-message-flow">Error Message Flow</h3>
+<pre><code>Agent fails
+    │
+    ▼
+Dispatcher catches
+    │
+    ├──► Log error message to messages.jsonl
+    │
+    └──► Write {to: &quot;relay&quot;, type: &quot;error&quot;, ...} to queue
+            │
+            ▼
+        Relay informs user:
+        &quot;I couldn't complete that. Can you clarify...?&quot;
+</code></pre>
+<h3 id="retry-logic">Retry Logic</h3>
+<table>
+<thead>
+<tr>
+<th>Error Type</th>
+<th>Action</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Transient (timeout, rate limit)</td>
+<td>Automatic retry (max 3)</td>
+</tr>
+<tr>
+<td>Ambiguous input</td>
+<td>Ask user for clarification</td>
+</tr>
+<tr>
+<td>Persistent failure</td>
+<td>Inform user, log, abort</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="conversation-lifecycle">Conversation Lifecycle</h2>
+<p>Conversations do not explicitly end. They age out.</p>
+<h3 id="rotation">Rotation</h3>
+<p>When <code>messages.jsonl</code> exceeds a threshold (configurable, default 10MB):</p>
+<pre><code>messages.jsonl          → messages.jsonl (current)
+                        → archive/messages-2025-03.jsonl (cold)
+</code></pre>
+<h3 id="cold-storage">Cold Storage</h3>
+<p>Old conversations move to <code>human/archive/</code>:</p>
+<pre><code>~/.outheis/human/
+├── messages.jsonl           # Hot: current, fast access
+└── archive/
+    ├── messages-2025-01.jsonl
+    ├── messages-2025-02.jsonl
+    └── ...                  # Cold: slower access
+</code></pre>
+<h3 id="access-patterns">Access Patterns</h3>
+<table>
+<thead>
+<tr>
+<th>Storage</th>
+<th>Access Time</th>
+<th>Use Case</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Hot</td>
+<td>Immediate</td>
+<td>Recent conversations</td>
+</tr>
+<tr>
+<td>Cold</td>
+<td>Slower (load on demand)</td>
+<td>"What did we discuss in January?"</td>
+</tr>
+</tbody>
+</table>
+<p>Cold storage access:
+1. User asks about old conversation
+2. Data agent loads relevant archive file
+3. Searches, returns results
+4. Unloads (memory management)</p>
+<hr />
+<h2 id="pattern-agent-scheduling">Pattern Agent Scheduling</h2>
+<p>The pattern agent runs:</p>
+<ol>
+<li><strong>Scheduled</strong>: Default 04:00 local time (configurable via Web UI)</li>
+<li><strong>On-demand</strong>: When user explicitly requests reflection</li>
+</ol>
+<h3 id="configuration">Configuration</h3>
+<pre><code class="language-json">{
+  &quot;agents&quot;: {
+    &quot;instances&quot;: {
+      &quot;pattern&quot;: {
+        &quot;model&quot;: &quot;strategic&quot;,
+        &quot;run_mode&quot;: &quot;scheduled&quot;,
+        &quot;schedule&quot;: {
+          &quot;times&quot;: [&quot;04:00&quot;],
+          &quot;timezone&quot;: &quot;local&quot;
+        }
+      }
+    }
+  }
+}
+</code></pre>
+<p>Multiple times possible: <code>["04:00", "16:00"]</code></p>
+<h3 id="on-demand-trigger">On-Demand Trigger</h3>
+<p>User can request: "@rumi reflect on this week" → Dispatcher routes to Pattern.</p>
+<hr />
+<h2 id="priority-scheduling-gcd-inspired">Priority Scheduling (GCD-inspired)</h2>
+<p>Agents have implicit priority levels:</p>
+<table>
+<thead>
+<tr>
+<th>Priority</th>
+<th>Agent</th>
+<th>Rationale</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>High</td>
+<td>Relay</td>
+<td>User-facing, latency-sensitive</td>
+</tr>
+<tr>
+<td>Default</td>
+<td>Action, Data, Agenda</td>
+<td>Normal operations</td>
+</tr>
+<tr>
+<td>Background</td>
+<td>Pattern</td>
+<td>Reflection can wait</td>
+</tr>
+</tbody>
+</table>
+<p>The dispatcher may defer background work when high-priority messages are pending.</p>
+<hr />
+<h2 id="channel-specific-formatting">Channel-Specific Formatting</h2>
+<p>Relay agent formats output for each channel:</p>
+<h3 id="signal">Signal</h3>
+<p>No Markdown support, but good emoji support:</p>
+<pre><code>📅 TODAY
+
+• 09:00 Standup
+• 14:00 Workshop
+
+⚠️ CONFLICT
+   10:00 Team meeting
+   10:00 Dentist
+   → Which takes priority?
+
+✅ Proposal reviewed
+☐ Finish report
+
+💬 1 open question → see Exchange
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>Element</th>
+<th>Formatting</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Headers</td>
+<td>CAPS + emoji</td>
+</tr>
+<tr>
+<td>Lists</td>
+<td>• bullets</td>
+</tr>
+<tr>
+<td>Tasks open</td>
+<td>☐</td>
+</tr>
+<tr>
+<td>Tasks done</td>
+<td>✅</td>
+</tr>
+<tr>
+<td>Conflicts</td>
+<td>⚠️ prominent</td>
+</tr>
+<tr>
+<td>Deadlines</td>
+<td>🔴 or ⏰</td>
+</tr>
+<tr>
+<td>Questions</td>
+<td>💬</td>
+</tr>
+<tr>
+<td>Links/refs</td>
+<td>→ plain text</td>
+</tr>
+</tbody>
+</table>
+<h3 id="cli">CLI</h3>
+<p>ANSI colors and formatting:</p>
+<pre><code>TODAY
+─────
+  09:00  Standup
+  14:00  Workshop
+
+⚠ CONFLICT
+  10:00  Team meeting
+  10:00  Dentist
+
+Tasks
+  [ ] Finish report
+  [x] Proposal reviewed
+</code></pre>
+<h3 id="api">API</h3>
+<p>Structured JSON for programmatic access.</p>
+<h3 id="user-behavior">User Behavior</h3>
+<table>
+<thead>
+<tr>
+<th>File</th>
+<th>User attention</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Daily.md</code></td>
+<td>Primary — checked regularly</td>
+</tr>
+<tr>
+<td><code>Inbox.md</code></td>
+<td>Write-only from user perspective</td>
+</tr>
+<tr>
+<td><code>Exchange.md</code></td>
+<td>Occasional — when Daily references it</td>
+</tr>
+</tbody>
+</table>
+<p>Conflicts and urgent items must surface in <code>Daily.md</code>, not hidden in Exchange.</p>
+<hr />
+<h2 id="operating-modes">Operating Modes</h2>
+<h3 id="personal-assistant-default">Personal Assistant (Default)</h3>
+<ul>
+<li><code>human/</code> directory active</li>
+<li>Agenda agent enabled</li>
+<li>Pattern agent reflects on user behavior</li>
+<li>Single user via Transport</li>
+</ul>
+<h3 id="domain-expert-future">Domain Expert (Future)</h3>
+<ul>
+<li><code>human/</code> directory represents admin, not end-user</li>
+<li>Agenda agent disabled</li>
+<li>Pattern agent reflects on domain knowledge</li>
+<li>Multiple end-users via Transport</li>
+<li>Admin configures system via Web UI</li>
+</ul>
+<hr />
+<h2 id="importance-of-attention">Importance of Attention</h2>
+<p>The transformer architecture's core insight from "Attention Is All You Need" (Vaswani et al., 2017) — that attention mechanisms direct processing to what matters — applies directly to outheis. This isn't metaphor; it's the same principle at a different level.</p>
+<h3 id="the-learning-architecture">The Learning Architecture</h3>
+<pre><code>Skills (highest density)
+   │  condensed principles
+   │  &quot;Dates: Always ISO format&quot;
+   │  direct attention BEFORE processing
+   │
+Memory (medium density)
+   │  facts, observations
+   │  &quot;User corrected date format 3x&quot;
+   │  raw material for distillation
+   │
+Rules (lowest density)
+      hard constraints
+      &quot;Never delete without confirmation&quot;
+      override everything, rarely change
+</code></pre>
+<h3 id="the-mapping">The Mapping</h3>
+<table>
+<thead>
+<tr>
+<th>LLM Concept</th>
+<th>outheis Equivalent</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Trained weights</td>
+<td>Skills (distilled principles)</td>
+</tr>
+<tr>
+<td>Context window</td>
+<td>Memory (current observations)</td>
+</tr>
+<tr>
+<td>Query</td>
+<td>User message</td>
+</tr>
+<tr>
+<td>Training loop</td>
+<td>Pattern Agent (nightly)</td>
+</tr>
+</tbody>
+</table>
+<h3 id="how-learning-works">How Learning Works</h3>
+<pre><code>User interacts with agents
+        ↓
+Corrections, preferences observed
+        ↓
+Stored in Memory (feedback type)
+        ↓
+Pattern Agent runs (nightly)
+        ↓
+Recognizes patterns (3+ similar observations)
+        ↓
+Distills into Skill (condensed principle)
+        ↓
+Deletes redundant Memory entries
+        ↓
+Next agent invocation: Skill directs attention
+        ↓
+Agent behaves differently (learned)
+</code></pre>
+<p>This is gradient descent at the system level. Each correction adjusts the "weights" (skills). Over time, the system needs less explicit context because skills direct attention efficiently.</p>
+<h3 id="why-not-more-code">Why Not More Code?</h3>
+<p>The anti-pattern is solving learning with hardcoded logic:</p>
+<p><strong>Wrong:</strong></p>
+<pre><code class="language-python">def format_date(date):
+    if user_prefers_iso:
+        return date.isoformat()
+    elif user_prefers_german:
+        return date.strftime(&quot;%d.%m.%Y&quot;)
+</code></pre>
+<p><strong>Right:</strong></p>
+<pre><code>Skill: &quot;Dates: Always ISO format (YYYY-MM-DD)&quot;
+</code></pre>
+<p>The LLM reads the skill and applies it. No code changes needed when preferences change. The system learns by refining skills, not by adding branches.</p>
+<h3 id="scaling-through-semantic-compression">Scaling Through Semantic Compression</h3>
+<p>As context grows, naive approaches fail:</p>
+<p><strong>Wrong:</strong> Add more tools to fetch more data</p>
+<p><strong>Right:</strong> Semantic compression — the Pattern Agent distills many specific observations into few general principles</p>
+<pre><code>3x &quot;User corrected date format&quot;  →  &quot;Dates: Always ISO format&quot;
+5x &quot;User prefers short answers&quot;  →  &quot;Brevity: be concise&quot;
+</code></pre>
+<p>The meaning is preserved, the redundancy disappears. One skill replaces ten memory entries, directing attention to what matters.</p>
+<h3 id="pattern-agent-as-optimizer">Pattern Agent as Optimizer</h3>
+<p>The Pattern Agent is the optimizer of this system:</p>
+<ol>
+<li><strong>Observes gradients</strong> — user corrections indicate error</li>
+<li><strong>Accumulates updates</strong> — memory stores observations</li>
+<li><strong>Applies batch update</strong> — nightly distillation</li>
+<li><strong>Prunes redundancy</strong> — deletes obsolete memory</li>
+</ol>
+<p>The goal: a system that improves not by adding code, but by refining attention. The longer it runs, the less context it needs.</p>
+<hr />
+<h2 id="design-principles-summary">Design Principles Summary</h2>
+<table>
+<thead>
+<tr>
+<th>Principle</th>
+<th>Implementation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Message Passing</td>
+<td>Append-only queue, no shared state</td>
+</tr>
+<tr>
+<td>Ownership</td>
+<td>Each agent owns its domain</td>
+</tr>
+<tr>
+<td>Supervision</td>
+<td>Dispatcher monitors and restarts</td>
+</tr>
+<tr>
+<td>Dynamic Restriction</td>
+<td>Agents pledge/unveil at startup</td>
+</tr>
+<tr>
+<td>Priority Scheduling</td>
+<td>User-facing work first</td>
+</tr>
+<tr>
+<td>Append-Only Log</td>
+<td>Queue as source of truth</td>
+</tr>
+<tr>
+<td>Specialization</td>
+<td>One agent, one role</td>
+</tr>
+<tr>
+<td>Secure by Default</td>
+<td>No implicit capabilities</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="implementation-stack">Implementation Stack</h2>
+<table>
+<thead>
+<tr>
+<th>Component</th>
+<th>Technology</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Transport</td>
+<td>Python (daemon)</td>
+</tr>
+<tr>
+<td>Dispatcher</td>
+<td>Python (daemon)</td>
+</tr>
+<tr>
+<td>Agents</td>
+<td>Python</td>
+</tr>
+<tr>
+<td>Queue</td>
+<td>JSONL file</td>
+</tr>
+<tr>
+<td>Configuration</td>
+<td>JSON</td>
+</tr>
+<tr>
+<td>Web UI</td>
+<td>localhost-only, config only</td>
+</tr>
+<tr>
+<td>Vault</td>
+<td>Markdown files + arbitrary assets</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<p>Next steps: Implementation of core components following this architecture.</p>
+      <hr>
+      <p class="footer">Open source under AGPL-3.0 · <a href="https://github.com/outheis-labs/outheis-minimal">Code on GitHub</a></p>
+    </main>
+  </div>
+</body>
+</html>

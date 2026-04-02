@@ -1,0 +1,1551 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Data Formats and Conventions · outheis</title>
+  <link rel="icon" type="image/png" href="../favicon-96x96.png" sizes="96x96">
+  <link rel="icon" type="image/svg+xml" href="../favicon.svg">
+  <link rel="shortcut icon" href="../favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="../apple-touch-icon.png">
+  <link rel="manifest" href="../site.webmanifest">
+  <link rel="preconnect" href="https://rsms.me/">
+  <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --font-body: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-ui: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-mono: SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      --color-text: #1a1a1a;
+      --color-text-muted: #666;
+      --color-text-faint: #999;
+      --color-border: #e0e0e0;
+      --color-bg-code: #f5f5f5;
+    }
+
+    @supports (font-variation-settings: normal) {
+      :root { --font-body: "Inter var", sans-serif; --font-ui: "Inter var", sans-serif; }
+    }
+
+    html, body {
+      width: 100%;
+      min-height: 100vh;
+      background: #fff;
+      font-family: var(--font-body);
+      font-size: 15px;
+      line-height: 1.6;
+      color: var(--color-text);
+    }
+
+    .container {
+      display: flex;
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 2rem;
+      gap: 3rem;
+    }
+
+    .sidebar {
+      flex: 0 0 200px;
+      position: sticky;
+      top: 2rem;
+      height: fit-content;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      align-self: flex-start;
+    }
+
+    .sidebar-logo-link {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
+      text-decoration: none;
+      margin-bottom: 2rem;
+    }
+
+    .sidebar-logo {
+      display: block;
+      width: 120px;
+      height: auto;
+      margin-bottom: 0.5rem;
+    }
+
+    .sidebar-title {
+      font-family: var(--font-ui);
+      font-size: 14px;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      color: var(--color-text);
+    }
+
+    .sidebar-nav {
+      list-style: none;
+      width: 100%;
+    }
+
+    .sidebar-nav li {
+      margin-bottom: 0.75rem;
+    }
+
+    .sidebar-nav a {
+      font-family: var(--font-ui);
+      color: var(--color-text-muted);
+      text-decoration: none;
+      font-size: 15px;
+      font-weight: 600;
+    }
+
+    .sidebar-nav a:hover { color: var(--color-text); }
+    .sidebar-nav a.active { color: var(--color-text); }
+
+    .sidebar-nav .nav-section {
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--color-text-faint);
+      margin-top: 1.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .sidebar-nav .nav-section:first-of-type { margin-top: 0; }
+
+    .sidebar-nav .nav-external {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--color-text-faint);
+    }
+
+    .content {
+      flex: 1;
+      min-width: 0;
+      max-width: 600px;
+      align-self: flex-start;
+    }
+
+    .content > *:first-child { margin-top: 0; }
+
+    .content h1 { font-family: var(--font-ui); font-size: 28px; font-weight: 600; margin-bottom: 0.5rem; letter-spacing: -0.02em; }
+    .content h2 { font-family: var(--font-ui); font-size: 18px; font-weight: 600; margin-top: 2rem; margin-bottom: 1.25rem; }
+    .content h3 { font-family: var(--font-ui); font-size: 15px; font-weight: 600; margin-top: 1.5rem; margin-bottom: 0.75rem; }
+    .content p { margin-bottom: 1rem; }
+    .content a { color: var(--color-text-muted); }
+    .content a:hover { color: var(--color-text); }
+    .content ul, .content ol { margin-bottom: 1rem; padding-left: 1.5rem; }
+    .content li { margin-bottom: 0.4rem; }
+
+    .content table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; font-family: var(--font-ui); font-size: 13px; }
+    .content th, .content td { text-align: left; padding: 0.5rem 0.75rem; border-bottom: 1px solid var(--color-border); }
+    .content th { font-weight: 500; font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--color-text-muted); }
+
+    .content code { font-family: var(--font-mono); font-size: 14px; background: var(--color-bg-code); padding: 0.15em 0.4em; border-radius: 3px; }
+    .content pre { background: var(--color-bg-code); padding: 1rem 1.25rem; overflow-x: auto; margin: 1.5rem 0; font-size: 13px; border-radius: 4px; line-height: 1.5; }
+    .content pre code { background: none; padding: 0; border-radius: 0; }
+
+    .content hr { border: none; border-top: 1px solid var(--color-border); margin: 1.5rem 0; }
+    .content strong { font-weight: 500; }
+    .content em { font-style: italic; }
+    .content blockquote { border-left: 2px solid var(--color-border); padding-left: 1.25rem; margin: 1.5rem 0; color: var(--color-text-muted); font-style: italic; }
+    .content .lead { font-style: italic; color: var(--color-text-muted); margin-bottom: 2rem; }
+    .content .footer { font-size: 12px; color: var(--color-text-muted); font-style: italic; }
+
+    @media (max-width: 700px) {
+      .container { flex-direction: column; padding: 1.5rem; gap: 1.5rem; }
+      .sidebar { position: static; flex: none; flex-direction: row; flex-wrap: wrap; align-items: center; gap: 1rem; }
+      .sidebar-logo { width: 48px; height: 48px; margin-bottom: 0; }
+      .sidebar-title { margin-bottom: 0; flex: 1; }
+      .sidebar-nav { width: 100%; display: flex; flex-wrap: wrap; gap: 0.5rem 1.25rem; }
+      .sidebar-nav li { margin-bottom: 0; }
+      .content h1 { font-size: 24px; }
+      .content h2 { font-size: 16px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <aside class="sidebar">
+      <a href="../index.html" class="sidebar-logo-link">
+        <img src="../assets/logo.svg" alt="outheis" class="sidebar-logo">
+        <span class="sidebar-title">outheis</span>
+      </a>
+      <nav>
+        <ul class="sidebar-nav">
+          <li><a href="../index.html">Home</a></li>
+          <li class="nav-section">Philosophy</li>
+          <li><a href="../philosophy/index.html">Why outheis</a></li>
+          <li class="nav-section">Design</li>
+          <li><a href="../design/index.html">Overview</a></li>
+          <li><a href="../design/01-why-os-principles.html">OS Principles</a></li>
+          <li><a href="../design/02-systems-survey.html">Systems Survey</a></li>
+          <li><a href="../design/03-architecture.html">Architecture</a></li>
+          <li><a href="../design/04-data-formats.html" class="active">Data Formats</a></li>
+          <li><a href="../design/05-related-work.html">Related Work</a></li>
+          <li><a href="../design/06-agent-prompts.html">Agent Prompts</a></li>
+          <li class="nav-section">Implementation</li>
+          <li><a href="../implementation/architecture.html">Current State</a></li>
+          <li><a href="../implementation/memory.html">Memory & Rules</a></li>
+          <li><a href="../implementation/agenda.html">Agenda</a></li>
+          <li><a href="../implementation/skills.html">Skills</a></li>
+          <li><a href="../implementation/migration.html">Migration</a></li>
+          <li><a href="../implementation/config.html">Config</a></li>
+          <li><a href="../implementation/guide.html">CLI Guide</a></li>
+          <li><a href="../implementation/webui.html">Web UI</a></li>
+          <li><a href="../implementation/alan.html">Code Agent</a></li>
+          <li class="nav-section"></li>
+          <li><a href="https://github.com/outheis-labs/outheis-minimal" class="nav-external">GitHub ↗</a></li>
+        </ul>
+      </nav>
+    </aside>
+    <main class="content">
+      <h1 id="data-formats-and-conventions">Data Formats and Conventions</h1>
+<p>This document specifies the structure and format of data in outheis, enabling agents to make reliable assumptions about content.</p>
+<hr />
+<h2 id="core-principle-data-locality">Core Principle: Data Locality</h2>
+<p><strong>User data exists only in two locations:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Location</th>
+<th>Written by</th>
+<th>Contains</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>~/.outheis/human/</code></td>
+<td>outheis system, user via Web UI, manual edit</td>
+<td>Configuration, insights, rules</td>
+</tr>
+<tr>
+<td><code>vault/</code> (external)</td>
+<td>User</td>
+<td>Knowledge, documents, assets</td>
+</tr>
+</tbody>
+</table>
+<p>No user data is stored anywhere else. Removing these directories erases all user traces.</p>
+<hr />
+<h2 id="directory-structure">Directory Structure</h2>
+<h3 id="system-directory">System Directory</h3>
+<pre><code>~/.outheis/                      # System directory
+├── agents/                      # Agent implementations
+├── transport/                   # Transport daemon
+├── dispatcher/                  # Dispatcher
+├── web/                         # Web UI (localhost-only)
+└── human/                       # ALL user-specific data
+    ├── config.json              # User configuration
+    ├── insights.jsonl           # Pattern agent output
+    ├── rules/                   # Agenda agent rules
+    │   └── priorities.md
+    ├── messages.jsonl           # Message queue (append-only)
+    ├── archive/                 # Cold storage for old conversations
+    │   ├── messages-2025-01.jsonl
+    │   └── ...
+    ├── index.jsonl              # Search index (across all vaults)
+    ├── tag-weights.jsonl        # Learned tag importance
+    ├── cache/                   # Cached data
+    │   └── agenda/              # Previous versions for diff
+    │       ├── Daily.md.prev
+    │       ├── Inbox.md.prev
+    │       └── Exchange.md.prev
+    ├── imports/                 # Imported external data
+    │   ├── calendar/
+    │   │   └── 2025-03-27.jsonl
+    │   ├── email/
+    │   │   └── inbox.jsonl
+    │   ├── tasks/
+    │   └── contacts/
+    └── vault/                   # Minimal starter vault
+</code></pre>
+<h3 id="vault-external-user-managed">Vault (External, User-Managed)</h3>
+<p>Vaults can be anywhere on the filesystem. Multiple vaults are supported.</p>
+<pre><code>~/Documents/MyVault/             # Example: user's primary vault
+├── Agenda/                      # Special directory (required in primary vault)
+│   ├── Daily.md
+│   ├── Inbox.md
+│   └── Exchange.md
+├── notes/
+│   └── project-alpha.md
+├── projects/
+│   └── project-alpha/
+│       ├── README.md
+│       └── assets/
+│           └── diagram.png
+└── archive/
+    └── 2024/
+
+~/Documents/Obsidian/            # Example: second vault
+├── ...
+</code></pre>
+<h3 id="configuration">Configuration</h3>
+<pre><code class="language-json">{
+  &quot;vault&quot;: [
+    &quot;~/Documents/MyVault&quot;,
+    &quot;~/Documents/Obsidian&quot;
+  ]
+}
+</code></pre>
+<p>First vault in list is the <strong>primary vault</strong> — contains <code>Agenda/</code>.</p>
+<hr />
+<h2 id="vault-structure">Vault Structure</h2>
+<h3 id="conventions">Conventions</h3>
+<table>
+<thead>
+<tr>
+<th>Rule</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Agenda/</code></td>
+<td>Required in primary vault, special handling</td>
+</tr>
+<tr>
+<td>User directories</td>
+<td>Arbitrary structure, arbitrary depth</td>
+</tr>
+<tr>
+<td>Directory names</td>
+<td>May serve as organizational hints</td>
+</tr>
+<tr>
+<td>Markdown files</td>
+<td>Primary knowledge format, self-describing via tags</td>
+</tr>
+<tr>
+<td>Other files</td>
+<td>Assets, attachments, linked or loose</td>
+</tr>
+</tbody>
+</table>
+<h3 id="philosophy">Philosophy</h3>
+<p>Following the principle of <em>prospective information architecture</em>:</p>
+<ul>
+<li><strong>Self-description</strong>: Files carry their meaning via tags, not via position</li>
+<li><strong>Position as hint</strong>: Directory structure provides context, not identity</li>
+<li><strong>Multiple access paths</strong>: Tags enable retrieval from any perspective</li>
+<li><strong>Structure at query time</strong>: Hierarchies are computed, not stored</li>
+</ul>
+<hr />
+<h2 id="file-types">File Types</h2>
+<h3 id="primary-markdown-md">Primary: Markdown (.md)</h3>
+<p>The primary knowledge format. Human-readable, machine-parseable, self-describing.</p>
+<h3 id="common-assets">Common Assets</h3>
+<p>Files that commonly appear alongside or linked from Markdown:</p>
+<table>
+<thead>
+<tr>
+<th>Category</th>
+<th>Extensions</th>
+<th>Handling</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Documents</td>
+<td><code>.docx</code>, <code>.xlsx</code>, <code>.pptx</code>, <code>.pdf</code></td>
+<td>Index metadata, extract text where possible</td>
+</tr>
+<tr>
+<td>Archives</td>
+<td><code>.zip</code>, <code>.tgz</code>, <code>.tar.gz</code>, <code>.tar</code>, <code>.7z</code></td>
+<td>Index as container, list contents</td>
+</tr>
+<tr>
+<td>Images</td>
+<td><code>.png</code>, <code>.jpg</code>, <code>.jpeg</code>, <code>.gif</code>, <code>.svg</code>, <code>.webp</code></td>
+<td>Index metadata, OCR if configured</td>
+</tr>
+<tr>
+<td>Code</td>
+<td><code>.py</code>, <code>.js</code>, <code>.ts</code>, <code>.sh</code>, <code>.json</code>, <code>.yaml</code></td>
+<td>Index as text</td>
+</tr>
+<tr>
+<td>Repositories</td>
+<td><code>.git/</code> (directory)</td>
+<td>Recognize as git repo, index metadata</td>
+</tr>
+<tr>
+<td>Data</td>
+<td><code>.csv</code>, <code>.tsv</code>, <code>.jsonl</code></td>
+<td>Index as structured data</td>
+</tr>
+</tbody>
+</table>
+<h3 id="relationship-patterns">Relationship Patterns</h3>
+<p>Files relate to each other in several ways:</p>
+<table>
+<thead>
+<tr>
+<th>Pattern</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Embedded</strong></td>
+<td>Image/asset referenced in Markdown (<code>![](path)</code>)</td>
+</tr>
+<tr>
+<td><strong>Linked</strong></td>
+<td>Document referenced via path or wiki-link (<code>[[name]]</code>)</td>
+</tr>
+<tr>
+<td><strong>Sibling</strong></td>
+<td>Related files in same directory</td>
+</tr>
+<tr>
+<td><strong>Loose</strong></td>
+<td>Files without explicit links (discoverable via search)</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="markdown-format">Markdown Format</h2>
+<h3 id="frontmatter">Frontmatter</h3>
+<p>Optional YAML frontmatter for explicit metadata:</p>
+<pre><code class="language-markdown">---
+title: Project Alpha Notes
+created: 2025-01-15
+modified: 2025-03-27
+tags: [project/alpha, important]
+---
+
+# Project Alpha Notes
+
+Content here...
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>title</code></td>
+<td>string</td>
+<td>Display title</td>
+</tr>
+<tr>
+<td><code>created</code></td>
+<td>date</td>
+<td>Creation date (ISO 8601)</td>
+</tr>
+<tr>
+<td><code>modified</code></td>
+<td>date</td>
+<td>Last modification (ISO 8601)</td>
+</tr>
+<tr>
+<td><code>tags</code></td>
+<td>array</td>
+<td>Semantic tags</td>
+</tr>
+</tbody>
+</table>
+<p>If frontmatter is absent, agents derive metadata from:
+- Title: First <code># heading</code> or filename
+- Created/Modified: Filesystem timestamps
+- Tags: Inline tags in content</p>
+<h3 id="tags">Tags</h3>
+<p>Tags can come from <strong>two sources</strong> (both work, combined automatically):</p>
+<ol>
+<li><strong>YAML frontmatter</strong> (optional):</li>
+</ol>
+<pre><code class="language-yaml">---
+tags: [project/alpha, important]
+---
+</code></pre>
+<ol>
+<li><strong>Inline #tags</strong> in body text (preferred):</li>
+</ol>
+<pre><code class="language-markdown">This is an #important note about #project/alpha.
+
+Meeting scheduled for tomorrow #deadline #priority-high.
+</code></pre>
+<p>outheis extracts tags from both sources and deduplicates them.</p>
+<h3 id="tag-formats">Tag Formats</h3>
+<table>
+<thead>
+<tr>
+<th>Format</th>
+<th>Example</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Single</td>
+<td><code>#important</code></td>
+<td>Simple flag</td>
+</tr>
+<tr>
+<td>Key-value</td>
+<td><code>#priority-high</code></td>
+<td>Attribute with value</td>
+</tr>
+<tr>
+<td>Hierarchical</td>
+<td><code>#project/alpha</code></td>
+<td>Nested namespace</td>
+</tr>
+<tr>
+<td>Date</td>
+<td><code>#date-2026-03-24</code></td>
+<td>Specific date</td>
+</tr>
+<tr>
+<td>Status</td>
+<td><code>#status-active</code></td>
+<td>State indicator</td>
+</tr>
+</tbody>
+</table>
+<p><strong>User's format is preserved.</strong> outheis learns whether you use <code>-</code> or <code>/</code> as separator.</p>
+<h3 id="tag-normalization">Tag Normalization</h3>
+<p>For indexing and search, tags are normalized:</p>
+<pre><code>#Important     → important
+#Priority-High → priority-high
+#Project/Alpha → project/alpha
+</code></pre>
+<p>Rules:
+- Lowercase for matching
+- Preserve hyphens and slashes
+- Strip leading <code>#</code></p>
+<h3 id="tag-analysis">Tag Analysis</h3>
+<p>outheis tracks tag usage and can report:</p>
+<ul>
+<li><strong>Top tags</strong> — most frequently used</li>
+<li><strong>Tag hierarchies</strong> — prefixes like <code>status-*</code>, <code>project/*</code></li>
+<li><strong>Singular tags</strong> — used only once (cleanup candidates)</li>
+</ul>
+<p>Ask in chat: "welche tags habe ich?" or "tag-analyse"</p>
+<h3 id="tag-philosophy">Tag Philosophy</h3>
+<p><strong>outheis does not invent tags.</strong> It uses your tags, learns your format, and may:
+- Suggest cleanup for singular tags
+- Warn about inconsistent formats
+- Propose similar existing tags when you create new ones</p>
+<p>You control the vocabulary.</p>
+<h3 id="links">Links</h3>
+<p>Wiki-style links for internal references:</p>
+<pre><code class="language-markdown">See [[meeting-notes]] for details.
+Related: [[projects/alpha/README]]
+</code></pre>
+<p>Standard Markdown links for external references:</p>
+<pre><code class="language-markdown">Based on [this paper](https://example.com/paper.pdf).
+</code></pre>
+<hr />
+<h2 id="imported-data">Imported Data</h2>
+<p>External data (calendar, email, etc.) is imported by the Action agent into <code>~/.outheis/human/imports/</code>. This data is canonical—structured representations of external sources.</p>
+<h3 id="directory-structure_1">Directory Structure</h3>
+<pre><code>~/.outheis/human/imports/
+├── calendar/
+│   ├── 2025-03-27.jsonl
+│   └── recurring.jsonl
+├── email/
+│   ├── inbox.jsonl
+│   └── sent.jsonl
+├── tasks/
+│   └── tasks.jsonl
+└── contacts/
+    └── contacts.jsonl
+</code></pre>
+<h3 id="calendar-events">Calendar Events</h3>
+<pre><code class="language-json">{
+  &quot;id&quot;: &quot;evt_abc123&quot;,
+  &quot;source&quot;: &quot;google_calendar&quot;,
+  &quot;title&quot;: &quot;Team Meeting&quot;,
+  &quot;start&quot;: &quot;2025-03-27T10:00:00Z&quot;,
+  &quot;end&quot;: &quot;2025-03-27T11:00:00Z&quot;,
+  &quot;location&quot;: &quot;Room 3B&quot;,
+  &quot;description&quot;: &quot;Weekly sync&quot;,
+  &quot;attendees&quot;: [&quot;alice@example.com&quot;, &quot;bob@example.com&quot;],
+  &quot;recurring&quot;: false,
+  &quot;imported_at&quot;: &quot;2025-03-27T08:00:00Z&quot;
+}
+</code></pre>
+<h3 id="email">Email</h3>
+<pre><code class="language-json">{
+  &quot;id&quot;: &quot;msg_xyz789&quot;,
+  &quot;source&quot;: &quot;gmail&quot;,
+  &quot;from&quot;: {&quot;name&quot;: &quot;Alice&quot;, &quot;email&quot;: &quot;alice@example.com&quot;},
+  &quot;to&quot;: [{&quot;name&quot;: &quot;User&quot;, &quot;email&quot;: &quot;user@example.com&quot;}],
+  &quot;cc&quot;: [],
+  &quot;subject&quot;: &quot;Project Update&quot;,
+  &quot;body_text&quot;: &quot;Plain text body...&quot;,
+  &quot;date&quot;: &quot;2025-03-27T09:15:00Z&quot;,
+  &quot;thread_id&quot;: &quot;thread_123&quot;,
+  &quot;labels&quot;: [&quot;inbox&quot;, &quot;important&quot;],
+  &quot;attachments&quot;: [
+    {&quot;filename&quot;: &quot;report.pdf&quot;, &quot;mime_type&quot;: &quot;application/pdf&quot;, &quot;size&quot;: 102400}
+  ],
+  &quot;imported_at&quot;: &quot;2025-03-27T10:00:00Z&quot;
+}
+</code></pre>
+<h3 id="tasks">Tasks</h3>
+<pre><code class="language-json">{
+  &quot;id&quot;: &quot;task_456&quot;,
+  &quot;source&quot;: &quot;todoist&quot;,
+  &quot;title&quot;: &quot;Review proposal&quot;,
+  &quot;description&quot;: &quot;Review and comment on Q2 proposal&quot;,
+  &quot;due&quot;: &quot;2025-03-28T17:00:00Z&quot;,
+  &quot;priority&quot;: 2,
+  &quot;status&quot;: &quot;pending&quot;,
+  &quot;project&quot;: &quot;Work&quot;,
+  &quot;labels&quot;: [&quot;review&quot;, &quot;q2&quot;],
+  &quot;imported_at&quot;: &quot;2025-03-27T08:00:00Z&quot;
+}
+</code></pre>
+<h3 id="contacts">Contacts</h3>
+<pre><code class="language-json">{
+  &quot;id&quot;: &quot;contact_789&quot;,
+  &quot;source&quot;: &quot;google_contacts&quot;,
+  &quot;name&quot;: &quot;Alice Smith&quot;,
+  &quot;email&quot;: [&quot;alice@example.com&quot;, &quot;alice.smith@work.com&quot;],
+  &quot;phone&quot;: [&quot;+1-555-123-4567&quot;],
+  &quot;organization&quot;: &quot;Acme Corp&quot;,
+  &quot;notes&quot;: &quot;Met at conference 2024&quot;,
+  &quot;imported_at&quot;: &quot;2025-03-27T08:00:00Z&quot;
+}
+</code></pre>
+<hr />
+<h2 id="index">Index</h2>
+<p>The Data agent maintains a search index at <code>~/.outheis/human/index.jsonl</code>:</p>
+<pre><code class="language-json">{
+  &quot;vault&quot;: &quot;~/Documents/MyVault&quot;,
+  &quot;path&quot;: &quot;notes/project-alpha.md&quot;,
+  &quot;type&quot;: &quot;markdown&quot;,
+  &quot;title&quot;: &quot;Project Alpha Notes&quot;,
+  &quot;tags&quot;: [&quot;project/alpha&quot;, &quot;important&quot;],
+  &quot;links_to&quot;: [&quot;meeting-notes.md&quot;, &quot;assets/diagram.png&quot;],
+  &quot;linked_from&quot;: [&quot;README.md&quot;],
+  &quot;modified&quot;: &quot;2025-03-27T10:00:00Z&quot;,
+  &quot;accessed_at&quot;: &quot;2025-03-27T14:00:00Z&quot;,
+  &quot;access_count&quot;: 12,
+  &quot;checksum&quot;: &quot;sha256:abc123...&quot;,
+  &quot;indexed_at&quot;: &quot;2025-03-27T10:05:00Z&quot;
+}
+</code></pre>
+<p>The index spans all configured vaults. Each entry includes the <code>vault</code> field.</p>
+<hr />
+<h2 id="human-directory">Human Directory</h2>
+<h3 id="structure">Structure</h3>
+<pre><code>~/.outheis/human/
+├── config.json                  # User configuration
+├── insights.jsonl               # Pattern agent output
+├── rules/                       # Agenda agent rules
+│   └── priorities.md
+└── vault/                       # Minimal starter vault
+</code></pre>
+<h3 id="write-access">Write Access</h3>
+<table>
+<thead>
+<tr>
+<th>Component</th>
+<th>Can Write</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>outheis system</td>
+<td>config.json, insights.jsonl</td>
+</tr>
+<tr>
+<td>Pattern agent</td>
+<td>insights.jsonl</td>
+</tr>
+<tr>
+<td>User (Web UI)</td>
+<td>config.json, rules/</td>
+</tr>
+<tr>
+<td>User (manual)</td>
+<td>Any file</td>
+</tr>
+<tr>
+<td>Other agents</td>
+<td><strong>Never</strong> (read-only)</td>
+</tr>
+</tbody>
+</table>
+<h3 id="configjson">config.json</h3>
+<p>User configuration:</p>
+<pre><code class="language-json">{
+  &quot;name&quot;: &quot;Markus&quot;,
+  &quot;language&quot;: &quot;en&quot;,
+  &quot;timezone&quot;: &quot;Europe/Berlin&quot;,
+  &quot;vault&quot;: [
+    &quot;~/Documents/MyVault&quot;,
+    &quot;~/Documents/Obsidian&quot;
+  ]
+}
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>name</code></td>
+<td>string</td>
+<td>User's display name</td>
+</tr>
+<tr>
+<td><code>language</code></td>
+<td>string</td>
+<td>Preferred language (ISO 639-1)</td>
+</tr>
+<tr>
+<td><code>timezone</code></td>
+<td>string</td>
+<td>IANA timezone</td>
+</tr>
+<tr>
+<td><code>vault</code></td>
+<td>array</td>
+<td>Paths to vaults (first = primary)</td>
+</tr>
+</tbody>
+</table>
+<h3 id="insightsjsonl">insights.jsonl</h3>
+<p>Pattern agent writes observations:</p>
+<pre><code class="language-json">{
+  &quot;v&quot;: 1,
+  &quot;id&quot;: &quot;ins_20251115_001&quot;,
+  &quot;type&quot;: &quot;strategy&quot;,
+  &quot;domain&quot;: &quot;communication&quot;,
+  &quot;insight&quot;: &quot;When formatting for Signal, use emoji headers instead of markdown&quot;,
+  &quot;confidence&quot;: 0.8,
+  &quot;evidence_count&quot;: 5,
+  &quot;source_sessions&quot;: [&quot;sess_001&quot;, &quot;sess_003&quot;, &quot;sess_007&quot;],
+  &quot;created_at&quot;: &quot;2025-11-15T04:12:00Z&quot;
+}
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>type</code></td>
+<td>string</td>
+<td><code>strategy</code>, <code>preference</code>, <code>pattern</code>, <code>capability</code></td>
+</tr>
+<tr>
+<td><code>domain</code></td>
+<td>string</td>
+<td>Area of applicability</td>
+</tr>
+<tr>
+<td><code>confidence</code></td>
+<td>float</td>
+<td>0.0–1.0, increases with evidence</td>
+</tr>
+<tr>
+<td><code>evidence_count</code></td>
+<td>int</td>
+<td>Number of supporting instances</td>
+</tr>
+<tr>
+<td><code>source_sessions</code></td>
+<td>array</td>
+<td>Traceability to conversations</td>
+</tr>
+</tbody>
+</table>
+<h3 id="session_notesjsonl">session_notes.jsonl</h3>
+<p>Temporary learning notes, reviewed by Pattern agent during scheduled runs:</p>
+<pre><code class="language-json">{
+  &quot;v&quot;: 1,
+  &quot;id&quot;: &quot;note_20251115_001&quot;,
+  &quot;session_id&quot;: &quot;sess_007&quot;,
+  &quot;agent&quot;: &quot;relay&quot;,
+  &quot;problem&quot;: &quot;User asked for table formatting in Signal&quot;,
+  &quot;solution&quot;: &quot;Replace markdown tables with emoji-separated rows&quot;,
+  &quot;context&quot;: {
+    &quot;channel&quot;: &quot;signal&quot;,
+    &quot;user_feedback&quot;: &quot;positive&quot;
+  },
+  &quot;created_at&quot;: &quot;2025-11-15T10:30:00Z&quot;,
+  &quot;reviewed&quot;: false
+}
+</code></pre>
+<p>Session notes are:
+- Written by any agent when user helps solve a problem
+- Read by Pattern agent during nightly run
+- Marked <code>reviewed: true</code> after processing
+- Periodically cleaned (reviewed notes older than 30 days)</p>
+<p>Pattern agent decides: generalize to insight, or leave as specific instance in archive.</p>
+<h3 id="agenda-rules">Agenda Rules</h3>
+<p>Markdown files in <code>human/rules/</code> define user preferences:</p>
+<pre><code class="language-markdown"># Priorities
+
+## Work vs Personal
+- Work appointments take priority over personal, except:
+  - Family events always take priority
+  - Health appointments always take priority
+
+## Time Blocks
+- Monday mornings: no meetings before 10:00
+- Friday afternoons: no meetings after 15:00
+
+## Notifications
+- Deadline &lt; 3 days: always remind
+- Emails from boss: always show immediately
+</code></pre>
+<hr />
+<h2 id="text-extraction">Text Extraction</h2>
+<p>For non-Markdown files, agents extract text where possible:</p>
+<table>
+<thead>
+<tr>
+<th>Type</th>
+<th>Extraction Method</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>PDF</td>
+<td><code>pdftotext</code>, <code>pymupdf</code>, or similar</td>
+</tr>
+<tr>
+<td>DOCX/XLSX/PPTX</td>
+<td><code>python-docx</code>, <code>openpyxl</code>, <code>python-pptx</code></td>
+</tr>
+<tr>
+<td>Images</td>
+<td>OCR (optional, configurable)</td>
+</tr>
+<tr>
+<td>Archives</td>
+<td>List contents, extract text from contained files</td>
+</tr>
+<tr>
+<td>Code</td>
+<td>Treat as plain text</td>
+</tr>
+</tbody>
+</table>
+<p>Extracted text is stored in the index, not as separate files.</p>
+<hr />
+<h2 id="binary-files">Binary Files</h2>
+<p>Binary files (images, PDFs, Office documents) are:</p>
+<ol>
+<li><strong>Indexed</strong> by metadata (size, type, modification date)</li>
+<li><strong>Text-extracted</strong> where possible</li>
+<li><strong>Linked</strong> via references in Markdown</li>
+<li><strong>Not modified</strong> by outheis (read-only from agent perspective)</li>
+</ol>
+<hr />
+<h2 id="git-repositories">Git Repositories</h2>
+<p>If a directory contains <code>.git/</code>:</p>
+<ol>
+<li><strong>Recognized</strong> as a git repository</li>
+<li><strong>Indexed</strong> by metadata (remotes, branches, recent commits)</li>
+<li><strong>Not modified</strong> by outheis agents</li>
+<li><strong>Action agent</strong> may execute git commands if instructed</li>
+</ol>
+<hr />
+<h2 id="timestamps">Timestamps</h2>
+<p>All timestamps use ISO 8601 format in UTC:</p>
+<pre><code>2025-03-27T10:00:00Z
+</code></pre>
+<p>Agents convert to local timezone for display based on <code>human/config.json</code> timezone setting.</p>
+<hr />
+<h2 id="file-naming">File Naming</h2>
+<h3 id="conventions_1">Conventions</h3>
+<table>
+<thead>
+<tr>
+<th>Type</th>
+<th>Convention</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Notes</td>
+<td>lowercase, hyphens</td>
+<td><code>project-alpha-notes.md</code></td>
+</tr>
+<tr>
+<td>Imports</td>
+<td>date or type prefix</td>
+<td><code>2025-03-27.jsonl</code></td>
+</tr>
+<tr>
+<td>System</td>
+<td>descriptive</td>
+<td><code>index.jsonl</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="forbidden-characters">Forbidden Characters</h3>
+<p>Filenames must not contain:
+- <code>/</code> <code>\</code> <code>:</code> <code>*</code> <code>?</code> <code>"</code> <code>&lt;</code> <code>&gt;</code> <code>|</code>
+- Leading/trailing spaces
+- Leading <code>.</code> in user files (reserved for system)</p>
+<hr />
+<h2 id="encoding">Encoding</h2>
+<p>All text files use UTF-8 encoding without BOM.</p>
+<hr />
+<h2 id="summary">Summary</h2>
+<table>
+<thead>
+<tr>
+<th>Data Type</th>
+<th>Location</th>
+<th>Format</th>
+<th>Written By</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>User notes</td>
+<td><code>vault/</code></td>
+<td>Markdown</td>
+<td>User</td>
+</tr>
+<tr>
+<td>User assets</td>
+<td><code>vault/</code></td>
+<td>Various</td>
+<td>User</td>
+</tr>
+<tr>
+<td>Search index</td>
+<td><code>~/.outheis/human/index.jsonl</code></td>
+<td>JSONL</td>
+<td>Data agent</td>
+</tr>
+<tr>
+<td>Tag weights</td>
+<td><code>~/.outheis/human/tag-weights.jsonl</code></td>
+<td>JSONL</td>
+<td>Pattern agent</td>
+</tr>
+<tr>
+<td>Imported data</td>
+<td><code>~/.outheis/human/imports/</code></td>
+<td>JSONL</td>
+<td>Action agent</td>
+</tr>
+<tr>
+<td>Message queue</td>
+<td><code>~/.outheis/human/messages.jsonl</code></td>
+<td>JSONL</td>
+<td>All agents</td>
+</tr>
+<tr>
+<td>Archive</td>
+<td><code>~/.outheis/human/archive/</code></td>
+<td>JSONL</td>
+<td>Dispatcher</td>
+</tr>
+<tr>
+<td>User config</td>
+<td><code>~/.outheis/human/config.json</code></td>
+<td>JSON</td>
+<td>System, User</td>
+</tr>
+<tr>
+<td>Insights</td>
+<td><code>~/.outheis/human/insights.jsonl</code></td>
+<td>JSONL</td>
+<td>Pattern agent</td>
+</tr>
+<tr>
+<td>Agenda rules</td>
+<td><code>~/.outheis/human/rules/</code></td>
+<td>Markdown</td>
+<td>User</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="schema-versioning">Schema Versioning</h2>
+<h3 id="the-problem">The Problem</h3>
+<p>Data structures evolve. Messages, insights, and other formats will change over time. Without versioning:</p>
+<ul>
+<li>Old data becomes unreadable after upgrades</li>
+<li>Mixed versions in same file cause parsing errors</li>
+<li>No migration path for existing data</li>
+</ul>
+<h3 id="version-field">Version Field</h3>
+<p>Every record in outheis-managed JSONL files carries a version:</p>
+<pre><code class="language-json">{&quot;v&quot;: 1, &quot;id&quot;: &quot;msg_001&quot;, &quot;from&quot;: {&quot;agent&quot;: &quot;zeno&quot;}, ...}
+{&quot;v&quot;: 1, &quot;id&quot;: &quot;msg_002&quot;, &quot;from&quot;: {&quot;agent&quot;: &quot;cato&quot;}, ...}
+{&quot;v&quot;: 2, &quot;id&quot;: &quot;msg_003&quot;, &quot;from&quot;: {&quot;agent&quot;: &quot;zeno&quot;}, &quot;priority&quot;: &quot;high&quot;, ...}
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>v</code></td>
+<td>integer</td>
+<td>Schema version of this record</td>
+</tr>
+</tbody>
+</table>
+<p>Short field name (<code>v</code> not <code>version</code>) because JSONL should be compact.</p>
+<h3 id="version-authority">Version Authority</h3>
+<p>The schema version is defined in <code>core/schema.py</code>:</p>
+<pre><code class="language-python"># core/schema.py — single source of truth
+
+MESSAGES_VERSION = 2
+INSIGHTS_VERSION = 1
+CONFIG_VERSION = 1
+
+def write_message(msg):
+    msg[&quot;v&quot;] = MESSAGES_VERSION
+    return json.dumps(msg)
+</code></pre>
+<p>All agents import this module. No agent writes JSON directly.</p>
+<h3 id="reading-with-version-check">Reading with Version Check</h3>
+<pre><code class="language-python">def read_message(line):
+    msg = json.loads(line)
+    version = msg.get(&quot;v&quot;, 0)  # v0 = pre-versioning
+
+    if version == MESSAGES_VERSION:
+        return msg  # Hot path, no overhead
+
+    if version &gt; MESSAGES_VERSION:
+        raise UnsupportedVersion(
+            f&quot;Message v{version} requires newer outheis&quot;
+        )
+
+    # Only old messages go through migration
+    return migrate_message(msg, from_version=version)
+</code></pre>
+<p><strong>Performance:</strong> 99% of messages match current version → single integer comparison, no overhead.</p>
+<h3 id="migration-logic">Migration Logic</h3>
+<p>Migration is stepwise (v0 → v1 → v2), located in <code>core/schema.py</code>:</p>
+<pre><code class="language-python">def migrate_message(msg, from_version):
+    &quot;&quot;&quot;Stepwise migration: v0 → v1 → v2 → ...&quot;&quot;&quot;
+
+    if from_version &lt; 1:
+        # v0 → v1: &quot;from&quot; was string, now object
+        if isinstance(msg.get(&quot;from&quot;), str):
+            msg[&quot;from&quot;] = {&quot;agent&quot;: msg[&quot;from&quot;]}
+        msg[&quot;v&quot;] = 1
+        from_version = 1
+
+    if from_version &lt; 2:
+        # v1 → v2: New field &quot;priority&quot; with default
+        msg.setdefault(&quot;priority&quot;, &quot;normal&quot;)
+        msg[&quot;v&quot;] = 2
+        from_version = 2
+
+    return msg
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>Principle</th>
+<th>Reason</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Stepwise (v0→v1→v2)</td>
+<td>Each step isolated, testable</td>
+</tr>
+<tr>
+<td>Lossless</td>
+<td>Old data remains fully readable</td>
+</tr>
+<tr>
+<td>Read-time migration</td>
+<td>Original file unchanged</td>
+</tr>
+<tr>
+<td>Write always current</td>
+<td>Never create old versions</td>
+</tr>
+</tbody>
+</table>
+<h3 id="migration-cli">Migration CLI</h3>
+<pre><code class="language-bash"># Scan for outdated records
+outheis migrate --scan
+
+&gt; Found 47 messages at v1 (current: v2)
+&gt; Found 12 insights at v0 (current: v1)
+&gt; 
+&gt; Run 'outheis migrate --apply' to convert
+
+# Apply migration
+outheis migrate --apply
+
+&gt; Migrating messages.jsonl: 47 entries v1 → v2
+&gt; Migrating archive/messages-2025-01.jsonl: 128 entries v1 → v2
+&gt; Migrating insights.jsonl: 12 entries v0 → v1
+&gt; Done. Backup in human/.migrate-backup/2025-11-15T10:00:00/
+
+# Quiet mode for automation
+outheis migrate --apply --quiet
+</code></pre>
+<h3 id="automatic-migration">Automatic Migration</h3>
+<p>Optional: run migration in nightly batch with Pattern agent.</p>
+<pre><code class="language-json">{
+  &quot;system&quot;: {
+    &quot;auto_migrate&quot;: true,
+    &quot;migrate_schedule&quot;: &quot;04:00&quot;
+  }
+}
+</code></pre>
+<h3 id="version-history">Version History</h3>
+<table>
+<thead>
+<tr>
+<th>File</th>
+<th>Current</th>
+<th>Changes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>messages.jsonl</td>
+<td>v1</td>
+<td>Initial</td>
+</tr>
+<tr>
+<td>insights.jsonl</td>
+<td>v1</td>
+<td>Initial</td>
+</tr>
+<tr>
+<td>config.json</td>
+<td>v1</td>
+<td>Initial</td>
+</tr>
+<tr>
+<td>tag-weights.jsonl</td>
+<td>v1</td>
+<td>Initial</td>
+</tr>
+<tr>
+<td>index.jsonl</td>
+<td>v1</td>
+<td>Initial</td>
+</tr>
+</tbody>
+</table>
+<p><em>Updated with each schema change.</em></p>
+<hr />
+<h2 id="theoretical-background">Theoretical Background</h2>
+<p>The vault architecture implements principles of <em>prospective information architecture</em>:</p>
+<ul>
+<li><strong>Self-describing objects</strong>: Files carry meaning via tags, not position</li>
+<li><strong>Multiple relationierung</strong>: Tags and links enable multiple access paths</li>
+<li><strong>Structure at query time</strong>: Hierarchies are computed, not stored</li>
+<li><strong>Plaintext as foundation</strong>: Universal readability, long-term stability</li>
+</ul>
+<p>See: <a href="https://github.com/outheis-labs/research-base/blob/main/temporalization-of-order/temporalization-of-order.md">Temporalization of Order</a> for theoretical foundations.</p>
+<hr />
+<h2 id="edge-cases">Edge Cases</h2>
+<h3 id="symlinks">Symlinks</h3>
+<table>
+<thead>
+<tr>
+<th>Type</th>
+<th>Handling</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Symlink within vault</td>
+<td>Follow, index target</td>
+</tr>
+<tr>
+<td>Symlink pointing outside vault</td>
+<td><strong>Do not follow</strong>, log as error</td>
+</tr>
+</tbody>
+</table>
+<p>Rationale: Symlinks outside vault could leak data or bypass access control.</p>
+<h3 id="hidden-files">Hidden Files</h3>
+<p>Files and directories starting with <code>.</code> are ignored, except:</p>
+<table>
+<thead>
+<tr>
+<th>Path</th>
+<th>Handling</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>.git/</code></td>
+<td>Recognized as repository metadata</td>
+</tr>
+<tr>
+<td>All other <code>.*</code></td>
+<td>Ignored (not indexed, not processed)</td>
+</tr>
+</tbody>
+</table>
+<p>This includes <code>.obsidian/</code>, <code>.DS_Store</code>, <code>.gitignore</code>, etc.</p>
+<h3 id="large-files">Large Files</h3>
+<table>
+<thead>
+<tr>
+<th>Size</th>
+<th>Handling</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>&lt; 50 MB</td>
+<td>Full text extraction</td>
+</tr>
+<tr>
+<td>50 MB - 200 MB</td>
+<td>Extract first/last pages, metadata only</td>
+</tr>
+<tr>
+<td>&gt; 200 MB</td>
+<td>Metadata only, log warning</td>
+</tr>
+</tbody>
+</table>
+<p>Thresholds are configurable.</p>
+<h3 id="encoding-issues">Encoding Issues</h3>
+<p>If a file is not valid UTF-8:</p>
+<ol>
+<li>Attempt detection (ISO-8859-1, Windows-1252, etc.)</li>
+<li>If conversion succeeds: index converted text</li>
+<li>If conversion fails: index metadata only, <strong>notify user</strong></li>
+</ol>
+<p>Notification path: Data agent → Dispatcher → Agenda agent (Personal Mode) or Relay (Domain Expert Mode) → User</p>
+<hr />
+<h2 id="domain-expert-mode-admin-role">Domain Expert Mode: Admin Role</h2>
+<p>In Domain Expert Mode, the <code>human/</code> directory serves a different purpose:</p>
+<table>
+<thead>
+<tr>
+<th>Aspect</th>
+<th>Personal Mode</th>
+<th>Domain Expert Mode</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>human/</code> represents</td>
+<td>Single user</td>
+<td>System administrator</td>
+</tr>
+<tr>
+<td>Agenda agent</td>
+<td>Active (personal secretary)</td>
+<td>Disabled</td>
+</tr>
+<tr>
+<td>Pattern agent</td>
+<td>Reflects on user behavior</td>
+<td>Reflects on domain knowledge</td>
+</tr>
+<tr>
+<td>Config access</td>
+<td>User via Web UI</td>
+<td>Admin via Web UI</td>
+</tr>
+<tr>
+<td>Rules</td>
+<td>User preferences</td>
+<td>System policies</td>
+</tr>
+</tbody>
+</table>
+<p>The admin role in Domain Expert Mode:</p>
+<ul>
+<li>Configures agents, models, routing</li>
+<li>Defines domain-specific rules</li>
+<li>Monitors system health</li>
+<li>Does <strong>not</strong> receive personal filtering (no Agenda)</li>
+</ul>
+<p>Multiple end-users interact via Transport, but only the admin configures <code>human/</code>.</p>
+<hr />
+<h2 id="agenda-directory">Agenda Directory</h2>
+<p>The primary vault contains a special <code>Agenda/</code> directory that serves as the structured interface between user and system.</p>
+<h3 id="structure_1">Structure</h3>
+<pre><code>vault/Agenda/
+├── Daily.md
+├── Inbox.md
+└── Exchange.md
+</code></pre>
+<p>Three files, no subdirectories.</p>
+<h3 id="purpose">Purpose</h3>
+<table>
+<thead>
+<tr>
+<th>File</th>
+<th>Direction</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Daily.md</code></td>
+<td>Bidirectional</td>
+<td>Today: appointments, tasks, notes</td>
+</tr>
+<tr>
+<td><code>Inbox.md</code></td>
+<td>User → System</td>
+<td>Quick input, unstructured thoughts</td>
+</tr>
+<tr>
+<td><code>Exchange.md</code></td>
+<td>System ↔ User</td>
+<td>Questions, clarifications, learning</td>
+</tr>
+</tbody>
+</table>
+<h3 id="dailymd">Daily.md</h3>
+<p>The current day. Agenda agent maintains structure, user adds content.</p>
+<pre><code class="language-markdown"># 2025-03-27
+
+## Appointments
+- 09:00 Standup
+- 14:00 Workshop
+
+## Focus
+- [ ] Finish report #deadline
+- [ ] Review proposal
+
+## Notes
+
+</code></pre>
+<h3 id="inboxmd">Inbox.md</h3>
+<p>Quick capture. User writes, system processes.</p>
+<pre><code class="language-markdown">meeting with X next week, important
+
+remember to call Y about the contract
+
+#idea redesign the onboarding flow
+</code></pre>
+<p>Agenda agent reads, classifies, routes to appropriate agents.</p>
+<h3 id="exchangemd">Exchange.md</h3>
+<p>Asynchronous dialogue. System asks, user answers when convenient. No pressure.</p>
+<pre><code class="language-markdown"># Open
+
+## Scheduling conflict
+&gt; Friday 28.03 you have:
+&gt; - 10:00 Team meeting
+&gt; - 10:00 Dentist
+&gt;
+&gt; Which takes priority?
+
+Your answer:
+
+
+---
+
+# Resolved
+
+## Tag meaning
+&gt; You use #wip and #in-progress. Synonyms?
+
+Your answer: Yes, merge to #wip
+
+Learned: #in-progress → #wip
+</code></pre>
+<h3 id="special-handling">Special Handling</h3>
+<p>The <code>Agenda/</code> directory receives special treatment:</p>
+<table>
+<thead>
+<tr>
+<th>Aspect</th>
+<th>Handling</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Change detection</td>
+<td>Checksum + diff (cached previous version)</td>
+</tr>
+<tr>
+<td>Ownership</td>
+<td>Agenda agent</td>
+</tr>
+<tr>
+<td>Indexing</td>
+<td>Higher priority, always current</td>
+</tr>
+<tr>
+<td>Diff analysis</td>
+<td>Comments, additions, deletions tracked</td>
+</tr>
+</tbody>
+</table>
+<p>This enables the Agenda agent to understand <em>what</em> changed, not just <em>that</em> something changed.</p>
+<h3 id="cache-location">Cache Location</h3>
+<pre><code>~/.outheis/human/cache/agenda/
+├── Daily.md.prev
+├── Inbox.md.prev
+└── Exchange.md.prev
+</code></pre>
+<p>Previous versions are cached in the system directory to compute diffs.</p>
+<hr />
+<h2 id="access-strategies">Access Strategies</h2>
+<p>Without a database, fast access requires smart strategies on top of plaintext.</p>
+<h3 id="index-as-primary-lookup">Index as Primary Lookup</h3>
+<p>The index (<code>~/.outheis/human/index.jsonl</code>) serves as the first point of access. File content is only loaded when needed.</p>
+<pre><code>Query
+  │
+  ▼
+Index (fast, in-memory)
+  │
+  ├── Filter by tags, type, date
+  ├── Rank candidates
+  │
+  ▼
+Top-N file access (lazy load)
+</code></pre>
+<h3 id="ranking-heuristics">Ranking Heuristics</h3>
+<p>Candidates from index are ranked by multiple signals:</p>
+<table>
+<thead>
+<tr>
+<th>Signal</th>
+<th>Weight</th>
+<th>Rationale</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Recency</strong></td>
+<td>High</td>
+<td>Recently modified = likely relevant</td>
+</tr>
+<tr>
+<td><strong>Access frequency</strong></td>
+<td>Medium</td>
+<td>Often accessed = important</td>
+</tr>
+<tr>
+<td><strong>Link density</strong></td>
+<td>Medium</td>
+<td>Many backlinks = central node</td>
+</tr>
+<tr>
+<td><strong>Tag match</strong></td>
+<td>High</td>
+<td>Direct tag match = strong signal</td>
+</tr>
+<tr>
+<td><strong>Tag weight</strong></td>
+<td>Medium</td>
+<td>Learned tag importance</td>
+</tr>
+</tbody>
+</table>
+<h3 id="tag-learning">Tag Learning</h3>
+<p>Pattern agent analyzes tag usage and learns weights:</p>
+<pre><code class="language-json">{
+  &quot;tag&quot;: &quot;project/alpha&quot;,
+  &quot;weight&quot;: 0.85,
+  &quot;access_count&quot;: 47,
+  &quot;co_occurs_with&quot;: [&quot;deadline&quot;, &quot;important&quot;],
+  &quot;last_accessed&quot;: &quot;2025-03-27T10:00:00Z&quot;
+}
+</code></pre>
+<p>Stored in <code>~/.outheis/human/tag-weights.jsonl</code>.</p>
+<p>Weights are updated based on:
+- Access frequency (tag appears in accessed files)
+- Co-occurrence with successful searches
+- Implicit feedback (was result used?)</p>
+<h3 id="full-text-search">Full-Text Search</h3>
+<p>For content not captured in index:</p>
+<table>
+<thead>
+<tr>
+<th>Approach</th>
+<th>Use Case</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Grep + cache</td>
+<td>Simple substring search</td>
+</tr>
+<tr>
+<td>Inverted index</td>
+<td>Frequent full-text queries</td>
+</tr>
+<tr>
+<td>Embedding search</td>
+<td>Semantic similarity (optional, local)</td>
+</tr>
+</tbody>
+</table>
+<p>Implementation choice depends on vault size and hardware.</p>
+<h3 id="index-updates">Index Updates</h3>
+<table>
+<thead>
+<tr>
+<th>Trigger</th>
+<th>Action</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Filewatch on vault</td>
+<td>Detect changes</td>
+</tr>
+<tr>
+<td>Checksum mismatch</td>
+<td>Re-index file</td>
+</tr>
+<tr>
+<td>Periodic sweep</td>
+<td>Catch missed changes</td>
+</tr>
+</tbody>
+</table>
+<p>Filewatch uses <code>inotify</code> (Linux) or <code>kqueue</code> (macOS/BSD) — event-driven, no polling.</p>
+<h3 id="cold-storage-access">Cold Storage Access</h3>
+<p>For archived conversations (<code>~/.outheis/human/archive/messages-*.jsonl</code>):</p>
+<pre><code>Query about old conversation
+  │
+  ▼
+Data agent identifies relevant archive
+  │
+  ▼
+Load archive file (slower)
+  │
+  ▼
+Search within archive
+  │
+  ▼
+Return results, unload archive
+</code></pre>
+<p>No permanent memory impact. Load on demand, release after use.</p>
+      <hr>
+      <p class="footer">Open source under AGPL-3.0 · <a href="https://github.com/outheis-labs/outheis-minimal">Code on GitHub</a></p>
+    </main>
+  </div>
+</body>
+</html>

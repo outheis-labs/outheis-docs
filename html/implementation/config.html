@@ -1,0 +1,735 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Configuration · outheis</title>
+  <link rel="icon" type="image/png" href="../favicon-96x96.png" sizes="96x96">
+  <link rel="icon" type="image/svg+xml" href="../favicon.svg">
+  <link rel="shortcut icon" href="../favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="../apple-touch-icon.png">
+  <link rel="manifest" href="../site.webmanifest">
+  <link rel="preconnect" href="https://rsms.me/">
+  <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --font-body: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-ui: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-mono: SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      --color-text: #1a1a1a;
+      --color-text-muted: #666;
+      --color-text-faint: #999;
+      --color-border: #e0e0e0;
+      --color-bg-code: #f5f5f5;
+    }
+
+    @supports (font-variation-settings: normal) {
+      :root { --font-body: "Inter var", sans-serif; --font-ui: "Inter var", sans-serif; }
+    }
+
+    html, body {
+      width: 100%;
+      min-height: 100vh;
+      background: #fff;
+      font-family: var(--font-body);
+      font-size: 15px;
+      line-height: 1.6;
+      color: var(--color-text);
+    }
+
+    .container {
+      display: flex;
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 2rem;
+      gap: 3rem;
+    }
+
+    .sidebar {
+      flex: 0 0 200px;
+      position: sticky;
+      top: 2rem;
+      height: fit-content;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      align-self: flex-start;
+    }
+
+    .sidebar-logo-link {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
+      text-decoration: none;
+      margin-bottom: 2rem;
+    }
+
+    .sidebar-logo {
+      display: block;
+      width: 120px;
+      height: auto;
+      margin-bottom: 0.5rem;
+    }
+
+    .sidebar-title {
+      font-family: var(--font-ui);
+      font-size: 14px;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      color: var(--color-text);
+    }
+
+    .sidebar-nav {
+      list-style: none;
+      width: 100%;
+    }
+
+    .sidebar-nav li {
+      margin-bottom: 0.75rem;
+    }
+
+    .sidebar-nav a {
+      font-family: var(--font-ui);
+      color: var(--color-text-muted);
+      text-decoration: none;
+      font-size: 15px;
+      font-weight: 600;
+    }
+
+    .sidebar-nav a:hover { color: var(--color-text); }
+    .sidebar-nav a.active { color: var(--color-text); }
+
+    .sidebar-nav .nav-section {
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--color-text-faint);
+      margin-top: 1.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .sidebar-nav .nav-section:first-of-type { margin-top: 0; }
+
+    .sidebar-nav .nav-external {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--color-text-faint);
+    }
+
+    .content {
+      flex: 1;
+      min-width: 0;
+      max-width: 600px;
+      align-self: flex-start;
+    }
+
+    .content > *:first-child { margin-top: 0; }
+
+    .content h1 { font-family: var(--font-ui); font-size: 28px; font-weight: 600; margin-bottom: 0.5rem; letter-spacing: -0.02em; }
+    .content h2 { font-family: var(--font-ui); font-size: 18px; font-weight: 600; margin-top: 2rem; margin-bottom: 1.25rem; }
+    .content h3 { font-family: var(--font-ui); font-size: 15px; font-weight: 600; margin-top: 1.5rem; margin-bottom: 0.75rem; }
+    .content p { margin-bottom: 1rem; }
+    .content a { color: var(--color-text-muted); }
+    .content a:hover { color: var(--color-text); }
+    .content ul, .content ol { margin-bottom: 1rem; padding-left: 1.5rem; }
+    .content li { margin-bottom: 0.4rem; }
+
+    .content table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; font-family: var(--font-ui); font-size: 13px; }
+    .content th, .content td { text-align: left; padding: 0.5rem 0.75rem; border-bottom: 1px solid var(--color-border); }
+    .content th { font-weight: 500; font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--color-text-muted); }
+
+    .content code { font-family: var(--font-mono); font-size: 14px; background: var(--color-bg-code); padding: 0.15em 0.4em; border-radius: 3px; }
+    .content pre { background: var(--color-bg-code); padding: 1rem 1.25rem; overflow-x: auto; margin: 1.5rem 0; font-size: 13px; border-radius: 4px; line-height: 1.5; }
+    .content pre code { background: none; padding: 0; border-radius: 0; }
+
+    .content hr { border: none; border-top: 1px solid var(--color-border); margin: 1.5rem 0; }
+    .content strong { font-weight: 500; }
+    .content em { font-style: italic; }
+    .content blockquote { border-left: 2px solid var(--color-border); padding-left: 1.25rem; margin: 1.5rem 0; color: var(--color-text-muted); font-style: italic; }
+    .content .lead { font-style: italic; color: var(--color-text-muted); margin-bottom: 2rem; }
+    .content .footer { font-size: 12px; color: var(--color-text-muted); font-style: italic; }
+
+    @media (max-width: 700px) {
+      .container { flex-direction: column; padding: 1.5rem; gap: 1.5rem; }
+      .sidebar { position: static; flex: none; flex-direction: row; flex-wrap: wrap; align-items: center; gap: 1rem; }
+      .sidebar-logo { width: 48px; height: 48px; margin-bottom: 0; }
+      .sidebar-title { margin-bottom: 0; flex: 1; }
+      .sidebar-nav { width: 100%; display: flex; flex-wrap: wrap; gap: 0.5rem 1.25rem; }
+      .sidebar-nav li { margin-bottom: 0; }
+      .content h1 { font-size: 24px; }
+      .content h2 { font-size: 16px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <aside class="sidebar">
+      <a href="../index.html" class="sidebar-logo-link">
+        <img src="../assets/logo.svg" alt="outheis" class="sidebar-logo">
+        <span class="sidebar-title">outheis</span>
+      </a>
+      <nav>
+        <ul class="sidebar-nav">
+          <li><a href="../index.html">Home</a></li>
+          <li class="nav-section">Philosophy</li>
+          <li><a href="../philosophy/index.html">Why outheis</a></li>
+          <li class="nav-section">Design</li>
+          <li><a href="../design/index.html">Overview</a></li>
+          <li><a href="../design/01-why-os-principles.html">OS Principles</a></li>
+          <li><a href="../design/02-systems-survey.html">Systems Survey</a></li>
+          <li><a href="../design/03-architecture.html">Architecture</a></li>
+          <li><a href="../design/04-data-formats.html">Data Formats</a></li>
+          <li><a href="../design/05-related-work.html">Related Work</a></li>
+          <li><a href="../design/06-agent-prompts.html">Agent Prompts</a></li>
+          <li class="nav-section">Implementation</li>
+          <li><a href="../implementation/architecture.html">Current State</a></li>
+          <li><a href="../implementation/memory.html">Memory & Rules</a></li>
+          <li><a href="../implementation/agenda.html">Agenda</a></li>
+          <li><a href="../implementation/skills.html">Skills</a></li>
+          <li><a href="../implementation/migration.html">Migration</a></li>
+          <li><a href="../implementation/config.html" class="active">Config</a></li>
+          <li><a href="../implementation/guide.html">CLI Guide</a></li>
+          <li><a href="../implementation/webui.html">Web UI</a></li>
+          <li><a href="../implementation/alan.html">Code Agent</a></li>
+          <li class="nav-section"></li>
+          <li><a href="https://github.com/outheis-labs/outheis-minimal" class="nav-external">GitHub ↗</a></li>
+        </ul>
+      </nav>
+    </aside>
+    <main class="content">
+      <h1 id="configuration">Configuration</h1>
+<p><em>Complete reference for <code>config.json</code>.</em></p>
+<h2 id="location">Location</h2>
+<pre><code>~/.outheis/human/config.json
+</code></pre>
+<p>Created automatically on first <code>outheis start</code> with sensible defaults.</p>
+<h2 id="full-example">Full Example</h2>
+<pre><code class="language-json">{
+  &quot;human&quot;: {
+    &quot;name&quot;: &quot;Max&quot;,
+    &quot;phone&quot;: [&quot;+49123456789&quot;],
+    &quot;language&quot;: &quot;de&quot;,
+    &quot;timezone&quot;: &quot;Europe/Berlin&quot;,
+    &quot;vault&quot;: [&quot;~/Documents/Vault&quot;, &quot;~/Work/Notes&quot;]
+  },
+  &quot;signal&quot;: {
+    &quot;enabled&quot;: false,
+    &quot;bot_phone&quot;: &quot;+49987654321&quot;,
+    &quot;bot_name&quot;: &quot;Ou&quot;,
+    &quot;allowed&quot;: [
+      {&quot;name&quot;: &quot;Partner&quot;, &quot;phone&quot;: &quot;+49111222333&quot;}
+    ]
+  },
+  &quot;llm&quot;: {
+    &quot;providers&quot;: {
+      &quot;anthropic&quot;: {
+        &quot;api_key&quot;: &quot;sk-ant-...&quot;
+      },
+      &quot;ollama&quot;: {
+        &quot;base_url&quot;: &quot;http://localhost:11434&quot;
+      }
+    },
+    &quot;models&quot;: {
+      &quot;fast&quot;: {
+        &quot;provider&quot;: &quot;anthropic&quot;,
+        &quot;name&quot;: &quot;claude-haiku-4-5&quot;,
+        &quot;run_mode&quot;: &quot;on-demand&quot;
+      },
+      &quot;capable&quot;: {
+        &quot;provider&quot;: &quot;anthropic&quot;,
+        &quot;name&quot;: &quot;claude-sonnet-4-20250514&quot;,
+        &quot;run_mode&quot;: &quot;on-demand&quot;
+      },
+      &quot;local&quot;: {
+        &quot;provider&quot;: &quot;ollama&quot;,
+        &quot;name&quot;: &quot;llama3.2:3b&quot;,
+        &quot;run_mode&quot;: &quot;persistent&quot;
+      }
+    }
+  },
+  &quot;agents&quot;: {
+    &quot;relay&quot;: {&quot;name&quot;: &quot;ou&quot;, &quot;model&quot;: &quot;fast&quot;, &quot;enabled&quot;: true},
+    &quot;data&quot;: {&quot;name&quot;: &quot;zeno&quot;, &quot;model&quot;: &quot;capable&quot;, &quot;enabled&quot;: true},
+    &quot;agenda&quot;: {&quot;name&quot;: &quot;cato&quot;, &quot;model&quot;: &quot;capable&quot;, &quot;enabled&quot;: true},
+    &quot;action&quot;: {&quot;name&quot;: &quot;hiro&quot;, &quot;model&quot;: &quot;capable&quot;, &quot;enabled&quot;: false},
+    &quot;pattern&quot;: {&quot;name&quot;: &quot;rumi&quot;, &quot;model&quot;: &quot;capable&quot;, &quot;enabled&quot;: true},
+    &quot;code&quot;: {&quot;name&quot;: &quot;alan&quot;, &quot;model&quot;: &quot;capable&quot;, &quot;enabled&quot;: false}
+  },
+  &quot;schedule&quot;: {
+    &quot;pattern_nightly&quot;: {&quot;enabled&quot;: true, &quot;hour&quot;: 4, &quot;minute&quot;: 0},
+    &quot;index_rebuild&quot;: {&quot;enabled&quot;: true, &quot;hour&quot;: 4, &quot;minute&quot;: 30},
+    &quot;archive_rotation&quot;: {&quot;enabled&quot;: true, &quot;hour&quot;: 5, &quot;minute&quot;: 0},
+    &quot;session_summary&quot;: {&quot;enabled&quot;: true, &quot;minute&quot;: 0},
+    &quot;agenda_review&quot;: {
+      &quot;enabled&quot;: true,
+      &quot;hourly_at_minute&quot;: 55,
+      &quot;start_hour&quot;: 4,
+      &quot;end_hour&quot;: 23
+    },
+    &quot;action_tasks&quot;: {&quot;enabled&quot;: true}
+  },
+  &quot;updates&quot;: {
+    &quot;auto_migrate&quot;: true,
+    &quot;schedule&quot;: &quot;04:00&quot;
+  }
+}
+</code></pre>
+<h2 id="sections">Sections</h2>
+<h3 id="human">human</h3>
+<p>User identification and vault locations.</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>name</code></td>
+<td>string</td>
+<td>"Human"</td>
+<td>Display name</td>
+</tr>
+<tr>
+<td><code>phone</code></td>
+<td>string[]</td>
+<td>[]</td>
+<td>Phone numbers (for Signal transport)</td>
+</tr>
+<tr>
+<td><code>language</code></td>
+<td>string</td>
+<td>"en"</td>
+<td>Preferred language code</td>
+</tr>
+<tr>
+<td><code>timezone</code></td>
+<td>string</td>
+<td>"Europe/Berlin"</td>
+<td>IANA timezone</td>
+</tr>
+<tr>
+<td><code>vault</code></td>
+<td>string[]</td>
+<td>["~/Documents/Vault"]</td>
+<td>Vault directories (first is primary)</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Environment overrides:</strong>
+- <code>OUTHEIS_HUMAN_DIR</code> — override human data directory (~/.outheis/human)
+- <code>OUTHEIS_VAULT</code> — override primary vault path</p>
+<h3 id="signal">signal</h3>
+<p>Signal messenger transport configuration.</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>enabled</code></td>
+<td>bool</td>
+<td>false</td>
+<td>Enable Signal transport</td>
+</tr>
+<tr>
+<td><code>bot_phone</code></td>
+<td>string</td>
+<td>null</td>
+<td>Bot's phone number</td>
+</tr>
+<tr>
+<td><code>bot_name</code></td>
+<td>string</td>
+<td>"Ou"</td>
+<td>Bot display name</td>
+</tr>
+<tr>
+<td><code>allowed</code></td>
+<td>object[]</td>
+<td>[]</td>
+<td>Additional allowed contacts</td>
+</tr>
+</tbody>
+</table>
+<p>Allowed contact format:</p>
+<pre><code class="language-json">{&quot;name&quot;: &quot;Partner&quot;, &quot;phone&quot;: &quot;+49111222333&quot;}
+</code></pre>
+<p>The user's own phone (from <code>human.phone</code>) is always allowed.</p>
+<h3 id="llm">llm</h3>
+<p>LLM providers and model aliases.</p>
+<h4 id="providers">providers</h4>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>api_key</code></td>
+<td>string</td>
+<td>API key (or use environment variable)</td>
+</tr>
+<tr>
+<td><code>base_url</code></td>
+<td>string</td>
+<td>Override base URL (for Ollama, custom endpoints)</td>
+</tr>
+</tbody>
+</table>
+<p>Provider names: <code>anthropic</code>, <code>ollama</code>, <code>openai</code></p>
+<p><strong>API key resolution:</strong>
+1. Config file (<code>api_key</code> field)
+2. Environment variable (<code>ANTHROPIC_API_KEY</code>, etc.)</p>
+<h4 id="models">models</h4>
+<p>Model aliases used by agents.</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>provider</code></td>
+<td>string</td>
+<td>"anthropic"</td>
+<td>Which provider to use</td>
+</tr>
+<tr>
+<td><code>name</code></td>
+<td>string</td>
+<td>—</td>
+<td>Model identifier</td>
+</tr>
+<tr>
+<td><code>run_mode</code></td>
+<td>string</td>
+<td>"on-demand"</td>
+<td><code>on-demand</code> or <code>persistent</code></td>
+</tr>
+</tbody>
+</table>
+<p><strong>run_mode:</strong>
+- <code>on-demand</code> — Start model per request (cloud APIs)
+- <code>persistent</code> — Keep model loaded (local Ollama)</p>
+<p><strong>Default aliases:</strong></p>
+<pre><code class="language-json">{
+  &quot;fast&quot;: {&quot;provider&quot;: &quot;anthropic&quot;, &quot;name&quot;: &quot;claude-haiku-4-5&quot;},
+  &quot;capable&quot;: {&quot;provider&quot;: &quot;anthropic&quot;, &quot;name&quot;: &quot;claude-sonnet-4-20250514&quot;}
+}
+</code></pre>
+<h3 id="agents">agents</h3>
+<p>Agent configuration. Each agent has:</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>name</code></td>
+<td>string</td>
+<td>(varies)</td>
+<td>Display name (ou, zeno, cato, hiro, rumi, alan)</td>
+</tr>
+<tr>
+<td><code>model</code></td>
+<td>string</td>
+<td>"capable"</td>
+<td>Model alias to use</td>
+</tr>
+<tr>
+<td><code>enabled</code></td>
+<td>bool</td>
+<td>true</td>
+<td>Whether agent is active</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Agent roles:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Role</th>
+<th>Default Name</th>
+<th>Default Model</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>relay</td>
+<td>ou</td>
+<td>fast</td>
+<td>Message routing, conversation</td>
+</tr>
+<tr>
+<td>data</td>
+<td>zeno</td>
+<td>capable</td>
+<td>Vault search</td>
+</tr>
+<tr>
+<td>agenda</td>
+<td>cato</td>
+<td>capable</td>
+<td>Schedule management</td>
+</tr>
+<tr>
+<td>action</td>
+<td>hiro</td>
+<td>capable</td>
+<td>External actions (disabled by default)</td>
+</tr>
+<tr>
+<td>pattern</td>
+<td>rumi</td>
+<td>capable</td>
+<td>Memory extraction, rules</td>
+</tr>
+<tr>
+<td>code</td>
+<td>alan</td>
+<td>capable</td>
+<td>Code intelligence (dev only, disabled)</td>
+</tr>
+</tbody>
+</table>
+<p>Disabled agents are not instantiated and their scheduled tasks don't run.</p>
+<h3 id="schedule">schedule</h3>
+<p>Scheduled task configuration.</p>
+<h4 id="fixed-time-tasks">Fixed-time tasks</h4>
+<table>
+<thead>
+<tr>
+<th>Task</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>pattern_nightly</code></td>
+<td>04:00</td>
+<td>Memory extraction, consolidation</td>
+</tr>
+<tr>
+<td><code>index_rebuild</code></td>
+<td>04:30</td>
+<td>Rebuild vault search indices</td>
+</tr>
+<tr>
+<td><code>archive_rotation</code></td>
+<td>05:00</td>
+<td>Archive old messages</td>
+</tr>
+</tbody>
+</table>
+<p>Fields:</p>
+<pre><code class="language-json">{
+  &quot;enabled&quot;: true,
+  &quot;hour&quot;: 4,
+  &quot;minute&quot;: 0
+}
+</code></pre>
+<h4 id="hourly-tasks">Hourly tasks</h4>
+<table>
+<thead>
+<tr>
+<th>Task</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>agenda_review</code></td>
+<td>xx:55 (04-23)</td>
+<td>Process agenda files</td>
+</tr>
+</tbody>
+</table>
+<p>Fields:</p>
+<pre><code class="language-json">{
+  &quot;enabled&quot;: true,
+  &quot;hourly_at_minute&quot;: 55,
+  &quot;start_hour&quot;: 4,
+  &quot;end_hour&quot;: 23
+}
+</code></pre>
+<ul>
+<li><code>hourly_at_minute</code> — Run at this minute every hour</li>
+<li><code>start_hour</code> — First hour of day to run (inclusive)</li>
+<li><code>end_hour</code> — Last hour of day to run (inclusive)</li>
+</ul>
+<p><strong>Conditional execution:</strong> Agenda review checks file hashes before running. If nothing changed, no LLM call is made. Morning (start_hour) and evening (end_hour) runs are unconditional.</p>
+<h4 id="interval-tasks">Interval tasks</h4>
+<table>
+<thead>
+<tr>
+<th>Task</th>
+<th>Interval</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>session_summary</code></td>
+<td>6 hours</td>
+<td>Extract session insights</td>
+</tr>
+<tr>
+<td><code>action_tasks</code></td>
+<td>15 minutes</td>
+<td>Run due action tasks</td>
+</tr>
+</tbody>
+</table>
+<p>Fields:</p>
+<pre><code class="language-json">{
+  &quot;enabled&quot;: true
+}
+</code></pre>
+<p>Interval is hardcoded; only <code>enabled</code> is configurable.</p>
+<h3 id="updates">updates</h3>
+<p>Memory migration and housekeeping.</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>auto_migrate</code></td>
+<td>bool</td>
+<td>true</td>
+<td>Automatically process seed files</td>
+</tr>
+<tr>
+<td><code>schedule</code></td>
+<td>string</td>
+<td>"04:00"</td>
+<td>Time for update tasks</td>
+</tr>
+</tbody>
+</table>
+<h2 id="minimal-config">Minimal Config</h2>
+<p>The smallest working config:</p>
+<pre><code class="language-json">{
+  &quot;llm&quot;: {
+    &quot;providers&quot;: {
+      &quot;anthropic&quot;: {
+        &quot;api_key&quot;: &quot;sk-ant-...&quot;
+      }
+    }
+  }
+}
+</code></pre>
+<p>Everything else uses defaults.</p>
+<h2 id="environment-variables">Environment Variables</h2>
+<table>
+<thead>
+<tr>
+<th>Variable</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ANTHROPIC_API_KEY</code></td>
+<td>Anthropic API key (fallback)</td>
+</tr>
+<tr>
+<td><code>OPENAI_API_KEY</code></td>
+<td>OpenAI API key (fallback)</td>
+</tr>
+<tr>
+<td><code>OUTHEIS_HUMAN_DIR</code></td>
+<td>Override human directory</td>
+</tr>
+<tr>
+<td><code>OUTHEIS_VAULT</code></td>
+<td>Override primary vault</td>
+</tr>
+</tbody>
+</table>
+<p>Environment variables take precedence over config file values.</p>
+<h2 id="cli-commands">CLI Commands</h2>
+<pre><code class="language-bash"># Show current config
+outheis config show
+
+# Edit config (opens in $EDITOR)
+outheis config edit
+
+# Set a value
+outheis config set human.language de
+
+# Validate config
+outheis config validate
+</code></pre>
+<h2 id="validation">Validation</h2>
+<p>Config is validated on load. Invalid config prevents daemon startup:</p>
+<ul>
+<li>Required fields must be present</li>
+<li>Types must match (string, int, bool, array)</li>
+<li>Referenced model aliases must exist</li>
+<li>Provider names must be valid</li>
+</ul>
+<h2 id="hot-reload">Hot Reload</h2>
+<p>Some settings can be reloaded without restarting:</p>
+<ul>
+<li>Agent <code>enabled</code> status</li>
+<li>Schedule times</li>
+<li>Model aliases</li>
+</ul>
+<p>Others require restart:</p>
+<ul>
+<li>Provider configuration</li>
+<li>Vault paths</li>
+<li>Signal configuration</li>
+</ul>
+<pre><code class="language-bash"># Reload config
+outheis reload
+
+# Or restart
+outheis stop &amp;&amp; outheis start
+</code></pre>
+<h2 id="see-also">See Also</h2>
+<ul>
+<li><a href="architecture.md">Architecture</a> — How components fit together</li>
+<li><a href="memory.md">Memory</a> — Memory system details</li>
+<li><a href="agenda.md">Agenda</a> — Agenda agent configuration</li>
+</ul>
+      <hr>
+      <p class="footer">Open source under AGPL-3.0 · <a href="https://github.com/outheis-labs/outheis-minimal">Code on GitHub</a></p>
+    </main>
+  </div>
+</body>
+</html>

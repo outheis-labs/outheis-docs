@@ -1,0 +1,727 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Systems Survey: Operating Systems and Applicable Concepts · outheis</title>
+  <link rel="icon" type="image/png" href="../favicon-96x96.png" sizes="96x96">
+  <link rel="icon" type="image/svg+xml" href="../favicon.svg">
+  <link rel="shortcut icon" href="../favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="../apple-touch-icon.png">
+  <link rel="manifest" href="../site.webmanifest">
+  <link rel="preconnect" href="https://rsms.me/">
+  <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --font-body: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-ui: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-mono: SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      --color-text: #1a1a1a;
+      --color-text-muted: #666;
+      --color-text-faint: #999;
+      --color-border: #e0e0e0;
+      --color-bg-code: #f5f5f5;
+    }
+
+    @supports (font-variation-settings: normal) {
+      :root { --font-body: "Inter var", sans-serif; --font-ui: "Inter var", sans-serif; }
+    }
+
+    html, body {
+      width: 100%;
+      min-height: 100vh;
+      background: #fff;
+      font-family: var(--font-body);
+      font-size: 15px;
+      line-height: 1.6;
+      color: var(--color-text);
+    }
+
+    .container {
+      display: flex;
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 2rem;
+      gap: 3rem;
+    }
+
+    .sidebar {
+      flex: 0 0 200px;
+      position: sticky;
+      top: 2rem;
+      height: fit-content;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      align-self: flex-start;
+    }
+
+    .sidebar-logo-link {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
+      text-decoration: none;
+      margin-bottom: 2rem;
+    }
+
+    .sidebar-logo {
+      display: block;
+      width: 120px;
+      height: auto;
+      margin-bottom: 0.5rem;
+    }
+
+    .sidebar-title {
+      font-family: var(--font-ui);
+      font-size: 14px;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      color: var(--color-text);
+    }
+
+    .sidebar-nav {
+      list-style: none;
+      width: 100%;
+    }
+
+    .sidebar-nav li {
+      margin-bottom: 0.75rem;
+    }
+
+    .sidebar-nav a {
+      font-family: var(--font-ui);
+      color: var(--color-text-muted);
+      text-decoration: none;
+      font-size: 15px;
+      font-weight: 600;
+    }
+
+    .sidebar-nav a:hover { color: var(--color-text); }
+    .sidebar-nav a.active { color: var(--color-text); }
+
+    .sidebar-nav .nav-section {
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--color-text-faint);
+      margin-top: 1.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .sidebar-nav .nav-section:first-of-type { margin-top: 0; }
+
+    .sidebar-nav .nav-external {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--color-text-faint);
+    }
+
+    .content {
+      flex: 1;
+      min-width: 0;
+      max-width: 600px;
+      align-self: flex-start;
+    }
+
+    .content > *:first-child { margin-top: 0; }
+
+    .content h1 { font-family: var(--font-ui); font-size: 28px; font-weight: 600; margin-bottom: 0.5rem; letter-spacing: -0.02em; }
+    .content h2 { font-family: var(--font-ui); font-size: 18px; font-weight: 600; margin-top: 2rem; margin-bottom: 1.25rem; }
+    .content h3 { font-family: var(--font-ui); font-size: 15px; font-weight: 600; margin-top: 1.5rem; margin-bottom: 0.75rem; }
+    .content p { margin-bottom: 1rem; }
+    .content a { color: var(--color-text-muted); }
+    .content a:hover { color: var(--color-text); }
+    .content ul, .content ol { margin-bottom: 1rem; padding-left: 1.5rem; }
+    .content li { margin-bottom: 0.4rem; }
+
+    .content table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; font-family: var(--font-ui); font-size: 13px; }
+    .content th, .content td { text-align: left; padding: 0.5rem 0.75rem; border-bottom: 1px solid var(--color-border); }
+    .content th { font-weight: 500; font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--color-text-muted); }
+
+    .content code { font-family: var(--font-mono); font-size: 14px; background: var(--color-bg-code); padding: 0.15em 0.4em; border-radius: 3px; }
+    .content pre { background: var(--color-bg-code); padding: 1rem 1.25rem; overflow-x: auto; margin: 1.5rem 0; font-size: 13px; border-radius: 4px; line-height: 1.5; }
+    .content pre code { background: none; padding: 0; border-radius: 0; }
+
+    .content hr { border: none; border-top: 1px solid var(--color-border); margin: 1.5rem 0; }
+    .content strong { font-weight: 500; }
+    .content em { font-style: italic; }
+    .content blockquote { border-left: 2px solid var(--color-border); padding-left: 1.25rem; margin: 1.5rem 0; color: var(--color-text-muted); font-style: italic; }
+    .content .lead { font-style: italic; color: var(--color-text-muted); margin-bottom: 2rem; }
+    .content .footer { font-size: 12px; color: var(--color-text-muted); font-style: italic; }
+
+    @media (max-width: 700px) {
+      .container { flex-direction: column; padding: 1.5rem; gap: 1.5rem; }
+      .sidebar { position: static; flex: none; flex-direction: row; flex-wrap: wrap; align-items: center; gap: 1rem; }
+      .sidebar-logo { width: 48px; height: 48px; margin-bottom: 0; }
+      .sidebar-title { margin-bottom: 0; flex: 1; }
+      .sidebar-nav { width: 100%; display: flex; flex-wrap: wrap; gap: 0.5rem 1.25rem; }
+      .sidebar-nav li { margin-bottom: 0; }
+      .content h1 { font-size: 24px; }
+      .content h2 { font-size: 16px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <aside class="sidebar">
+      <a href="../index.html" class="sidebar-logo-link">
+        <img src="../assets/logo.svg" alt="outheis" class="sidebar-logo">
+        <span class="sidebar-title">outheis</span>
+      </a>
+      <nav>
+        <ul class="sidebar-nav">
+          <li><a href="../index.html">Home</a></li>
+          <li class="nav-section">Philosophy</li>
+          <li><a href="../philosophy/index.html">Why outheis</a></li>
+          <li class="nav-section">Design</li>
+          <li><a href="../design/index.html">Overview</a></li>
+          <li><a href="../design/01-why-os-principles.html">OS Principles</a></li>
+          <li><a href="../design/02-systems-survey.html" class="active">Systems Survey</a></li>
+          <li><a href="../design/03-architecture.html">Architecture</a></li>
+          <li><a href="../design/04-data-formats.html">Data Formats</a></li>
+          <li><a href="../design/05-related-work.html">Related Work</a></li>
+          <li><a href="../design/06-agent-prompts.html">Agent Prompts</a></li>
+          <li class="nav-section">Implementation</li>
+          <li><a href="../implementation/architecture.html">Current State</a></li>
+          <li><a href="../implementation/memory.html">Memory & Rules</a></li>
+          <li><a href="../implementation/agenda.html">Agenda</a></li>
+          <li><a href="../implementation/skills.html">Skills</a></li>
+          <li><a href="../implementation/migration.html">Migration</a></li>
+          <li><a href="../implementation/config.html">Config</a></li>
+          <li><a href="../implementation/guide.html">CLI Guide</a></li>
+          <li><a href="../implementation/webui.html">Web UI</a></li>
+          <li><a href="../implementation/alan.html">Code Agent</a></li>
+          <li class="nav-section"></li>
+          <li><a href="https://github.com/outheis-labs/outheis-minimal" class="nav-external">GitHub ↗</a></li>
+        </ul>
+      </nav>
+    </aside>
+    <main class="content">
+      <h1 id="systems-survey-operating-systems-and-applicable-concepts">Systems Survey: Operating Systems and Applicable Concepts</h1>
+<p>This document surveys operating systems and architectural patterns relevant to multi-agent AI system design.</p>
+<hr />
+<h2 id="dragonflybsd">DragonFlyBSD</h2>
+<p><strong>Origin</strong>: Forked from FreeBSD 4.x in 2003 by Matthew Dillon<br />
+<strong>Focus</strong>: SMP scalability through message passing</p>
+<h3 id="relevant-concepts">Relevant Concepts</h3>
+<h4 id="lwkt-light-weight-kernel-threads">LWKT (Light Weight Kernel Threads)</h4>
+<p>Traditional Unix kernels use a Big Kernel Lock (BKL) or fine-grained locking. Both have problems: BKL doesn't scale; fine-grained locking is complex and deadlock-prone.</p>
+<p>DragonFlyBSD's approach: <strong>per-CPU scheduling with message passing</strong>.</p>
+<ul>
+<li>Each CPU runs its own scheduler</li>
+<li>No global run queue lock</li>
+<li>Threads migrate between CPUs via explicit messages</li>
+</ul>
+<h4 id="ipi-message-queues">IPI Message Queues</h4>
+<p>Inter-Processor Interrupts (IPIs) deliver messages between CPUs:</p>
+<pre><code>CPU 0                CPU 1                CPU 2
+┌─────────┐          ┌─────────┐          ┌─────────┐
+│ Queue 0 │          │ Queue 1 │          │ Queue 2 │
+└────▲────┘          └────▲────┘          └────▲────┘
+     │                    │                    │
+     └────────────────────┴────────────────────┘
+              Messages go directly to target
+</code></pre>
+<p><strong>Not a central queue</strong>. Each CPU has its own. Producers write to the target's queue; consumers read only from their own.</p>
+<h4 id="ownership-semantics">Ownership Semantics</h4>
+<p>Data "belongs" to a CPU. Only the owner modifies it. Others send messages requesting changes.</p>
+<p>This eliminates:
+- Lock contention
+- Cache line bouncing
+- Deadlocks</p>
+<h3 id="applicability-to-agent-systems">Applicability to Agent Systems</h3>
+<table>
+<thead>
+<tr>
+<th>DragonFlyBSD</th>
+<th>Agent System</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>CPU</td>
+<td>Agent</td>
+</tr>
+<tr>
+<td>Per-CPU queue</td>
+<td>Per-agent inbox</td>
+</tr>
+<tr>
+<td>IPI message</td>
+<td>Inter-agent message</td>
+</tr>
+<tr>
+<td>Ownership</td>
+<td>Domain responsibility</td>
+</tr>
+<tr>
+<td>No shared locks</td>
+<td>No shared mutable state</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="erlangotp">Erlang/OTP</h2>
+<p><strong>Origin</strong>: Developed at Ericsson for telecom switches (1986)<br />
+<strong>Focus</strong>: Fault tolerance, concurrency, hot code reloading</p>
+<h3 id="relevant-concepts_1">Relevant Concepts</h3>
+<h4 id="actor-model">Actor Model</h4>
+<p>Processes (actors) are:
+- Isolated (no shared memory)
+- Identified by PID
+- Communicate only via async messages</p>
+<pre><code>┌─────────┐    message    ┌─────────┐
+│ Actor A │──────────────►│ Actor B │
+└─────────┘               └─────────┘
+     │                         │
+     │    (no shared state)    │
+     └─────────────────────────┘
+</code></pre>
+<h4 id="supervision-trees">Supervision Trees</h4>
+<p>Processes are organized hierarchically. Parents supervise children:</p>
+<pre><code>        ┌──────────────┐
+        │  Supervisor  │
+        └──────┬───────┘
+               │
+    ┌──────────┼──────────┐
+    ▼          ▼          ▼
+┌───────┐ ┌───────┐ ┌───────┐
+│Worker │ │Worker │ │Worker │
+└───────┘ └───────┘ └───────┘
+</code></pre>
+<p>Supervisor strategies:
+- <strong>one_for_one</strong>: Restart only the failed child
+- <strong>one_for_all</strong>: Restart all children if one fails
+- <strong>rest_for_one</strong>: Restart failed child and those started after it</p>
+<h4 id="let-it-crash">"Let It Crash"</h4>
+<p>Don't program defensively. Let processes fail. The supervisor restarts them in a known good state.</p>
+<p>This is counterintuitive but powerful: failure handling is separated from business logic.</p>
+<h3 id="applicability-to-agent-systems_1">Applicability to Agent Systems</h3>
+<table>
+<thead>
+<tr>
+<th>Erlang/OTP</th>
+<th>Agent System</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Process</td>
+<td>Agent</td>
+</tr>
+<tr>
+<td>PID</td>
+<td>Agent ID</td>
+</tr>
+<tr>
+<td>Mailbox</td>
+<td>Message queue</td>
+</tr>
+<tr>
+<td>Supervisor</td>
+<td>Dispatcher</td>
+</tr>
+<tr>
+<td>Restart strategy</td>
+<td>Agent recovery policy</td>
+</tr>
+<tr>
+<td>Hot code reload</td>
+<td>Agent update without downtime</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="sel4">seL4</h2>
+<p><strong>Origin</strong>: Formally verified microkernel (NICTA/Data61)<br />
+<strong>Focus</strong>: Security through minimal trusted computing base</p>
+<h3 id="relevant-concepts_2">Relevant Concepts</h3>
+<h4 id="capabilities">Capabilities</h4>
+<p>A capability is an unforgeable token granting specific rights to a specific object.</p>
+<pre><code>┌─────────────────────────────────────┐
+│ Capability                          │
+│                                     │
+│  Object: FileHandle_42              │
+│  Rights: Read, Write                │
+│  Holder: Process_7                  │
+└─────────────────────────────────────┘
+</code></pre>
+<p>You can only access what you hold capabilities for. No ambient authority.</p>
+<h4 id="minimal-kernel">Minimal Kernel</h4>
+<p>seL4's kernel provides only:
+- Threads
+- Address spaces
+- IPC
+- Capability management</p>
+<p>Everything else (filesystems, drivers, networking) runs in user space.</p>
+<h3 id="applicability-to-agent-systems_2">Applicability to Agent Systems</h3>
+<table>
+<thead>
+<tr>
+<th>seL4</th>
+<th>Agent System</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Capability</td>
+<td>Permission token</td>
+</tr>
+<tr>
+<td>Object</td>
+<td>Resource (file, API, domain)</td>
+</tr>
+<tr>
+<td>Rights</td>
+<td>Read, write, execute, delegate</td>
+</tr>
+<tr>
+<td>Minimal kernel</td>
+<td>Minimal dispatcher</td>
+</tr>
+</tbody>
+</table>
+<p>Example: A pattern agent holds write capability for insights; others hold only read capability.</p>
+<hr />
+<h2 id="openbsd">OpenBSD</h2>
+<p><strong>Origin</strong>: Forked from NetBSD in 1995 by Theo de Raadt<br />
+<strong>Focus</strong>: Security, correctness, simplicity</p>
+<h3 id="relevant-concepts_3">Relevant Concepts</h3>
+<p>OpenBSD has contributed many security innovations. For agent architectures, two are particularly applicable:</p>
+<h4 id="pledge2">pledge(2)</h4>
+<p>A process declares upfront which system call classes it needs. After pledging, any other syscall terminates the process.</p>
+<pre><code class="language-c">pledge(&quot;stdio rpath&quot;, NULL);  // Only stdio and read-only file access
+// From here: no network, no write, no exec—enforced by kernel
+</code></pre>
+<p>This is <strong>self-imposed restriction</strong>. The process gives up capabilities it doesn't need.</p>
+<h4 id="unveil2">unveil(2)</h4>
+<p>A process declares which filesystem paths it can access. Everything else becomes invisible.</p>
+<pre><code class="language-c">unveil(&quot;/var/data&quot;, &quot;r&quot;);   // Read-only access to /var/data
+unveil(&quot;/tmp&quot;, &quot;rwc&quot;);      // Read, write, create in /tmp
+unveil(NULL, NULL);         // Lock it down—no more unveil calls allowed
+</code></pre>
+<p>After the final <code>unveil(NULL, NULL)</code>, the process cannot expand its view. The filesystem has effectively shrunk to the declared paths.</p>
+<h4 id="privilege-separation">Privilege Separation</h4>
+<p>OpenBSD daemons split into two processes:</p>
+<pre><code>┌─────────────────┐
+│ Parent (root)   │  ← Holds socket, keys, minimal code
+└────────┬────────┘
+         │ fork
+         ▼
+┌─────────────────┐
+│ Child (nobody)  │  ← Parses input, does work, unprivileged
+└─────────────────┘
+</code></pre>
+<p>The child handles untrusted input. If compromised, it has no privileges. The parent only performs minimal, audited operations on the child's behalf.</p>
+<h4 id="historical-context-jails-and-containers">Historical Context: Jails and Containers</h4>
+<p>Process isolation has evolved through several stages: chroot (1979), FreeBSD jails (1999), Solaris zones, Linux containers, Docker. These provide <strong>static isolation</strong>—you build the container, then run in it.</p>
+<p>pledge/unveil represent a different approach: <strong>dynamic restriction</strong>. A process starts with full capabilities and progressively gives them up as it initializes. This is often more practical for applications that need resources during startup but not during operation.</p>
+<h3 id="applicability-to-agent-systems_3">Applicability to Agent Systems</h3>
+<table>
+<thead>
+<tr>
+<th>OpenBSD</th>
+<th>Agent System</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>pledge</td>
+<td>Agent declares capabilities at startup</td>
+</tr>
+<tr>
+<td>unveil</td>
+<td>Agent sees only relevant paths</td>
+</tr>
+<tr>
+<td>privsep</td>
+<td>Dispatcher privileged, agents restricted</td>
+</tr>
+<tr>
+<td>Secure by default</td>
+<td>No implicit permissions</td>
+</tr>
+</tbody>
+</table>
+<p>Example: A data agent pledges <code>["vault:read", "vault:write"]</code> and unveils only <code>vault/</code>. It cannot access <code>human/</code>, cannot make network calls, cannot execute code.</p>
+<hr />
+<h2 id="macos-darwin">macOS / Darwin</h2>
+<p><strong>Origin</strong>: Apple's XNU kernel, combining Mach microkernel with BSD<br />
+<strong>Focus</strong>: Consumer usability with Unix underpinnings</p>
+<h3 id="relevant-concepts_4">Relevant Concepts</h3>
+<h4 id="grand-central-dispatch-gcd">Grand Central Dispatch (GCD)</h4>
+<p>A system-wide framework for concurrent execution. Instead of managing threads directly, work is submitted to dispatch queues:</p>
+<pre><code>┌─────────────────────────────────────────┐
+│           Dispatch Queues               │
+├─────────────────────────────────────────┤
+│  Main Queue      │ Serial, UI thread    │
+├──────────────────┼──────────────────────┤
+│  Global Queues   │ Concurrent, by       │
+│  (QoS levels)    │ priority:            │
+│                  │  - User Interactive  │
+│                  │  - User Initiated    │
+│                  │  - Utility           │
+│                  │  - Background        │
+├──────────────────┼──────────────────────┤
+│  Custom Queues   │ Serial or concurrent │
+└──────────────────┴──────────────────────┘
+</code></pre>
+<p>The system manages thread pools. You just say "do this work" and "how important is it."</p>
+<h4 id="quality-of-service-qos">Quality of Service (QoS)</h4>
+<p>Work is tagged with its priority level. The system can:
+- Throttle background work when the user is active
+- Boost priority when results are needed immediately
+- Balance energy usage on laptops/phones</p>
+<h3 id="applicability-to-agent-systems_4">Applicability to Agent Systems</h3>
+<table>
+<thead>
+<tr>
+<th>GCD</th>
+<th>Agent System</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Dispatch queue</td>
+<td>Agent message queue</td>
+</tr>
+<tr>
+<td>QoS levels</td>
+<td>Agent priority</td>
+</tr>
+<tr>
+<td>Main queue</td>
+<td>User-facing relay agent</td>
+</tr>
+<tr>
+<td>Background queue</td>
+<td>Pattern recognition agent</td>
+</tr>
+<tr>
+<td>Serial queue</td>
+<td>Sequential operations (writes)</td>
+</tr>
+<tr>
+<td>Concurrent queue</td>
+<td>Parallel operations (reads)</td>
+</tr>
+</tbody>
+</table>
+<p>Example: A relay agent handling user input runs at high priority. A pattern agent analyzing history runs in background. The dispatcher manages queue priorities based on system load and user activity.</p>
+<hr />
+<h2 id="plan-9">Plan 9</h2>
+<p><strong>Origin</strong>: Bell Labs (1980s–2000s), successor to Unix<br />
+<strong>Focus</strong>: Distributed systems, uniform interfaces</p>
+<h3 id="relevant-concepts_5">Relevant Concepts</h3>
+<h4 id="everything-is-a-file">Everything is a File</h4>
+<p>Not just files and devices—processes, network connections, windows, even other machines appear as files.</p>
+<pre><code>/proc/42/mem      # Process memory
+/net/tcp/clone    # New TCP connection
+/mnt/remote/      # Remote machine's filesystem
+</code></pre>
+<h4 id="9p-protocol">9P Protocol</h4>
+<p>A simple protocol for accessing files over a network. Any resource that implements 9P can be mounted and accessed uniformly.</p>
+<h4 id="per-process-namespaces">Per-Process Namespaces</h4>
+<p>Each process can have its own view of the filesystem. Mounting resources is local to the process.</p>
+<h3 id="applicability-to-agent-systems_5">Applicability to Agent Systems</h3>
+<table>
+<thead>
+<tr>
+<th>Plan 9</th>
+<th>Agent System</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>File</td>
+<td>Resource</td>
+</tr>
+<tr>
+<td>9P</td>
+<td>Resource access protocol</td>
+</tr>
+<tr>
+<td>Mount</td>
+<td>Attach knowledge base</td>
+</tr>
+<tr>
+<td>Namespace</td>
+<td>Agent's view of available resources</td>
+</tr>
+</tbody>
+</table>
+<p>Example: A vault is mounted into an agent's namespace. The agent interacts with it through a uniform file-like interface.</p>
+<hr />
+<h2 id="event-sourcing">Event Sourcing</h2>
+<p><strong>Origin</strong>: Domain-Driven Design community<br />
+<strong>Focus</strong>: State as derived from immutable events</p>
+<h3 id="relevant-concepts_6">Relevant Concepts</h3>
+<h4 id="append-only-log">Append-Only Log</h4>
+<p>State is not stored directly. Instead, events are appended to an immutable log:</p>
+<pre><code>┌─────────────────────────────────────────────┐
+│ Event Log                                   │
+│                                             │
+│ 1. UserCreated {id: 1, name: &quot;...&quot;}         │
+│ 2. UserEmailChanged {id: 1, email: &quot;...&quot;}   │
+│ 3. UserDeleted {id: 1}                      │
+└─────────────────────────────────────────────┘
+</code></pre>
+<p>Current state = fold over all events.</p>
+<h4 id="benefits">Benefits</h4>
+<ul>
+<li><strong>Audit trail</strong>: Complete history</li>
+<li><strong>Replay</strong>: Reconstruct any past state</li>
+<li><strong>Debugging</strong>: See exactly what happened</li>
+<li><strong>Temporal queries</strong>: "What was the state at time T?"</li>
+</ul>
+<h3 id="applicability-to-agent-systems_6">Applicability to Agent Systems</h3>
+<table>
+<thead>
+<tr>
+<th>Event Sourcing</th>
+<th>Agent System</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Event</td>
+<td>Message</td>
+</tr>
+<tr>
+<td>Event log</td>
+<td>Message queue (append-only)</td>
+</tr>
+<tr>
+<td>Projection</td>
+<td>Current conversation state</td>
+</tr>
+<tr>
+<td>Replay</td>
+<td>Debug, retry, recover</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="unikernels">Unikernels</h2>
+<p><strong>Origin</strong>: Academic research (MirageOS, IncludeOS, Nanos)<br />
+<strong>Focus</strong>: Single-purpose, minimal attack surface</p>
+<h3 id="relevant-concepts_7">Relevant Concepts</h3>
+<h4 id="library-operating-system">Library Operating System</h4>
+<p>The application links directly against OS libraries. No separate kernel. The result is a single bootable image.</p>
+<pre><code>Traditional:
+┌─────────────┐
+│ Application │
+├─────────────┤
+│   Kernel    │
+└─────────────┘
+
+Unikernel:
+┌─────────────────────┐
+│ Application + LibOS │
+└─────────────────────┘
+</code></pre>
+<h4 id="specialization">Specialization</h4>
+<p>Each unikernel does one thing. No shell, no users, no unnecessary drivers.</p>
+<h3 id="applicability-to-agent-systems_7">Applicability to Agent Systems</h3>
+<table>
+<thead>
+<tr>
+<th>Unikernel</th>
+<th>Agent System</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Single-purpose image</td>
+<td>Single-purpose agent</td>
+</tr>
+<tr>
+<td>No shell</td>
+<td>No general capabilities</td>
+</tr>
+<tr>
+<td>Minimal surface</td>
+<td>Minimal prompt, focused role</td>
+</tr>
+</tbody>
+</table>
+<p>Example: An action agent is specialized—it executes tasks. It doesn't analyze patterns or compose messages.</p>
+<hr />
+<h2 id="comparison-matrix">Comparison Matrix</h2>
+<table>
+<thead>
+<tr>
+<th>System</th>
+<th>Primary Contribution</th>
+<th>Key Mechanism</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>DragonFlyBSD</td>
+<td>Scalable concurrency</td>
+<td>Per-CPU queues, ownership</td>
+</tr>
+<tr>
+<td>Erlang/OTP</td>
+<td>Fault tolerance</td>
+<td>Supervision, let it crash</td>
+</tr>
+<tr>
+<td>seL4</td>
+<td>Formal security</td>
+<td>Capabilities</td>
+</tr>
+<tr>
+<td>OpenBSD</td>
+<td>Practical security</td>
+<td>pledge, unveil, privsep</td>
+</tr>
+<tr>
+<td>macOS/GCD</td>
+<td>Priority scheduling</td>
+<td>QoS-tagged dispatch queues</td>
+</tr>
+<tr>
+<td>Plan 9</td>
+<td>Uniform access</td>
+<td>Everything is a file</td>
+</tr>
+<tr>
+<td>Event Sourcing</td>
+<td>Auditability</td>
+<td>Append-only log</td>
+</tr>
+<tr>
+<td>Unikernels</td>
+<td>Minimalism</td>
+<td>Single-purpose images</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="synthesis-for-agent-architectures">Synthesis for Agent Architectures</h2>
+<p>A well-designed multi-agent system can combine:</p>
+<ol>
+<li><strong>DragonFlyBSD's message passing</strong> for agent communication</li>
+<li><strong>Erlang's supervision</strong> for fault tolerance</li>
+<li><strong>seL4's capabilities</strong> for formal access control</li>
+<li><strong>OpenBSD's pledge/unveil</strong> for practical, self-imposed restrictions</li>
+<li><strong>GCD's priority queues</strong> for workload management</li>
+<li><strong>Plan 9's uniform interface</strong> for resource access</li>
+<li><strong>Event sourcing's append-only log</strong> for auditability</li>
+<li><strong>Unikernel's specialization</strong> for focused agent roles</li>
+</ol>
+<p>These are not competing approaches—they address orthogonal concerns and compose naturally.</p>
+<hr />
+<p>Next: <a href="03-architecture.md">03-architecture.md</a> — The outheis architecture derived from these principles.</p>
+      <hr>
+      <p class="footer">Open source under AGPL-3.0 · <a href="https://github.com/outheis-labs/outheis-minimal">Code on GitHub</a></p>
+    </main>
+  </div>
+</body>
+</html>
