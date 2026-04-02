@@ -21,35 +21,47 @@ TEMPLATES = ROOT / "templates"
 
 SITE_TITLE = "outheis"
 
-# Base URL for GitHub Pages (empty for custom domain, "/outheis-docs" for project pages)
-BASE_URL = "/outheis-docs"
-
 # Navigation definition — order matters
+# URLs are defined as absolute but converted to relative during build
 NAV_ITEMS = [
-    {"label": "Home",          "url": "/",                                    "match": "^index\\.html$"},
+    {"label": "Home",          "url": "index.html",                              "match": "^index\\.html$"},
     {"section": "Philosophy"},
-    {"label": "Why outheis",   "url": "/philosophy/",                         "match": "philosophy"},
+    {"label": "Why outheis",   "url": "philosophy/index.html",                   "match": "philosophy"},
     {"section": "Design"},
-    {"label": "Overview",      "url": "/design/",                             "match": "^design/index\\.html$"},
-    {"label": "OS Principles", "url": "/design/01-why-os-principles.html",    "match": "01-why-os"},
-    {"label": "Systems Survey","url": "/design/02-systems-survey.html",       "match": "02-systems"},
-    {"label": "Architecture",  "url": "/design/03-architecture.html",         "match": "03-architecture"},
-    {"label": "Data Formats",  "url": "/design/04-data-formats.html",         "match": "04-data"},
-    {"label": "Related Work",  "url": "/design/05-related-work.html",         "match": "05-related"},
-    {"label": "Agent Prompts", "url": "/design/06-agent-prompts.html",        "match": "06-agent"},
+    {"label": "Overview",      "url": "design/index.html",                       "match": "^design/index\\.html$"},
+    {"label": "OS Principles", "url": "design/01-why-os-principles.html",        "match": "01-why-os"},
+    {"label": "Systems Survey","url": "design/02-systems-survey.html",           "match": "02-systems"},
+    {"label": "Architecture",  "url": "design/03-architecture.html",             "match": "03-architecture"},
+    {"label": "Data Formats",  "url": "design/04-data-formats.html",             "match": "04-data"},
+    {"label": "Related Work",  "url": "design/05-related-work.html",             "match": "05-related"},
+    {"label": "Agent Prompts", "url": "design/06-agent-prompts.html",            "match": "06-agent"},
     {"section": "Implementation"},
-    {"label": "Current State", "url": "/implementation/architecture.html",    "match": "implementation/architecture"},
-    {"label": "Memory & Rules","url": "/implementation/memory.html",          "match": "implementation/memory"},
-    {"label": "Agenda",        "url": "/implementation/agenda.html",          "match": "implementation/agenda"},
-    {"label": "Skills",        "url": "/implementation/skills.html",          "match": "implementation/skills"},
-    {"label": "Migration",     "url": "/implementation/migration.html",       "match": "implementation/migration"},
-    {"label": "Config",        "url": "/implementation/config.html",          "match": "implementation/config"},
-    {"label": "CLI Guide",     "url": "/implementation/guide.html",           "match": "implementation/guide"},
-    {"label": "Web UI",        "url": "/implementation/webui.html",           "match": "implementation/webui"},
-    {"label": "Code Agent",    "url": "/implementation/alan.html",            "match": "implementation/alan"},
+    {"label": "Current State", "url": "implementation/architecture.html",        "match": "implementation/architecture"},
+    {"label": "Memory & Rules","url": "implementation/memory.html",              "match": "implementation/memory"},
+    {"label": "Agenda",        "url": "implementation/agenda.html",              "match": "implementation/agenda"},
+    {"label": "Skills",        "url": "implementation/skills.html",              "match": "implementation/skills"},
+    {"label": "Migration",     "url": "implementation/migration.html",           "match": "implementation/migration"},
+    {"label": "Config",        "url": "implementation/config.html",              "match": "implementation/config"},
+    {"label": "CLI Guide",     "url": "implementation/guide.html",               "match": "implementation/guide"},
+    {"label": "Web UI",        "url": "implementation/webui.html",               "match": "implementation/webui"},
+    {"label": "Code Agent",    "url": "implementation/alan.html",                "match": "implementation/alan"},
     {"section": ""},
     {"label": "GitHub ↗",      "url": "https://github.com/outheis-labs/outheis-minimal", "external": True},
 ]
+
+
+def relative_url(from_path: str, to_path: str) -> str:
+    """Calculate relative URL from one page to another."""
+    from_parts = from_path.split('/')
+    to_parts = to_path.split('/')
+    
+    # From root (index.html) — no prefix needed
+    if len(from_parts) == 1:
+        return to_path
+    
+    # From subdir (design/foo.html) — need ../ prefix
+    depth = len(from_parts) - 1
+    return '../' * depth + to_path
 
 
 def build_nav(current_rel: str) -> str:
@@ -66,7 +78,7 @@ def build_nav(current_rel: str) -> str:
             match = item.get("match", "")
             is_active = bool(re.search(match, current_rel)) if match else False
             active = ' class="active"' if is_active else ''
-            url = BASE_URL + item["url"] if item["url"].startswith("/") else item["url"]
+            url = relative_url(current_rel, item["url"])
             items.append(f'<li><a href="{url}"{active}>{item["label"]}</a></li>')
     return "\n          ".join(items)
 
@@ -114,10 +126,14 @@ def build_page(src: Path, template: str):
 
     dst = output_path(src)
     rel = str(dst.relative_to(HTML))
+    
+    # Calculate path to root (e.g., "" for index.html, "../" for design/foo.html)
+    depth = len(rel.split('/')) - 1
+    root = '../' * depth if depth > 0 else ''
 
     nav_html = build_nav(rel)
     page = (template
-            .replace('<!-- BASE_URL -->', BASE_URL)
+            .replace('<!-- ROOT -->', root)
             .replace('<!-- TITLE -->', f'{title} · {SITE_TITLE}' if title != SITE_TITLE else SITE_TITLE)
             .replace('<!-- NAV -->', nav_html)
             .replace('<!-- CONTENT -->', content_html))
