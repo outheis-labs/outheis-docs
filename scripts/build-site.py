@@ -21,6 +21,9 @@ TEMPLATES = ROOT / "templates"
 
 SITE_TITLE = "outheis"
 
+# Base URL for GitHub Pages (empty for custom domain, "/outheis-docs" for project pages)
+BASE_URL = "/outheis-docs"
+
 # Navigation definition — order matters
 NAV_ITEMS = [
     {"label": "Home",          "url": "/",                                    "match": "^index\\.html$"},
@@ -63,7 +66,8 @@ def build_nav(current_rel: str) -> str:
             match = item.get("match", "")
             is_active = bool(re.search(match, current_rel)) if match else False
             active = ' class="active"' if is_active else ''
-            items.append(f'<li><a href="{item["url"]}"{active}>{item["label"]}</a></li>')
+            url = BASE_URL + item["url"] if item["url"].startswith("/") else item["url"]
+            items.append(f'<li><a href="{url}"{active}>{item["label"]}</a></li>')
     return "\n          ".join(items)
 
 
@@ -113,6 +117,7 @@ def build_page(src: Path, template: str):
 
     nav_html = build_nav(rel)
     page = (template
+            .replace('<!-- BASE_URL -->', BASE_URL)
             .replace('<!-- TITLE -->', f'{title} · {SITE_TITLE}' if title != SITE_TITLE else SITE_TITLE)
             .replace('<!-- NAV -->', nav_html)
             .replace('<!-- CONTENT -->', content_html))
