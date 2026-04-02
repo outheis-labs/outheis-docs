@@ -65,7 +65,8 @@ Created automatically on first `outheis start` with sensible defaults.
     "data": {"name": "zeno", "model": "capable", "enabled": true},
     "agenda": {"name": "cato", "model": "capable", "enabled": true},
     "action": {"name": "hiro", "model": "capable", "enabled": false},
-    "pattern": {"name": "rumi", "model": "capable", "enabled": true}
+    "pattern": {"name": "rumi", "model": "capable", "enabled": true},
+    "code": {"name": "alan", "model": "capable", "enabled": false}
   },
   "schedule": {
     "pattern_nightly": {"enabled": true, "hour": 4, "minute": 0},
@@ -168,7 +169,7 @@ Agent configuration. Each agent has:
 
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
-| `name` | string | (varies) | Display name (ou, zeno, cato, hiro, rumi) |
+| `name` | string | (varies) | Display name (ou, zeno, cato, hiro, rumi, alan) |
 | `model` | string | "capable" | Model alias to use |
 | `enabled` | bool | true | Whether agent is active |
 
@@ -181,6 +182,7 @@ Agent configuration. Each agent has:
 | agenda | cato | capable | Schedule management |
 | action | hiro | capable | External actions (disabled by default) |
 | pattern | rumi | capable | Memory extraction, rules |
+| code | alan | capable | Code intelligence (dev only, disabled) |
 
 Disabled agents are not instantiated and their scheduled tasks don't run.
 

@@ -118,7 +118,7 @@ alan is registered in the dispatcher only when `config.json` contains:
 ```json
 {
   "agents": {
-    "alan": {
+    "code": {
       "name": "alan",
       "model": "capable",
       "enabled": true
@@ -126,6 +126,8 @@ alan is registered in the dispatcher only when `config.json` contains:
   }
 }
 ```
+
+Note: The config key is `code` (function name), the display name is `alan` (persona).
 
 Production deployments omit this entry. alan is never loaded by default.
 

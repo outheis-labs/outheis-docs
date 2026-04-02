@@ -42,6 +42,8 @@ NAV_ITEMS = [
     {"label": "Migration",     "url": "/implementation/migration.html",       "match": "implementation/migration"},
     {"label": "Config",        "url": "/implementation/config.html",          "match": "implementation/config"},
     {"label": "CLI Guide",     "url": "/implementation/guide.html",           "match": "implementation/guide"},
+    {"label": "Web UI",        "url": "/implementation/webui.html",           "match": "implementation/webui"},
+    {"label": "Code Agent",    "url": "/implementation/alan.html",            "match": "implementation/alan"},
     {"section": ""},
     {"label": "GitHub ↗",      "url": "https://github.com/outheis-labs/outheis-minimal", "external": True},
 ]
@@ -121,23 +123,31 @@ def build_page(src: Path, template: str):
 
 
 def copy_assets():
-    """Copy assets from docs/_assets/ to html/."""
-    assets_src = DOCS / "_assets"
+    """Copy assets from docs/assets/ to html/."""
+    assets_src = DOCS / "assets"
     if not assets_src.exists():
         return
 
+    # Logo goes into html/assets/
     logo_dst = HTML / "assets" / "logo.svg"
     logo_dst.parent.mkdir(parents=True, exist_ok=True)
     logo_src = assets_src / "logo.svg"
     if logo_src.exists():
         shutil.copy(logo_src, logo_dst)
-        print("  _assets/logo.svg → assets/logo.svg")
+        print("  assets/logo.svg → assets/logo.svg")
+    
+    # PNG logo as fallback
+    logo_png = assets_src / "logo.png"
+    if logo_png.exists():
+        shutil.copy(logo_png, HTML / "assets" / "logo.png")
+        print("  assets/logo.png → assets/logo.png")
 
+    # Other assets go to root (favicon, manifest, etc.)
     for f in assets_src.iterdir():
-        if f.name == "logo.svg":
+        if f.name in ("logo.svg", "logo.png"):
             continue
         shutil.copy(f, HTML / f.name)
-        print(f"  _assets/{f.name} → {f.name}")
+        print(f"  assets/{f.name} → {f.name}")
 
 
 def main():

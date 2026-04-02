@@ -44,15 +44,16 @@ The dispatcher contains no LLM calls. It's deterministic, testable, fast.
 
 ## Agents
 
-Five agents, each with a name and role:
+Six agents, each with a name and role:
 
 | Role | Name | When used | Reads | Writes |
 |------|------|-----------|-------|--------|
 | relay | ou | All messages — decides routing | Memory, Context | Messages |
 | data | zeno | Vault search (via tool) | Vault, Memory | — |
 | agenda | cato | Schedule queries (via tool) | Agenda/ | Agenda/ |
-| action | hiro | External actions (future) | — | External |
+| action | hiro | External actions, background jobs | Task registry | External |
 | pattern | rumi | Scheduled (04:00) | Messages, Seed | Memory, Rules |
+| code | alan | Code questions (development only) | Source code | vault/Codebase/ |
 
 ### Routing
 
@@ -107,6 +108,37 @@ The Pattern agent runs nightly and:
 4. Validates own extraction strategies (learns how to learn)
 
 **Memory Migration** is handled via chat commands ("memory migrate") through Relay, not Pattern agent. See [Migration](migration.md).
+
+### Action Agent (hiro)
+
+The Action agent executes tasks and background jobs. Currently in development with these planned capabilities:
+
+| Capability | Status | Description |
+|------------|--------|-------------|
+| Task scheduling | Planned | Schedule one-time or recurring actions |
+| Email sending | Planned | Send emails via configured SMTP |
+| Calendar events | Planned | Create/modify calendar entries |
+| File operations | Planned | Move, copy, archive files |
+| External commands | Planned | Run whitelisted shell commands |
+
+Action is disabled by default (`enabled: false`). When enabled, it:
+- Receives tasks from other agents or scheduled jobs
+- Executes actions with explicit confirmation for destructive operations
+- Reports results back via message queue
+
+**Security model:** Action has a whitelist of permitted operations. Unknown commands require explicit user approval in Exchange.md.
+
+### Code Agent (alan)
+
+The Code agent provides development-time intelligence. See [Code Agent (alan)](alan.md) for full documentation.
+
+Summary:
+- **Introspection**: Answer questions about outheis implementation
+- **Proposals**: Suggest improvements via `vault/Codebase/Exchange.md`
+- **Search**: Find patterns and implementations in source code
+- **Isolation**: Write access restricted to `vault/Codebase/` only
+
+**alan is development-only.** Disabled by default, never loaded in production.
 
 ## Knowledge Stores
 
@@ -266,4 +298,6 @@ Each task can be disabled independently. Agents run sequentially in the early mo
 - [Memory](memory.md) — How persistent memory works
 - [Agenda](agenda.md) — Time management with Daily, Inbox, Exchange
 - [Migration](migration.md) — Seeding memory from external sources
+- [Code Agent (alan)](alan.md) — Development-time code intelligence
+- [Web UI](webui.md) — Browser-based administration interface
 - [Philosophy](../philosophy/) — Why this architecture
