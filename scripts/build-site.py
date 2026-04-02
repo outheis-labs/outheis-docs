@@ -15,8 +15,8 @@ from pathlib import Path
 import markdown
 
 ROOT = Path(__file__).parent.parent
-DOCS = ROOT / "docs"
-HTML = ROOT / "html"
+DOCS_SOURCE = ROOT / "docs_source"
+DOCS = ROOT / "docs"  # Output (served by GitHub Pages)
 TEMPLATES = ROOT / "templates"
 
 SITE_TITLE = "outheis"
@@ -113,8 +113,8 @@ def md_to_html(content: str) -> str:
 
 def output_path(src: Path) -> Path:
     """Determine output path: docs/foo/bar.md -> html/foo/bar.html"""
-    rel = src.relative_to(DOCS)
-    return HTML / rel.with_suffix('.html')
+    rel = src.relative_to(DOCS_SOURCE)
+    return DOCS / rel.with_suffix('.html')
 
 
 def build_page(src: Path, template: str):
@@ -125,7 +125,7 @@ def build_page(src: Path, template: str):
     content_html = md_to_html(content_md)
 
     dst = output_path(src)
-    rel = str(dst.relative_to(HTML))
+    rel = str(dst.relative_to(DOCS))
     
     # Calculate path to root (e.g., "" for index.html, "../" for design/foo.html)
     depth = len(rel.split('/')) - 1
@@ -140,44 +140,48 @@ def build_page(src: Path, template: str):
 
     dst.parent.mkdir(parents=True, exist_ok=True)
     dst.write_text(page, encoding='utf-8')
-    print(f"  {src.relative_to(DOCS)} → {dst.relative_to(HTML)}")
+    print(f"  {src.relative_to(DOCS_SOURCE)} → {dst.relative_to(DOCS)}")
 
 
 def copy_assets():
-    """Copy assets from docs/assets/ to html/."""
-    assets_src = DOCS / "assets"
+    """Copy assets from docs_source/assets/ to docs/."""
+    assets_src = DOCS_SOURCE / "assets"
     if not assets_src.exists():
         return
 
-    # Logo goes into html/assets/
-    logo_dst = HTML / "assets" / "logo.svg"
-    logo_dst.parent.mkdir(parents=True, exist_ok=True)
+    # Logo goes into docs/assets/
+    assets_dst = DOCS / "assets"
+    assets_dst.mkdir(parents=True, exist_ok=True)
+    
     logo_src = assets_src / "logo.svg"
     if logo_src.exists():
-        shutil.copy(logo_src, logo_dst)
+        shutil.copy(logo_src, assets_dst / "logo.svg")
         print("  assets/logo.svg → assets/logo.svg")
     
     # PNG logo as fallback
     logo_png = assets_src / "logo.png"
     if logo_png.exists():
-        shutil.copy(logo_png, HTML / "assets" / "logo.png")
+        shutil.copy(logo_png, assets_dst / "logo.png")
         print("  assets/logo.png → assets/logo.png")
 
     # Other assets go to root (favicon, manifest, etc.)
     for f in assets_src.iterdir():
         if f.name in ("logo.svg", "logo.png"):
             continue
-        shutil.copy(f, HTML / f.name)
+        shutil.copy(f, DOCS / f.name)
         print(f"  assets/{f.name} → {f.name}")
 
 
 def main():
     template = (TEMPLATES / "default.html").read_text(encoding='utf-8')
 
-    HTML.mkdir(exist_ok=True)
+    # Clean and recreate output
+    if DOCS.exists():
+        shutil.rmtree(DOCS)
+    DOCS.mkdir(exist_ok=True)
 
-    print("Building docs/ → html/")
-    for md_file in sorted(DOCS.rglob("*.md")):
+    print(f"Building {DOCS_SOURCE.name}/ → {DOCS.name}/")
+    for md_file in sorted(DOCS_SOURCE.rglob("*.md")):
         if any(part.startswith('_') for part in md_file.parts):
             continue
         build_page(md_file, template)
