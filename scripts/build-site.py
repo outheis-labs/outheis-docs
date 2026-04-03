@@ -71,10 +71,9 @@ NAV_SECTIONS = [
     },
     {
         "label": "Installation",
-        "url": "installation/index.html",
+        "url": "installation/release-notes.html",
         "match": "installation|guide|config|migration|webui|signal",
         "items": [
-            {"label": "Installation",    "url": "installation/index.html",          "match": "installation/index"},
             {"label": "Release Notes",   "url": "installation/release-notes.html",  "match": "release-notes"},
             {"label": "Getting Started", "url": "implementation/guide.html",        "match": "implementation/guide"},
             {"label": "Configuration",   "url": "implementation/config.html",       "match": "implementation/config"},
