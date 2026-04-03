@@ -326,7 +326,7 @@
 </tbody>
 </table>
 <p><strong>hiro is present but empty.</strong> The agent starts and routes, but no external integrations exist — no email, no calendar, no shell execution. Enabling it in config.json has no practical effect yet.</p>
-<p><strong>alan is for development use only.</strong> It provides introspection into the outheis codebase itself. Not relevant for users.</p>
+<p><strong>alan requires manual activation.</strong> The Code agent provides introspection into the outheis codebase — useful for anyone who wants to explore how it works or have the code explained. Enable in <code>config.json</code> under <code>agents.code.enabled: true</code>.</p>
 <h2 id="known-gaps">Known Gaps</h2>
 <p><strong>Pattern agent requires history.</strong> rumi has nothing to extract on a fresh install. Memory builds over days, not immediately.</p>
 <p><strong>Tag scan is on demand.</strong> Tags are not indexed at startup. Run from Web UI (Vault → Tags → Scan) or say <code>analyze tags</code> in chat.</p>

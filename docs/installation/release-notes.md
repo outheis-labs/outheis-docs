@@ -32,7 +32,7 @@ title: Release Notes
 
 **hiro is present but empty.** The agent starts and routes, but no external integrations exist — no email, no calendar, no shell execution. Enabling it in config.json has no practical effect yet.
 
-**alan is for development use only.** It provides introspection into the outheis codebase itself. Not relevant for users.
+**alan requires manual activation.** The Code agent provides introspection into the outheis codebase — useful for anyone who wants to explore how it works or have the code explained. Enable in `config.json` under `agents.code.enabled: true`.
 
 ## Known Gaps
 
