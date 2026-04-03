@@ -26,11 +26,11 @@ SITE_TITLE = "outheis"
 NAV_SECTIONS = [
     {
         "label": "Foundations",
-        "url": "philosophy/index.html",
-        "match": "philosophy",
+        "url": "foundations/index.html",
+        "match": "foundations",
         "items": [
-            {"label": "Why outheis",          "url": "philosophy/index.html",                "match": "philosophy/index"},
-            {"label": "Information and Semantics", "url": "philosophy/02-semantic-foundations.html", "match": "02-semantic"},
+            {"label": "Why outheis",          "url": "foundations/index.html",                "match": "foundations/index"},
+            {"label": "Information and Semantics", "url": "foundations/02-semantic-foundations.html", "match": "02-semantic"},
         ],
     },
     {

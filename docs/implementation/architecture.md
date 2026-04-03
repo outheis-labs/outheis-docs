@@ -300,4 +300,4 @@ Each task can be disabled independently. Agents run sequentially in the early mo
 - [Migration](migration.md) — Seeding memory from external sources
 - [Code Agent (alan)](alan.md) — Development-time code intelligence
 - [Web UI](webui.md) — Browser-based administration interface
-- [Philosophy](../philosophy/) — Why this architecture
+- [Foundations](../foundations/) — Why this architecture

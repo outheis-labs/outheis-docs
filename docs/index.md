@@ -22,7 +22,7 @@ Five agents coordinate through messages. Your knowledge stays in a local vault. 
 
 ## Documentation
 
-**[Philosophy](philosophy/)** — Why sovereignty matters. The problem with captured cognition.
+**[Foundations](foundations/)** — Why sovereignty matters. The problem with captured cognition.
 
 **[Design](design/)** — OS principles applied to agents. Architecture specification, data formats, agent prompts.
 
