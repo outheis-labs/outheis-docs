@@ -8,7 +8,7 @@ title: outheis
 
 ---
 
-A personal AI assistant that treats your knowledge as yours — based on proven principles from a variety of disciplines that make complex systems reliable.
+A personal AI assistant that treats your knowledge as yours — engineered like infrastructure, not like a product.
 
 ---
 
