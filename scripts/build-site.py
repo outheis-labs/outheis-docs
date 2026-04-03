@@ -15,8 +15,8 @@ from pathlib import Path
 import markdown
 
 ROOT = Path(__file__).parent.parent
-DOCS_SOURCE = ROOT / "docs_source"
-DOCS = ROOT / "docs"  # Output (served by GitHub Pages)
+DOCS_SOURCE = ROOT / "docs"
+DOCS = ROOT / "html"  # Output (served by GitHub Pages)
 TEMPLATES = ROOT / "templates"
 
 SITE_TITLE = "outheis"
