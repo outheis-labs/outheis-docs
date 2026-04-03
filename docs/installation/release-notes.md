@@ -42,4 +42,4 @@ title: Release Notes
 
 **No mobile UI.** Web UI is localhost-only. Use Signal transport for mobile access.
 
-**Session continuity is limited.** Relay replays the last 20 messages on restart. Longer conversation context is lost between sessions.
+**Context after restart.** On restart, relay replays the last 20 messages to restore recent context. Older conversation history is not replayed.

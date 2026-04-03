@@ -331,7 +331,7 @@
 <p><strong>Pattern agent requires history.</strong> rumi has nothing to extract on a fresh install. Memory builds over days, not immediately.</p>
 <p><strong>Tag scan is on demand.</strong> Tags are not indexed at startup. Run from Web UI (Vault → Tags → Scan) or say <code>analyze tags</code> in chat.</p>
 <p><strong>No mobile UI.</strong> Web UI is localhost-only. Use Signal transport for mobile access.</p>
-<p><strong>Session continuity is limited.</strong> Relay replays the last 20 messages on restart. Longer conversation context is lost between sessions.</p>
+<p><strong>Context after restart.</strong> On restart, relay replays the last 20 messages to restore recent context. Older conversation history is not replayed.</p>
     <hr>
     <p class="footer">Open source under AGPL-3.0 · <a href="https://github.com/outheis-labs/outheis-minimal">Code on GitHub</a></p>
   </main>
