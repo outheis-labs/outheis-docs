@@ -28,8 +28,8 @@ Optional:
 ## Installation
 
 ```bash
-git clone https://github.com/outheis-labs/outheis.git
-cd outheis
+git clone https://github.com/outheis-labs/outheis-minimal.git
+cd outheis-minimal
 pip install -e ".[dev]"
 ```
 
