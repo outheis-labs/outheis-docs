@@ -159,3 +159,23 @@ When a user corrects an agent:
 4. Skill now influences all future actions
 
 This creates a learning loop where corrections become permanent improvements.
+
+### Distillation Triggers
+
+The Pattern Agent uses judgment, not fixed thresholds. But these conditions indicate a pattern is ready:
+
+- **3+ similar observations** → pattern detectable
+- **Repeated corrections** → principle extractable
+- **Stable preference** → ready for skill
+
+A strong preference stated clearly once may become a skill. Something mentioned casually many times may not. Explicit corrections always carry more weight than inferred patterns.
+
+### Quality Criteria
+
+A good skill:
+
+- **Directs attention** — tells the agent what to notice, not what to do
+- **Generalizes** — applies beyond the specific instance that prompted it
+- **Replaces** — makes one or more memory entries unnecessary
+
+If a skill doesn't replace anything, it may be too specific. If it doesn't direct attention, it may be a rule in disguise.

@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Philosophy · outheis</title>
+  <title>Attention as Architecture · outheis</title>
   <link rel="icon" type="image/png" href="../favicon-96x96.png" sizes="96x96">
   <link rel="icon" type="image/svg+xml" href="../favicon.svg">
   <link rel="shortcut icon" href="../favicon.ico">
@@ -195,8 +195,8 @@
         <span class="site-name">outheis</span>
       </a>
       <nav class="topnav">
-        <a href="../philosophy/index.html" class="active">Motivation</a>
-        <a href="../design/index.html">Design</a>
+        <a href="../philosophy/index.html">Motivation</a>
+        <a href="../design/index.html" class="active">Design</a>
         <a href="../implementation/architecture.html">Implementation</a>
         <a href="../implementation/guide.html">Usage</a>
         <a href="https://github.com/outheis-labs/outheis-minimal" class="external">GitHub ↗</a>
@@ -205,32 +205,171 @@
   </header>
   <div class="subnav-bar">
     <div class="subnav-inner">
-      <a href="../philosophy/index.html" class="active">Why outheis</a>
+      <a href="../design/index.html">Overview</a>
+      <a href="../design/01-why-os-principles.html">OS Principles</a>
+      <a href="../design/02-systems-survey.html">Systems Survey</a>
+      <a href="../design/03-architecture.html">Architecture</a>
+      <a href="../design/04-data-formats.html">Data Formats</a>
+      <a href="../design/05-related-work.html">Related Work</a>
+      <a href="../design/06-agent-prompts.html">Agent Prompts</a>
+      <a href="../design/07-hybrid-memory-stack.html">Hybrid Memory Stack</a>
+      <a href="../design/08-attention-as-architecture.html" class="active">Attention as Architecture</a>
     </div>
   </div>
   <main class="content">
-    <hr />
-<p>title: Philosophy</p>
-<h1 id="philosophy">Philosophy</h1>
-<p><em>Why outheis exists.</em></p>
-<h2 id="the-problem">The Problem</h2>
-<p>Every interaction with an AI system leaves traces. Queries reveal interests. Conversations expose thinking patterns. Over time, these traces form a profile — not for your benefit, but for extraction.</p>
-<p>The term <em>captured cognition</em> describes this: your mental work, externalized through AI interaction, becomes raw material for systems that don't serve you.</p>
-<h2 id="sovereignty">Sovereignty</h2>
-<p>outheis takes a different position: your cognitive infrastructure belongs to you.</p>
-<p>This means:
-- <strong>Local first</strong> — your data stays on your machine
-- <strong>Transparent operation</strong> — append-only logs, no hidden state
-- <strong>Explicit capabilities</strong> — agents declare what they can access
-- <strong>Portable formats</strong> — Markdown and JSON, no lock-in</p>
-<h2 id="_1">οὐθείς</h2>
-<p>The name comes from Homer. When Polyphemus asks who blinded him, Odysseus answers: οὐθείς — <em>nobody</em>. The Cyclops calls for help: "Nobody is hurting me!" No help comes.</p>
-<p>It's a trick, but also a stance: by refusing to be named, captured, pinned down, Odysseus remains free to act.</p>
-<p>outheis carries this into AI interaction. The system knows you — but only locally, only under your control, only in service of your work.</p>
-<h2 id="not-anti-ai">Not Anti-AI</h2>
-<p>This isn't a rejection of AI assistance. It's a rejection of the extractive model that currently dominates.</p>
-<p>AI can be genuinely helpful: finding connections in your notes, managing complexity, extending memory. But this help shouldn't come at the cost of surveillance.</p>
-<p>outheis explores what AI assistance looks like when sovereignty is non-negotiable.</p>
+    <h1 id="attention-as-architecture">Attention as Architecture</h1>
+<h2 id="the-structural-analogy">The Structural Analogy</h2>
+<p>The transformer architecture's central insight — that learned attention mechanisms can replace complex sequential processing — applies directly to how outheis is structured. This isn't metaphor. It's the same principle operating at a different level of abstraction.</p>
+<table>
+<thead>
+<tr>
+<th>LLM Concept</th>
+<th>outheis Equivalent</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Trained weights</td>
+<td>Skills (distilled principles)</td>
+</tr>
+<tr>
+<td>Context window</td>
+<td>Memory (current observations)</td>
+</tr>
+<tr>
+<td>Query</td>
+<td>User message</td>
+</tr>
+<tr>
+<td>Attention scores</td>
+<td>Relevance — what context gets loaded</td>
+</tr>
+<tr>
+<td>Training loop</td>
+<td>Pattern Agent (nightly)</td>
+</tr>
+</tbody>
+</table>
+<p>In a transformer:
+- <strong>Weights</strong> are learned patterns that direct attention to relevant parts of input
+- <strong>Context</strong> is the current input being processed
+- <strong>Training</strong> refines weights so less context is needed for good outputs</p>
+<p>In outheis:
+- <strong>Skills</strong> are learned principles that direct agent attention to what matters
+- <strong>Memory</strong> is accumulated observations awaiting distillation
+- <strong>Pattern Agent</strong> refines skills so agents need less in their context</p>
+<p>The goal in both cases: require progressively less explicit input to produce good output, because learned representations already capture what matters.</p>
+<hr />
+<h2 id="the-learning-loop">The Learning Loop</h2>
+<pre><code>User interacts with agents
+        ↓
+Corrections, preferences observed
+        ↓
+Stored in Memory (feedback type)
+        ↓
+Pattern Agent runs (nightly)
+        ↓
+Recognizes patterns (3+ similar observations)
+        ↓
+Distills into Skill (condensed principle)
+        ↓
+Deletes redundant Memory entries
+        ↓
+Next agent invocation: Skill directs attention
+        ↓
+Agent behaves differently (learned)
+</code></pre>
+<p>This is gradient descent at the system level. Each correction adjusts the "weights" (skills). Over time, the system needs less explicit context because the skills direct attention efficiently.</p>
+<hr />
+<h2 id="why-not-more-code">Why Not More Code?</h2>
+<p>The anti-pattern is solving learning with code:</p>
+<pre><code class="language-python"># Wrong: hardcoded preference checks
+def format_date(date):
+    if user_prefers_iso:
+        return date.isoformat()
+    elif user_prefers_german:
+        return date.strftime(&quot;%d.%m.%Y&quot;)
+    # ... more branches for each preference
+</code></pre>
+<pre><code># Right: distilled skill
+Skill: &quot;Dates: Always ISO format (YYYY-MM-DD)&quot;
+</code></pre>
+<p>The LLM reads the skill and applies it. No code changes when preferences change. The system learns by refining skills, not by adding branches.</p>
+<p>This is why the boundary between code and LLM is a design constraint, not just a preference. Code that encodes learned behavior makes the system rigid. Skills that encode learned behavior make it adaptive.</p>
+<hr />
+<h2 id="compression-as-the-core-mechanism">Compression as the Core Mechanism</h2>
+<p>As context grows, naive approaches fail:</p>
+<pre><code>Wrong: add more tools to fetch more data
+read_file_1(), read_file_2(), ... read_file_n()
+
+Right: better compression through skills
+One skill replaces 10 memory entries.
+One principle replaces 10 examples.
+</code></pre>
+<p>A trained model doesn't store all training examples — it learns patterns. Similarly, outheis doesn't keep all observations; it distills principles. The measure of a maturing system is not how much it stores, but how little it needs.</p>
+<hr />
+<h2 id="the-hierarchy-as-attention-layers">The Hierarchy as Attention Layers</h2>
+<pre><code>Skills (highest density)
+   │  &quot;Use ISO dates&quot; — applies everywhere
+   │  Compressed knowledge, maximum leverage
+   │
+Memory (medium density)
+   │  &quot;User corrected date format 3x&quot;
+   │  Raw observations, awaiting compression
+   │
+Rules (lowest density)
+      &quot;Never delete without confirmation&quot;
+      Hard constraints, override everything
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>Layer</th>
+<th>Density</th>
+<th>Volatility</th>
+<th>Function</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Skills</td>
+<td>High</td>
+<td>Changes via distillation</td>
+<td>Direct attention</td>
+</tr>
+<tr>
+<td>Memory</td>
+<td>Medium</td>
+<td>Changes constantly</td>
+<td>Store observations</td>
+</tr>
+<tr>
+<td>Rules</td>
+<td>Low</td>
+<td>Rarely changes</td>
+<td>Set boundaries</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="pattern-agent-as-optimizer">Pattern Agent as Optimizer</h2>
+<p>The Pattern Agent plays the role of the optimizer in this system:</p>
+<ol>
+<li><strong>Observes gradients</strong> — user corrections signal error</li>
+<li><strong>Accumulates updates</strong> — memory stores observations</li>
+<li><strong>Applies batch update</strong> — nightly distillation</li>
+<li><strong>Prunes redundancy</strong> — deletes obsolete memory entries</li>
+</ol>
+<p>Like a training loop, it runs continuously in the background, gradually improving the system's "weights" (skills) based on observed "loss" (corrections and feedback).</p>
+<hr />
+<h2 id="practical-implications">Practical Implications</h2>
+<ul>
+<li>Don't hardcode preferences — let skills emerge from observation</li>
+<li>Don't add tools to fetch more data — compress data into context via skills</li>
+<li>Trust the distillation — corrections today become skills tomorrow</li>
+<li>Measure by context size: better skills = smaller context needed</li>
+</ul>
+<p>The goal: a system that gets better not by adding code, but by refining attention. The longer it runs, the less it needs in context, because skills already direct focus to what matters.</p>
     <hr>
     <p class="footer">Open source under AGPL-3.0 · <a href="https://github.com/outheis-labs/outheis-minimal">Code on GitHub</a></p>
   </main>

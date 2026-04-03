@@ -23,6 +23,8 @@
       --color-text-faint: #999;
       --color-border: #e0e0e0;
       --color-bg-code: #f5f5f5;
+      --header-height: 52px;
+      --subnav-height: 40px;
     }
 
     @supports (font-variation-settings: normal) {
@@ -39,92 +41,110 @@
       color: var(--color-text);
     }
 
-    .container {
+    /* ── Header ── */
+
+    .header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: #fff;
+      border-bottom: 1px solid var(--color-border);
+    }
+
+    .header-inner {
       display: flex;
+      align-items: center;
+      justify-content: space-between;
       max-width: 900px;
       margin: 0 auto;
-      padding: 2rem;
-      gap: 3rem;
+      padding: 0 2rem;
+      height: var(--header-height);
+      gap: 2rem;
     }
 
-    .sidebar {
-      flex: 0 0 200px;
-      position: sticky;
-      top: 2rem;
-      height: fit-content;
+    .logo-link {
       display: flex;
-      flex-direction: column;
-      align-items: flex-start;
-      align-self: flex-start;
-    }
-
-    .sidebar-logo-link {
-      display: flex;
-      flex-direction: column;
       align-items: center;
-      width: 100%;
+      gap: 0.6rem;
       text-decoration: none;
-      margin-bottom: 2rem;
+      flex-shrink: 0;
     }
 
-    .sidebar-logo {
-      display: block;
-      width: 120px;
-      height: auto;
-      margin-bottom: 0.5rem;
+    .logo {
+      width: 28px;
+      height: 28px;
     }
 
-    .sidebar-title {
+    .site-name {
+      font-family: var(--font-ui);
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--color-text);
+      letter-spacing: 0.01em;
+    }
+
+    .topnav {
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
+    }
+
+    .topnav a {
       font-family: var(--font-ui);
       font-size: 14px;
-      font-weight: 600;
-      letter-spacing: 0.02em;
-      color: var(--color-text);
-    }
-
-    .sidebar-nav {
-      list-style: none;
-      width: 100%;
-    }
-
-    .sidebar-nav li {
-      margin-bottom: 0.75rem;
-    }
-
-    .sidebar-nav a {
-      font-family: var(--font-ui);
+      font-weight: 500;
       color: var(--color-text-muted);
       text-decoration: none;
-      font-size: 15px;
-      font-weight: 600;
+      padding: 0.3rem 0.65rem;
+      border-radius: 4px;
+      white-space: nowrap;
     }
 
-    .sidebar-nav a:hover { color: var(--color-text); }
-    .sidebar-nav a.active { color: var(--color-text); }
+    .topnav a:hover { color: var(--color-text); background: var(--color-bg-code); }
+    .topnav a.active { color: var(--color-text); font-weight: 600; }
+    .topnav a.external { color: var(--color-text-faint); }
 
-    .sidebar-nav .nav-section {
-      font-size: 11px;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      color: var(--color-text-faint);
-      margin-top: 1.5rem;
-      margin-bottom: 0.5rem;
+    /* ── Sub-nav ── */
+
+    .subnav-bar {
+      border-bottom: 1px solid var(--color-border);
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+    .subnav-bar::-webkit-scrollbar { display: none; }
+    .subnav-bar:empty,
+    .subnav-bar.hidden { display: none; }
+
+    .subnav-inner {
+      display: flex;
+      align-items: center;
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0 2rem;
+      gap: 0.1rem;
+      height: var(--subnav-height);
     }
 
-    .sidebar-nav .nav-section:first-of-type { margin-top: 0; }
-
-    .sidebar-nav .nav-external {
-      font-size: 15px;
-      font-weight: 600;
-      color: var(--color-text-faint);
+    .subnav-inner a {
+      font-family: var(--font-ui);
+      font-size: 13px;
+      color: var(--color-text-muted);
+      text-decoration: none;
+      padding: 0.25rem 0.6rem;
+      border-radius: 3px;
+      white-space: nowrap;
     }
+
+    .subnav-inner a:hover { color: var(--color-text); background: var(--color-bg-code); }
+    .subnav-inner a.active { color: var(--color-text); font-weight: 500; }
+
+    /* ── Content ── */
 
     .content {
-      flex: 1;
-      min-width: 0;
-      max-width: 600px;
-      align-self: flex-start;
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 2.5rem 2rem 4rem;
     }
 
     .content > *:first-child { margin-top: 0; }
@@ -151,57 +171,49 @@
     .content em { font-style: italic; }
     .content blockquote { border-left: 2px solid var(--color-border); padding-left: 1.25rem; margin: 1.5rem 0; color: var(--color-text-muted); font-style: italic; }
     .content .lead { font-style: italic; color: var(--color-text-muted); margin-bottom: 2rem; }
-    .content .footer { font-size: 12px; color: var(--color-text-muted); font-style: italic; }
+    .content .footer { font-size: 12px; color: var(--color-text-faint); font-style: italic; }
 
-    @media (max-width: 700px) {
-      .container { flex-direction: column; padding: 1.5rem; gap: 1.5rem; }
-      .sidebar { position: static; flex: none; flex-direction: row; flex-wrap: wrap; align-items: center; gap: 1rem; }
-      .sidebar-logo { width: 48px; height: 48px; margin-bottom: 0; }
-      .sidebar-title { margin-bottom: 0; flex: 1; }
-      .sidebar-nav { width: 100%; display: flex; flex-wrap: wrap; gap: 0.5rem 1.25rem; }
-      .sidebar-nav li { margin-bottom: 0; }
+    /* ── Mobile ── */
+
+    @media (max-width: 640px) {
+      .header-inner { padding: 0 1.25rem; gap: 1rem; }
+      .topnav { gap: 0; }
+      .topnav a { padding: 0.3rem 0.5rem; font-size: 13px; }
+      .topnav a.external { display: none; }
+      .subnav-inner { padding: 0 1.25rem; }
+      .content { padding: 2rem 1.25rem 3rem; }
       .content h1 { font-size: 24px; }
       .content h2 { font-size: 16px; }
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <aside class="sidebar">
-      <a href="../index.html" class="sidebar-logo-link">
-        <img src="../assets/logo.svg" alt="outheis" class="sidebar-logo">
-        <span class="sidebar-title">outheis</span>
+  <header class="header">
+    <div class="header-inner">
+      <a href="../index.html" class="logo-link">
+        <img src="../assets/logo.svg" alt="outheis" class="logo">
+        <span class="site-name">outheis</span>
       </a>
-      <nav>
-        <ul class="sidebar-nav">
-          <li><a href="../index.html">Home</a></li>
-          <li class="nav-section">Philosophy</li>
-          <li><a href="../philosophy/index.html">Why outheis</a></li>
-          <li class="nav-section">Design</li>
-          <li><a href="../design/index.html">Overview</a></li>
-          <li><a href="../design/01-why-os-principles.html">OS Principles</a></li>
-          <li><a href="../design/02-systems-survey.html">Systems Survey</a></li>
-          <li><a href="../design/03-architecture.html">Architecture</a></li>
-          <li><a href="../design/04-data-formats.html">Data Formats</a></li>
-          <li><a href="../design/05-related-work.html">Related Work</a></li>
-          <li><a href="../design/06-agent-prompts.html">Agent Prompts</a></li>
-          <li class="nav-section">Implementation</li>
-          <li><a href="../implementation/architecture.html">Current State</a></li>
-          <li><a href="../implementation/memory.html">Memory & Rules</a></li>
-          <li><a href="../implementation/agenda.html">Agenda</a></li>
-          <li><a href="../implementation/skills.html" class="active">Skills</a></li>
-          <li><a href="../implementation/migration.html">Migration</a></li>
-          <li><a href="../implementation/config.html">Config</a></li>
-          <li><a href="../implementation/guide.html">CLI Guide</a></li>
-          <li><a href="../implementation/webui.html">Web UI</a></li>
-          <li><a href="../implementation/alan.html">Code Agent</a></li>
-          <li class="nav-section"></li>
-          <li><a href="https://github.com/outheis-labs/outheis-minimal" class="nav-external">GitHub ↗</a></li>
-        </ul>
+      <nav class="topnav">
+        <a href="../philosophy/index.html">Motivation</a>
+        <a href="../design/index.html">Design</a>
+        <a href="../implementation/architecture.html" class="active">Implementation</a>
+        <a href="../implementation/guide.html">Usage</a>
+        <a href="https://github.com/outheis-labs/outheis-minimal" class="external">GitHub ↗</a>
       </nav>
-    </aside>
-    <main class="content">
-      <h1 id="skills">Skills</h1>
+    </div>
+  </header>
+  <div class="subnav-bar">
+    <div class="subnav-inner">
+      <a href="../implementation/architecture.html">Current State</a>
+      <a href="../implementation/memory.html">Memory & Rules</a>
+      <a href="../implementation/agenda.html">Agenda</a>
+      <a href="../implementation/skills.html" class="active">Skills</a>
+      <a href="../implementation/alan.html">Code Agent</a>
+    </div>
+  </div>
+  <main class="content">
+    <h1 id="skills">Skills</h1>
 <p><em>What agents know about how to act.</em></p>
 <h2 id="overview">Overview</h2>
 <p>Skills are an agent's internal capabilities — strategies, methods, heuristics for accomplishing tasks. Unlike rules (external instructions), skills represent the agent's own knowledge about <em>how</em> to do things.</p>
@@ -374,9 +386,24 @@ Skills enable behavior from inside.</p>
 <li>Skill now influences all future actions</li>
 </ol>
 <p>This creates a learning loop where corrections become permanent improvements.</p>
-      <hr>
-      <p class="footer">Open source under AGPL-3.0 · <a href="https://github.com/outheis-labs/outheis-minimal">Code on GitHub</a></p>
-    </main>
-  </div>
+<h3 id="distillation-triggers">Distillation Triggers</h3>
+<p>The Pattern Agent uses judgment, not fixed thresholds. But these conditions indicate a pattern is ready:</p>
+<ul>
+<li><strong>3+ similar observations</strong> → pattern detectable</li>
+<li><strong>Repeated corrections</strong> → principle extractable</li>
+<li><strong>Stable preference</strong> → ready for skill</li>
+</ul>
+<p>A strong preference stated clearly once may become a skill. Something mentioned casually many times may not. Explicit corrections always carry more weight than inferred patterns.</p>
+<h3 id="quality-criteria">Quality Criteria</h3>
+<p>A good skill:</p>
+<ul>
+<li><strong>Directs attention</strong> — tells the agent what to notice, not what to do</li>
+<li><strong>Generalizes</strong> — applies beyond the specific instance that prompted it</li>
+<li><strong>Replaces</strong> — makes one or more memory entries unnecessary</li>
+</ul>
+<p>If a skill doesn't replace anything, it may be too specific. If it doesn't direct attention, it may be a rule in disguise.</p>
+    <hr>
+    <p class="footer">Open source under AGPL-3.0 · <a href="https://github.com/outheis-labs/outheis-minimal">Code on GitHub</a></p>
+  </main>
 </body>
 </html>
