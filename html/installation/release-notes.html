@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Working with Tags · outheis</title>
+  <title>Release Notes · outheis</title>
   <link rel="icon" type="image/png" href="../favicon-96x96.png" sizes="96x96">
   <link rel="icon" type="image/svg+xml" href="../favicon.svg">
   <link rel="shortcut icon" href="../favicon.ico">
@@ -191,67 +191,117 @@
         <a href="../foundations/index.html">Foundations</a>
         <a href="../design/index.html">Design</a>
         <a href="../implementation/architecture.html">Implementation</a>
-        <a href="../installation/index.html">Installation</a>
+        <a href="../installation/index.html" class="active">Installation</a>
         <a href="https://github.com/outheis-labs/outheis-minimal" class="external">GitHub ↗</a>
       </nav>
     </div>
   </header>
-  
+  <div class="subnav-bar">
+    <div class="subnav-inner">
+      <a href="../installation/index.html">Installation</a>
+      <a href="../installation/release-notes.html" class="active">Release Notes</a>
+      <a href="../implementation/guide.html">Getting Started</a>
+      <a href="../implementation/config.html">Configuration</a>
+      <a href="../implementation/signal.html">Signal</a>
+      <a href="../implementation/migration.html">Migration</a>
+      <a href="../implementation/webui.html">Web UI</a>
+    </div>
+  </div>
   <main class="content">
-    <h1 id="working-with-tags">Working with Tags</h1>
-<p><em>How outheis learns your tag system and works within it.</em></p>
-<h2 id="the-principle">The principle</h2>
-<p>outheis does not come with a tag schema. It learns yours.</p>
-<p>When you start outheis for the first time, your vault tags are unknown to it. The data agent can scan and extract your tag taxonomy — but only when you ask. No automatic restructuring, no invented tags.</p>
-<p>The one exception: date tags. When outheis creates or annotates a note, it may add a <code>#date-YYYY-MM-DD</code> tag to anchor it in time. Everything else stays untouched.</p>
-<h2 id="starting-the-analysis">Starting the analysis</h2>
-<p>Once your vault is connected, run:</p>
-<pre><code>analyze tags
-</code></pre>
-<p>The data agent scans all Markdown files, extracts every tag it finds, and reflects the structure back to you. For example:</p>
-<pre><code>Found 847 tags across 134 files.
-
-Tag categories detected:
-  action-*   (required, waiting, idle, now, call, send)
-  status-*   (active, linger, completed, init)
-  rank-*     (urgent, high, medium, low)
-  unit-*     (work, self, family, ...)
-  topic-*    (12 values)
-  size-*     (S, M, L)
-  recurring
-
-No fixed schema assumed. Does this match how you use these tags?
-</code></pre>
-<p>You confirm or correct. From that point, outheis searches, plans, and reasons within your system.</p>
-<h2 id="what-outheis-does-with-tags">What outheis does with tags</h2>
-<p><strong>Daily planning</strong> — the agenda agent uses <code>#action-required</code>, <code>#action-now</code>, <code>#focus-today</code>, and date tags when building your daily view. Items tagged for today surface automatically.</p>
-<p><strong>Search</strong> — you can query by tag directly:</p>
-<pre><code>show everything tagged #unit-work and #action-waiting
-what's tagged #recurring this week?
-</code></pre>
-<p><strong>Shadow.md</strong> — the nightly vault scan uses your tags to identify time-relevant entries. Items with <code>#recurring</code>, <code>#date-*</code>, or action tags appear in the chronological index the agenda agent reads each morning.</p>
-<h2 id="tag-systems-vary">Tag systems vary</h2>
-<p>outheis works with whatever convention you use:</p>
-<pre><code>#todo #project #someday           ← flat
-#work/client/project              ← hierarchical with /
-#action-required #status-active   ← namespaced with -
-</code></pre>
-<p>The data agent maps the structure it finds. It does not rewrite your tags to fit a preferred format.</p>
-<h2 id="the-faceted-namespace-pattern">The faceted namespace pattern</h2>
-<p>One particularly effective convention uses a <code>category-value</code> namespace separated by hyphens. Each tag carries two pieces of information: what dimension it describes and what value it holds.</p>
-<pre><code>#action-required    what needs to happen
-#status-active      current state
-#rank-high          priority
-#unit-work          context
-#topic-design       subject matter
-#size-M             estimated effort
-#recurring          repeats
-</code></pre>
-<p>This makes any file queryable along multiple axes — without nested folders or formal metadata. A file tagged <code>#action-required #rank-urgent #unit-work</code> tells you immediately what it is, how urgent it is, and where it belongs.</p>
-<p>The temporal dimension of this pattern — how time-anchored tags interact with recurring structure — is explored in the <a href="https://github.com/outheis-labs/research-base/tree/main/temporalization-of-order">research-base</a>.</p>
-<h2 id="improvements-and-proposals">Improvements and proposals</h2>
-<p>Over time, the data agent may notice things: a category with only one value, two tags that always appear together, an inconsistency that a small convention change would resolve. When it does, it raises this directly in conversation — not silently, not automatically.</p>
-<p>You decide whether to adopt the suggestion. If yes, outheis helps you apply it. The tag system stays yours.</p>
+    <h1 id="release-notes">Release Notes</h1>
+<p><em>Private beta — April 2026.</em></p>
+<hr />
+<h2 id="what-works">What Works</h2>
+<table>
+<thead>
+<tr>
+<th>Component</th>
+<th>Status</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Dispatcher — microkernel, scheduler, lock manager</td>
+<td>✓</td>
+<td></td>
+</tr>
+<tr>
+<td>Relay (ou) — routing, memory integration</td>
+<td>✓</td>
+<td></td>
+</tr>
+<tr>
+<td>Data (zeno) — vault search, tag analysis</td>
+<td>✓</td>
+<td></td>
+</tr>
+<tr>
+<td>Agenda (cato) — Daily, Inbox, Exchange, Shadow</td>
+<td>✓</td>
+<td></td>
+</tr>
+<tr>
+<td>Pattern (rumi) — nightly memory extraction</td>
+<td>✓</td>
+<td></td>
+</tr>
+<tr>
+<td>Web UI — config, memory, scheduler, vault, tags, migration</td>
+<td>✓</td>
+<td></td>
+</tr>
+<tr>
+<td>Signal transport — receive, respond, voice transcription</td>
+<td>✓</td>
+<td></td>
+</tr>
+<tr>
+<td>Vault file browser — all file types, images, Obsidian wikilinks</td>
+<td>✓</td>
+<td></td>
+</tr>
+<tr>
+<td>Tags — scan, namespace grouping, rename, delete</td>
+<td>✓</td>
+<td></td>
+</tr>
+<tr>
+<td>Migration — Exchange.md approval workflow</td>
+<td>✓</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h2 id="what-doesnt">What Doesn't</h2>
+<table>
+<thead>
+<tr>
+<th>Component</th>
+<th>Status</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Action (hiro) — external tasks, email, calendar</td>
+<td>not implemented</td>
+<td>Framework present, no capabilities</td>
+</tr>
+<tr>
+<td>Code (alan) — codebase introspection</td>
+<td>dev only</td>
+<td>Disabled in production</td>
+</tr>
+</tbody>
+</table>
+<p><strong>hiro is present but empty.</strong> The agent starts and routes, but no external integrations exist — no email, no calendar, no shell execution. Enabling it in config.json has no practical effect yet.</p>
+<p><strong>alan is for development use only.</strong> It provides introspection into the outheis codebase itself. Not relevant for users.</p>
+<h2 id="known-gaps">Known Gaps</h2>
+<p><strong>Pattern agent requires history.</strong> rumi has nothing to extract on a fresh install. Memory builds over days, not immediately.</p>
+<p><strong>Tag scan is on demand.</strong> Tags are not indexed at startup. Run from Web UI (Vault → Tags → Scan) or say <code>analyze tags</code> in chat.</p>
+<p><strong>No mobile UI.</strong> Web UI is localhost-only. Use Signal transport for mobile access.</p>
+<p><strong>Session continuity is limited.</strong> Relay replays the last 20 messages on restart. Longer conversation context is lost between sessions.</p>
     <hr>
     <p class="footer">Open source under AGPL-3.0 · <a href="https://github.com/outheis-labs/outheis-minimal">Code on GitHub</a></p>
   </main>

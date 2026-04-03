@@ -62,22 +62,17 @@ NAV_SECTIONS = [
         ],
     },
     {
-        "label": "Workflows",
-        "url": "implementation/guide.html",
-        "match": "guide|config|migration|webui",
-        "items": [
-            {"label": "Getting Started", "url": "implementation/guide.html",      "match": "implementation/guide"},
-            {"label": "Configuration",   "url": "implementation/config.html",     "match": "implementation/config"},
-            {"label": "Migration",       "url": "implementation/migration.html",  "match": "implementation/migration"},
-            {"label": "Web UI",          "url": "implementation/webui.html",      "match": "implementation/webui"},
-        ],
-    },
-    {
         "label": "Installation",
         "url": "installation/index.html",
-        "match": "installation",
+        "match": "installation|guide|config|migration|webui|signal",
         "items": [
-            {"label": "Installation", "url": "installation/index.html", "match": "installation/index"},
+            {"label": "Installation",    "url": "installation/index.html",          "match": "installation/index"},
+            {"label": "Release Notes",   "url": "installation/release-notes.html",  "match": "release-notes"},
+            {"label": "Getting Started", "url": "implementation/guide.html",        "match": "implementation/guide"},
+            {"label": "Configuration",   "url": "implementation/config.html",       "match": "implementation/config"},
+            {"label": "Signal",          "url": "implementation/signal.html",       "match": "implementation/signal"},
+            {"label": "Migration",       "url": "implementation/migration.html",    "match": "implementation/migration"},
+            {"label": "Web UI",          "url": "implementation/webui.html",        "match": "implementation/webui"},
         ],
     },
 ]
