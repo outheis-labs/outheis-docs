@@ -18,10 +18,22 @@ Optional for messaging via Signal:
 
 ## Installation
 
+Modern pip enforces virtual environments. Create one first:
+
 ```bash
 git clone https://github.com/outheis-labs/outheis-minimal.git
 cd outheis-minimal
-pip install -e ".[dev]"
+python3 -m venv .venv
+source .venv/bin/activate   # Windows: .venv\Scripts\activate
+pip install -e .
+```
+
+The `outheis` command is only available while the venv is active. Add `source /path/to/outheis-minimal/.venv/bin/activate` to your shell profile if you want it always available.
+
+For voice transcription via Signal, install the optional dependency:
+
+```bash
+pip install -e ".[signal]"
 ```
 
 ## Setup
@@ -83,9 +95,19 @@ It provides:
 - Live message feed (conversations with agents)
 - Memory, Rules, and Skills viewer and editor
 - Scheduler status and manual task triggers
-- Token usage overview
+- Vault file browser
 
 The Web UI port and host are configurable in `config.json` under `"webui": {"host": "127.0.0.1", "port": 8080}`.
+
+### Remote access via SSH
+
+The Web UI binds to localhost only. To access it from another machine, use SSH port forwarding:
+
+```bash
+ssh -L 8080:localhost:8080 user@your-server
+```
+
+Then open `http://localhost:8080` in your local browser. The tunnel stays open as long as the SSH connection is active.
 
 ## Vault Setup
 

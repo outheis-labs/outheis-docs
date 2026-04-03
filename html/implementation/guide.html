@@ -250,9 +250,16 @@
 - A registered Signal account for the bot phone number
 - <code>signal-cli</code> installed and configured</p>
 <h2 id="installation">Installation</h2>
+<p>Modern pip enforces virtual environments. Create one first:</p>
 <pre><code class="language-bash">git clone https://github.com/outheis-labs/outheis-minimal.git
 cd outheis-minimal
-pip install -e &quot;.[dev]&quot;
+python3 -m venv .venv
+source .venv/bin/activate   # Windows: .venv\Scripts\activate
+pip install -e .
+</code></pre>
+<p>The <code>outheis</code> command is only available while the venv is active. Add <code>source /path/to/outheis-minimal/.venv/bin/activate</code> to your shell profile if you want it always available.</p>
+<p>For voice transcription via Signal, install the optional dependency:</p>
+<pre><code class="language-bash">pip install -e &quot;.[signal]&quot;
 </code></pre>
 <h2 id="setup">Setup</h2>
 <pre><code class="language-bash">outheis init
@@ -296,8 +303,13 @@ outheis stop         # Stop daemon
 - Live message feed (conversations with agents)
 - Memory, Rules, and Skills viewer and editor
 - Scheduler status and manual task triggers
-- Token usage overview</p>
+- Vault file browser</p>
 <p>The Web UI port and host are configurable in <code>config.json</code> under <code>"webui": {"host": "127.0.0.1", "port": 8080}</code>.</p>
+<h3 id="remote-access-via-ssh">Remote access via SSH</h3>
+<p>The Web UI binds to localhost only. To access it from another machine, use SSH port forwarding:</p>
+<pre><code class="language-bash">ssh -L 8080:localhost:8080 user@your-server
+</code></pre>
+<p>Then open <code>http://localhost:8080</code> in your local browser. The tunnel stays open as long as the SSH connection is active.</p>
 <h2 id="vault-setup">Vault Setup</h2>
 <p>outheis treats your vault as a read-only knowledge source. Structure is flexible — any Markdown files work. The recommended Agenda layout:</p>
 <pre><code>vault/
