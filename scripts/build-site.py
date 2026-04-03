@@ -62,14 +62,6 @@ NAV_SECTIONS = [
         ],
     },
     {
-        "label": "Workflows",
-        "url": "workflows/index.html",
-        "match": "^workflows/",
-        "items": [
-            {"label": "Overview", "url": "workflows/index.html", "match": "workflows/index"},
-        ],
-    },
-    {
         "label": "Installation",
         "url": "installation/release-notes.html",
         "match": "installation|guide|config|migration|webui|signal",
@@ -80,6 +72,14 @@ NAV_SECTIONS = [
             {"label": "Signal",          "url": "implementation/signal.html",       "match": "implementation/signal"},
             {"label": "Migration",       "url": "implementation/migration.html",    "match": "implementation/migration"},
             {"label": "Web UI",          "url": "implementation/webui.html",        "match": "implementation/webui"},
+        ],
+    },
+    {
+        "label": "Workflows",
+        "url": "workflows/index.html",
+        "match": "^workflows/",
+        "items": [
+            {"label": "Overview", "url": "workflows/index.html", "match": "workflows/index"},
         ],
     },
 ]
