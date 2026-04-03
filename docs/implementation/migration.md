@@ -23,8 +23,7 @@ Place files to migrate in your vault:
 vault/Migration/
 ├── claude-export.json    # Your data
 ├── preferences.md        # Your rules/preferences
-├── data.md               # Rules for Data agent
-└── Migration.md          # ← Created by outheis
+└── data.md               # Rules for Data agent
 ```
 
 This directory is **temporary** — create it when you have something to migrate, delete it when done.
@@ -35,7 +34,7 @@ All migration happens through natural conversation:
 
 | You say | What happens |
 |---------|--------------|
-| "memory migrate" | Process Migration/ files, create Migration.md |
+| "memory migrate" | Parse Migration/ files, write candidates to Exchange.md |
 | "migriere memory" | Same, in German |
 | "memory traits" | Show current memory and rules |
 | "zeige traits" | Same, in German |
@@ -99,6 +98,8 @@ Sections map to memory types or rules:
 - `## user`, `## feedback`, `## context` → Memory
 - `## rule:agenda`, `## rule:data`, `## rule:relay` → Rules files
 
+Any markdown or JSON structure is acceptable — outheis uses LLM parsing and does not require a specific schema.
+
 ## Workflow
 
 ### 1. Create Migration Directory
@@ -116,91 +117,79 @@ Copy your data:
 
 ### 3. Say "memory migrate"
 
-In chat with outheis:
+outheis parses all files in `vault/Migration/`, deduplicates candidates against existing memory via LLM, and writes consolidated items as a block into `vault/Agenda/Exchange.md`:
 
 ```
-Du: memory migrate
-Ou: Migration verarbeitet:
-    - 3 Dateien geparst
-    - 12 Einträge warten auf Bestätigung
-    
-    Prüfe vault/Migration/Migration.md
+<!-- outheis:migration:start -->
+## Migration-Vorschläge
+
+*2026-04-03 14:30 — Bitte prüfen und markieren:*
+*`[x]` übernehmen · `[-]` ablehnen · `[ ]` offen lassen*
+*Anschließend: `memory migrate` erneut ausführen.*
+
+- [ ] Works as Director Innovation Lab [user]
+- [ ] Prefers short, direct answers [feedback]
+- [ ] Respond in German [rule:relay]
+
+<!-- outheis:migration:end -->
 ```
 
-### 4. Review Migration.md
+Duplicates are always expected — the LLM deduplication step handles them. Only new or distinct items appear in the block.
 
-outheis creates `Migration.md`:
+### 4. Review Exchange.md
 
-```markdown
-# Migration
+Open `vault/Agenda/Exchange.md` — the same file you already use for async communication with outheis. The migration block appears at the top or inline, clearly delimited.
 
-*Zuletzt aktualisiert: 2026-03-30 14:30*
+Mark each item:
 
-Markiere Einträge:
-- `[x]` → übernehmen
-- `[-]` → ablehnen
-- `[ ]` → noch offen
-
----
-
-## Offen
-
-- [ ] User arbeitet bei senswork [user]
-- [ ] Antworte knapp und direkt [feedback]
-- [ ] MAX 10 Items in Daily.md [rule:agenda]
-- [ ] User ist 35 Jahre alt [user]
-
----
-
-## Statistik
-
-- Übernommen: 0
-- Abgelehnt: 0
+```
+- [x] Works as Director Innovation Lab [user]
+- [x] Prefers short, direct answers [feedback]
+- [-] Respond in German [rule:relay]
+- [ ] Lebt in München [user]
 ```
 
-Edit the file — mark entries:
+- `[x]` — apply to memory/rules
+- `[-]` — discard
+- `[ ]` — leave open for next round
 
-```markdown
-- [x] User arbeitet bei senswork [user]
-- [x] Antworte knapp und direkt [feedback]
-- [x] MAX 10 Items in Daily.md [rule:agenda]
-- [-] User ist 35 Jahre alt [user]
-```
+Cato (agenda agent) ignores the migration block when processing Exchange.md.
 
 ### 5. Say "memory migrate" Again
 
 ```
 Du: memory migrate
 Ou: Migration verarbeitet:
-    - 3 übernommen
+    - 2 übernommen
     - 1 abgelehnt
-    - 0 noch offen
+    - 1 noch offen
 ```
 
-Adopted entries are now in memory/rules. Rejected entries are discarded.
+- `[x]` items are written to memory and rules
+- `[-]` items are discarded
+- `[ ]` items remain in the block for the next round
+- The block is removed from Exchange.md once all items are resolved (or on your request)
 
-### 6. Delete Migration Directory
+### 6. Processed Source Files
 
-When done:
-
-```bash
-rm -rf ~/Documents/Vault/Migration
-```
-
-outheis doesn't mind — the directory is purely transient.
-
-## Processed Files
-
-After parsing, files get an `x-` prefix:
+After parsing, source files in `vault/Migration/` get an `x-` prefix:
 
 ```
 vault/Migration/
 ├── x-claude-export.json    # Processed
 ├── x-preferences.md        # Processed
-├── Migration.md            # Still active
 ```
 
-This prevents re-processing. Delete the `x-` files yourself when ready.
+This prevents re-processing. Delete the `x-` files yourself when ready, or use the WebUI Migration view.
+
+## WebUI Migration View
+
+The Migration view in the Web UI provides:
+- Full list of files in `vault/Migration/`
+- View and edit each file directly
+- Drop zone for uploading new migration files
+
+Use it to add files without leaving the browser, or to inspect what has already been processed.
 
 ## Direct Rule Writing
 
@@ -232,11 +221,11 @@ Ou: Erkannte Eigenschaften:
     ## Identität
       • User arbeitet bei senswork
       • User lebt in München
-    
+
     ## Präferenzen
       • Antworte knapp und direkt
       • Bevorzuge deutsche Sprache
-    
+
     ## Etablierte Regeln
       • agenda: 2 Regeln
       • relay: 1 Regel

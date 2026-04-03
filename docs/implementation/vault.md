@@ -59,7 +59,15 @@ The temporal dimension of this pattern — how time-anchored tags interact with 
 
 ### Date tags
 
-Date tags (`#date-2026-03-24`) are the one category outheis may generate itself. When creating notes or capturing information, the data agent adds a date tag to anchor the entry in time. All other tags are user-owned.
+Date tags (`#date-2026-03-24`) are one category outheis may generate itself. When creating notes or capturing information, the data agent adds a date tag to anchor the entry in time. All other tags are user-owned.
+
+### Internal tags
+
+outheis uses the `#outheis-` namespace for its own internal state tracking. These tags are never shown to the user in the WebUI and serve agent operations only — flagging processed items, archiving candidates, state markers.
+
+Examples: `#outheis-state-done`, `#outheis-state-pending`, `#outheis-archive`
+
+`#outheis-*` tags are always in English. They are created sparingly and only when they add genuine value to a future agent operation.
 
 ### Tag analysis
 

@@ -30,6 +30,7 @@ The Web UI provides a browser-based interface for configuring and monitoring out
 │  Agenda     │                                               │
 │  Codebase   │                                               │
 │  Migration  │                                               │
+│  Tags       │                                               │
 └─────────────┴───────────────────────────────────────────────┘
 ```
 
@@ -69,7 +70,19 @@ Opens at `http://localhost:8080`. The server watches `~/.outheis/human/` for cha
 |------|---------|
 | **Agenda** | View/edit files in `vault/Agenda/` (Daily.md, Inbox.md, Exchange.md) |
 | **Codebase** | View files in `vault/Codebase/` (alan's proposals) |
-| **Migration** | View migration files, create Migration directory |
+| **Migration** | Upload migration files (drop zone), view and edit files, manage Migration/ directory |
+| **Tags** | Scan vault for #tags, list by namespace group, rename or delete tags across all files |
+
+## Tags View
+
+The Tags view scans the vault for all `#tags` and presents them grouped by namespace prefix:
+
+- **Scan button** — queues a `tag_scan` dispatcher task (same async UX as the Scheduler)
+- Results are cached; the scan button re-runs on demand
+- Tags are grouped by namespace prefix (`#action-*`, `#date-*`, `#rank-*`, etc.), all collapsed by default
+- Each group shows tag count and total occurrences across the vault
+- Per-tag: occurrence count, file count, rename input field, Delete button
+- `#outheis-*` tags are hidden (internal system use only)
 
 ## Configuration Editor
 
@@ -190,9 +203,18 @@ The server exposes REST endpoints:
 - `GET /api/{type}/{filename}` — Read file content
 - `PUT /api/{type}/{filename}` — Write file content
 
+### Tags
+- `GET /api/tags` — Tag scan results (cached, filtered, sorted lexically)
+- `POST /api/tags/scan` — Queue tag_scan dispatcher task, returns conversation_id
+- `POST /api/tags/rename` — Rename tag across all vault files
+- `POST /api/tags/delete` — Remove tag from all vault files
+
 ### Migration
-- `GET /api/migration` — Check if Migration directory exists, list files
+- `GET /api/migration` — List files in vault/Migration/
+- `GET /api/migration/{filename}` — Read file content
+- `PUT /api/migration/{filename}` — Write file content
 - `POST /api/migration/create` — Create vault/Migration directory
+- `POST /api/migration/upload` — Upload file via multipart form
 
 ### WebSocket
 - `WS /ws` — Live message stream

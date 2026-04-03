@@ -267,6 +267,7 @@ The dispatcher runs periodic tasks via built-in scheduler. All times configurabl
 | `agenda_review` | xx:55 (04-23) | Parse Agenda files (conditional on changes) |
 | `action_tasks` | every 15 min | Run due scheduled tasks |
 | `session_summary` | every 6 hours | Extract session insights |
+| `tag_scan` | on demand | Scan vault for #tags, update cache — triggered from WebUI |
 
 **Resource efficiency:** Agenda review checks file hashes before processing. If nothing changed, no LLM call is made. Morning (04:55) and evening (23:55) runs are unconditional to ensure day boundaries are handled.
 
