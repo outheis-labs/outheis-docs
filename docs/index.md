@@ -22,10 +22,12 @@ Five agents coordinate through messages. Your knowledge stays in a local vault. 
 
 ## Documentation
 
+**[Installation](installation/)** — Private beta release. Requirements, setup, first steps, known gaps.
+
 **[Foundations](foundations/)** — Why sovereignty matters. The problem with captured cognition.
 
 **[Design](design/)** — OS principles applied to agents. Architecture specification, data formats, agent prompts.
 
-**[Implementation](implementation/)** — Current state. How to install, configure, and use outheis.
+**[Implementation](implementation/)** — Current state. Architecture, agents, configuration, vault, tags, migration.
 
 **[Workflows](workflows/)** — Practical guides. How to work with outheis day to day.
