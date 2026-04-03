@@ -136,40 +136,6 @@ vault/
 
 Create the `Agenda/` directory and empty files. cato generates `Daily.md` on first run.
 
-## Signal Setup (optional)
-
-To receive and send messages via Signal:
-
-1. Register a dedicated phone number with Signal
-2. Install and configure `signal-cli` for that number
-3. Add to `config.json`:
-
-```json
-{
-  "signal": {
-    "enabled": true,
-    "bot_name": "ou",
-    "bot_phone": "+49...",
-    "allowed": []
-  }
-}
-```
-
-Set `allowed` to an empty array to allow all contacts, or list specific numbers: `["+49..."]`.
-
-Edit `~/.outheis/human/config.json` for the full config:
-
-```json
-{
-  "user": {
-    "name": "your-name",
-    "language": "en",
-    "timezone": "Europe/Berlin",
-    "vault": ["~/Documents/Vault"]
-  }
-}
-```
-
 ## CLI Commands
 
 ### Daemon Control

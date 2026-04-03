@@ -136,27 +136,6 @@ vault/
 
 Erstelle das `Agenda/`-Verzeichnis und leere Dateien. cato generiert `Daily.md` beim ersten Lauf.
 
-## Signal-Einrichtung (optional)
-
-Um Nachrichten über Signal zu empfangen und zu senden:
-
-1. Eine dedizierte Telefonnummer bei Signal registrieren
-2. `signal-cli` für diese Nummer installieren und konfigurieren
-3. Zu `config.json` hinzufügen:
-
-```json
-{
-  "signal": {
-    "enabled": true,
-    "bot_name": "ou",
-    "bot_phone": "+49...",
-    "allowed": []
-  }
-}
-```
-
-Setze `allowed` auf ein leeres Array, um alle Kontakte zu erlauben, oder liste spezifische Nummern auf: `["+49..."]`.
-
 ## CLI-Befehle
 
 ### Daemon-Steuerung
