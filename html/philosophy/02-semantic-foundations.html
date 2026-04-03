@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Semantic Foundations · outheis</title>
+  <link rel="icon" type="image/png" href="../favicon-96x96.png" sizes="96x96">
+  <link rel="icon" type="image/svg+xml" href="../favicon.svg">
+  <link rel="shortcut icon" href="../favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="../apple-touch-icon.png">
+  <link rel="manifest" href="../site.webmanifest">
+  <link rel="preconnect" href="https://rsms.me/">
+  <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --font-body: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-ui: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-mono: SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      --color-text: #1a1a1a;
+      --color-text-muted: #666;
+      --color-text-faint: #999;
+      --color-border: #e0e0e0;
+      --color-bg-code: #f5f5f5;
+      --header-height: 52px;
+      --subnav-height: 40px;
+    }
+
+    @supports (font-variation-settings: normal) {
+      :root { --font-body: "Inter var", sans-serif; --font-ui: "Inter var", sans-serif; }
+    }
+
+    html, body {
+      width: 100%;
+      min-height: 100vh;
+      background: #fff;
+      font-family: var(--font-body);
+      font-size: 15px;
+      line-height: 1.6;
+      color: var(--color-text);
+    }
+
+    /* ── Header ── */
+
+    .header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: #fff;
+      border-bottom: 1px solid var(--color-border);
+    }
+
+    .header-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0 2rem;
+      height: var(--header-height);
+      gap: 2rem;
+    }
+
+    .logo-link {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      text-decoration: none;
+      flex-shrink: 0;
+    }
+
+    .logo {
+      width: 28px;
+      height: 28px;
+    }
+
+    .site-name {
+      font-family: var(--font-ui);
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--color-text);
+      letter-spacing: 0.01em;
+    }
+
+    .topnav {
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
+    }
+
+    .topnav a {
+      font-family: var(--font-ui);
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--color-text-muted);
+      text-decoration: none;
+      padding: 0.3rem 0.65rem;
+      border-radius: 4px;
+      white-space: nowrap;
+    }
+
+    .topnav a:hover { color: var(--color-text); background: var(--color-bg-code); }
+    .topnav a.active { color: var(--color-text); font-weight: 600; }
+    .topnav a.external { color: var(--color-text-faint); }
+
+    /* ── Sub-nav ── */
+
+    .subnav-bar {
+      border-bottom: 1px solid var(--color-border);
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+    .subnav-bar::-webkit-scrollbar { display: none; }
+    .subnav-bar:empty,
+    .subnav-bar.hidden { display: none; }
+
+    .subnav-inner {
+      display: flex;
+      align-items: center;
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0 2rem;
+      gap: 0.1rem;
+      height: var(--subnav-height);
+    }
+
+    .subnav-inner a {
+      font-family: var(--font-ui);
+      font-size: 13px;
+      color: var(--color-text-muted);
+      text-decoration: none;
+      padding: 0.25rem 0.6rem;
+      border-radius: 3px;
+      white-space: nowrap;
+    }
+
+    .subnav-inner a:hover { color: var(--color-text); background: var(--color-bg-code); }
+    .subnav-inner a.active { color: var(--color-text); font-weight: 500; }
+
+    /* ── Content ── */
+
+    .content {
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 2.5rem 2rem 4rem;
+    }
+
+    .content > *:first-child { margin-top: 0; }
+
+    .content h1 { font-family: var(--font-ui); font-size: 28px; font-weight: 600; margin-bottom: 0.5rem; letter-spacing: -0.02em; }
+    .content h2 { font-family: var(--font-ui); font-size: 18px; font-weight: 600; margin-top: 2rem; margin-bottom: 1.25rem; }
+    .content h3 { font-family: var(--font-ui); font-size: 15px; font-weight: 600; margin-top: 1.5rem; margin-bottom: 0.75rem; }
+    .content p { margin-bottom: 1rem; }
+    .content a { color: var(--color-text-muted); }
+    .content a:hover { color: var(--color-text); }
+    .content ul, .content ol { margin-bottom: 1rem; padding-left: 1.5rem; }
+    .content li { margin-bottom: 0.4rem; }
+
+    .content table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; font-family: var(--font-ui); font-size: 13px; }
+    .content th, .content td { text-align: left; padding: 0.5rem 0.75rem; border-bottom: 1px solid var(--color-border); }
+    .content th { font-weight: 500; font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--color-text-muted); }
+
+    .content code { font-family: var(--font-mono); font-size: 14px; background: var(--color-bg-code); padding: 0.15em 0.4em; border-radius: 3px; }
+    .content pre { background: var(--color-bg-code); padding: 1rem 1.25rem; overflow-x: auto; margin: 1.5rem 0; font-size: 13px; border-radius: 4px; line-height: 1.5; }
+    .content pre code { background: none; padding: 0; border-radius: 0; }
+
+    .content hr { border: none; border-top: 1px solid var(--color-border); margin: 1.5rem 0; }
+    .content strong { font-weight: 500; }
+    .content em { font-style: italic; }
+    .content blockquote { border-left: 2px solid var(--color-border); padding-left: 1.25rem; margin: 1.5rem 0; color: var(--color-text-muted); font-style: italic; }
+    .content .lead { font-style: italic; color: var(--color-text-muted); margin-bottom: 2rem; }
+    .content .footer { font-size: 12px; color: var(--color-text-faint); font-style: italic; }
+
+    /* ── Mobile ── */
+
+    @media (max-width: 640px) {
+      .header-inner { padding: 0 1.25rem; gap: 1rem; }
+      .topnav { gap: 0; }
+      .topnav a { padding: 0.3rem 0.5rem; font-size: 13px; }
+      .topnav a.external { display: none; }
+      .subnav-inner { padding: 0 1.25rem; }
+      .content { padding: 2rem 1.25rem 3rem; }
+      .content h1 { font-size: 24px; }
+      .content h2 { font-size: 16px; }
+    }
+  </style>
+</head>
+<body>
+  <header class="header">
+    <div class="header-inner">
+      <a href="../index.html" class="logo-link">
+        <img src="../assets/logo.svg" alt="outheis" class="logo">
+        <span class="site-name">outheis</span>
+      </a>
+      <nav class="topnav">
+        <a href="../philosophy/index.html" class="active">Foundations</a>
+        <a href="../design/index.html">Design</a>
+        <a href="../implementation/architecture.html">Implementation</a>
+        <a href="../implementation/guide.html">Workflows</a>
+        <a href="https://github.com/outheis-labs/outheis-minimal" class="external">GitHub ↗</a>
+      </nav>
+    </div>
+  </header>
+  <div class="subnav-bar">
+    <div class="subnav-inner">
+      <a href="../philosophy/index.html">Why outheis</a>
+      <a href="../philosophy/02-semantic-foundations.html" class="active">Semantic Foundations</a>
+    </div>
+  </div>
+  <main class="content">
+    <h1 id="semantic-foundations">Semantic Foundations</h1>
+<p><em>Why information is not data — and why that matters for a personal AI system.</em></p>
+<hr />
+<h2 id="the-gap-shannon-left-open">The Gap Shannon Left Open</h2>
+<p>In 1948, Claude Shannon published <em>A Mathematical Theory of Communication</em> — one of the most consequential papers in the history of science. He showed how to measure information as a statistical quantity: the more unexpected a message, the more information it carries. His entropy formula works with perfect precision for the engineering problems he cared about — noise, compression, channel capacity.</p>
+<p>Shannon was explicit about what he was not doing. "The semantic aspects of communication," he wrote, "are irrelevant to the engineering problem." He bracketed meaning deliberately. His theory tells you how to transmit data reliably. It says nothing about whether any of it matters, what it refers to, or whether it is true.</p>
+<p>This is not a flaw. It is a boundary. The flaw is treating it as a complete theory of information.</p>
+<p>Every AI system built on statistical pattern matching — including large language models — inherits this boundary. The underlying mathematics is Shannon's: predict the next token, minimize prediction error, maximize likelihood. Meaning is not in the model; it is projected by the reader.</p>
+<hr />
+<h2 id="the-question-of-meaning">The Question of Meaning</h2>
+<p>The decades following Shannon produced several attempts to extend information theory into the semantic domain.</p>
+<p><strong>Carnap and Bar-Hillel</strong> (1952) made the first formal attempt. Working within logic, they defined semantic information as the set of possible states of affairs a sentence rules out — the more it excludes, the more it says. This was elegant, but it exposed an immediate paradox: a contradiction rules out <em>everything</em>, and should therefore carry maximum information. Yet contradictions are false, and false statements seem like poor candidates for maximum information content. Their theory gave no principled way to exclude them.</p>
+<p><strong>Fred Dretske</strong> (1981) approached the problem differently. In <em>Knowledge and the Flow of Information</em>, he defined information in terms of causal dependency: a signal carries information about a source when there is a lawful, reliable connection between them. Smoke carries information about fire not because of any convention but because of the physical relationship between them. On this account, information exists in the world — it is not assigned by convention. And knowledge is what happens when such a signal causes a belief: to <em>know</em> that something is the case is to hold a belief that was produced by a genuine information-carrying signal.</p>
+<p>This matters for any system that claims to manage knowledge. The question is not just whether data is stored, but whether stored representations are causally connected to anything real.</p>
+<p><strong>Gregory Bateson</strong> (1972) offered what may be the most compressed definition: information is "a difference that makes a difference." Two things are compressed into one phrase: a difference in the world, and a difference in the observer. Data that produces no change in the system receiving it is not information in any meaningful sense. Relevance is not a property added to information after the fact — it is part of what makes something information at all.</p>
+<p><strong>Luciano Floridi</strong> (2004, 2011) brought these threads together in a formal theory. His definition: semantic information is <em>well-formed, meaningful, and truthful</em> data. The third condition — truthfulness — is the most contested and the most important. Floridi argues that false information is a contradiction in terms: a signal that misrepresents the world is not carrying information about the world; it is carrying noise that happens to look like information. He calls this the veridicality thesis.</p>
+<p>The debate continues. Scarantino and Piccinini (2010) argue that information can be false — that the concept requires no truth condition. The disagreement is not merely academic: it determines what obligations a knowledge management system has toward accuracy.</p>
+<hr />
+<h2 id="what-this-means-in-practice">What This Means in Practice</h2>
+<p>These distinctions are not abstract. They show up directly in how a personal knowledge system should behave.</p>
+<p><strong>The data/information gap</strong> is the difference between a system that logs everything and one that understands what is worth keeping. A conversation that occurred is a fact — a datum. That you consistently prefer morning appointments is <em>information</em> in Dretske's sense: it is a reliable pattern causally connected to your actual behavior. A system that only logs cannot distinguish them.</p>
+<p><strong>Bateson's relevance criterion</strong> is the design principle behind distillation. The question is not "what should we store?" but "what produces a difference in future behavior?" Skills replace long explanations not because they are shorter, but because they make a difference — they change how the agent acts. An instruction that is never activated is not information; it is stored text.</p>
+<p><strong>Floridi's veridicality principle</strong> explains why the pattern agent discards rather than accumulates. A memory system that tolerates false or outdated entries does not degrade gracefully — it becomes unreliable in proportion to the noise it contains. The question "is this still true?" is not a nicety; it is constitutive of whether the entry is information at all.</p>
+<p><strong>The DIKW distinction</strong> — data, information, knowledge, wisdom (Ackoff, 1989) — explains the three-tier architecture. Rules are behavioral dispositions: know-that. Skills are procedural: know-how. Memory is contextual: know-when. These are not technical categories invented for implementation convenience. They correspond to epistemically distinct kinds of things a system can hold.</p>
+<hr />
+<h2 id="a-second-frame-operating-system-concepts">A Second Frame: Operating System Concepts</h2>
+<p>Alongside information theory, a different field developed complementary solutions to related problems — not philosophically, but engineeringly.</p>
+<p>Operating systems manage resources under scarcity: limited memory, limited processor time, multiple competing processes. The solutions they developed — demand paging, process isolation, scheduling, virtual memory — are answers to the question of how to make a system behave coherently when it cannot hold everything at once.</p>
+<p>The parallel to a personal AI system is direct. An agent with a context window is a process with a working memory. Skills loaded on demand are pages swapped in from disk. The scheduler that runs the pattern agent at 04:00 is an OS scheduler. The three-tier memory architecture — rules, skills, episodic memory — maps onto registers, RAM, and storage.</p>
+<p>This is not metaphor for its own sake. It is a set of tested abstractions for resource-constrained cognition. The operating system solved these problems under much stricter constraints than an LLM context window imposes. The solutions are worth borrowing.</p>
+<hr />
+<h2 id="further-reading">Further Reading</h2>
+<p><strong>On semantic information theory:</strong></p>
+<ul>
+<li>Floridi, L. <em>The Philosophy of Information</em>. Oxford University Press, 2011. — The most comprehensive treatment; Chapters 4–7 cover the veridicality thesis and semantic theory directly.</li>
+<li>Dretske, F. <em>Knowledge and the Flow of Information</em>. MIT Press, 1981. — The causal-nomological account; essential for understanding what it means to <em>know</em> something.</li>
+<li>Shannon, C. E. &amp; Weaver, W. <em>The Mathematical Theory of Communication</em>. University of Illinois Press, 1949. — Read Weaver's introduction for the explicit acknowledgment of what the theory leaves open.</li>
+<li>Bateson, G. "Form, Substance and Difference." In <em>Steps to an Ecology of Mind</em>. Chandler, 1972. — The "difference that makes a difference" essay; short and direct.</li>
+</ul>
+<p><strong>On knowledge architecture:</strong></p>
+<ul>
+<li>Ackoff, R. L. "From Data to Wisdom." <em>Journal of Applied Systems Analysis</em>, 16, 1989. — The foundational DIKW paper; four pages, immediately readable.</li>
+<li>Polanyi, M. <em>The Tacit Dimension</em>. Doubleday, 1966. — The limit case: what no information system can fully capture.</li>
+</ul>
+    <hr>
+    <p class="footer">Open source under AGPL-3.0 · <a href="https://github.com/outheis-labs/outheis-minimal">Code on GitHub</a></p>
+  </main>
+</body>
+</html>

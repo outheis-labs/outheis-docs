@@ -25,11 +25,12 @@ SITE_TITLE = "outheis"
 # 'match' is a regex tested against the current page's relative path.
 NAV_SECTIONS = [
     {
-        "label": "Motivation",
+        "label": "Foundations",
         "url": "philosophy/index.html",
         "match": "philosophy",
         "items": [
-            {"label": "Why outheis", "url": "philosophy/index.html", "match": "philosophy"},
+            {"label": "Why outheis",          "url": "philosophy/index.html",                "match": "philosophy/index"},
+            {"label": "Semantic Foundations", "url": "philosophy/02-semantic-foundations.html", "match": "02-semantic"},
         ],
     },
     {
