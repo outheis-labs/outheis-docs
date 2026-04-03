@@ -8,7 +8,7 @@ title: outheis
 
 ---
 
-A multi-agent AI assistant built on proven operating system principles.
+A personal AI assistant that treats your knowledge as yours — based on proven principles from a variety of disciplines that make complex systems reliable.
 
 ---
 
