@@ -225,8 +225,15 @@ def copy_assets():
     for f in assets_src.iterdir():
         if f.name in ("logo.svg", "logo.png"):
             continue
-        shutil.copy(f, DOCS / f.name)
-        print(f"  assets/{f.name} → {f.name}")
+        if f.is_dir():
+            dst_dir = assets_dst / f.name
+            if dst_dir.exists():
+                shutil.rmtree(dst_dir)
+            shutil.copytree(f, dst_dir)
+            print(f"  assets/{f.name}/ → assets/{f.name}/")
+        else:
+            shutil.copy(f, DOCS / f.name)
+            print(f"  assets/{f.name} → {f.name}")
 
 
 def main():
