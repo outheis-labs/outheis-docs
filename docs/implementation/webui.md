@@ -68,10 +68,24 @@ Opens at `http://localhost:8080`. The server watches `~/.outheis/human/` for cha
 
 | View | Purpose |
 |------|---------|
+| **Files** | Full vault browser — all configured vaults, directory tree, edit and delete |
 | **Agenda** | View/edit files in `vault/Agenda/` (Daily.md, Inbox.md, Exchange.md) |
 | **Codebase** | View files in `vault/Codebase/` (alan's proposals) |
 | **Migration** | Upload migration files (drop zone), view and edit files, manage Migration/ directory |
 | **Tags** | Scan vault for #tags, list by namespace group, rename or delete tags across all files |
+
+## Files View
+
+Full browser for all configured vault directories:
+
+- **Directory tree** on the left — all vaults as roots, directories collapsed by default, click to expand
+- **File viewer/editor** on the right — same rendered/source toggle as other file views
+- **All file types** visible in the tree:
+  - Text files (`.md`, `.txt`, `.json`, `.py`, …) — editable, Save button
+  - Image files (`.png`, `.jpg`, `.svg`, …) — rendered inline, Download button
+  - Binary files (`.pdf`, `.docx`, …) — Download button
+- **Obsidian wikilinks** — `![[image.jpg]]` and `![[image.jpg|WxH]]` are resolved and rendered as inline images
+- **Delete** — confirmation dialog, removes file from vault
 
 ## Tags View
 
@@ -208,6 +222,13 @@ The server exposes REST endpoints:
 - `POST /api/tags/scan` — Queue tag_scan dispatcher task, returns conversation_id
 - `POST /api/tags/rename` — Rename tag across all vault files
 - `POST /api/tags/delete` — Remove tag from all vault files
+
+### Vault Files
+- `GET /api/vault/tree` — Recursive tree of all configured vaults
+- `GET /api/vault/file?path=` — Read file (text/image/binary detection, wikilinks resolved for .md)
+- `PUT /api/vault/file` — Write file content
+- `DELETE /api/vault/file?path=` — Delete file
+- `GET /api/vault/raw?path=` — Serve raw file (used for inline images and downloads)
 
 ### Migration
 - `GET /api/migration` — List files in vault/Migration/

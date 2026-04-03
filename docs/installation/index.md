@@ -132,7 +132,7 @@ Starts automatically with the dispatcher. Provides:
 - Live message feed (WebSocket)
 - Memory, Skills, Rules editors
 - Scheduler — manage and trigger background tasks
-- Vault: Agenda files, Tags, Migration
+- Vault: Files (full browser), Agenda, Tags, Migration
 
 ---
 
@@ -190,6 +190,17 @@ Register a dedicated phone number with Signal, install `signal-cli`, then add to
 
 `allowed` is a whitelist. Empty array permits all contacts.
 
+**First contact — trust your identity key:**
+
+On first use, signal-cli may not trust the sender's identity key. If messages are received but no response arrives, run:
+
+```bash
+signal-cli -a <bot_phone> listIdentities
+signal-cli -a <bot_phone> trust -a <uuid>
+```
+
+outheis learns and saves UUIDs automatically after the first trusted message. The bot's display name (`bot_name`) is set as the Signal profile name on each start.
+
 ---
 
 ## What's in This Release
@@ -201,10 +212,11 @@ Register a dedicated phone number with Signal, install `signal-cli`, then add to
 | Data (zeno) — vault search, tag analysis | ✓ |
 | Agenda (cato) — Daily, Inbox, Exchange | ✓ |
 | Pattern (rumi) — nightly memory extraction | ✓ |
-| Web UI — config, memory, scheduler, vault, tags, migration | ✓ |
+| Web UI — config, memory, scheduler, vault files, tags, migration | ✓ |
 | Tags — scan, namespace grouping, rename, delete | ✓ |
 | Migration — Exchange.md approval workflow | ✓ |
-| Signal transport | ✓ |
+| Signal transport — receive, respond, voice transcription | ✓ |
+| Vault file browser — all file types, images, Obsidian wikilinks | ✓ |
 | Action (hiro) — external tasks, email, calendar | planned |
 | Code (alan) — development-time introspection | dev only |
 
