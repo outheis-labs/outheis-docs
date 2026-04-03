@@ -28,6 +28,10 @@ Time management through Daily.md, Inbox.md, Exchange.md. Hourly review, manual r
 
 Bringing existing knowledge into outheis: vault/Migration workflow, approval via checkboxes.
 
+### [Vault](vault.md)
+
+How to structure your knowledge: file layout, tag systems, the faceted namespace pattern, Daily.md template.
+
 ### [CLI Guide](guide.md)
 
 Command-line interface: installation, commands, usage examples.

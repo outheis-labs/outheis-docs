@@ -27,3 +27,5 @@ Five agents coordinate through messages. Your knowledge stays in a local vault. 
 **[Design](design/)** — OS principles applied to agents. Architecture specification, data formats, agent prompts.
 
 **[Implementation](implementation/)** — Current state. How to install, configure, and use outheis.
+
+**[Workflows](workflows/)** — Practical guides. How to work with outheis day to day.
