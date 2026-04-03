@@ -283,9 +283,6 @@ CSS-Variablen unterstützen automatischen Hell-/Dunkel-Modus über `prefers-colo
 
 Die UI ist aus Design-Gründen nur auf localhost. Kein Login, keine Sitzungen. Wenn du Port 8080 erreichen kannst, hast du vollen Zugriff.
 
-### Kein Chat
-
-Das ist eine Verwaltungsoberfläche, keine Chat-UI. Für Chat verwende die CLI (`nous chat`) oder den Signal-Transport.
 
 ## Abhängigkeiten
 

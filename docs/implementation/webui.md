@@ -280,8 +280,6 @@ CSS variables support automatic light/dark mode via `prefers-color-scheme`. The 
 ### No Authentication
 The UI is localhost-only by design. No login, no sessions. If you can reach port 8080, you have full access.
 
-### No Chat
-This is an administration interface, not a chat UI. For chat, use the CLI (`nous chat`) or Signal transport.
 
 ## Dependencies
 
