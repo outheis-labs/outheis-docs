@@ -192,6 +192,7 @@
         <a href="../design/index.html">Design</a>
         <a href="../implementation/architecture.html">Implementation</a>
         <a href="../implementation/guide.html" class="active">Workflows</a>
+        <a href="../installation/index.html">Installation</a>
         <a href="https://github.com/outheis-labs/outheis-minimal" class="external">GitHub ↗</a>
       </nav>
     </div>
@@ -228,6 +229,7 @@
 │  Agenda     │                                               │
 │  Codebase   │                                               │
 │  Migration  │                                               │
+│  Tags       │                                               │
 └─────────────┴───────────────────────────────────────────────┘
 </code></pre>
 <h2 id="starting-the-server">Starting the Server</h2>
@@ -301,6 +303,10 @@ python server.py
 </thead>
 <tbody>
 <tr>
+<td><strong>Files</strong></td>
+<td>Full vault browser — all configured vaults, directory tree, edit and delete</td>
+</tr>
+<tr>
 <td><strong>Agenda</strong></td>
 <td>View/edit files in <code>vault/Agenda/</code> (Daily.md, Inbox.md, Exchange.md)</td>
 </tr>
@@ -310,10 +316,36 @@ python server.py
 </tr>
 <tr>
 <td><strong>Migration</strong></td>
-<td>View migration files, create Migration directory</td>
+<td>Upload migration files (drop zone), view and edit files, manage Migration/ directory</td>
+</tr>
+<tr>
+<td><strong>Tags</strong></td>
+<td>Scan vault for #tags, list by namespace group, rename or delete tags across all files</td>
 </tr>
 </tbody>
 </table>
+<h2 id="files-view">Files View</h2>
+<p>Full browser for all configured vault directories:</p>
+<ul>
+<li><strong>Directory tree</strong> on the left — all vaults as roots, directories collapsed by default, click to expand</li>
+<li><strong>File viewer/editor</strong> on the right — same rendered/source toggle as other file views</li>
+<li><strong>All file types</strong> visible in the tree:</li>
+<li>Text files (<code>.md</code>, <code>.txt</code>, <code>.json</code>, <code>.py</code>, …) — editable, Save button</li>
+<li>Image files (<code>.png</code>, <code>.jpg</code>, <code>.svg</code>, …) — rendered inline, Download button</li>
+<li>Binary files (<code>.pdf</code>, <code>.docx</code>, …) — Download button</li>
+<li><strong>Obsidian wikilinks</strong> — <code>![[image.jpg]]</code> and <code>![[image.jpg|WxH]]</code> are resolved and rendered as inline images</li>
+<li><strong>Delete</strong> — confirmation dialog, removes file from vault</li>
+</ul>
+<h2 id="tags-view">Tags View</h2>
+<p>The Tags view scans the vault for all <code>#tags</code> and presents them grouped by namespace prefix:</p>
+<ul>
+<li><strong>Scan button</strong> — queues a <code>tag_scan</code> dispatcher task (same async UX as the Scheduler)</li>
+<li>Results are cached; the scan button re-runs on demand</li>
+<li>Tags are grouped by namespace prefix (<code>#action-*</code>, <code>#date-*</code>, <code>#rank-*</code>, etc.), all collapsed by default</li>
+<li>Each group shows tag count and total occurrences across the vault</li>
+<li>Per-tag: occurrence count, file count, rename input field, Delete button</li>
+<li><code>#outheis-*</code> tags are hidden (internal system use only)</li>
+</ul>
 <h2 id="configuration-editor">Configuration Editor</h2>
 <p>The Configuration view provides a complete editor for <code>~/.outheis/human/config.json</code>:</p>
 <h3 id="general-tab">General Tab</h3>
@@ -453,10 +485,28 @@ reasoning → claude-opus-4-5
 <li><code>GET /api/{type}/{filename}</code> — Read file content</li>
 <li><code>PUT /api/{type}/{filename}</code> — Write file content</li>
 </ul>
+<h3 id="tags">Tags</h3>
+<ul>
+<li><code>GET /api/tags</code> — Tag scan results (cached, filtered, sorted lexically)</li>
+<li><code>POST /api/tags/scan</code> — Queue tag_scan dispatcher task, returns conversation_id</li>
+<li><code>POST /api/tags/rename</code> — Rename tag across all vault files</li>
+<li><code>POST /api/tags/delete</code> — Remove tag from all vault files</li>
+</ul>
+<h3 id="vault-files">Vault Files</h3>
+<ul>
+<li><code>GET /api/vault/tree</code> — Recursive tree of all configured vaults</li>
+<li><code>GET /api/vault/file?path=</code> — Read file (text/image/binary detection, wikilinks resolved for .md)</li>
+<li><code>PUT /api/vault/file</code> — Write file content</li>
+<li><code>DELETE /api/vault/file?path=</code> — Delete file</li>
+<li><code>GET /api/vault/raw?path=</code> — Serve raw file (used for inline images and downloads)</li>
+</ul>
 <h3 id="migration">Migration</h3>
 <ul>
-<li><code>GET /api/migration</code> — Check if Migration directory exists, list files</li>
+<li><code>GET /api/migration</code> — List files in vault/Migration/</li>
+<li><code>GET /api/migration/{filename}</code> — Read file content</li>
+<li><code>PUT /api/migration/{filename}</code> — Write file content</li>
 <li><code>POST /api/migration/create</code> — Create vault/Migration directory</li>
+<li><code>POST /api/migration/upload</code> — Upload file via multipart form</li>
 </ul>
 <h3 id="websocket">WebSocket</h3>
 <ul>

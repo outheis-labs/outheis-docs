@@ -45,3 +45,5 @@ Most AI systems treat this as an engineering problem — store more, retrieve fa
 These questions have a body of theory behind them. The next section explores it — not as academic background, but as the foundation from which outheis's architecture follows.
 
 → [Semantic Foundations](02-semantic-foundations.html)
+
+→ [Attention as Architecture](03-attention-as-architecture.html)

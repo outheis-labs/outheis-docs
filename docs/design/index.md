@@ -40,6 +40,3 @@ System prompt specifications for each agent: common principles, role-specific in
 
 Where code ends and LLM begins — the sharp boundary between deterministic structure and learned meaning. Why neither pure code nor pure LLM is sufficient, and how outheis divides responsibility between the two.
 
-### [Attention as Architecture](08-attention-as-architecture.md)
-
-The transformer analogy applied to system design. Skills as trained weights, memory as context window, the Pattern agent as training loop. How attention mechanisms explain why the three-tier knowledge store works.

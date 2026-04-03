@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Why outheis · outheis</title>
+  <title>Vault · outheis</title>
   <link rel="icon" type="image/png" href="../favicon-96x96.png" sizes="96x96">
   <link rel="icon" type="image/svg+xml" href="../favicon.svg">
   <link rel="shortcut icon" href="../favicon.ico">
@@ -188,7 +188,7 @@
         <span class="site-name">οὐθείς</span>
       </a>
       <nav class="topnav">
-        <a href="../foundations/index.html" class="active">Foundations</a>
+        <a href="../foundations/index.html">Foundations</a>
         <a href="../design/index.html">Design</a>
         <a href="../implementation/architecture.html">Implementation</a>
         <a href="../implementation/guide.html">Workflows</a>
@@ -197,41 +197,78 @@
       </nav>
     </div>
   </header>
-  <div class="subnav-bar">
-    <div class="subnav-inner">
-      <a href="../foundations/index.html" class="active">Why outheis</a>
-      <a href="../foundations/02-semantic-foundations.html">Information and Semantics</a>
-      <a href="../foundations/03-attention-as-architecture.html">Attention as Architecture</a>
-    </div>
-  </div>
+  
   <main class="content">
-    <h1 id="why-outheis">Why outheis</h1>
-<p><em>On sovereignty, cognition, and why the extractive model fails.</em></p>
-<hr />
-<h2 id="the-problem">The Problem</h2>
-<p>Every interaction with an AI system leaves traces. Queries reveal interests. Conversations expose thinking patterns. Over time, these traces form a profile — not for your benefit, but for extraction.</p>
-<p>The term <em>captured cognition</em> describes this: your mental work, externalized through AI interaction, becomes raw material for systems that don't serve you. The assistant learns from you. The learning belongs to someone else.</p>
-<h2 id="sovereignty">Sovereignty</h2>
-<p>outheis takes a different position: your cognitive infrastructure belongs to you.</p>
-<p>This means:
-- <strong>Local first</strong> — your data stays on your machine
-- <strong>Transparent operation</strong> — append-only logs, no hidden state
-- <strong>Explicit capabilities</strong> — agents declare what they can access
-- <strong>Portable formats</strong> — Markdown and JSON, no lock-in</p>
-<h2 id="_1">οὐθείς</h2>
-<p>The name comes from Homer. When Polyphemus asks who blinded him, Odysseus answers: οὐθείς — <em>nobody</em>. The Cyclops calls for help: "Nobody is hurting me!" No help comes.</p>
-<p>It's a trick, but also a stance: by refusing to be named, captured, pinned down, Odysseus remains free to act.</p>
-<p>outheis carries this into AI interaction. The system knows you — but only locally, only under your control, only in service of your work.</p>
-<h2 id="not-anti-ai">Not Anti-AI</h2>
-<p>This isn't a rejection of AI assistance. It's a rejection of the extractive model that currently dominates.</p>
-<p>AI can be genuinely helpful: finding connections in your notes, managing complexity, extending memory. But this help shouldn't come at the cost of surveillance.</p>
-<p>outheis explores what AI assistance looks like when sovereignty is non-negotiable.</p>
-<h2 id="a-theoretical-question">A Theoretical Question</h2>
-<p>Sovereignty tells us <em>who</em> should control the system. It doesn't yet answer a prior question: what should the system actually do with what it learns?</p>
-<p>Most AI systems treat this as an engineering problem — store more, retrieve faster, predict better. But this sidesteps a deeper issue: the difference between data and knowledge, between storing and understanding, between a log and a memory.</p>
-<p>These questions have a body of theory behind them. The next section explores it — not as academic background, but as the foundation from which outheis's architecture follows.</p>
-<p>→ <a href="02-semantic-foundations.html">Semantic Foundations</a></p>
-<p>→ <a href="03-attention-as-architecture.html">Attention as Architecture</a></p>
+    <h1 id="vault">Vault</h1>
+<p><em>How to structure your knowledge so outheis can work with it.</em></p>
+<h2 id="what-the-vault-is">What the vault is</h2>
+<p>The vault is a directory of Markdown files — your notes, projects, documents, schedules. outheis reads it but does not own it. You bring the structure; outheis learns to navigate it.</p>
+<p>The only required subdirectory is <code>Agenda/</code>, which outheis manages:</p>
+<pre><code>vault/
+├── Agenda/
+│   ├── Daily.md      # Today — schedule, tasks, notes
+│   ├── Inbox.md      # Quick capture, unprocessed
+│   └── Exchange.md   # Async communication with outheis
+└── ... your files
+</code></pre>
+<p>Everything else is yours.</p>
+<h2 id="tags">Tags</h2>
+<p>outheis does not impose a tag schema. When you start outheis for the first time (or run <code>analyze tags</code>), the data agent scans your vault and extracts whatever tag system you already use — without modification.</p>
+<h3 id="tag-systems-vary">Tag systems vary</h3>
+<p>Users come with different conventions:</p>
+<pre><code>#todo #project #someday          ← flat, singular
+#work/client/project             ← hierarchical with /
+#action-required #status-active  ← namespaced with -
+</code></pre>
+<p>All of these work. outheis maps what it finds and works within that structure.</p>
+<h3 id="the-faceted-namespace-pattern">The faceted namespace pattern</h3>
+<p>One particularly effective convention for personal knowledge management uses a <code>category-value</code> namespace with hyphens:</p>
+<pre><code>#action-required   #action-waiting   #action-now
+#status-active     #status-completed #status-linger
+#rank-urgent       #rank-high        #rank-low
+#unit-work         #unit-self        #unit-family
+#topic-design      #topic-admin
+#size-S            #size-M           #size-L
+#recurring
+</code></pre>
+<p>Each tag carries two pieces of information: what dimension it describes (<code>action</code>, <code>status</code>, <code>rank</code>) and what value it holds (<code>required</code>, <code>active</code>, <code>urgent</code>). This makes files queryable along multiple axes without nested folders or complex metadata.</p>
+<p>The temporal dimension of this pattern — how time-anchored tags interact with recurring structure — is explored in the <a href="https://github.com/outheis-labs/research-base/tree/main/temporalization-of-order">research-base</a>.</p>
+<h3 id="date-tags">Date tags</h3>
+<p>Date tags (<code>#date-2026-03-24</code>) are one category outheis may generate itself. When creating notes or capturing information, the data agent adds a date tag to anchor the entry in time. All other tags are user-owned.</p>
+<h3 id="internal-tags">Internal tags</h3>
+<p>outheis uses the <code>#outheis-</code> namespace for its own internal state tracking. These tags are never shown to the user in the WebUI and serve agent operations only — flagging processed items, archiving candidates, state markers.</p>
+<p>Examples: <code>#outheis-state-done</code>, <code>#outheis-state-pending</code>, <code>#outheis-archive</code></p>
+<p><code>#outheis-*</code> tags are always in English. They are created sparingly and only when they add genuine value to a future agent operation.</p>
+<h3 id="tag-analysis">Tag analysis</h3>
+<p>outheis learns your tag system on demand, not automatically. To start:</p>
+<pre><code>analyze tags
+</code></pre>
+<p>The data agent scans the vault, extracts the tag taxonomy, and reflects it back. You confirm or correct the interpretation. From that point, search and daily planning work within your established system.</p>
+<p>If the data agent later observes inconsistencies or potential simplifications — a category with only one value, two tags that always appear together, a naming pattern that could be unified — it raises this directly in conversation. No changes are made without your agreement.</p>
+<h2 id="dailymd">Daily.md</h2>
+<p>Daily.md is generated fresh each day by the agenda agent. The default structure:</p>
+<pre><code class="language-markdown"># [Weekday], [Date]
+
+## Morning
+
+## Schedule
+
+## Tasks
+
+## Notes
+
+## Evening
+</code></pre>
+<p>The agenda agent populates this from your vault: scheduled events, recurring items, tasks due today, items from Inbox.md. If your vault contains a timetable, a recurring schedule, or date-tagged entries, they appear here automatically.</p>
+<p>You can modify the template. Put your preferred structure in <code>rules/agenda.md</code>:</p>
+<pre><code class="language-markdown">Daily.md should use these sections: [your sections here]
+</code></pre>
+<h2 id="inboxmd">Inbox.md</h2>
+<p>Quick capture without friction. Write anything — voice, typed, dictated. The agenda agent processes Inbox items during the hourly review: moves them to Daily.md, creates vault notes, or asks in Exchange.md if something needs clarification.</p>
+<p>Format is free. One line per item is enough.</p>
+<h2 id="exchangemd">Exchange.md</h2>
+<p>Async communication between you and outheis. Questions that don't need immediate answers, proposals that need review, information waiting for your input.</p>
+<p>outheis writes here when it needs something from you. You answer when you have time. No notifications, no pressure.</p>
     <hr>
     <p class="footer">Open source under AGPL-3.0 · <a href="https://github.com/outheis-labs/outheis-minimal">Code on GitHub</a></p>
   </main>

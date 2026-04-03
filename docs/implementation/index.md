@@ -35,3 +35,7 @@ How to structure your knowledge: file layout, tag systems, the faceted namespace
 ### [CLI Guide](guide.md)
 
 Command-line interface: installation, commands, usage examples.
+
+### [Signal](signal.md)
+
+Signal Messenger transport: reader thread architecture, markdown stripping, authorization, voice transcription.

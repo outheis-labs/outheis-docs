@@ -192,6 +192,7 @@
         <a href="../design/index.html">Design</a>
         <a href="../implementation/architecture.html">Implementation</a>
         <a href="../implementation/guide.html" class="active">Workflows</a>
+        <a href="../installation/index.html">Installation</a>
         <a href="https://github.com/outheis-labs/outheis-minimal" class="external">GitHub ↗</a>
       </nav>
     </div>
@@ -218,8 +219,7 @@
 <pre><code>vault/Migration/
 ├── claude-export.json    # Your data
 ├── preferences.md        # Your rules/preferences
-├── data.md               # Rules for Data agent
-└── Migration.md          # ← Created by outheis
+└── data.md               # Rules for Data agent
 </code></pre>
 <p>This directory is <strong>temporary</strong> — create it when you have something to migrate, delete it when done.</p>
 <h2 id="chat-commands">Chat Commands</h2>
@@ -234,7 +234,7 @@
 <tbody>
 <tr>
 <td>"memory migrate"</td>
-<td>Process Migration/ files, create Migration.md</td>
+<td>Parse Migration/ files, write candidates to Exchange.md</td>
 </tr>
 <tr>
 <td>"migriere memory"</td>
@@ -304,6 +304,7 @@
 <p>Sections map to memory types or rules:
 - <code>## user</code>, <code>## feedback</code>, <code>## context</code> → Memory
 - <code>## rule:agenda</code>, <code>## rule:data</code>, <code>## rule:relay</code> → Rules files</p>
+<p>Any markdown or JSON structure is acceptable — outheis uses LLM parsing and does not require a specific schema.</p>
 <h2 id="workflow">Workflow</h2>
 <h3 id="1-create-migration-directory">1. Create Migration Directory</h3>
 <pre><code class="language-bash">mkdir ~/Documents/Vault/Migration
@@ -314,68 +315,61 @@
 - Your preferences → <code>preferences.md</code>
 - Agent-specific rules → <code>agenda.md</code>, <code>data.md</code></p>
 <h3 id="3-say-memory-migrate">3. Say "memory migrate"</h3>
-<p>In chat with outheis:</p>
-<pre><code>Du: memory migrate
-Ou: Migration verarbeitet:
-    - 3 Dateien geparst
-    - 12 Einträge warten auf Bestätigung
+<p>outheis parses all files in <code>vault/Migration/</code>, deduplicates candidates against existing memory via LLM, and writes consolidated items as a block into <code>vault/Agenda/Exchange.md</code>:</p>
+<pre><code>&lt;!-- outheis:migration:start --&gt;
+## Migration-Vorschläge
 
-    Prüfe vault/Migration/Migration.md
+*2026-04-03 14:30 — Bitte prüfen und markieren:*
+*`[x]` übernehmen · `[-]` ablehnen · `[ ]` offen lassen*
+*Anschließend: `memory migrate` erneut ausführen.*
+
+- [ ] Works as Director Innovation Lab [user]
+- [ ] Prefers short, direct answers [feedback]
+- [ ] Respond in German [rule:relay]
+
+&lt;!-- outheis:migration:end --&gt;
 </code></pre>
-<h3 id="4-review-migrationmd">4. Review Migration.md</h3>
-<p>outheis creates <code>Migration.md</code>:</p>
-<pre><code class="language-markdown"># Migration
-
-*Zuletzt aktualisiert: 2026-03-30 14:30*
-
-Markiere Einträge:
-- `[x]` → übernehmen
-- `[-]` → ablehnen
-- `[ ]` → noch offen
-
----
-
-## Offen
-
-- [ ] User arbeitet bei senswork [user]
-- [ ] Antworte knapp und direkt [feedback]
-- [ ] MAX 10 Items in Daily.md [rule:agenda]
-- [ ] User ist 35 Jahre alt [user]
-
----
-
-## Statistik
-
-- Übernommen: 0
-- Abgelehnt: 0
+<p>Duplicates are always expected — the LLM deduplication step handles them. Only new or distinct items appear in the block.</p>
+<h3 id="4-review-exchangemd">4. Review Exchange.md</h3>
+<p>Open <code>vault/Agenda/Exchange.md</code> — the same file you already use for async communication with outheis. The migration block appears at the top or inline, clearly delimited.</p>
+<p>Mark each item:</p>
+<pre><code>- [x] Works as Director Innovation Lab [user]
+- [x] Prefers short, direct answers [feedback]
+- [-] Respond in German [rule:relay]
+- [ ] Lebt in München [user]
 </code></pre>
-<p>Edit the file — mark entries:</p>
-<pre><code class="language-markdown">- [x] User arbeitet bei senswork [user]
-- [x] Antworte knapp und direkt [feedback]
-- [x] MAX 10 Items in Daily.md [rule:agenda]
-- [-] User ist 35 Jahre alt [user]
-</code></pre>
+<ul>
+<li><code>[x]</code> — apply to memory/rules</li>
+<li><code>[-]</code> — discard</li>
+<li><code>[ ]</code> — leave open for next round</li>
+</ul>
+<p>Cato (agenda agent) ignores the migration block when processing Exchange.md.</p>
 <h3 id="5-say-memory-migrate-again">5. Say "memory migrate" Again</h3>
 <pre><code>Du: memory migrate
 Ou: Migration verarbeitet:
-    - 3 übernommen
+    - 2 übernommen
     - 1 abgelehnt
-    - 0 noch offen
+    - 1 noch offen
 </code></pre>
-<p>Adopted entries are now in memory/rules. Rejected entries are discarded.</p>
-<h3 id="6-delete-migration-directory">6. Delete Migration Directory</h3>
-<p>When done:</p>
-<pre><code class="language-bash">rm -rf ~/Documents/Vault/Migration
-</code></pre>
-<p>outheis doesn't mind — the directory is purely transient.</p>
-<h2 id="processed-files">Processed Files</h2>
-<p>After parsing, files get an <code>x-</code> prefix:</p>
+<ul>
+<li><code>[x]</code> items are written to memory and rules</li>
+<li><code>[-]</code> items are discarded</li>
+<li><code>[ ]</code> items remain in the block for the next round</li>
+<li>The block is removed from Exchange.md once all items are resolved (or on your request)</li>
+</ul>
+<h3 id="6-processed-source-files">6. Processed Source Files</h3>
+<p>After parsing, source files in <code>vault/Migration/</code> get an <code>x-</code> prefix:</p>
 <pre><code>vault/Migration/
 ├── x-claude-export.json    # Processed
 ├── x-preferences.md        # Processed
-├── Migration.md            # Still active
 </code></pre>
-<p>This prevents re-processing. Delete the <code>x-</code> files yourself when ready.</p>
+<p>This prevents re-processing. Delete the <code>x-</code> files yourself when ready, or use the WebUI Migration view.</p>
+<h2 id="webui-migration-view">WebUI Migration View</h2>
+<p>The Migration view in the Web UI provides:
+- Full list of files in <code>vault/Migration/</code>
+- View and edit each file directly
+- Drop zone for uploading new migration files</p>
+<p>Use it to add files without leaving the browser, or to inspect what has already been processed.</p>
 <h2 id="direct-rule-writing">Direct Rule Writing</h2>
 <p>To add a rule immediately without the Migration workflow:</p>
 <pre><code>Du: schreibe regel: antworte immer auf Deutsch

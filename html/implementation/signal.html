@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Why outheis · outheis</title>
+  <title>Signal · outheis</title>
   <link rel="icon" type="image/png" href="../favicon-96x96.png" sizes="96x96">
   <link rel="icon" type="image/svg+xml" href="../favicon.svg">
   <link rel="shortcut icon" href="../favicon.ico">
@@ -188,7 +188,7 @@
         <span class="site-name">οὐθείς</span>
       </a>
       <nav class="topnav">
-        <a href="../foundations/index.html" class="active">Foundations</a>
+        <a href="../foundations/index.html">Foundations</a>
         <a href="../design/index.html">Design</a>
         <a href="../implementation/architecture.html">Implementation</a>
         <a href="../implementation/guide.html">Workflows</a>
@@ -197,41 +197,162 @@
       </nav>
     </div>
   </header>
-  <div class="subnav-bar">
-    <div class="subnav-inner">
-      <a href="../foundations/index.html" class="active">Why outheis</a>
-      <a href="../foundations/02-semantic-foundations.html">Information and Semantics</a>
-      <a href="../foundations/03-attention-as-architecture.html">Attention as Architecture</a>
-    </div>
-  </div>
+  
   <main class="content">
-    <h1 id="why-outheis">Why outheis</h1>
-<p><em>On sovereignty, cognition, and why the extractive model fails.</em></p>
-<hr />
-<h2 id="the-problem">The Problem</h2>
-<p>Every interaction with an AI system leaves traces. Queries reveal interests. Conversations expose thinking patterns. Over time, these traces form a profile — not for your benefit, but for extraction.</p>
-<p>The term <em>captured cognition</em> describes this: your mental work, externalized through AI interaction, becomes raw material for systems that don't serve you. The assistant learns from you. The learning belongs to someone else.</p>
-<h2 id="sovereignty">Sovereignty</h2>
-<p>outheis takes a different position: your cognitive infrastructure belongs to you.</p>
-<p>This means:
-- <strong>Local first</strong> — your data stays on your machine
-- <strong>Transparent operation</strong> — append-only logs, no hidden state
-- <strong>Explicit capabilities</strong> — agents declare what they can access
-- <strong>Portable formats</strong> — Markdown and JSON, no lock-in</p>
-<h2 id="_1">οὐθείς</h2>
-<p>The name comes from Homer. When Polyphemus asks who blinded him, Odysseus answers: οὐθείς — <em>nobody</em>. The Cyclops calls for help: "Nobody is hurting me!" No help comes.</p>
-<p>It's a trick, but also a stance: by refusing to be named, captured, pinned down, Odysseus remains free to act.</p>
-<p>outheis carries this into AI interaction. The system knows you — but only locally, only under your control, only in service of your work.</p>
-<h2 id="not-anti-ai">Not Anti-AI</h2>
-<p>This isn't a rejection of AI assistance. It's a rejection of the extractive model that currently dominates.</p>
-<p>AI can be genuinely helpful: finding connections in your notes, managing complexity, extending memory. But this help shouldn't come at the cost of surveillance.</p>
-<p>outheis explores what AI assistance looks like when sovereignty is non-negotiable.</p>
-<h2 id="a-theoretical-question">A Theoretical Question</h2>
-<p>Sovereignty tells us <em>who</em> should control the system. It doesn't yet answer a prior question: what should the system actually do with what it learns?</p>
-<p>Most AI systems treat this as an engineering problem — store more, retrieve faster, predict better. But this sidesteps a deeper issue: the difference between data and knowledge, between storing and understanding, between a log and a memory.</p>
-<p>These questions have a body of theory behind them. The next section explores it — not as academic background, but as the foundation from which outheis's architecture follows.</p>
-<p>→ <a href="02-semantic-foundations.html">Semantic Foundations</a></p>
-<p>→ <a href="03-attention-as-architecture.html">Attention as Architecture</a></p>
+    <h1 id="signal">Signal</h1>
+<p><em>Signal Messenger transport via signal-cli JSON-RPC.</em></p>
+<h2 id="overview">Overview</h2>
+<p>The Signal transport connects outheis to Signal Messenger. It runs as a standalone process (<code>outheis signal</code>), separate from the main daemon. It receives messages from Signal, forwards them to relay, and sends responses back.</p>
+<p>Underlying mechanism: signal-cli in <code>--json-rpc</code> mode, communicating over stdin/stdout.</p>
+<h2 id="architecture">Architecture</h2>
+<p>The central design is a <strong>dedicated reader thread</strong> that owns all stdout from signal-cli. This solves a race condition that arises when send and receive both try to read from the same subprocess stdout.</p>
+<pre><code>signal-cli (jsonRpc)
+     │
+     ▼
+ _read_loop() thread
+     ├── receive events → Queue (for incoming messages)
+     └── RPC responses → dict + Event (for send confirmations)
+
+Main thread: read_message() ← Queue.get()
+Send path:  _send_request() → stdin write → Event.wait()
+</code></pre>
+<h3 id="classes">Classes</h3>
+<ul>
+<li><code>SignalRPC</code> — <code>transport/signal_rpc.py</code>: manages the signal-cli subprocess, reader thread, send/receive primitives</li>
+<li><code>SignalTransport</code> — <code>transport/signal.py</code>: message loop, authorization, watcher thread, markdown stripping</li>
+</ul>
+<h3 id="concurrency-model">Concurrency model</h3>
+<table>
+<thead>
+<tr>
+<th>Component</th>
+<th>Mechanism</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Incoming messages</td>
+<td><code>_receive_queue</code> — <code>Queue.get()</code> blocks until a message arrives</td>
+</tr>
+<tr>
+<td>RPC responses (send confirmations)</td>
+<td><code>_response_map</code> + <code>threading.Event</code> per request ID</td>
+</tr>
+<tr>
+<td>Stdin writes</td>
+<td><code>_stdin_lock</code> — prevents interleaved writes</td>
+</tr>
+</tbody>
+</table>
+<p>The reader thread is the only consumer of signal-cli stdout. Nothing else reads from it.</p>
+<h2 id="message-flow">Message Flow</h2>
+<ol>
+<li>signal-cli emits a receive event on stdout</li>
+<li><code>_read_loop</code> parses the JSON and puts it in <code>_receive_queue</code></li>
+<li><code>read_message()</code> returns the parsed <code>SignalMessage</code></li>
+<li><code>SignalTransport._handle_message()</code> checks authorization, creates a user message, appends to <code>messages.jsonl</code></li>
+<li>A watcher thread (<code>_watch_responses</code>) polls for a relay reply addressed to <code>transport</code></li>
+<li>When found, calls <code>send_message(sender_uuid, text)</code> via <code>_send_request()</code></li>
+</ol>
+<h2 id="markdown-stripping">Markdown Stripping</h2>
+<p>Before sending, <code>_strip_markdown()</code> removes markdown syntax deterministically. This is a transport concern — the model returns content as-is; stripping happens here.</p>
+<table>
+<thead>
+<tr>
+<th>Input</th>
+<th>Output</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>**bold**</code>, <code>__bold__</code></td>
+<td>plain text</td>
+</tr>
+<tr>
+<td><code>*italic*</code>, <code>_italic_</code></td>
+<td>plain text</td>
+</tr>
+<tr>
+<td><code>## Heading</code></td>
+<td>heading text without <code>#</code></td>
+</tr>
+<tr>
+<td><code>`inline code`</code></td>
+<td>code text</td>
+</tr>
+<tr>
+<td><code>- [ ]</code>, <code>- [x]</code> checkboxes</td>
+<td>plain text</td>
+</tr>
+<tr>
+<td><code>- item</code>, <code>* item</code> bullets</td>
+<td>plain text</td>
+</tr>
+<tr>
+<td><code>---</code> horizontal rule</td>
+<td><code>____________________</code> (20 underscores)</td>
+</tr>
+</tbody>
+</table>
+<p>The horizontal rule replacement renders as a solid dividing line in Signal's UI.</p>
+<h2 id="authorization">Authorization</h2>
+<ul>
+<li><code>signal.allowed</code> in <code>config.json</code>: whitelist of phone numbers permitted to send messages</li>
+<li><code>human.phone</code> is always allowed regardless of the whitelist</li>
+<li>UUIDs are learned on first contact and saved to <code>~/.outheis/human/signal.json</code></li>
+<li>First-time setup requires trusting the identity key via <code>signal-cli trust</code> (see installation guide)</li>
+</ul>
+<p>An empty <code>allowed</code> array means only <code>human.phone</code> can interact with the bot.</p>
+<h2 id="profile-name">Profile Name</h2>
+<p>On startup, the bot's Signal profile display name is set from <code>config.signal.bot_name</code> via the <code>updateProfile</code> RPC call. This is what Signal contacts see as the bot's name.</p>
+<h2 id="voice-transcription">Voice Transcription</h2>
+<p>If <code>faster-whisper</code> is installed, voice messages are transcribed before being forwarded to relay. This is an optional dependency — the transport works without it; voice messages are silently skipped if <code>faster-whisper</code> is absent.</p>
+<h2 id="configuration">Configuration</h2>
+<pre><code class="language-json">{
+  &quot;signal&quot;: {
+    &quot;enabled&quot;: true,
+    &quot;bot_name&quot;: &quot;Ou&quot;,
+    &quot;bot_phone&quot;: &quot;+49...&quot;,
+    &quot;allowed&quot;: []
+  }
+}
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>Key</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>enabled</code></td>
+<td>Enable Signal transport</td>
+</tr>
+<tr>
+<td><code>bot_name</code></td>
+<td>Display name set on the Signal profile at startup</td>
+</tr>
+<tr>
+<td><code>bot_phone</code></td>
+<td>The phone number registered with signal-cli</td>
+</tr>
+<tr>
+<td><code>allowed</code></td>
+<td>Whitelist of phone numbers. Empty = human.phone only</td>
+</tr>
+</tbody>
+</table>
+<h2 id="running">Running</h2>
+<pre><code class="language-bash">outheis signal        # foreground
+outheis signal -v     # verbose (shows tool calls)
+</code></pre>
+<p>Signal transport runs separately from the main daemon. Both can run simultaneously — the daemon handles scheduled tasks and direct CLI queries; the Signal transport handles incoming Signal messages.</p>
+<h2 id="file-locations">File Locations</h2>
+<pre><code>src/outheis/transport/
+├── signal.py        # SignalTransport: message loop, watcher, markdown stripping
+└── signal_rpc.py    # SignalRPC: jsonRpc subprocess, reader thread, send/receive
+</code></pre>
     <hr>
     <p class="footer">Open source under AGPL-3.0 · <a href="https://github.com/outheis-labs/outheis-minimal">Code on GitHub</a></p>
   </main>

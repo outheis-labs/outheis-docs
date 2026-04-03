@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Guide · outheis</title>
+  <title>Installation · outheis</title>
   <link rel="icon" type="image/png" href="../favicon-96x96.png" sizes="96x96">
   <link rel="icon" type="image/svg+xml" href="../favicon.svg">
   <link rel="shortcut icon" href="../favicon.ico">
@@ -191,44 +191,46 @@
         <a href="../foundations/index.html">Foundations</a>
         <a href="../design/index.html">Design</a>
         <a href="../implementation/architecture.html">Implementation</a>
-        <a href="../implementation/guide.html" class="active">Workflows</a>
-        <a href="../installation/index.html">Installation</a>
+        <a href="../implementation/guide.html">Workflows</a>
+        <a href="../installation/index.html" class="active">Installation</a>
         <a href="https://github.com/outheis-labs/outheis-minimal" class="external">GitHub ↗</a>
       </nav>
     </div>
   </header>
   <div class="subnav-bar">
     <div class="subnav-inner">
-      <a href="../implementation/guide.html" class="active">Getting Started</a>
-      <a href="../implementation/config.html">Configuration</a>
-      <a href="../implementation/migration.html">Migration</a>
-      <a href="../implementation/webui.html">Web UI</a>
+      <a href="../installation/index.html" class="active">Installation</a>
     </div>
   </div>
   <main class="content">
-    <h1 id="guide">Guide</h1>
-<p><em>Getting started with outheis.</em></p>
+    <h1 id="installation">Installation</h1>
+<p><em>Private beta — April 2026.</em></p>
+<hr />
+<p>outheis is in private beta. The core loop works: you send a message, relay routes it, agents respond, patterns accumulate overnight. What's here is usable, not polished.</p>
+<p>Known gaps are documented at the end of this page.</p>
+<hr />
 <h2 id="requirements">Requirements</h2>
 <ul>
-<li>Python 3.11+</li>
-<li>An Anthropic API key</li>
-<li>A vault directory — a folder of Markdown files (Obsidian works directly)</li>
+<li>Python 3.11 or higher</li>
+<li>An Anthropic API key (Claude Haiku / Sonnet — no other provider required)</li>
+<li>A vault directory — a folder of Markdown files (Obsidian vaults work directly)</li>
 </ul>
-<p>Optional for messaging via Signal:
-- A registered Signal account for the bot phone number
-- <code>signal-cli</code> installed and configured</p>
-<h2 id="installation">Installation</h2>
+<p>Optional:
+- Signal account + <code>signal-cli</code> for messaging via Signal</p>
+<hr />
+<h2 id="installation_1">Installation</h2>
 <pre><code class="language-bash">git clone https://github.com/outheis-labs/outheis-minimal.git
 cd outheis-minimal
 pip install -e &quot;.[dev]&quot;
 </code></pre>
+<hr />
 <h2 id="setup">Setup</h2>
 <pre><code class="language-bash">outheis init
 </code></pre>
-<p>This creates <code>~/.outheis/human/config.json</code> with defaults. Edit it:</p>
+<p>This creates <code>~/.outheis/human/</code> with default configuration, skills, and rules. Edit the config:</p>
 <pre><code class="language-bash">$EDITOR ~/.outheis/human/config.json
 </code></pre>
-<p>Minimal required configuration:</p>
+<p>Minimum required:</p>
 <pre><code class="language-json">{
   &quot;human&quot;: {
     &quot;name&quot;: &quot;Your Name&quot;,
@@ -249,188 +251,172 @@ pip install -e &quot;.[dev]&quot;
   }
 }
 </code></pre>
-<p>The <code>vault</code> array accepts multiple paths. outheis monitors all of them.</p>
-<h2 id="starting-the-dispatcher">Starting the Dispatcher</h2>
+<p>The <code>vault</code> array accepts multiple paths.</p>
+<hr />
+<h2 id="vault">Vault</h2>
+<p>Create the Agenda directory in your vault:</p>
+<pre><code class="language-bash">mkdir -p ~/Documents/Vault/Agenda
+touch ~/Documents/Vault/Agenda/Daily.md
+touch ~/Documents/Vault/Agenda/Inbox.md
+touch ~/Documents/Vault/Agenda/Exchange.md
+</code></pre>
+<p>cato generates <code>Daily.md</code> on first run. The other two files can stay empty.</p>
+<hr />
+<h2 id="start">Start</h2>
 <pre><code class="language-bash">outheis start        # Background daemon
-outheis start -f     # Foreground (useful for first run / debugging)
-outheis status       # Check PID, uptime, agent status
-outheis stop         # Stop daemon
+outheis start -f     # Foreground (recommended for first run)
+outheis status       # PID, uptime, agent status
+outheis stop
 </code></pre>
+<p>On first start, outheis seeds <code>~/.outheis/human/skills/</code> and <code>~/.outheis/human/rules/</code> with defaults. These are yours to edit — they are never overwritten on restart.</p>
+<hr />
+<h2 id="first-conversation">First Conversation</h2>
+<pre><code class="language-bash">outheis chat
+</code></pre>
+<p>Or send a single message:</p>
+<pre><code class="language-bash">outheis send &quot;What do you know about me?&quot;
+outheis send &quot;What's on today?&quot;
+outheis send &quot;! I work at Acme Corp&quot;     # explicit memory marker
+</code></pre>
+<p>The <code>!</code> prefix writes directly to memory without waiting for the pattern agent.</p>
+<hr />
 <h2 id="web-ui">Web UI</h2>
-<p>Once the dispatcher is running, the Web UI is available at:</p>
-<pre><code>http://127.0.0.1:8080
+<pre><code>http://localhost:8080
 </code></pre>
-<p>It provides:
-- Live message feed (conversations with agents)
-- Memory, Rules, and Skills viewer and editor
-- Scheduler status and manual task triggers
-- Token usage overview</p>
-<p>The Web UI port and host are configurable in <code>config.json</code> under <code>"webui": {"host": "127.0.0.1", "port": 8080}</code>.</p>
-<h2 id="vault-setup">Vault Setup</h2>
-<p>outheis treats your vault as a read-only knowledge source. Structure is flexible — any Markdown files work. The recommended Agenda layout:</p>
-<pre><code>vault/
-└── Agenda/
-    ├── Daily.md      # Today's schedule — written by cato
-    ├── Inbox.md      # Your quick capture — processed hourly
-    └── Exchange.md   # Async back-and-forth with cato
+<p>Starts automatically with the dispatcher. Provides:</p>
+<ul>
+<li>Live message feed (WebSocket)</li>
+<li>Memory, Skills, Rules editors</li>
+<li>Scheduler — manage and trigger background tasks</li>
+<li>Vault: Files (full browser), Agenda, Tags, Migration</li>
+</ul>
+<hr />
+<h2 id="cli-reference">CLI Reference</h2>
+<h3 id="daemon">Daemon</h3>
+<pre><code class="language-bash">outheis start        # Background
+outheis start -f     # Foreground
+outheis start -fv    # Foreground + verbose (shows tool calls)
+outheis stop
+outheis status
 </code></pre>
-<p>Create the <code>Agenda/</code> directory and empty files. cato generates <code>Daily.md</code> on first run.</p>
+<h3 id="messaging">Messaging</h3>
+<pre><code class="language-bash">outheis send &quot;message&quot;
+outheis send &quot;@zeno find notes about X&quot;   # direct to Data agent
+outheis send &quot;@cato what's on Thursday?&quot;  # direct to Agenda agent
+outheis chat                               # interactive session with history
+</code></pre>
+<h3 id="memory">Memory</h3>
+<pre><code class="language-bash">outheis memory              # show all
+outheis memory --type user  # user facts only
+</code></pre>
+<h3 id="rules">Rules</h3>
+<pre><code class="language-bash">outheis rules               # all rules
+outheis rules relay         # relay agent rules
+</code></pre>
+<hr />
 <h2 id="signal-setup-optional">Signal Setup (optional)</h2>
-<p>To receive and send messages via Signal:</p>
-<ol>
-<li>Register a dedicated phone number with Signal</li>
-<li>Install and configure <code>signal-cli</code> for that number</li>
-<li>Add to <code>config.json</code>:</li>
-</ol>
+<p>Register a dedicated phone number with Signal, install <code>signal-cli</code>, then add to <code>config.json</code>:</p>
 <pre><code class="language-json">{
   &quot;signal&quot;: {
     &quot;enabled&quot;: true,
     &quot;bot_name&quot;: &quot;ou&quot;,
     &quot;bot_phone&quot;: &quot;+49...&quot;,
-    &quot;allowed&quot;: []
+    &quot;allowed&quot;: [&quot;+49...&quot;]
   }
 }
 </code></pre>
-<p>Set <code>allowed</code> to an empty array to allow all contacts, or list specific numbers: <code>["+49..."]</code>.</p>
-<p>Edit <code>~/.outheis/human/config.json</code> for the full config:</p>
-<pre><code class="language-json">{
-  &quot;user&quot;: {
-    &quot;name&quot;: &quot;your-name&quot;,
-    &quot;language&quot;: &quot;en&quot;,
-    &quot;timezone&quot;: &quot;Europe/Berlin&quot;,
-    &quot;vault&quot;: [&quot;~/Documents/Vault&quot;]
-  }
-}
+<p><code>allowed</code> is a whitelist. Empty array permits all contacts.</p>
+<p><strong>First contact — trust your identity key:</strong></p>
+<p>On first use, signal-cli may not trust the sender's identity key. If messages are received but no response arrives, run:</p>
+<pre><code class="language-bash">signal-cli -a &lt;bot_phone&gt; listIdentities
+signal-cli -a &lt;bot_phone&gt; trust -a &lt;uuid&gt;
 </code></pre>
-<h2 id="cli-commands">CLI Commands</h2>
-<h3 id="daemon-control">Daemon Control</h3>
-<pre><code class="language-bash">outheis start       # Start dispatcher (background)
-outheis start -f    # Start in foreground
-outheis start -fv   # Foreground + verbose (shows tool calls)
-outheis stop        # Stop dispatcher
-outheis status      # Show status, PID, uptime
-</code></pre>
-<h3 id="messaging">Messaging</h3>
-<pre><code class="language-bash">outheis send &quot;Hello&quot;              # Single message
-outheis send &quot;@zeno find notes&quot;   # Direct to Data agent
-outheis chat                      # Interactive mode (with history)
-</code></pre>
-<h3 id="memory">Memory</h3>
-<pre><code class="language-bash">outheis memory              # Show all memories
-outheis memory --type user  # Show only user facts
-</code></pre>
-<h3 id="rules">Rules</h3>
-<pre><code class="language-bash">outheis rules         # Show all rules (system + user)
-outheis rules relay   # Show relay agent rules
-</code></pre>
-<h2 id="talking-to-outheis">Talking to outheis</h2>
-<p>Just talk naturally. Relay decides when to use tools:</p>
+<p>outheis learns and saves UUIDs automatically after the first trusted message. The bot's display name (<code>bot_name</code>) is set as the Signal profile name on each start.</p>
+<hr />
+<h2 id="whats-in-this-release">What's in This Release</h2>
 <table>
 <thead>
 <tr>
-<th>You say</th>
-<th>What happens</th>
+<th>Component</th>
+<th>Status</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>"hi"</td>
-<td>Direct response</td>
+<td>Dispatcher — microkernel, scheduler, lock manager</td>
+<td>✓</td>
 </tr>
 <tr>
-<td>"was steht heute an?"</td>
-<td>Uses check_agenda tool → Agenda agent</td>
+<td>Relay (ou) — routing, memory integration</td>
+<td>✓</td>
 </tr>
 <tr>
-<td>"wo wohne ich?"</td>
-<td>Uses search_vault tool → Data agent</td>
+<td>Data (zeno) — vault search, tag analysis</td>
+<td>✓</td>
 </tr>
 <tr>
-<td>"! ich bin 54"</td>
-<td>Saves to Memory (explicit marker)</td>
+<td>Agenda (cato) — Daily, Inbox, Exchange</td>
+<td>✓</td>
+</tr>
+<tr>
+<td>Pattern (rumi) — nightly memory extraction</td>
+<td>✓</td>
+</tr>
+<tr>
+<td>Web UI — config, memory, scheduler, vault files, tags, migration</td>
+<td>✓</td>
+</tr>
+<tr>
+<td>Tags — scan, namespace grouping, rename, delete</td>
+<td>✓</td>
+</tr>
+<tr>
+<td>Migration — Exchange.md approval workflow</td>
+<td>✓</td>
+</tr>
+<tr>
+<td>Signal transport — receive, respond, voice transcription</td>
+<td>✓</td>
+</tr>
+<tr>
+<td>Vault file browser — all file types, images, Obsidian wikilinks</td>
+<td>✓</td>
+</tr>
+<tr>
+<td>Action (hiro) — external tasks, email, calendar</td>
+<td>planned</td>
+</tr>
+<tr>
+<td>Code (alan) — development-time introspection</td>
+<td>dev only</td>
 </tr>
 </tbody>
 </table>
-<h3 id="explicit-agent-mentions">Explicit Agent Mentions</h3>
-<p>Use <code>@name</code> for direct delegation:</p>
-<table>
-<thead>
-<tr>
-<th>Mention</th>
-<th>Agent</th>
-<th>Use for</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>@zeno</td>
-<td>Data</td>
-<td>Search vault explicitly</td>
-</tr>
-<tr>
-<td>@cato</td>
-<td>Agenda</td>
-<td>Schedule queries</td>
-</tr>
-<tr>
-<td>@hiro</td>
-<td>Action</td>
-<td>External actions (future)</td>
-</tr>
-</tbody>
-</table>
-<h2 id="vault">Vault</h2>
-<p>Your vault is a directory of Markdown files:</p>
-<pre><code class="language-markdown">---
-title: Project Alpha
-tags: [active, client-work]
-created: 2025-01-15
----
-# Project Alpha
-
-Status update...
-</code></pre>
-<h3 id="recommended-structure">Recommended Structure</h3>
-<pre><code>vault/
-├── Agenda/
-│   ├── Daily.md      # Today's schedule
-│   ├── Inbox.md      # Unprocessed items
-│   └── Exchange.md   # External sync
-├── projects/
-├── notes/
-└── references/
-</code></pre>
-<h2 id="configuration">Configuration</h2>
-<p><code>~/.outheis/human/config.json</code>:</p>
-<pre><code class="language-json">{
-  &quot;user&quot;: {
-    &quot;name&quot;: &quot;string&quot;,
-    &quot;language&quot;: &quot;en|de|...&quot;,
-    &quot;timezone&quot;: &quot;Region/City&quot;,
-    &quot;vault&quot;: [&quot;~/path/to/vault&quot;]
-  },
-  &quot;llm&quot;: {
-    &quot;provider&quot;: &quot;anthropic&quot;
-  }
-}
-</code></pre>
+<hr />
+<h2 id="known-gaps">Known Gaps</h2>
+<p><strong>hiro is disabled by default.</strong> The Action agent framework is present but external integrations (email, calendar, shell commands) are not implemented. Enable at your own risk — it has no configured capabilities yet.</p>
+<p><strong>alan is development-only.</strong> The Code agent provides introspection into the outheis codebase itself. It is disabled in production and not relevant for users.</p>
+<p><strong>Pattern agent requires conversation history.</strong> On a fresh install, rumi has nothing to extract on the first nightly run. Memory builds over days, not immediately.</p>
+<p><strong>Tag scan is on demand.</strong> Tags are not indexed at startup. Run a scan from the Web UI (Vault → Tags → Scan) or say <code>analyze tags</code> in chat.</p>
+<p><strong>No mobile UI.</strong> Web UI is localhost-only by design. Use Signal transport for mobile access.</p>
+<hr />
 <h2 id="troubleshooting">Troubleshooting</h2>
-<h3 id="dispatcher-not-running">"Dispatcher not running"</h3>
-<pre><code class="language-bash">outheis status   # Check if running
-outheis start    # Start it
-</code></pre>
-<h3 id="stale-pid-file">Stale PID file</h3>
+<p><strong>Dispatcher won't start</strong></p>
 <pre><code class="language-bash">rm ~/.outheis/.dispatcher.pid
-outheis start
+outheis start -f
 </code></pre>
-<h3 id="no-api-key">No API key</h3>
+<p><strong>No response from agents</strong></p>
+<pre><code class="language-bash">outheis status           # check dispatcher is running
+outheis send &quot;ping&quot;      # check relay responds
+</code></pre>
+<p><strong>Web UI not loading</strong>
+The Web UI starts with the dispatcher. If port 8080 is busy, change it in <code>config.json</code>:</p>
+<pre><code class="language-json">{&quot;webui&quot;: {&quot;port&quot;: 8081}}
+</code></pre>
+<p><strong>API key errors</strong></p>
 <pre><code class="language-bash">export ANTHROPIC_API_KEY=&quot;sk-ant-...&quot;
-# Or add to ~/.bashrc / ~/.zshrc
 </code></pre>
-<h3 id="macos-daemon-wont-start-in-background">macOS: Daemon won't start in background</h3>
-<p>Use foreground mode:</p>
-<pre><code class="language-bash">outheis start -f &amp;
-</code></pre>
+<p>Or set it permanently in <code>config.json</code> under <code>llm.providers.anthropic.api_key</code>.</p>
     <hr>
     <p class="footer">Open source under AGPL-3.0 · <a href="https://github.com/outheis-labs/outheis-minimal">Code on GitHub</a></p>
   </main>

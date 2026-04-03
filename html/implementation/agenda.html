@@ -192,6 +192,7 @@
         <a href="../design/index.html">Design</a>
         <a href="../implementation/architecture.html" class="active">Implementation</a>
         <a href="../implementation/guide.html">Workflows</a>
+        <a href="../installation/index.html">Installation</a>
         <a href="https://github.com/outheis-labs/outheis-minimal" class="external">GitHub ↗</a>
       </nav>
     </div>
@@ -216,37 +217,25 @@
 └── Exchange.md   # Async dialogue: system ↔ user
 </code></pre>
 <h3 id="dailymd">Daily.md</h3>
-<p>Your day at a glance. Contains:</p>
-<ul>
-<li><strong>🧘 Morning</strong> — Intentions, focus for the day</li>
-<li><strong>🔴 Schedule</strong> — Fixed appointments with times</li>
-<li><strong>🟠 Tasks</strong> — What needs doing today</li>
-<li><strong>Notes</strong> — Quick thoughts throughout the day</li>
-<li><strong>Evening</strong> — End-of-day reflection (optional)</li>
-</ul>
-<p>Example:</p>
-<pre><code class="language-markdown"># Montag, 30. März 2026
+<p>Your day at a glance. The default template:</p>
+<pre><code class="language-markdown">⛅ [Weekday, DD.MM.YYYY]
+*Refresh: HH:MM*
 
-## 🧘 Morning
-Focus today: Quarterly report finalisieren.
+---
+## 🧘 Persönlich
 
-## 🔴 Schedule
-- 09:00 Standup
-- 14:00 Client call (Project Alpha)
-- 16:30 Kinder abholen
+- [ ]
 
-## 🟠 Tasks
-- [ ] Quarterly report fertigstellen
-- [x] Email an X wegen Meeting
-- [ ] PR #42 reviewen
+---
+## 📅 Heute
 
-## Notes
-&lt;!-- 10:15 --&gt;
-Call mit Client lief gut. Follow-up nächste Woche.
+---
+## 🗓️ Diese Woche
 
-## Evening
-Guter Tag. Report noch offen — auf morgen verschieben.
+---
+## 💶 Cashflow
 </code></pre>
+<p>The structure is user-configurable. Once you establish your preferred layout, outheis preserves it exactly on each refresh — only the content changes, never the structure.</p>
 <p>outheis reads this file, understands your commitments, and can answer questions like "bin ich heute nachmittag frei?" or "was steht morgen an?"</p>
 <h3 id="inboxmd">Inbox.md</h3>
 <p>Quick capture without structure. When you have a thought but don't want to think about where it goes:</p>
@@ -313,11 +302,39 @@ Zahnarzt ist wichtiger, Team-Meeting verschieben.
 <li><strong>Update hashes</strong> — Store new file hashes for next comparison</li>
 <li><strong>Cache diffs</strong> — Save <code>.prev</code> versions for debugging</li>
 </ol>
-<h3 id="comments-matter">Comments Matter</h3>
-<p>HTML comments in Daily.md are noticed and processed:</p>
-<pre><code class="language-markdown">- [ ] Report schreiben #deadline-2025-03-28  &lt;!-- verschoben auf nächste Woche --&gt;
+<h3 id="annotations">Annotations</h3>
+<p>Lines starting with <code>&gt;</code> immediately after a task are processed as instructions:</p>
+<pre><code class="language-markdown">- [ ] Report schreiben
+&gt; verschieben auf nächste Woche
 </code></pre>
-<p>outheis sees this annotation and can act on it (e.g., update deadline, note in Evening).</p>
+<p>Supported actions:</p>
+<table>
+<thead>
+<tr>
+<th>Annotation</th>
+<th>Effect</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>&gt; erledigt</code> or <code>&gt; ✓</code></td>
+<td>Remove the item (mark done)</td>
+</tr>
+<tr>
+<td><code>&gt; verschieben auf [Datum]</code></td>
+<td>Reschedule to the given date</td>
+</tr>
+<tr>
+<td><code>&gt; wiedervorlage am [Datum]</code></td>
+<td>Schedule the item for that date</td>
+</tr>
+<tr>
+<td><code>&gt; nicht mehr wichtig</code></td>
+<td>Delete the item</td>
+</tr>
+</tbody>
+</table>
+<p>The <code>&gt;</code> line itself is always removed after processing.</p>
 <h3 id="time-window">Time Window</h3>
 <p>By default, hourly reviews only run between 04:55 and 23:55. No reviews during night hours (00:55–03:55). Configurable in <code>config.json</code>:</p>
 <pre><code class="language-json">{
@@ -357,8 +374,10 @@ touch ~/Documents/Vault/Agenda/{Daily,Inbox,Exchange}.md
 <li>"Schreib auf: Meeting mit Y am Freitag 10 Uhr"</li>
 </ul>
 <p>outheis reads your Agenda files and responds naturally.</p>
+<h3 id="read-queries">Read Queries</h3>
+<p>When asked to show the agenda ("Agenda", "was steht heute an", "gib mir die Agenda"), cato returns the content of Daily.md verbatim — no reformatting, no summarizing. The file content is the answer. Relay passes it through directly without a second LLM call.</p>
 <h2 id="integration-with-other-agents">Integration with Other Agents</h2>
-<p><strong>Relay (ou)</strong> routes schedule questions to Agenda and offers the <code>refresh_agenda</code> tool for manual updates.</p>
+<p><strong>Relay (ou)</strong> routes schedule questions to Agenda. Read queries ("Agenda", "was steht heute") are routed directly to cato, which returns Daily.md verbatim. Write/update queries go through the full tool loop.</p>
 <p><strong>Data Agent (zeno)</strong> can search your vault but doesn't write to Agenda files.</p>
 <p><strong>Action Agent (hiro)</strong> can execute tasks (send emails, create calendar events) but Agenda manages what's scheduled.</p>
 <p><strong>Pattern Agent (rumi)</strong> observes your scheduling patterns and may:
@@ -517,7 +536,7 @@ touch ~/Documents/Vault/Agenda/{Daily,Inbox,Exchange}.md
 <li><strong>Keep Daily.md simple</strong> — 🧘 Morning + 🔴 Schedule + 🟠 Tasks is enough</li>
 <li><strong>Use Inbox for quick capture</strong> — Don't think, just dump</li>
 <li><strong>Answer Exchange when you can</strong> — No rush, but it helps outheis learn</li>
-<li><strong>Add comments freely</strong> — <code>&lt;!-- notes --&gt;</code> won't break anything</li>
+<li><strong>Annotate with <code>&gt;</code></strong> — Use <code>&gt; verschieben auf ...</code> or <code>&gt; erledigt</code> to instruct outheis without editing the task itself</li>
 <li><strong>Let outheis manage structure</strong> — Focus on content, not formatting</li>
 <li><strong>Use manual refresh sparingly</strong> — Hourly is usually sufficient</li>
 </ol>

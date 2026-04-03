@@ -29,8 +29,9 @@ NAV_SECTIONS = [
         "url": "foundations/index.html",
         "match": "foundations",
         "items": [
-            {"label": "Why outheis",          "url": "foundations/index.html",                "match": "foundations/index"},
-            {"label": "Information and Semantics", "url": "foundations/02-semantic-foundations.html", "match": "02-semantic"},
+            {"label": "Why outheis",               "url": "foundations/index.html",                       "match": "foundations/index"},
+            {"label": "Information and Semantics", "url": "foundations/02-semantic-foundations.html",      "match": "02-semantic"},
+            {"label": "Attention as Architecture", "url": "foundations/03-attention-as-architecture.html", "match": "03-attention"},
         ],
     },
     {
@@ -46,7 +47,6 @@ NAV_SECTIONS = [
             {"label": "Related Work",          "url": "design/05-related-work.html",              "match": "05-related"},
             {"label": "Agent Prompts",         "url": "design/06-agent-prompts.html",             "match": "06-agent"},
             {"label": "Hybrid Memory Stack",   "url": "design/07-hybrid-memory-stack.html",       "match": "07-hybrid"},
-            {"label": "Attention as Architecture", "url": "design/08-attention-as-architecture.html", "match": "08-attention"},
         ],
     },
     {
@@ -70,6 +70,14 @@ NAV_SECTIONS = [
             {"label": "Configuration",   "url": "implementation/config.html",     "match": "implementation/config"},
             {"label": "Migration",       "url": "implementation/migration.html",  "match": "implementation/migration"},
             {"label": "Web UI",          "url": "implementation/webui.html",      "match": "implementation/webui"},
+        ],
+    },
+    {
+        "label": "Installation",
+        "url": "installation/index.html",
+        "match": "installation",
+        "items": [
+            {"label": "Installation", "url": "installation/index.html", "match": "installation/index"},
         ],
     },
 ]
