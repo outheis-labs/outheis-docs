@@ -924,6 +924,46 @@ Other agents read insights on next session
 - You can share it deliberately (future: federation)</p>
 <p>Your experience remains yours. The system is a tool that remembers <em>on your behalf</em>, not a platform that extracts <em>for its benefit</em>.</p>
 <hr />
+<h2 id="design-principles">Design Principles</h2>
+<h3 id="context-at-startup-not-via-tools">Context at Startup, Not Via Tools</h3>
+<p>Agents receive their relevant context when invoked — not by making tool calls to gather it during a run.</p>
+<pre><code class="language-python"># Wrong: agent gathers context through tools during the run
+read_daily()
+read_inbox()
+read_exchange()
+# then decide what to do
+
+# Right: agent gets context upfront, acts immediately
+context = load_agenda_context()  # daily + inbox + exchange + shadow
+# decide and act
+</code></pre>
+<p>This mirrors the OS process model: a process receives its memory space at launch. It does not request memory piecemeal during execution. Tools are for <strong>output</strong> (write, append, trigger) — not for data gathering that could be provided at startup.</p>
+<p><strong>Implication for tool design:</strong> If an agent consistently uses a tool only to read a fixed set of files at the start of every run, that read belongs in the invocation context, not in a tool call.</p>
+<h3 id="minimal-tools-maximum-context">Minimal Tools, Maximum Context</h3>
+<p>Every tool call consumes context budget and adds latency. The right design loads everything relevant at startup — and uses tools only for actions whose target isn't known in advance.</p>
+<table>
+<thead>
+<tr>
+<th>Use tools for</th>
+<th>Don't use tools for</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Writing output to a specific file</td>
+<td>Reading files that are always needed</td>
+</tr>
+<tr>
+<td>Triggering another agent</td>
+<td>Data available at startup</td>
+</tr>
+<tr>
+<td>On-demand detail beyond the index</td>
+<td>Decisions that only need context</td>
+</tr>
+</tbody>
+</table>
+<hr />
 <h2 id="appendix-prompt-templates">Appendix: Prompt Templates</h2>
 <h3 id="a1-simple-query-via-relay">A.1 Simple Query (via Relay)</h3>
 <p>User: "What did I write about project X?"</p>

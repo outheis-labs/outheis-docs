@@ -9,7 +9,12 @@ title: Guide
 ## Requirements
 
 - Python 3.11+
-- Anthropic API key
+- An Anthropic API key
+- A vault directory — a folder of Markdown files (Obsidian works directly)
+
+Optional for messaging via Signal:
+- A registered Signal account for the bot phone number
+- `signal-cli` installed and configured
 
 ## Installation
 
@@ -22,14 +27,102 @@ pip install -e ".[dev]"
 ## Setup
 
 ```bash
-# Initialize configuration
 outheis init
-
-# Set your API key
-export ANTHROPIC_API_KEY="sk-ant-..."
 ```
 
-Edit `~/.outheis/human/config.json`:
+This creates `~/.outheis/human/config.json` with defaults. Edit it:
+
+```bash
+$EDITOR ~/.outheis/human/config.json
+```
+
+Minimal required configuration:
+
+```json
+{
+  "human": {
+    "name": "Your Name",
+    "language": "en",
+    "timezone": "Europe/Berlin",
+    "vault": ["~/Documents/Vault"]
+  },
+  "llm": {
+    "providers": {
+      "anthropic": {
+        "api_key": "sk-ant-..."
+      }
+    },
+    "models": {
+      "fast":    {"provider": "anthropic", "name": "claude-haiku-4-5"},
+      "capable": {"provider": "anthropic", "name": "claude-sonnet-4-5"}
+    }
+  }
+}
+```
+
+The `vault` array accepts multiple paths. outheis monitors all of them.
+
+## Starting the Dispatcher
+
+```bash
+outheis start        # Background daemon
+outheis start -f     # Foreground (useful for first run / debugging)
+outheis status       # Check PID, uptime, agent status
+outheis stop         # Stop daemon
+```
+
+## Web UI
+
+Once the dispatcher is running, the Web UI is available at:
+
+```
+http://127.0.0.1:8080
+```
+
+It provides:
+- Live message feed (conversations with agents)
+- Memory, Rules, and Skills viewer and editor
+- Scheduler status and manual task triggers
+- Token usage overview
+
+The Web UI port and host are configurable in `config.json` under `"webui": {"host": "127.0.0.1", "port": 8080}`.
+
+## Vault Setup
+
+outheis treats your vault as a read-only knowledge source. Structure is flexible — any Markdown files work. The recommended Agenda layout:
+
+```
+vault/
+└── Agenda/
+    ├── Daily.md      # Today's schedule — written by cato
+    ├── Inbox.md      # Your quick capture — processed hourly
+    └── Exchange.md   # Async back-and-forth with cato
+```
+
+Create the `Agenda/` directory and empty files. cato generates `Daily.md` on first run.
+
+## Signal Setup (optional)
+
+To receive and send messages via Signal:
+
+1. Register a dedicated phone number with Signal
+2. Install and configure `signal-cli` for that number
+3. Add to `config.json`:
+
+```json
+{
+  "signal": {
+    "enabled": true,
+    "bot_name": "ou",
+    "bot_phone": "+49...",
+    "allowed": []
+  }
+}
+```
+
+Set `allowed` to an empty array to allow all contacts, or list specific numbers: `["+49..."]`.
+
+Edit `~/.outheis/human/config.json` for the full config:
 
 ```json
 {

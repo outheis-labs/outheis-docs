@@ -210,21 +210,88 @@
 <h2 id="requirements">Requirements</h2>
 <ul>
 <li>Python 3.11+</li>
-<li>Anthropic API key</li>
+<li>An Anthropic API key</li>
+<li>A vault directory — a folder of Markdown files (Obsidian works directly)</li>
 </ul>
+<p>Optional for messaging via Signal:
+- A registered Signal account for the bot phone number
+- <code>signal-cli</code> installed and configured</p>
 <h2 id="installation">Installation</h2>
 <pre><code class="language-bash">git clone https://github.com/outheis-labs/outheis-minimal.git
 cd outheis-minimal
 pip install -e &quot;.[dev]&quot;
 </code></pre>
 <h2 id="setup">Setup</h2>
-<pre><code class="language-bash"># Initialize configuration
-outheis init
-
-# Set your API key
-export ANTHROPIC_API_KEY=&quot;sk-ant-...&quot;
+<pre><code class="language-bash">outheis init
 </code></pre>
-<p>Edit <code>~/.outheis/human/config.json</code>:</p>
+<p>This creates <code>~/.outheis/human/config.json</code> with defaults. Edit it:</p>
+<pre><code class="language-bash">$EDITOR ~/.outheis/human/config.json
+</code></pre>
+<p>Minimal required configuration:</p>
+<pre><code class="language-json">{
+  &quot;human&quot;: {
+    &quot;name&quot;: &quot;Your Name&quot;,
+    &quot;language&quot;: &quot;en&quot;,
+    &quot;timezone&quot;: &quot;Europe/Berlin&quot;,
+    &quot;vault&quot;: [&quot;~/Documents/Vault&quot;]
+  },
+  &quot;llm&quot;: {
+    &quot;providers&quot;: {
+      &quot;anthropic&quot;: {
+        &quot;api_key&quot;: &quot;sk-ant-...&quot;
+      }
+    },
+    &quot;models&quot;: {
+      &quot;fast&quot;:    {&quot;provider&quot;: &quot;anthropic&quot;, &quot;name&quot;: &quot;claude-haiku-4-5&quot;},
+      &quot;capable&quot;: {&quot;provider&quot;: &quot;anthropic&quot;, &quot;name&quot;: &quot;claude-sonnet-4-5&quot;}
+    }
+  }
+}
+</code></pre>
+<p>The <code>vault</code> array accepts multiple paths. outheis monitors all of them.</p>
+<h2 id="starting-the-dispatcher">Starting the Dispatcher</h2>
+<pre><code class="language-bash">outheis start        # Background daemon
+outheis start -f     # Foreground (useful for first run / debugging)
+outheis status       # Check PID, uptime, agent status
+outheis stop         # Stop daemon
+</code></pre>
+<h2 id="web-ui">Web UI</h2>
+<p>Once the dispatcher is running, the Web UI is available at:</p>
+<pre><code>http://127.0.0.1:8080
+</code></pre>
+<p>It provides:
+- Live message feed (conversations with agents)
+- Memory, Rules, and Skills viewer and editor
+- Scheduler status and manual task triggers
+- Token usage overview</p>
+<p>The Web UI port and host are configurable in <code>config.json</code> under <code>"webui": {"host": "127.0.0.1", "port": 8080}</code>.</p>
+<h2 id="vault-setup">Vault Setup</h2>
+<p>outheis treats your vault as a read-only knowledge source. Structure is flexible — any Markdown files work. The recommended Agenda layout:</p>
+<pre><code>vault/
+└── Agenda/
+    ├── Daily.md      # Today's schedule — written by cato
+    ├── Inbox.md      # Your quick capture — processed hourly
+    └── Exchange.md   # Async back-and-forth with cato
+</code></pre>
+<p>Create the <code>Agenda/</code> directory and empty files. cato generates <code>Daily.md</code> on first run.</p>
+<h2 id="signal-setup-optional">Signal Setup (optional)</h2>
+<p>To receive and send messages via Signal:</p>
+<ol>
+<li>Register a dedicated phone number with Signal</li>
+<li>Install and configure <code>signal-cli</code> for that number</li>
+<li>Add to <code>config.json</code>:</li>
+</ol>
+<pre><code class="language-json">{
+  &quot;signal&quot;: {
+    &quot;enabled&quot;: true,
+    &quot;bot_name&quot;: &quot;ou&quot;,
+    &quot;bot_phone&quot;: &quot;+49...&quot;,
+    &quot;allowed&quot;: []
+  }
+}
+</code></pre>
+<p>Set <code>allowed</code> to an empty array to allow all contacts, or list specific numbers: <code>["+49..."]</code>.</p>
+<p>Edit <code>~/.outheis/human/config.json</code> for the full config:</p>
 <pre><code class="language-json">{
   &quot;user&quot;: {
     &quot;name&quot;: &quot;your-name&quot;,

@@ -657,6 +657,40 @@ Your experience remains yours. The system is a tool that remembers *on your beha
 
 ---
 
+## Design Principles
+
+### Context at Startup, Not Via Tools
+
+Agents receive their relevant context when invoked — not by making tool calls to gather it during a run.
+
+```python
+# Wrong: agent gathers context through tools during the run
+read_daily()
+read_inbox()
+read_exchange()
+# then decide what to do
+
+# Right: agent gets context upfront, acts immediately
+context = load_agenda_context()  # daily + inbox + exchange + shadow
+# decide and act
+```
+
+This mirrors the OS process model: a process receives its memory space at launch. It does not request memory piecemeal during execution. Tools are for **output** (write, append, trigger) — not for data gathering that could be provided at startup.
+
+**Implication for tool design:** If an agent consistently uses a tool only to read a fixed set of files at the start of every run, that read belongs in the invocation context, not in a tool call.
+
+### Minimal Tools, Maximum Context
+
+Every tool call consumes context budget and adds latency. The right design loads everything relevant at startup — and uses tools only for actions whose target isn't known in advance.
+
+| Use tools for | Don't use tools for |
+|--------------|---------------------|
+| Writing output to a specific file | Reading files that are always needed |
+| Triggering another agent | Data available at startup |
+| On-demand detail beyond the index | Decisions that only need context |
+
+---
+
 ## Appendix: Prompt Templates
 
 ### A.1 Simple Query (via Relay)

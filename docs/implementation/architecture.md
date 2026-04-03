@@ -52,7 +52,7 @@ Six agents, each with a name and role:
 | data | zeno | Vault search (via tool) | Vault, Memory | — |
 | agenda | cato | Schedule queries (via tool) | Agenda/ | Agenda/ |
 | action | hiro | External actions, background jobs | Task registry | External |
-| pattern | rumi | Scheduled (04:00) | Messages, Seed | Memory, Rules |
+| pattern | rumi | Scheduled (04:00), 7-tool autonomous loop | Messages, Memory | Memory, Rules, Skills |
 | code | alan | Code questions (development only) | Source code | vault/Codebase/ |
 
 ### Routing
@@ -263,6 +263,7 @@ The dispatcher runs periodic tasks via built-in scheduler. All times configurabl
 | `pattern_nightly` | 04:00 | Extract memories, consolidate, promote rules |
 | `index_rebuild` | 04:30 | Rebuild vault search indices |
 | `archive_rotation` | 05:00 | Archive old messages |
+| `shadow_scan` | 03:30 | Scan vault for chronological entries → Shadow.md |
 | `agenda_review` | xx:55 (04-23) | Parse Agenda files (conditional on changes) |
 | `action_tasks` | every 15 min | Run due scheduled tasks |
 | `session_summary` | every 6 hours | Extract session insights |
@@ -276,22 +277,45 @@ In `config.json`:
 ```json
 {
   "schedule": {
-    "pattern_nightly": {"enabled": true, "hour": 4, "minute": 0},
-    "index_rebuild": {"enabled": true, "hour": 4, "minute": 30},
-    "archive_rotation": {"enabled": true, "hour": 5, "minute": 0},
+    "pattern_nightly": {"enabled": true, "times": ["04:00"]},
+    "index_rebuild":   {"enabled": true, "times": ["04:30"]},
+    "archive_rotation":{"enabled": true, "times": ["05:00"]},
+    "shadow_scan":     {"enabled": true, "times": ["03:30"]},
     "agenda_review": {
       "enabled": true,
-      "hourly_at_minute": 55,
-      "start_hour": 4,
-      "end_hour": 23
-    },
-    "action_tasks": {"enabled": true},
-    "session_summary": {"enabled": true}
+      "times": ["04:55","05:55","06:55","07:55","08:55","09:55",
+                "10:55","11:55","12:55","13:55","14:55","15:55",
+                "16:55","17:55","18:55","19:55","20:55","21:55",
+                "22:55","23:55"]
+    }
   }
 }
 ```
 
-Each task can be disabled independently. Agents run sequentially in the early morning to avoid conflicts.
+Each task can be disabled independently. Tasks run in daemon threads — a running task blocks a second start of the same task but not others.
+
+## The Scaling Problem
+
+As a vault grows, agents can't hold everything in context. This is addressed through abstraction, not by adding more read-tools.
+
+**Wrong:** more tools
+```
+read_file_1(), read_file_2(), ... read_file_n()
+```
+
+**Right:** better abstractions — an index the agent can query, with on-demand detail.
+
+Four strategies in use or planned:
+
+**1. Index with recency weighting** — The Data agent maintains a search index. Agents see a compact index, not raw files. The index includes access frequency and recency signals.
+
+**2. Shadow.md as chronological pre-filter** — The Data agent runs a nightly vault scan and writes all time-relevant entries into a single structured file (`Agenda/Shadow.md`). The Agenda agent loads this instead of scanning the full vault on every hourly review.
+
+**3. Progressive loading** — Overview first, detail on demand. The `load_skill(topic)` mechanism works like controlled demand paging: the agent has a summary in context and requests detail only when needed.
+
+**4. Skill-based compression** — Skills replace lengthy instructions. "Use ISO dates" instead of ten examples. Better skills mean smaller prompts and more room for user content.
+
+---
 
 ## Further Reading
 
