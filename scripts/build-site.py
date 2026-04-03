@@ -61,7 +61,7 @@ NAV_SECTIONS = [
         ],
     },
     {
-        "label": "Usage",
+        "label": "Workflows",
         "url": "implementation/guide.html",
         "match": "guide|config|migration|webui",
         "items": [
