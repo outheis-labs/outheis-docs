@@ -1,0 +1,796 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Konfiguration · outheis</title>
+  <link rel="icon" type="image/png" href="../../favicon-96x96.png" sizes="96x96">
+  <link rel="icon" type="image/svg+xml" href="../../favicon.svg">
+  <link rel="shortcut icon" href="../../favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="../../apple-touch-icon.png">
+  <link rel="manifest" href="../../site.webmanifest">
+  <style>
+    @font-face {
+      font-family: 'Inter';
+      src: url('../../assets/fonts/InterVariable.woff2') format('woff2'),
+           url('../../assets/fonts/InterVariable.ttf') format('truetype');
+      font-weight: 100 900;
+      font-style: normal;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'Inter';
+      src: url('../../assets/fonts/InterVariable-Italic.woff2') format('woff2');
+      font-weight: 100 900;
+      font-style: italic;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'Inter var';
+      src: url('../../assets/fonts/InterVariable.woff2') format('woff2'),
+           url('../../assets/fonts/InterVariable.ttf') format('truetype');
+      font-weight: 100 900;
+      font-style: normal;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'Inter var';
+      src: url('../../assets/fonts/InterVariable-Italic.woff2') format('woff2');
+      font-weight: 100 900;
+      font-style: italic;
+      font-display: swap;
+    }
+  </style>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --font-body: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-ui: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-mono: SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      --color-text: #1a1a1a;
+      --color-text-muted: #666;
+      --color-text-faint: #999;
+      --color-border: #e0e0e0;
+      --color-bg-code: #f5f5f5;
+      --header-height: 52px;
+      --subnav-height: 40px;
+    }
+
+    @supports (font-variation-settings: normal) {
+      :root { --font-body: "Inter var", sans-serif; --font-ui: "Inter var", sans-serif; }
+    }
+
+    html, body {
+      width: 100%;
+      min-height: 100vh;
+      background: #fff;
+      font-family: var(--font-body);
+      font-size: 15px;
+      line-height: 1.6;
+      color: var(--color-text);
+    }
+
+    /* ── Header ── */
+
+    .header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: #fff;
+      border-bottom: 1px solid var(--color-border);
+    }
+
+    .header-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0 2rem;
+      height: var(--header-height);
+      gap: 2rem;
+    }
+
+    .logo-link {
+      display: flex;
+      align-items: center;
+      text-decoration: none;
+      flex-shrink: 0;
+    }
+
+    .site-name {
+      font-family: var(--font-ui);
+      font-size: 20px;
+      font-weight: 600;
+      color: var(--color-text);
+      letter-spacing: -0.01em;
+    }
+
+    .topnav {
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
+    }
+
+    .topnav a {
+      font-family: var(--font-ui);
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--color-text-muted);
+      text-decoration: none;
+      padding: 0.3rem 0.65rem;
+      border-radius: 4px;
+      white-space: nowrap;
+    }
+
+    .topnav a:hover { color: var(--color-text); background: var(--color-bg-code); }
+    .topnav a.active { color: var(--color-text); font-weight: 600; }
+    .topnav a.external { color: var(--color-text-faint); }
+
+    /* ── Sub-nav ── */
+
+    .subnav-bar {
+      border-bottom: 1px solid var(--color-border);
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+    .subnav-bar::-webkit-scrollbar { display: none; }
+    .subnav-bar:empty,
+    .subnav-bar.hidden { display: none; }
+
+    .subnav-inner {
+      display: flex;
+      align-items: center;
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0 2rem;
+      gap: 0.1rem;
+      height: var(--subnav-height);
+    }
+
+    .subnav-inner a {
+      font-family: var(--font-ui);
+      font-size: 13px;
+      color: var(--color-text-muted);
+      text-decoration: none;
+      padding: 0.25rem 0.6rem;
+      border-radius: 3px;
+      white-space: nowrap;
+    }
+
+    .subnav-inner a:hover { color: var(--color-text); background: var(--color-bg-code); }
+    .subnav-inner a.active { color: var(--color-text); font-weight: 500; }
+
+    /* ── Content ── */
+
+    .content {
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 2.5rem 2rem 4rem;
+    }
+
+    .content > *:first-child { margin-top: 0; }
+
+    .content h1 { font-family: var(--font-ui); font-size: 28px; font-weight: 600; margin-bottom: 0.5rem; letter-spacing: -0.02em; }
+    .content h2 { font-family: var(--font-ui); font-size: 18px; font-weight: 600; margin-top: 2rem; margin-bottom: 1.25rem; }
+    .content h3 { font-family: var(--font-ui); font-size: 15px; font-weight: 600; margin-top: 1.5rem; margin-bottom: 0.75rem; }
+    .content p { margin-bottom: 1rem; }
+    .content a { color: var(--color-text-muted); }
+    .content a:hover { color: var(--color-text); }
+    .content ul, .content ol { margin-bottom: 1rem; padding-left: 1.5rem; }
+    .content li { margin-bottom: 0.4rem; }
+
+    .content table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; font-family: var(--font-ui); font-size: 13px; }
+    .content th, .content td { text-align: left; padding: 0.5rem 0.75rem; border-bottom: 1px solid var(--color-border); }
+    .content th { font-weight: 500; font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--color-text-muted); }
+
+    .content code { font-family: var(--font-mono); font-size: 14px; background: var(--color-bg-code); padding: 0.15em 0.4em; border-radius: 3px; }
+    .content pre { background: var(--color-bg-code); padding: 1rem 1.25rem; overflow-x: auto; margin: 1.5rem 0; font-size: 13px; border-radius: 4px; line-height: 1.5; }
+    .content pre code { background: none; padding: 0; border-radius: 0; }
+
+    .content hr { border: none; border-top: 1px solid var(--color-border); margin: 1.5rem 0; }
+    .content strong { font-weight: 500; }
+    .content em { font-style: italic; }
+    .content blockquote { border-left: 2px solid var(--color-border); padding-left: 1.25rem; margin: 1.5rem 0; color: var(--color-text-muted); font-style: italic; }
+    .content .lead { font-style: italic; color: var(--color-text-muted); margin-bottom: 2rem; }
+    .content .footer { font-size: 12px; color: var(--color-text-faint); font-style: italic; }
+
+    /* ── Mobile ── */
+
+    /* ── Language switch ── */
+
+    .lang-switch {
+      font-family: var(--font-ui);
+      font-size: 13px;
+      color: var(--color-text-muted);
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .lang-switch .lang-active {
+      color: var(--color-text);
+      font-weight: 500;
+    }
+
+    .lang-switch a.lang-link {
+      color: var(--color-text-muted);
+      text-decoration: none;
+    }
+
+    .lang-switch a.lang-link:hover { color: var(--color-text); }
+
+    /* ── Mobile ── */
+
+    @media (max-width: 640px) {
+      .header-inner { padding: 0 1.25rem; gap: 1rem; }
+      .topnav { gap: 0; }
+      .topnav a { padding: 0.3rem 0.5rem; font-size: 13px; }
+      .topnav a.external { display: none; }
+      .subnav-inner { padding: 0 1.25rem; }
+      .content { padding: 2rem 1.25rem 3rem; }
+      .content h1 { font-size: 24px; }
+      .content h2 { font-size: 16px; }
+    }
+  </style>
+</head>
+<body>
+  <header class="header">
+    <div class="header-inner">
+      <a href="../../index.html" class="logo-link">
+        <span class="site-name">οὐθείς</span>
+      </a>
+      <nav class="topnav">
+        <a href="../foundations/index.html">Grundlagen</a>
+        <a href="../design/index.html">Design</a>
+        <a href="../implementation/architecture.html">Implementierung</a>
+        <a href="../installation/release-notes.html" class="active">Installation</a>
+        <a href="../workflows/index.html">Workflows</a>
+        <a href="https://github.com/outheis-labs/outheis-minimal" class="external">GitHub ↗</a>
+      </nav>
+      <div class="lang-switch"><a href="../../implementation/config.html" class="lang-link">EN</a> · <span class="lang-active">DE</span></div>
+    </div>
+  </header>
+  <div class="subnav-bar">
+    <div class="subnav-inner">
+      <a href="../installation/release-notes.html">Release Notes</a>
+      <a href="../implementation/guide.html">Erste Schritte</a>
+      <a href="../implementation/config.html" class="active">Konfiguration</a>
+      <a href="../implementation/signal.html">Signal</a>
+      <a href="../implementation/migration.html">Migration</a>
+      <a href="../implementation/webui.html">Web UI</a>
+    </div>
+  </div>
+  <main class="content">
+    <h1 id="konfiguration">Konfiguration</h1>
+<p><em>Vollständige Referenz für <code>config.json</code>.</em></p>
+<h2 id="ort">Ort</h2>
+<pre><code>~/.outheis/human/config.json
+</code></pre>
+<p>Wird beim ersten <code>outheis start</code> automatisch mit sinnvollen Standardwerten erstellt.</p>
+<h2 id="vollstandiges-beispiel">Vollständiges Beispiel</h2>
+<pre><code class="language-json">{
+  &quot;human&quot;: {
+    &quot;name&quot;: &quot;Max&quot;,
+    &quot;phone&quot;: [&quot;+49123456789&quot;],
+    &quot;language&quot;: &quot;de&quot;,
+    &quot;timezone&quot;: &quot;Europe/Berlin&quot;,
+    &quot;vault&quot;: [&quot;~/Documents/Vault&quot;, &quot;~/Work/Notes&quot;]
+  },
+  &quot;signal&quot;: {
+    &quot;enabled&quot;: false,
+    &quot;bot_phone&quot;: &quot;+49987654321&quot;,
+    &quot;bot_name&quot;: &quot;Ou&quot;,
+    &quot;allowed&quot;: [
+      {&quot;name&quot;: &quot;Partner&quot;, &quot;phone&quot;: &quot;+49111222333&quot;}
+    ]
+  },
+  &quot;llm&quot;: {
+    &quot;providers&quot;: {
+      &quot;anthropic&quot;: {
+        &quot;api_key&quot;: &quot;sk-ant-...&quot;
+      },
+      &quot;ollama&quot;: {
+        &quot;base_url&quot;: &quot;http://localhost:11434&quot;
+      }
+    },
+    &quot;models&quot;: {
+      &quot;fast&quot;: {
+        &quot;provider&quot;: &quot;anthropic&quot;,
+        &quot;name&quot;: &quot;claude-haiku-4-5&quot;,
+        &quot;run_mode&quot;: &quot;on-demand&quot;
+      },
+      &quot;capable&quot;: {
+        &quot;provider&quot;: &quot;anthropic&quot;,
+        &quot;name&quot;: &quot;claude-sonnet-4-20250514&quot;,
+        &quot;run_mode&quot;: &quot;on-demand&quot;
+      },
+      &quot;local&quot;: {
+        &quot;provider&quot;: &quot;ollama&quot;,
+        &quot;name&quot;: &quot;llama3.2:3b&quot;,
+        &quot;run_mode&quot;: &quot;persistent&quot;
+      }
+    }
+  },
+  &quot;agents&quot;: {
+    &quot;relay&quot;: {&quot;name&quot;: &quot;ou&quot;, &quot;model&quot;: &quot;fast&quot;, &quot;enabled&quot;: true},
+    &quot;data&quot;: {&quot;name&quot;: &quot;zeno&quot;, &quot;model&quot;: &quot;capable&quot;, &quot;enabled&quot;: true},
+    &quot;agenda&quot;: {&quot;name&quot;: &quot;cato&quot;, &quot;model&quot;: &quot;capable&quot;, &quot;enabled&quot;: true},
+    &quot;action&quot;: {&quot;name&quot;: &quot;hiro&quot;, &quot;model&quot;: &quot;capable&quot;, &quot;enabled&quot;: false},
+    &quot;pattern&quot;: {&quot;name&quot;: &quot;rumi&quot;, &quot;model&quot;: &quot;capable&quot;, &quot;enabled&quot;: true},
+    &quot;code&quot;: {&quot;name&quot;: &quot;alan&quot;, &quot;model&quot;: &quot;capable&quot;, &quot;enabled&quot;: false}
+  },
+  &quot;schedule&quot;: {
+    &quot;pattern_nightly&quot;: {&quot;enabled&quot;: true, &quot;hour&quot;: 4, &quot;minute&quot;: 0},
+    &quot;index_rebuild&quot;: {&quot;enabled&quot;: true, &quot;hour&quot;: 4, &quot;minute&quot;: 30},
+    &quot;archive_rotation&quot;: {&quot;enabled&quot;: true, &quot;hour&quot;: 5, &quot;minute&quot;: 0},
+    &quot;session_summary&quot;: {&quot;enabled&quot;: true, &quot;minute&quot;: 0},
+    &quot;agenda_review&quot;: {
+      &quot;enabled&quot;: true,
+      &quot;hourly_at_minute&quot;: 55,
+      &quot;start_hour&quot;: 4,
+      &quot;end_hour&quot;: 23
+    },
+    &quot;action_tasks&quot;: {&quot;enabled&quot;: true}
+  },
+  &quot;updates&quot;: {
+    &quot;auto_migrate&quot;: true,
+    &quot;schedule&quot;: &quot;04:00&quot;
+  }
+}
+</code></pre>
+<h2 id="abschnitte">Abschnitte</h2>
+<h3 id="human">human</h3>
+<p>Benutzeridentifikation und Vault-Orte.</p>
+<table>
+<thead>
+<tr>
+<th>Feld</th>
+<th>Typ</th>
+<th>Standard</th>
+<th>Beschreibung</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>name</code></td>
+<td>string</td>
+<td>"Human"</td>
+<td>Anzeigename</td>
+</tr>
+<tr>
+<td><code>phone</code></td>
+<td>string[]</td>
+<td>[]</td>
+<td>Telefonnummern (für Signal-Transport)</td>
+</tr>
+<tr>
+<td><code>language</code></td>
+<td>string</td>
+<td>"en"</td>
+<td>Bevorzugter Sprachcode</td>
+</tr>
+<tr>
+<td><code>timezone</code></td>
+<td>string</td>
+<td>"Europe/Berlin"</td>
+<td>IANA-Zeitzone</td>
+</tr>
+<tr>
+<td><code>vault</code></td>
+<td>string[]</td>
+<td>["~/Documents/Vault"]</td>
+<td>Vault-Verzeichnisse (erstes ist primär)</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Umgebungsvariablen-Überschreibungen:</strong>
+- <code>OUTHEIS_HUMAN_DIR</code> — Human-Datenverzeichnis überschreiben (~/.outheis/human)
+- <code>OUTHEIS_VAULT</code> — Primären Vault-Pfad überschreiben</p>
+<h3 id="signal">signal</h3>
+<p>Signal Messenger Transport-Konfiguration.</p>
+<table>
+<thead>
+<tr>
+<th>Feld</th>
+<th>Typ</th>
+<th>Standard</th>
+<th>Beschreibung</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>enabled</code></td>
+<td>bool</td>
+<td>false</td>
+<td>Signal-Transport aktivieren</td>
+</tr>
+<tr>
+<td><code>bot_phone</code></td>
+<td>string</td>
+<td>null</td>
+<td>Telefonnummer des Bots</td>
+</tr>
+<tr>
+<td><code>bot_name</code></td>
+<td>string</td>
+<td>"Ou"</td>
+<td>Bot-Anzeigename</td>
+</tr>
+<tr>
+<td><code>allowed</code></td>
+<td>object[]</td>
+<td>[]</td>
+<td>Weitere erlaubte Kontakte</td>
+</tr>
+</tbody>
+</table>
+<p>Format erlaubter Kontakte:</p>
+<pre><code class="language-json">{&quot;name&quot;: &quot;Partner&quot;, &quot;phone&quot;: &quot;+49111222333&quot;}
+</code></pre>
+<p>Die eigene Telefonnummer des Benutzers (aus <code>human.phone</code>) ist immer erlaubt.</p>
+<h3 id="llm">llm</h3>
+<p>LLM-Anbieter und Modell-Aliase.</p>
+<h4 id="providers">providers</h4>
+<table>
+<thead>
+<tr>
+<th>Feld</th>
+<th>Typ</th>
+<th>Beschreibung</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>api_key</code></td>
+<td>string</td>
+<td>API-Schlüssel (oder Umgebungsvariable verwenden)</td>
+</tr>
+<tr>
+<td><code>base_url</code></td>
+<td>string</td>
+<td>Basis-URL überschreiben (für Ollama, benutzerdefinierte Endpunkte)</td>
+</tr>
+</tbody>
+</table>
+<p>Anbieternamen: <code>anthropic</code>, <code>ollama</code>, <code>openai</code></p>
+<p><strong>API-Schlüssel-Auflösung:</strong>
+1. Konfigurationsdatei (<code>api_key</code>-Feld)
+2. Umgebungsvariable (<code>ANTHROPIC_API_KEY</code> usw.)</p>
+<h4 id="models">models</h4>
+<p>Modell-Aliase, die von Agenten verwendet werden.</p>
+<table>
+<thead>
+<tr>
+<th>Feld</th>
+<th>Typ</th>
+<th>Standard</th>
+<th>Beschreibung</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>provider</code></td>
+<td>string</td>
+<td>"anthropic"</td>
+<td>Welcher Anbieter zu verwenden ist</td>
+</tr>
+<tr>
+<td><code>name</code></td>
+<td>string</td>
+<td>—</td>
+<td>Modell-Bezeichner</td>
+</tr>
+<tr>
+<td><code>run_mode</code></td>
+<td>string</td>
+<td>"on-demand"</td>
+<td><code>on-demand</code> oder <code>persistent</code></td>
+</tr>
+</tbody>
+</table>
+<p><strong>run_mode:</strong>
+- <code>on-demand</code> — Modell pro Anfrage starten (Cloud-APIs)
+- <code>persistent</code> — Modell geladen halten (lokales Ollama)</p>
+<p><strong>Standard-Aliase:</strong></p>
+<pre><code class="language-json">{
+  &quot;fast&quot;: {&quot;provider&quot;: &quot;anthropic&quot;, &quot;name&quot;: &quot;claude-haiku-4-5&quot;},
+  &quot;capable&quot;: {&quot;provider&quot;: &quot;anthropic&quot;, &quot;name&quot;: &quot;claude-sonnet-4-20250514&quot;}
+}
+</code></pre>
+<h3 id="agents">agents</h3>
+<p>Agenten-Konfiguration. Jeder Agent hat:</p>
+<table>
+<thead>
+<tr>
+<th>Feld</th>
+<th>Typ</th>
+<th>Standard</th>
+<th>Beschreibung</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>name</code></td>
+<td>string</td>
+<td>(variiert)</td>
+<td>Anzeigename (ou, zeno, cato, hiro, rumi, alan)</td>
+</tr>
+<tr>
+<td><code>model</code></td>
+<td>string</td>
+<td>"capable"</td>
+<td>Zu verwendender Modell-Alias</td>
+</tr>
+<tr>
+<td><code>enabled</code></td>
+<td>bool</td>
+<td>true</td>
+<td>Ob Agent aktiv ist</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Agenten-Rollen:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Rolle</th>
+<th>Standard-Name</th>
+<th>Standard-Modell</th>
+<th>Zweck</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>relay</td>
+<td>ou</td>
+<td>fast</td>
+<td>Nachrichtenrouting, Gespräch</td>
+</tr>
+<tr>
+<td>data</td>
+<td>zeno</td>
+<td>capable</td>
+<td>Vault-Suche</td>
+</tr>
+<tr>
+<td>agenda</td>
+<td>cato</td>
+<td>capable</td>
+<td>Terminverwaltung</td>
+</tr>
+<tr>
+<td>action</td>
+<td>hiro</td>
+<td>capable</td>
+<td>Externe Aktionen (standardmäßig deaktiviert)</td>
+</tr>
+<tr>
+<td>pattern</td>
+<td>rumi</td>
+<td>capable</td>
+<td>Memory-Extraktion, Rules</td>
+</tr>
+<tr>
+<td>code</td>
+<td>alan</td>
+<td>capable</td>
+<td>Code-Intelligenz (nur Entwicklung, deaktiviert)</td>
+</tr>
+</tbody>
+</table>
+<p>Deaktivierte Agenten werden nicht instanziiert und ihre geplanten Aufgaben laufen nicht.</p>
+<h3 id="schedule">schedule</h3>
+<p>Konfiguration geplanter Aufgaben.</p>
+<h4 id="aufgaben-zu-festen-zeiten">Aufgaben zu festen Zeiten</h4>
+<table>
+<thead>
+<tr>
+<th>Aufgabe</th>
+<th>Standard</th>
+<th>Beschreibung</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>pattern_nightly</code></td>
+<td>04:00</td>
+<td>Memory-Extraktion, Konsolidierung</td>
+</tr>
+<tr>
+<td><code>index_rebuild</code></td>
+<td>04:30</td>
+<td>Vault-Suchindizes neu erstellen</td>
+</tr>
+<tr>
+<td><code>archive_rotation</code></td>
+<td>05:00</td>
+<td>Alte Nachrichten archivieren</td>
+</tr>
+</tbody>
+</table>
+<p>Felder:</p>
+<pre><code class="language-json">{
+  &quot;enabled&quot;: true,
+  &quot;hour&quot;: 4,
+  &quot;minute&quot;: 0
+}
+</code></pre>
+<h4 id="stundliche-aufgaben">Stündliche Aufgaben</h4>
+<table>
+<thead>
+<tr>
+<th>Aufgabe</th>
+<th>Standard</th>
+<th>Beschreibung</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>agenda_review</code></td>
+<td>xx:55 (04-23)</td>
+<td>Agenda-Dateien verarbeiten</td>
+</tr>
+</tbody>
+</table>
+<p>Felder:</p>
+<pre><code class="language-json">{
+  &quot;enabled&quot;: true,
+  &quot;hourly_at_minute&quot;: 55,
+  &quot;start_hour&quot;: 4,
+  &quot;end_hour&quot;: 23
+}
+</code></pre>
+<ul>
+<li><code>hourly_at_minute</code> — In dieser Minute jeder Stunde ausführen</li>
+<li><code>start_hour</code> — Erste Stunde des Tages zum Ausführen (einschließlich)</li>
+<li><code>end_hour</code> — Letzte Stunde des Tages zum Ausführen (einschließlich)</li>
+</ul>
+<p><strong>Bedingte Ausführung:</strong> Agenda-Überprüfung prüft Datei-Hashes vor dem Laufen. Wenn nichts geändert wurde, wird kein LLM-Aufruf gemacht. Morgen- (start_hour) und Abendläufe (end_hour) sind unbedingt.</p>
+<h4 id="intervall-aufgaben">Intervall-Aufgaben</h4>
+<table>
+<thead>
+<tr>
+<th>Aufgabe</th>
+<th>Intervall</th>
+<th>Beschreibung</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>session_summary</code></td>
+<td>6 Stunden</td>
+<td>Sitzungs-Insights extrahieren</td>
+</tr>
+<tr>
+<td><code>action_tasks</code></td>
+<td>15 Minuten</td>
+<td>Fällige Action-Aufgaben ausführen</td>
+</tr>
+</tbody>
+</table>
+<p>Felder:</p>
+<pre><code class="language-json">{
+  &quot;enabled&quot;: true
+}
+</code></pre>
+<p>Intervall ist fest kodiert; nur <code>enabled</code> ist konfigurierbar.</p>
+<h3 id="updates">updates</h3>
+<p>Memory-Migration und Housekeeping.</p>
+<table>
+<thead>
+<tr>
+<th>Feld</th>
+<th>Typ</th>
+<th>Standard</th>
+<th>Beschreibung</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>auto_migrate</code></td>
+<td>bool</td>
+<td>true</td>
+<td>Seed-Dateien automatisch verarbeiten</td>
+</tr>
+<tr>
+<td><code>schedule</code></td>
+<td>string</td>
+<td>"04:00"</td>
+<td>Zeit für Update-Aufgaben</td>
+</tr>
+</tbody>
+</table>
+<h2 id="minimale-konfiguration">Minimale Konfiguration</h2>
+<p>Die kleinste funktionierende Konfiguration:</p>
+<pre><code class="language-json">{
+  &quot;llm&quot;: {
+    &quot;providers&quot;: {
+      &quot;anthropic&quot;: {
+        &quot;api_key&quot;: &quot;sk-ant-...&quot;
+      }
+    }
+  }
+}
+</code></pre>
+<p>Alles andere verwendet Standardwerte.</p>
+<h2 id="umgebungsvariablen">Umgebungsvariablen</h2>
+<table>
+<thead>
+<tr>
+<th>Variable</th>
+<th>Zweck</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ANTHROPIC_API_KEY</code></td>
+<td>Anthropic-API-Schlüssel (Fallback)</td>
+</tr>
+<tr>
+<td><code>OPENAI_API_KEY</code></td>
+<td>OpenAI-API-Schlüssel (Fallback)</td>
+</tr>
+<tr>
+<td><code>OUTHEIS_HUMAN_DIR</code></td>
+<td>Human-Verzeichnis überschreiben</td>
+</tr>
+<tr>
+<td><code>OUTHEIS_VAULT</code></td>
+<td>Primären Vault überschreiben</td>
+</tr>
+</tbody>
+</table>
+<p>Umgebungsvariablen haben Vorrang vor Konfigurationsdatei-Werten.</p>
+<h2 id="cli-befehle">CLI-Befehle</h2>
+<pre><code class="language-bash"># Show current config
+outheis config show
+
+# Edit config (opens in $EDITOR)
+outheis config edit
+
+# Set a value
+outheis config set human.language de
+
+# Validate config
+outheis config validate
+</code></pre>
+<h2 id="validierung">Validierung</h2>
+<p>Die Konfiguration wird beim Laden validiert. Ungültige Konfiguration verhindert den Daemon-Start:</p>
+<ul>
+<li>Pflichtfelder müssen vorhanden sein</li>
+<li>Typen müssen übereinstimmen (string, int, bool, array)</li>
+<li>Referenzierte Modell-Aliase müssen existieren</li>
+<li>Anbieternamen müssen gültig sein</li>
+</ul>
+<h2 id="hot-reload">Hot Reload</h2>
+<p>Einige Einstellungen können ohne Neustart neu geladen werden:</p>
+<ul>
+<li>Agenten-<code>enabled</code>-Status</li>
+<li>Zeitplan-Zeiten</li>
+<li>Modell-Aliase</li>
+</ul>
+<p>Andere erfordern einen Neustart:</p>
+<ul>
+<li>Anbieter-Konfiguration</li>
+<li>Vault-Pfade</li>
+<li>Signal-Konfiguration</li>
+</ul>
+<pre><code class="language-bash"># Reload config
+outheis reload
+
+# Or restart
+outheis stop &amp;&amp; outheis start
+</code></pre>
+<h2 id="siehe-auch">Siehe auch</h2>
+<ul>
+<li><a href="architecture.md">Architektur</a> — Wie Komponenten zusammenpassen</li>
+<li><a href="memory.md">Memory</a> — Details zum Memory-System</li>
+<li><a href="agenda.md">Agenda</a> — Agenda-Agent-Konfiguration</li>
+</ul>
+    <hr>
+    <p class="footer">Open source under AGPL-3.0 · <a href="https://github.com/outheis-labs/outheis-minimal">Code on GitHub</a></p>
+  </main>
+</body>
+</html>

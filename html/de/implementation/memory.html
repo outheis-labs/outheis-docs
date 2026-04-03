@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Memory · outheis</title>
+  <link rel="icon" type="image/png" href="../../favicon-96x96.png" sizes="96x96">
+  <link rel="icon" type="image/svg+xml" href="../../favicon.svg">
+  <link rel="shortcut icon" href="../../favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="../../apple-touch-icon.png">
+  <link rel="manifest" href="../../site.webmanifest">
+  <style>
+    @font-face {
+      font-family: 'Inter';
+      src: url('../../assets/fonts/InterVariable.woff2') format('woff2'),
+           url('../../assets/fonts/InterVariable.ttf') format('truetype');
+      font-weight: 100 900;
+      font-style: normal;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'Inter';
+      src: url('../../assets/fonts/InterVariable-Italic.woff2') format('woff2');
+      font-weight: 100 900;
+      font-style: italic;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'Inter var';
+      src: url('../../assets/fonts/InterVariable.woff2') format('woff2'),
+           url('../../assets/fonts/InterVariable.ttf') format('truetype');
+      font-weight: 100 900;
+      font-style: normal;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'Inter var';
+      src: url('../../assets/fonts/InterVariable-Italic.woff2') format('woff2');
+      font-weight: 100 900;
+      font-style: italic;
+      font-display: swap;
+    }
+  </style>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --font-body: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-ui: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-mono: SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      --color-text: #1a1a1a;
+      --color-text-muted: #666;
+      --color-text-faint: #999;
+      --color-border: #e0e0e0;
+      --color-bg-code: #f5f5f5;
+      --header-height: 52px;
+      --subnav-height: 40px;
+    }
+
+    @supports (font-variation-settings: normal) {
+      :root { --font-body: "Inter var", sans-serif; --font-ui: "Inter var", sans-serif; }
+    }
+
+    html, body {
+      width: 100%;
+      min-height: 100vh;
+      background: #fff;
+      font-family: var(--font-body);
+      font-size: 15px;
+      line-height: 1.6;
+      color: var(--color-text);
+    }
+
+    /* ── Header ── */
+
+    .header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: #fff;
+      border-bottom: 1px solid var(--color-border);
+    }
+
+    .header-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0 2rem;
+      height: var(--header-height);
+      gap: 2rem;
+    }
+
+    .logo-link {
+      display: flex;
+      align-items: center;
+      text-decoration: none;
+      flex-shrink: 0;
+    }
+
+    .site-name {
+      font-family: var(--font-ui);
+      font-size: 20px;
+      font-weight: 600;
+      color: var(--color-text);
+      letter-spacing: -0.01em;
+    }
+
+    .topnav {
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
+    }
+
+    .topnav a {
+      font-family: var(--font-ui);
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--color-text-muted);
+      text-decoration: none;
+      padding: 0.3rem 0.65rem;
+      border-radius: 4px;
+      white-space: nowrap;
+    }
+
+    .topnav a:hover { color: var(--color-text); background: var(--color-bg-code); }
+    .topnav a.active { color: var(--color-text); font-weight: 600; }
+    .topnav a.external { color: var(--color-text-faint); }
+
+    /* ── Sub-nav ── */
+
+    .subnav-bar {
+      border-bottom: 1px solid var(--color-border);
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+    .subnav-bar::-webkit-scrollbar { display: none; }
+    .subnav-bar:empty,
+    .subnav-bar.hidden { display: none; }
+
+    .subnav-inner {
+      display: flex;
+      align-items: center;
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0 2rem;
+      gap: 0.1rem;
+      height: var(--subnav-height);
+    }
+
+    .subnav-inner a {
+      font-family: var(--font-ui);
+      font-size: 13px;
+      color: var(--color-text-muted);
+      text-decoration: none;
+      padding: 0.25rem 0.6rem;
+      border-radius: 3px;
+      white-space: nowrap;
+    }
+
+    .subnav-inner a:hover { color: var(--color-text); background: var(--color-bg-code); }
+    .subnav-inner a.active { color: var(--color-text); font-weight: 500; }
+
+    /* ── Content ── */
+
+    .content {
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 2.5rem 2rem 4rem;
+    }
+
+    .content > *:first-child { margin-top: 0; }
+
+    .content h1 { font-family: var(--font-ui); font-size: 28px; font-weight: 600; margin-bottom: 0.5rem; letter-spacing: -0.02em; }
+    .content h2 { font-family: var(--font-ui); font-size: 18px; font-weight: 600; margin-top: 2rem; margin-bottom: 1.25rem; }
+    .content h3 { font-family: var(--font-ui); font-size: 15px; font-weight: 600; margin-top: 1.5rem; margin-bottom: 0.75rem; }
+    .content p { margin-bottom: 1rem; }
+    .content a { color: var(--color-text-muted); }
+    .content a:hover { color: var(--color-text); }
+    .content ul, .content ol { margin-bottom: 1rem; padding-left: 1.5rem; }
+    .content li { margin-bottom: 0.4rem; }
+
+    .content table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; font-family: var(--font-ui); font-size: 13px; }
+    .content th, .content td { text-align: left; padding: 0.5rem 0.75rem; border-bottom: 1px solid var(--color-border); }
+    .content th { font-weight: 500; font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--color-text-muted); }
+
+    .content code { font-family: var(--font-mono); font-size: 14px; background: var(--color-bg-code); padding: 0.15em 0.4em; border-radius: 3px; }
+    .content pre { background: var(--color-bg-code); padding: 1rem 1.25rem; overflow-x: auto; margin: 1.5rem 0; font-size: 13px; border-radius: 4px; line-height: 1.5; }
+    .content pre code { background: none; padding: 0; border-radius: 0; }
+
+    .content hr { border: none; border-top: 1px solid var(--color-border); margin: 1.5rem 0; }
+    .content strong { font-weight: 500; }
+    .content em { font-style: italic; }
+    .content blockquote { border-left: 2px solid var(--color-border); padding-left: 1.25rem; margin: 1.5rem 0; color: var(--color-text-muted); font-style: italic; }
+    .content .lead { font-style: italic; color: var(--color-text-muted); margin-bottom: 2rem; }
+    .content .footer { font-size: 12px; color: var(--color-text-faint); font-style: italic; }
+
+    /* ── Mobile ── */
+
+    /* ── Language switch ── */
+
+    .lang-switch {
+      font-family: var(--font-ui);
+      font-size: 13px;
+      color: var(--color-text-muted);
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .lang-switch .lang-active {
+      color: var(--color-text);
+      font-weight: 500;
+    }
+
+    .lang-switch a.lang-link {
+      color: var(--color-text-muted);
+      text-decoration: none;
+    }
+
+    .lang-switch a.lang-link:hover { color: var(--color-text); }
+
+    /* ── Mobile ── */
+
+    @media (max-width: 640px) {
+      .header-inner { padding: 0 1.25rem; gap: 1rem; }
+      .topnav { gap: 0; }
+      .topnav a { padding: 0.3rem 0.5rem; font-size: 13px; }
+      .topnav a.external { display: none; }
+      .subnav-inner { padding: 0 1.25rem; }
+      .content { padding: 2rem 1.25rem 3rem; }
+      .content h1 { font-size: 24px; }
+      .content h2 { font-size: 16px; }
+    }
+  </style>
+</head>
+<body>
+  <header class="header">
+    <div class="header-inner">
+      <a href="../../index.html" class="logo-link">
+        <span class="site-name">οὐθείς</span>
+      </a>
+      <nav class="topnav">
+        <a href="../foundations/index.html">Grundlagen</a>
+        <a href="../design/index.html">Design</a>
+        <a href="../implementation/architecture.html" class="active">Implementierung</a>
+        <a href="../installation/release-notes.html">Installation</a>
+        <a href="../workflows/index.html">Workflows</a>
+        <a href="https://github.com/outheis-labs/outheis-minimal" class="external">GitHub ↗</a>
+      </nav>
+      <div class="lang-switch"><a href="../../implementation/memory.html" class="lang-link">EN</a> · <span class="lang-active">DE</span></div>
+    </div>
+  </header>
+  <div class="subnav-bar">
+    <div class="subnav-inner">
+      <a href="../implementation/architecture.html">Aktueller Stand</a>
+      <a href="../implementation/memory.html" class="active">Memory & Regeln</a>
+      <a href="../implementation/agenda.html">Agenda</a>
+      <a href="../implementation/skills.html">Skills</a>
+      <a href="../implementation/alan.html">Code-Agent</a>
+    </div>
+  </div>
+  <main class="content">
+    <h1 id="memory">Memory</h1>
+<p><em>Was outheis über dich erinnert — und wie.</em></p>
+<h2 id="memory-vs-vault">Memory vs. Vault</h2>
+<p>outheis pflegt zwei separate Wissensspeicher:</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Memory</th>
+<th>Vault</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Zweck</strong></td>
+<td>Meta-Wissen über dich</td>
+<td>Deine Arbeitsinhalte</td>
+</tr>
+<tr>
+<td><strong>Enthält</strong></td>
+<td>Fakten, Präferenzen, Kontext</td>
+<td>Dokumente, Notizen, Projekte</td>
+</tr>
+<tr>
+<td><strong>Aktualisiert von</strong></td>
+<td>Agenten während Interaktion, Pattern-Agent, explizite Marker</td>
+<td>Von dir direkt</td>
+</tr>
+<tr>
+<td><strong>Format</strong></td>
+<td>Strukturiertes JSON</td>
+<td>Markdown-Dateien</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Memory</strong> beantwortet: <em>Wer ist diese Person? Wie soll ich arbeiten?</em></p>
+<p><strong>Vault</strong> beantwortet: <em>Welche Informationen haben sie?</em></p>
+<h2 id="memory-typen">Memory-Typen</h2>
+<h3 id="user">user</h3>
+<p>Persönliche Fakten, die sich selten ändern.</p>
+<p>Beispiele:
+- "User is 35 years old"
+- "Children: Leo (8) and Emma (5)"
+- "Lives in Munich"
+- "Works as a software engineer"</p>
+<p><strong>Zerfall:</strong> Dauerhaft (bis korrigiert)</p>
+<h3 id="feedback">feedback</h3>
+<p>Wie du möchtest, dass outheis sich verhält.</p>
+<p>Beispiele:
+- "Prefers short, direct answers"
+- "Respond in German unless asked otherwise"
+- "Don't explain technical concepts — user is an expert"</p>
+<p><strong>Zerfall:</strong> Dauerhaft (bis korrigiert)</p>
+<h3 id="context">context</h3>
+<p>Womit du dich gerade beschäftigst.</p>
+<p>Beispiele:
+- "Working on Project Alpha mobile app"
+- "Preparing for conference talk next week"
+- "Learning Japanese"</p>
+<p><strong>Zerfall:</strong> Standardmäßig 14 Tage (verblasst, wenn nicht mehr relevant)</p>
+<h2 id="wie-memory-erstellt-wird">Wie Memory erstellt wird</h2>
+<p>Memory wird über drei Kanäle geschrieben:</p>
+<h3 id="1-expliziter-marker">1. Expliziter Marker (<code>!</code>)</h3>
+<p>Stelle jeder Nachricht <code>!</code> voran, um sie sofort zu speichern:</p>
+<pre><code>! I am 35 years old
+→ Stored in user memory, agent responds with this knowledge
+
+! please always give short answers
+→ Stored in feedback memory, agent adapts immediately
+
+! I'm currently working on Project Alpha
+→ Stored in context memory (14 day decay)
+</code></pre>
+<p>Die Klassifizierung erfolgt automatisch basierend auf dem Inhalt. Der <code>!</code>-Marker ist eine Abkürzung — er entspricht "merke dir das", ist aber kürzer. Der Agent speichert die Information UND verwendet sie sofort im aktuellen Gespräch.</p>
+<h3 id="2-agenten-wahrend-der-interaktion">2. Agenten während der Interaktion</h3>
+<p>Agenten können erkennen, wenn du etwas Merkenswürdiges mitteilst:</p>
+<ul>
+<li>Du erwähnst deinen Geburtstag → Agent kann es speichern</li>
+<li>Du äußerst eine Präferenz → Agent kann sie speichern</li>
+<li>Du beschreibst ein aktuelles Projekt → Agent kann es als Kontext speichern</li>
+</ul>
+<p>Dies geschieht durch Urteilsvermögen, nicht durch starre Regeln. Agenten sind angewiesen, relevante Informationen zu bemerken, aber nicht zu viel zu extrahieren. Nicht jede Aussage wird Memory — nur was für zukünftige Interaktionen wirklich nützlich erscheint.</p>
+<h3 id="3-pattern-agent-extraktion">3. Pattern-Agent-Extraktion</h3>
+<p>Der Pattern-Agent (rumi) läuft nächtlich um 04:00 und:</p>
+<ol>
+<li>Überprüft aktuelle Gespräche</li>
+<li>Extrahiert merkwürdige Informationen, die Agenten möglicherweise verpasst haben</li>
+<li>Konsolidiert Duplikate und löst Widersprüche auf</li>
+<li>Weist Konfidenzwerte zu</li>
+<li>Bereinigt abgelaufene Einträge</li>
+<li>Erwägt die Förderung stabiler Muster zu User Rules</li>
+</ol>
+<p>Du kannst dies manuell auslösen: <code>outheis pattern</code></p>
+<h2 id="memory-konsolidierung">Memory-Konsolidierung</h2>
+<p>Mit der Zeit kann Memory Duplikate oder widersprüchliche Einträge ansammeln. Der Pattern-Agent behandelt dies bei seinem geplanten Lauf:</p>
+<ul>
+<li><strong>Duplikate</strong>: "Has pending tasks: X, Y" und "Current pending tasks: X, Y" → behält den neueren</li>
+<li><strong>Widersprüche</strong>: "User is 35" und "User is 36" → behält den neueren oder explizit markierten</li>
+<li><strong>Überholte Einträge</strong>: Kontext, der aktualisiert wurde → entfernt die ältere Version</li>
+</ul>
+<p>Das ist kein mechanischer Prozess — der Pattern-Agent verwendet Urteilsvermögen, um zu entscheiden, was konsolidiert werden soll, mit einem Bias zum Behalten bei Unsicherheit.</p>
+<h2 id="zeitliches-bewusstsein">Zeitliches Bewusstsein</h2>
+<p>Nicht alles sollte für immer gespeichert werden.</p>
+<p><strong>Als dauerhaftes Fakt gespeichert:</strong>
+- "User has two children"
+- "Prefers formal communication"</p>
+<p><strong>NICHT gespeichert (temporärer Zustand):</strong>
+- "User seems frustrated today"
+- "User is tired"
+- "User is stressed about deadline"</p>
+<p>Alle Agenten sind angewiesen, stabile Eigenschaften von vorübergehenden Stimmungen zu unterscheiden. Eine frustrierte Nachricht ist kein Persönlichkeitsmerkmal — es ist ein Moment.</p>
+<h2 id="memory-anzeigen-und-bearbeiten">Memory anzeigen und bearbeiten</h2>
+<h3 id="cli">CLI</h3>
+<pre><code class="language-bash"># View all memory
+outheis memory
+
+# Add entry manually
+outheis memory --add &quot;user:My birthday is March 15&quot;
+
+# Clear a type
+outheis memory --clear context
+</code></pre>
+<h3 id="anzeigeformat">Anzeigeformat</h3>
+<pre><code>Memory
+----------------------------------------
+
+[user] (3 entries)
+  1. User is 35 years old
+  2. Children: Leo (8), Emma (5) [!]
+  3. Lives in Munich [90%]
+
+[feedback] (1 entries)
+  1. Prefers short answers [!]
+
+[context] (2 entries)
+  1. Working on Project Alpha [↓12d]
+  2. Preparing conference talk [↓5d]
+</code></pre>
+<p>Marker:
+- <code>[!]</code> — Explizit über <code>!</code>-Marker gespeichert
+- <code>[90%]</code> — Konfidenz unter 100 %
+- <code>[↓12d]</code> — Läuft in 12 Tagen ab</p>
+<h2 id="speicherung">Speicherung</h2>
+<pre><code>~/.outheis/human/memory/
+├── user.json           # Personal facts
+├── feedback.json       # Working preferences
+├── context.json        # Current focus
+└── pattern/            # Pattern agent's learning
+    └── strategies.md
+</code></pre>
+<p>Jede Memory-Datei enthält zeitgestempelte Einträge mit Metadaten:</p>
+<pre><code class="language-json">{
+  &quot;type&quot;: &quot;user&quot;,
+  &quot;updated_at&quot;: &quot;2025-03-28T14:30:00&quot;,
+  &quot;entries&quot;: [
+    {
+      &quot;content&quot;: &quot;User is 35 years old&quot;,
+      &quot;created_at&quot;: &quot;2025-03-28T14:30:00&quot;,
+      &quot;updated_at&quot;: &quot;2025-03-28T14:30:00&quot;,
+      &quot;confidence&quot;: 1.0,
+      &quot;source_count&quot;: 1,
+      &quot;decay_days&quot;: null,
+      &quot;is_explicit&quot;: true
+    }
+  ]
+}
+</code></pre>
+<h2 id="migration">Migration</h2>
+<p>Um bestehendes Wissen von Claude.ai oder anderen Quellen zu importieren, verwende den Migrations-Workflow. Siehe <a href="migration.md">Migration</a> für Details.</p>
+<p>Kurzübersicht:
+1. <code>vault/Migration/</code> mit deinen <code>.json</code>- oder <code>.md</code>-Dateien erstellen
+2. Im Chat "memory migrate" sagen
+3. Einträge in <code>Migration.md</code> prüfen und markieren
+4. Erneut "memory migrate" sagen, um anzuwenden
+5. <code>vault/Migration/</code> löschen, wenn fertig</p>
+<h2 id="pattern-agent-meta-memory">Pattern-Agent-Meta-Memory</h2>
+<p>Der Pattern-Agent hat sein eigenes Memory in <code>~/.outheis/human/memory/pattern/</code>. Hier speichert er:</p>
+<ul>
+<li>Welche Extraktionsstrategien für diesen Benutzer funktionieren</li>
+<li>Muster im Kommunikationsstil</li>
+<li>Meta-Insights über seinen eigenen Prozess</li>
+</ul>
+<p>Dieses Memory zerfällt nicht — so wird der Pattern-Agent mit der Zeit besser darin, zu verstehen, was dir wichtig ist.</p>
+<h2 id="integration-mit-agenten">Integration mit Agenten</h2>
+<p>Memory wird automatisch in Agenten-System-Prompts injiziert:</p>
+<pre><code># Memory
+
+## About the user
+- User is 35 years old
+- Children: Leo (8), Emma (5)
+
+## Working preferences
+- Prefers short answers
+
+## Current context
+- Working on Project Alpha
+</code></pre>
+<p>Agenten nutzen dies natürlich — sie kündigen nicht "Ich erinnere mich, dass..." an, sondern wissen es einfach.</p>
+<h2 id="korrektur">Korrektur</h2>
+<p>Wenn outheis falsche Informationen hat:</p>
+<ol>
+<li><strong>Explizite Korrektur:</strong> <code>! I'm 36, not 35</code></li>
+<li><strong>CLI-Bearbeitung:</strong> <code>outheis memory --clear user</code>, dann neu hinzufügen</li>
+<li><strong>Direkte Dateibearbeitung:</strong> JSON in <code>~/.outheis/human/memory/</code> modifizieren</li>
+</ol>
+<p>Explizite (<code>!</code>)-Einträge haben Vorrang — Agenten überschreiben sie nicht mit Extraktionen niedrigerer Konfidenz.</p>
+<hr />
+<h2 id="rules">Rules</h2>
+<p>Rules sind die stabile Destillation von Memory — Verhaltensprinzipien, die bestimmen, wie outheis mit dir arbeitet.</p>
+<h3 id="zwei-schichten">Zwei Schichten</h3>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>System Rules</th>
+<th>User Rules</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Quelle</strong></td>
+<td>Entwickler</td>
+<td>Entstanden aus Interaktion</td>
+</tr>
+<tr>
+<td><strong>Zweck</strong></td>
+<td>Grenzen, Fähigkeiten</td>
+<td>Stil, Präferenzen</td>
+</tr>
+<tr>
+<td><strong>Ort</strong></td>
+<td><code>src/outheis/agents/rules/</code></td>
+<td><code>~/.outheis/human/rules/</code></td>
+</tr>
+<tr>
+<td><strong>Veränderlichkeit</strong></td>
+<td>Ändert sich mit Code-Updates</td>
+<td>Wächst mit der Zeit</td>
+</tr>
+</tbody>
+</table>
+<p><strong>System Rules</strong> definieren, was ein Agent <em>kann</em> — architektonische Beschränkungen.</p>
+<p><strong>User Rules</strong> definieren, wie ein Agent es <em>tun soll</em> — dein Arbeitsstil.</p>
+<h3 id="wie-user-rules-entstehen">Wie User Rules entstehen</h3>
+<p>User Rules werden nicht direkt von dir geschrieben. Sie entstehen aus Memory durch den Pattern-Agenten.</p>
+<p>Der Pattern-Agent überprüft Memory bei seinem nächtlichen Lauf und sucht nach Mustern, die stabil genug geworden sind, um als Rules kodifiziert zu werden. Das ist kein mechanischer Prozess mit festen Schwellenwerten — der Agent verwendet Urteilsvermögen:</p>
+<ul>
+<li>Eine einmal klar geäußerte starke Präferenz könnte eine Rule werden</li>
+<li>Etwas oft beiläufig Erwähntes vielleicht nicht</li>
+<li>Explizite Korrekturen zählen immer mehr als Inferenzen</li>
+</ul>
+<p>Wenn der Pattern-Agent ein stabiles Muster identifiziert, schreibt er es in <code>~/.outheis/human/rules/{agent}.md</code>:</p>
+<pre><code class="language-markdown"># User Rules for Relay Agent
+
+- User prefers concise responses  &lt;!-- 2026-03-30 --&gt;
+- Respond in German unless the user writes in English  &lt;!-- 2026-03-28 --&gt;
+</code></pre>
+<h3 id="memory-vs-rules">Memory vs. Rules</h3>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Memory</th>
+<th>Rules</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Zeitskala</strong></td>
+<td>Tage bis Wochen</td>
+<td>Monate bis Jahre</td>
+</tr>
+<tr>
+<td><strong>Flüchtigkeit</strong></td>
+<td>Kann ablaufen, häufig aktualisiert</td>
+<td>Stabil einmal etabliert</td>
+</tr>
+<tr>
+<td><strong>Inhalt</strong></td>
+<td>Fakten, Beobachtungen</td>
+<td>Prinzipien, Muster</td>
+</tr>
+<tr>
+<td><strong>Beispiel</strong></td>
+<td>"User is 35 years old"</td>
+<td>"User prefers brevity"</td>
+</tr>
+</tbody>
+</table>
+<p>Memory ist <em>was wir wissen</em>. Rules sind <em>wie wir arbeiten</em>.</p>
+<h3 id="speicherung_1">Speicherung</h3>
+<pre><code>~/.outheis/human/rules/
+├── common.md      # Applies to all agents
+├── relay.md       # Conversation style
+├── data.md        # Search behavior
+├── agenda.md      # Scheduling preferences
+└── pattern.md     # Extraction behavior
+</code></pre>
+<h3 id="cli_1">CLI</h3>
+<pre><code class="language-bash"># View all rules
+outheis rules
+
+# View rules for specific agent
+outheis rules relay
+
+# View only user rules (emergent)
+outheis rules --user
+
+# View only system rules (architectural)
+outheis rules --system
+</code></pre>
+<h3 id="koharente-personlichkeit">Kohärente Persönlichkeit</h3>
+<p>Obwohl outheis aus fünf Agenten besteht, erlebst du einen Assistenten. Rules bewahren diese Kohärenz:</p>
+<ul>
+<li><strong>Common rules</strong> sichern konsistentes Verhalten über alle Agenten</li>
+<li><strong>Agenten-spezifische Rules</strong> ermöglichen angemessene Spezialisierung</li>
+<li><strong>User Rules</strong> passen das gesamte System an deinen Arbeitsstil an</li>
+</ul>
+<p>Mit der Zeit entwickelt outheis eine stabile Persönlichkeit — nicht programmiert, sondern gewachsen aus dem gemeinsamen Arbeiten.</p>
+    <hr>
+    <p class="footer">Open source under AGPL-3.0 · <a href="https://github.com/outheis-labs/outheis-minimal">Code on GitHub</a></p>
+  </main>
+</body>
+</html>

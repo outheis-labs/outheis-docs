@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Der hybride Memory-Stack: Wo Code endet und das LLM beginnt · outheis</title>
+  <link rel="icon" type="image/png" href="../../favicon-96x96.png" sizes="96x96">
+  <link rel="icon" type="image/svg+xml" href="../../favicon.svg">
+  <link rel="shortcut icon" href="../../favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="../../apple-touch-icon.png">
+  <link rel="manifest" href="../../site.webmanifest">
+  <style>
+    @font-face {
+      font-family: 'Inter';
+      src: url('../../assets/fonts/InterVariable.woff2') format('woff2'),
+           url('../../assets/fonts/InterVariable.ttf') format('truetype');
+      font-weight: 100 900;
+      font-style: normal;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'Inter';
+      src: url('../../assets/fonts/InterVariable-Italic.woff2') format('woff2');
+      font-weight: 100 900;
+      font-style: italic;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'Inter var';
+      src: url('../../assets/fonts/InterVariable.woff2') format('woff2'),
+           url('../../assets/fonts/InterVariable.ttf') format('truetype');
+      font-weight: 100 900;
+      font-style: normal;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'Inter var';
+      src: url('../../assets/fonts/InterVariable-Italic.woff2') format('woff2');
+      font-weight: 100 900;
+      font-style: italic;
+      font-display: swap;
+    }
+  </style>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --font-body: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-ui: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-mono: SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      --color-text: #1a1a1a;
+      --color-text-muted: #666;
+      --color-text-faint: #999;
+      --color-border: #e0e0e0;
+      --color-bg-code: #f5f5f5;
+      --header-height: 52px;
+      --subnav-height: 40px;
+    }
+
+    @supports (font-variation-settings: normal) {
+      :root { --font-body: "Inter var", sans-serif; --font-ui: "Inter var", sans-serif; }
+    }
+
+    html, body {
+      width: 100%;
+      min-height: 100vh;
+      background: #fff;
+      font-family: var(--font-body);
+      font-size: 15px;
+      line-height: 1.6;
+      color: var(--color-text);
+    }
+
+    /* ── Header ── */
+
+    .header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: #fff;
+      border-bottom: 1px solid var(--color-border);
+    }
+
+    .header-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0 2rem;
+      height: var(--header-height);
+      gap: 2rem;
+    }
+
+    .logo-link {
+      display: flex;
+      align-items: center;
+      text-decoration: none;
+      flex-shrink: 0;
+    }
+
+    .site-name {
+      font-family: var(--font-ui);
+      font-size: 20px;
+      font-weight: 600;
+      color: var(--color-text);
+      letter-spacing: -0.01em;
+    }
+
+    .topnav {
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
+    }
+
+    .topnav a {
+      font-family: var(--font-ui);
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--color-text-muted);
+      text-decoration: none;
+      padding: 0.3rem 0.65rem;
+      border-radius: 4px;
+      white-space: nowrap;
+    }
+
+    .topnav a:hover { color: var(--color-text); background: var(--color-bg-code); }
+    .topnav a.active { color: var(--color-text); font-weight: 600; }
+    .topnav a.external { color: var(--color-text-faint); }
+
+    /* ── Sub-nav ── */
+
+    .subnav-bar {
+      border-bottom: 1px solid var(--color-border);
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+    .subnav-bar::-webkit-scrollbar { display: none; }
+    .subnav-bar:empty,
+    .subnav-bar.hidden { display: none; }
+
+    .subnav-inner {
+      display: flex;
+      align-items: center;
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0 2rem;
+      gap: 0.1rem;
+      height: var(--subnav-height);
+    }
+
+    .subnav-inner a {
+      font-family: var(--font-ui);
+      font-size: 13px;
+      color: var(--color-text-muted);
+      text-decoration: none;
+      padding: 0.25rem 0.6rem;
+      border-radius: 3px;
+      white-space: nowrap;
+    }
+
+    .subnav-inner a:hover { color: var(--color-text); background: var(--color-bg-code); }
+    .subnav-inner a.active { color: var(--color-text); font-weight: 500; }
+
+    /* ── Content ── */
+
+    .content {
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 2.5rem 2rem 4rem;
+    }
+
+    .content > *:first-child { margin-top: 0; }
+
+    .content h1 { font-family: var(--font-ui); font-size: 28px; font-weight: 600; margin-bottom: 0.5rem; letter-spacing: -0.02em; }
+    .content h2 { font-family: var(--font-ui); font-size: 18px; font-weight: 600; margin-top: 2rem; margin-bottom: 1.25rem; }
+    .content h3 { font-family: var(--font-ui); font-size: 15px; font-weight: 600; margin-top: 1.5rem; margin-bottom: 0.75rem; }
+    .content p { margin-bottom: 1rem; }
+    .content a { color: var(--color-text-muted); }
+    .content a:hover { color: var(--color-text); }
+    .content ul, .content ol { margin-bottom: 1rem; padding-left: 1.5rem; }
+    .content li { margin-bottom: 0.4rem; }
+
+    .content table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; font-family: var(--font-ui); font-size: 13px; }
+    .content th, .content td { text-align: left; padding: 0.5rem 0.75rem; border-bottom: 1px solid var(--color-border); }
+    .content th { font-weight: 500; font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--color-text-muted); }
+
+    .content code { font-family: var(--font-mono); font-size: 14px; background: var(--color-bg-code); padding: 0.15em 0.4em; border-radius: 3px; }
+    .content pre { background: var(--color-bg-code); padding: 1rem 1.25rem; overflow-x: auto; margin: 1.5rem 0; font-size: 13px; border-radius: 4px; line-height: 1.5; }
+    .content pre code { background: none; padding: 0; border-radius: 0; }
+
+    .content hr { border: none; border-top: 1px solid var(--color-border); margin: 1.5rem 0; }
+    .content strong { font-weight: 500; }
+    .content em { font-style: italic; }
+    .content blockquote { border-left: 2px solid var(--color-border); padding-left: 1.25rem; margin: 1.5rem 0; color: var(--color-text-muted); font-style: italic; }
+    .content .lead { font-style: italic; color: var(--color-text-muted); margin-bottom: 2rem; }
+    .content .footer { font-size: 12px; color: var(--color-text-faint); font-style: italic; }
+
+    /* ── Mobile ── */
+
+    /* ── Language switch ── */
+
+    .lang-switch {
+      font-family: var(--font-ui);
+      font-size: 13px;
+      color: var(--color-text-muted);
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .lang-switch .lang-active {
+      color: var(--color-text);
+      font-weight: 500;
+    }
+
+    .lang-switch a.lang-link {
+      color: var(--color-text-muted);
+      text-decoration: none;
+    }
+
+    .lang-switch a.lang-link:hover { color: var(--color-text); }
+
+    /* ── Mobile ── */
+
+    @media (max-width: 640px) {
+      .header-inner { padding: 0 1.25rem; gap: 1rem; }
+      .topnav { gap: 0; }
+      .topnav a { padding: 0.3rem 0.5rem; font-size: 13px; }
+      .topnav a.external { display: none; }
+      .subnav-inner { padding: 0 1.25rem; }
+      .content { padding: 2rem 1.25rem 3rem; }
+      .content h1 { font-size: 24px; }
+      .content h2 { font-size: 16px; }
+    }
+  </style>
+</head>
+<body>
+  <header class="header">
+    <div class="header-inner">
+      <a href="../../index.html" class="logo-link">
+        <span class="site-name">οὐθείς</span>
+      </a>
+      <nav class="topnav">
+        <a href="../foundations/index.html">Grundlagen</a>
+        <a href="../design/index.html" class="active">Design</a>
+        <a href="../implementation/architecture.html">Implementierung</a>
+        <a href="../installation/release-notes.html">Installation</a>
+        <a href="../workflows/index.html">Workflows</a>
+        <a href="https://github.com/outheis-labs/outheis-minimal" class="external">GitHub ↗</a>
+      </nav>
+      <div class="lang-switch"><a href="../../design/07-hybrid-memory-stack.html" class="lang-link">EN</a> · <span class="lang-active">DE</span></div>
+    </div>
+  </header>
+  <div class="subnav-bar">
+    <div class="subnav-inner">
+      <a href="../design/index.html">Überblick</a>
+      <a href="../design/01-why-os-principles.html">OS-Prinzipien</a>
+      <a href="../design/02-systems-survey.html">Systemvergleich</a>
+      <a href="../design/03-architecture.html">Architektur</a>
+      <a href="../design/04-data-formats.html">Datenformate</a>
+      <a href="../design/05-related-work.html">Verwandte Ansätze</a>
+      <a href="../design/06-agent-prompts.html">Agenten-Prompts</a>
+      <a href="../design/07-hybrid-memory-stack.html" class="active">Hybrider Memory-Stack</a>
+    </div>
+  </div>
+  <main class="content">
+    <h1 id="der-hybride-memory-stack-wo-code-endet-und-das-llm-beginnt">Der hybride Memory-Stack: Wo Code endet und das LLM beginnt</h1>
+<h2 id="das-problem-mit-reinen-ansatzen">Das Problem mit reinen Ansätzen</h2>
+<p>Zwei Versagensmuster definieren den Designraum für adaptive KI-Systeme.</p>
+<p><strong>Reiner Code</strong> kann nicht lernen. Schlüsselwortlisten, Regex-Muster, fest kodierte Klassifikatoren, Icon-Mappings, Format-Detektoren — diese kodieren das heutige Verständnis und sperren es gleichzeitig ein. Wenn der Benutzer etwas anders formuliert, in einer anderen Sprache schreibt oder ein unerwartetes Format verwendet, schlägt die Heuristik still fehl oder liefert falsche Ergebnisse. Weitere Verzweigungen hinzuzufügen, um Randfälle zu behandeln, ist kein Lernen; es ist das Ansammeln technischer Schulden, die schneller wachsen, als das System sich verbessert.</p>
+<p><strong>Reines LLM</strong> skaliert nicht. Jede Entscheidung an ein Sprachmodell zu delegieren — einschließlich Entscheidungen, die deterministisch getroffen werden könnten — ist teuer, langsam, unvorhersehbar und undurchsichtig. Es bedeutet auch keine stabilen Garantien: Dieselbe Datei könnte bei zwei aufeinanderfolgenden Läufen unterschiedlich klassifiziert werden.</p>
+<p>Die richtige Position liegt zwischen diesen Polen, und die Grenze ist scharf.</p>
+<hr />
+<h2 id="die-grenze">Die Grenze</h2>
+<p><strong>Code behandelt Struktur</strong> — Dinge, die eindeutig, deterministisch und inhaltsunabhängig sind:</p>
+<ul>
+<li>Dateisystemoperationen (lesen, schreiben, umbenennen, atomares Schreiben über temp+rename)</li>
+<li>Nachrichtenaustausch zwischen Agenten (Warteschlange, Dispatcher, Routing)</li>
+<li>Planung (wann Aufgaben laufen, Zeitstempel, Deadlines)</li>
+<li>Persistenz (Memory-Store, Suchindex, Cache)</li>
+<li>Schema-Validierung (korrektes JSON-Format, Pflichtfelder, gültige Typen)</li>
+<li>Tool-Implementierungen (was <code>read_file</code> tut — nicht was es bedeutet)</li>
+</ul>
+<p>Diese Dinge ändern sich nicht, weil der Benutzer etwas anders formuliert hat. Ihre Korrektheit ist durch Tests überprüfbar, unabhängig von Sprache, Kontext oder Präferenz.</p>
+<p><strong>Das LLM behandelt Bedeutung</strong> — Dinge, die von Kontext, Sprache, Präferenz und implizitem Wissen abhängen:</p>
+<ul>
+<li>Klassifizierung (welcher Typ ist dieser Eintrag — user, feedback, context?)</li>
+<li>Muster- und Widerspruchserkennung über Beobachtungen hinweg</li>
+<li>Entscheidung, welche Aktion angesichts der aktuellen Situation angemessen ist</li>
+<li>Formatierung gemäß den beobachteten Präferenzen des Benutzers</li>
+<li>Strukturiertes Wissen aus Freitext extrahieren (Dateien, Nachrichten, Notizen)</li>
+<li>Konflikte, Prioritäten und Relevanz beurteilen</li>
+</ul>
+<p>Kein statischer Algorithmus kann subtile Muster in natürlicher Sprache über Sitzungen und Sprachen hinweg erkennen. Ein Sprachmodell kann es — und es wird besser darin, je mehr Skills und Memory das System destilliert hat.</p>
+<hr />
+<h2 id="die-memory-hierarchie-als-hybrider-stack">Die Memory-Hierarchie als hybrider Stack</h2>
+<p>outheis implementiert dieses Prinzip als Drei-Schichten-Stack:</p>
+<pre><code>┌──────────────────────────────────────────┐
+│              SKILLS                       │  highest density
+│   condensed principles that direct        │  LLM writes, LLM reads
+│   attention before processing begins     │  distilled from memory
+└───────────────────┬──────────────────────┘
+                    │ distillation
+┌───────────────────┴──────────────────────┐
+│              MEMORY                       │  medium density
+│   observations, facts, corrections       │  LLM writes, LLM reads
+│   raw material awaiting distillation     │  stored as JSON (code)
+└───────────────────┬──────────────────────┘
+                    │ promotion (rare)
+┌───────────────────┴──────────────────────┐
+│              RULES                        │  lowest density
+│   stable constraints, hard boundaries    │  LLM writes, LLM reads
+│   what must never happen                 │  persisted as Markdown (code)
+└──────────────────────────────────────────┘
+</code></pre>
+<p>Jede Schicht wird:
+- <strong>Vom LLM geschrieben</strong> (keine fest kodierte Extraktion, kein Schlüsselwort-Matching)
+- <strong>Vom LLM gelesen</strong> (zur Laufzeit in System-Prompts injiziert)
+- <strong>Vom Code gespeichert</strong> (JSON-Dateien, Markdown-Dateien — deterministisches I/O)
+- <strong>Vom Code verwaltet</strong> (wann laden, wie validieren, wann ablaufen lassen)</p>
+<p>Die Trennung ist strikt. Code entscheidet nie, was ein Memory-Eintrag bedeutet. Das LLM verwaltet nie Datei-Handles oder Transaktionssicherheit.</p>
+<hr />
+<h2 id="konsequenz-fur-die-agenten-architektur">Konsequenz für die Agenten-Architektur</h2>
+<p>Jeder Agent in outheis besteht aus genau zwei Schichten:</p>
+<pre><code>┌────────────────────────────────────────┐
+│            LLM  (decides)              │
+│  What to do? How to format? Why?       │
+│  What type? What does this mean?       │
+├────────────────────────────────────────┤
+│         Tools  (infrastructure)         │
+│  read_file, write_file, add_memory     │
+│  append_rule, read_messages, done      │
+└────────────────────────────────────────┘
+</code></pre>
+<p>Das LLM ruft Tools auf — nicht umgekehrt. Python orchestriert nicht, was das LLM tun soll. Python stellt bereit, was das LLM zum Handeln braucht.</p>
+<p>Die Agentenschleife ist strukturell einheitlich über alle Agenten:</p>
+<pre><code class="language-python">while True:
+    response = call_llm(system=context, messages=history, tools=tools)
+    if no tool calls: return response.text
+    results = [execute_tool(t) for t in response.tool_calls]
+    history += [response, results]
+</code></pre>
+<p>Kontext wird vorab bereitgestellt (Memory, Skills, Rules, relevante Dateien). Tools sind reines I/O. Das LLM entscheidet Reihenfolge, Strategie und was mit Ergebnissen zu tun ist.</p>
+<p>Das bedeutet: Eine feste Fünf-Schritte-Pipeline — extrahieren, konsolidieren, destillieren, promoten, validieren — ist eine Heuristik. Sie kodiert die heutige Annahme darüber, welche Schritte in welcher Reihenfolge benötigt werden. Ein tool-nutzendes Agenten mit Zugang zu Lese-/Schreib-Primitiven kann dies selbst entscheiden und wird mit wachsendem Memory und Skills bessere Entscheidungen treffen.</p>
+<hr />
+<h2 id="konkrete-grenzfalle">Konkrete Grenzfälle</h2>
+<table>
+<thead>
+<tr>
+<th>Entscheidung</th>
+<th>Falsch: Heuristik</th>
+<th>Richtig: LLM</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Welcher Memory-Typ ist das?</td>
+<td>Schlüsselwort-Match auf "prefer", "always"</td>
+<td>LLM erhält Inhalt und entscheidet</td>
+</tr>
+<tr>
+<td>Was enthält diese JSON-Datei?</td>
+<td>Format-Erkennung mit <code>isinstance()</code></td>
+<td>LLM liest Datei, extrahiert Bedeutung</td>
+</tr>
+<tr>
+<td>Sind diese Einträge Duplikate?</td>
+<td>Wortüberlappungs-Verhältnis-Schwellenwert</td>
+<td>LLM vergleicht semantisch</td>
+</tr>
+<tr>
+<td>Welches Icon/Emoji für diesen Typ?</td>
+<td>Fest kodiertes <code>icon_map</code>-Dict</td>
+<td>LLM formatiert frei</td>
+</tr>
+<tr>
+<td>Wie soll diese Datei aussehen?</td>
+<td>Fest kodierte Vorlage</td>
+<td>LLM fragt einmal, passt sich an</td>
+</tr>
+<tr>
+<td>Welcher Typ ist dieser Migrationseintrag?</td>
+<td>Abschnittsüberschriften-Matching</td>
+<td>LLM klassifiziert nach dem Lesen</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="wann-wird-eine-heuristik-zu-code">Wann wird eine Heuristik zu Code?</h2>
+<p>Das LLM selbst erkennt, was über viele Aufrufe hinweg stabil bleibt. Erst wenn ein Muster klar und konsistent stabil ist, sollte es kodiert werden — nicht vorher.</p>
+<p>Der Pattern-Agent beobachtet, welche Entscheidungen konsistent sind, und kann diese als Skills formulieren (die zukünftige Aufmerksamkeit lenken) oder sie dem Entwickler als Implementierungskandidaten melden. Das ist der organische Wachstumspfad:</p>
+<p><strong>Code wächst von unten nach oben aus beobachteter Stabilität, nicht von oben nach unten aus antizipierten Anforderungen.</strong></p>
+<p>Das verhindert vorzeitige Optimierung und hält das System flexibel. Eine outheis-Instanz, die ein Jahr lang läuft, hat mehr Code als eine frische Installation — aber jedes Code-Stück entstand aus Daten, nicht aus Spekulation.</p>
+<hr />
+<h2 id="der-destillationsgradient">Der Destillationsgradient</h2>
+<p>Der hybride Stack erzeugt einen kontinuierlichen Gradienten von der rohen Beobachtung zum stabilen Prinzip:</p>
+<pre><code>User interaction
+     ↓
+Memory (LLM extracts what's worth keeping)
+     ↓
+Pattern agent consolidates (LLM merges, deduplicates, resolves)
+     ↓
+Skills (LLM distills patterns into principles)
+     ↓
+Rules (LLM promotes stable constraints)
+     ↓
+Code (developer promotes stable behavior)
+</code></pre>
+<p>Jeder Übergang ist ein Kompressionsschritt. Rohe Beobachtungen werden zu strukturiertem Memory. Memory wird zu kondensierten Skills. Skills werden zu harten Rules. Wiederholte Rules werden zu Code. Auf jeder Ebene führt das LLM die Klassifizierung durch; Code übernimmt die Persistenz.</p>
+<p>Das Ziel ist ein System, das mit der Zeit progressiv weniger Kontext benötigt — weil Skills bereits erfasst haben, was gewusst werden muss, und Code das behandelt, was sich nie ändern wird.</p>
+    <hr>
+    <p class="footer">Open source under AGPL-3.0 · <a href="https://github.com/outheis-labs/outheis-minimal">Code on GitHub</a></p>
+  </main>
+</body>
+</html>

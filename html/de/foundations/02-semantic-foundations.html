@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Information und Semantik · outheis</title>
+  <link rel="icon" type="image/png" href="../../favicon-96x96.png" sizes="96x96">
+  <link rel="icon" type="image/svg+xml" href="../../favicon.svg">
+  <link rel="shortcut icon" href="../../favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="../../apple-touch-icon.png">
+  <link rel="manifest" href="../../site.webmanifest">
+  <style>
+    @font-face {
+      font-family: 'Inter';
+      src: url('../../assets/fonts/InterVariable.woff2') format('woff2'),
+           url('../../assets/fonts/InterVariable.ttf') format('truetype');
+      font-weight: 100 900;
+      font-style: normal;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'Inter';
+      src: url('../../assets/fonts/InterVariable-Italic.woff2') format('woff2');
+      font-weight: 100 900;
+      font-style: italic;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'Inter var';
+      src: url('../../assets/fonts/InterVariable.woff2') format('woff2'),
+           url('../../assets/fonts/InterVariable.ttf') format('truetype');
+      font-weight: 100 900;
+      font-style: normal;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'Inter var';
+      src: url('../../assets/fonts/InterVariable-Italic.woff2') format('woff2');
+      font-weight: 100 900;
+      font-style: italic;
+      font-display: swap;
+    }
+  </style>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --font-body: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-ui: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-mono: SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      --color-text: #1a1a1a;
+      --color-text-muted: #666;
+      --color-text-faint: #999;
+      --color-border: #e0e0e0;
+      --color-bg-code: #f5f5f5;
+      --header-height: 52px;
+      --subnav-height: 40px;
+    }
+
+    @supports (font-variation-settings: normal) {
+      :root { --font-body: "Inter var", sans-serif; --font-ui: "Inter var", sans-serif; }
+    }
+
+    html, body {
+      width: 100%;
+      min-height: 100vh;
+      background: #fff;
+      font-family: var(--font-body);
+      font-size: 15px;
+      line-height: 1.6;
+      color: var(--color-text);
+    }
+
+    /* ── Header ── */
+
+    .header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: #fff;
+      border-bottom: 1px solid var(--color-border);
+    }
+
+    .header-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0 2rem;
+      height: var(--header-height);
+      gap: 2rem;
+    }
+
+    .logo-link {
+      display: flex;
+      align-items: center;
+      text-decoration: none;
+      flex-shrink: 0;
+    }
+
+    .site-name {
+      font-family: var(--font-ui);
+      font-size: 20px;
+      font-weight: 600;
+      color: var(--color-text);
+      letter-spacing: -0.01em;
+    }
+
+    .topnav {
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
+    }
+
+    .topnav a {
+      font-family: var(--font-ui);
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--color-text-muted);
+      text-decoration: none;
+      padding: 0.3rem 0.65rem;
+      border-radius: 4px;
+      white-space: nowrap;
+    }
+
+    .topnav a:hover { color: var(--color-text); background: var(--color-bg-code); }
+    .topnav a.active { color: var(--color-text); font-weight: 600; }
+    .topnav a.external { color: var(--color-text-faint); }
+
+    /* ── Sub-nav ── */
+
+    .subnav-bar {
+      border-bottom: 1px solid var(--color-border);
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+    .subnav-bar::-webkit-scrollbar { display: none; }
+    .subnav-bar:empty,
+    .subnav-bar.hidden { display: none; }
+
+    .subnav-inner {
+      display: flex;
+      align-items: center;
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0 2rem;
+      gap: 0.1rem;
+      height: var(--subnav-height);
+    }
+
+    .subnav-inner a {
+      font-family: var(--font-ui);
+      font-size: 13px;
+      color: var(--color-text-muted);
+      text-decoration: none;
+      padding: 0.25rem 0.6rem;
+      border-radius: 3px;
+      white-space: nowrap;
+    }
+
+    .subnav-inner a:hover { color: var(--color-text); background: var(--color-bg-code); }
+    .subnav-inner a.active { color: var(--color-text); font-weight: 500; }
+
+    /* ── Content ── */
+
+    .content {
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 2.5rem 2rem 4rem;
+    }
+
+    .content > *:first-child { margin-top: 0; }
+
+    .content h1 { font-family: var(--font-ui); font-size: 28px; font-weight: 600; margin-bottom: 0.5rem; letter-spacing: -0.02em; }
+    .content h2 { font-family: var(--font-ui); font-size: 18px; font-weight: 600; margin-top: 2rem; margin-bottom: 1.25rem; }
+    .content h3 { font-family: var(--font-ui); font-size: 15px; font-weight: 600; margin-top: 1.5rem; margin-bottom: 0.75rem; }
+    .content p { margin-bottom: 1rem; }
+    .content a { color: var(--color-text-muted); }
+    .content a:hover { color: var(--color-text); }
+    .content ul, .content ol { margin-bottom: 1rem; padding-left: 1.5rem; }
+    .content li { margin-bottom: 0.4rem; }
+
+    .content table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; font-family: var(--font-ui); font-size: 13px; }
+    .content th, .content td { text-align: left; padding: 0.5rem 0.75rem; border-bottom: 1px solid var(--color-border); }
+    .content th { font-weight: 500; font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--color-text-muted); }
+
+    .content code { font-family: var(--font-mono); font-size: 14px; background: var(--color-bg-code); padding: 0.15em 0.4em; border-radius: 3px; }
+    .content pre { background: var(--color-bg-code); padding: 1rem 1.25rem; overflow-x: auto; margin: 1.5rem 0; font-size: 13px; border-radius: 4px; line-height: 1.5; }
+    .content pre code { background: none; padding: 0; border-radius: 0; }
+
+    .content hr { border: none; border-top: 1px solid var(--color-border); margin: 1.5rem 0; }
+    .content strong { font-weight: 500; }
+    .content em { font-style: italic; }
+    .content blockquote { border-left: 2px solid var(--color-border); padding-left: 1.25rem; margin: 1.5rem 0; color: var(--color-text-muted); font-style: italic; }
+    .content .lead { font-style: italic; color: var(--color-text-muted); margin-bottom: 2rem; }
+    .content .footer { font-size: 12px; color: var(--color-text-faint); font-style: italic; }
+
+    /* ── Mobile ── */
+
+    /* ── Language switch ── */
+
+    .lang-switch {
+      font-family: var(--font-ui);
+      font-size: 13px;
+      color: var(--color-text-muted);
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .lang-switch .lang-active {
+      color: var(--color-text);
+      font-weight: 500;
+    }
+
+    .lang-switch a.lang-link {
+      color: var(--color-text-muted);
+      text-decoration: none;
+    }
+
+    .lang-switch a.lang-link:hover { color: var(--color-text); }
+
+    /* ── Mobile ── */
+
+    @media (max-width: 640px) {
+      .header-inner { padding: 0 1.25rem; gap: 1rem; }
+      .topnav { gap: 0; }
+      .topnav a { padding: 0.3rem 0.5rem; font-size: 13px; }
+      .topnav a.external { display: none; }
+      .subnav-inner { padding: 0 1.25rem; }
+      .content { padding: 2rem 1.25rem 3rem; }
+      .content h1 { font-size: 24px; }
+      .content h2 { font-size: 16px; }
+    }
+  </style>
+</head>
+<body>
+  <header class="header">
+    <div class="header-inner">
+      <a href="../../index.html" class="logo-link">
+        <span class="site-name">οὐθείς</span>
+      </a>
+      <nav class="topnav">
+        <a href="../foundations/index.html" class="active">Grundlagen</a>
+        <a href="../design/index.html">Design</a>
+        <a href="../implementation/architecture.html">Implementierung</a>
+        <a href="../installation/release-notes.html">Installation</a>
+        <a href="../workflows/index.html">Workflows</a>
+        <a href="https://github.com/outheis-labs/outheis-minimal" class="external">GitHub ↗</a>
+      </nav>
+      <div class="lang-switch"><a href="../../foundations/02-semantic-foundations.html" class="lang-link">EN</a> · <span class="lang-active">DE</span></div>
+    </div>
+  </header>
+  <div class="subnav-bar">
+    <div class="subnav-inner">
+      <a href="../foundations/index.html">Warum outheis</a>
+      <a href="../foundations/02-semantic-foundations.html" class="active">Information und Semantik</a>
+      <a href="../foundations/03-attention-as-architecture.html">Aufmerksamkeit als Architektur</a>
+    </div>
+  </div>
+  <main class="content">
+    <h1 id="information-und-semantik">Information und Semantik</h1>
+<p><em>Warum Information nicht gleich Daten ist — und was das für ein persönliches KI-System bedeutet.</em></p>
+<hr />
+<h2 id="die-lucke-die-shannon-offenlie">Die Lücke, die Shannon offenließ</h2>
+<p>Souveränität legt fest, wer das System kontrolliert. Aber es gibt eine vorgelagerte Frage: was sollte ein System mit dem tun, was es über dich lernt?</p>
+<p>1948 veröffentlichte Claude Shannon <em>A Mathematical Theory of Communication</em> — eines der folgenreichsten Papiere in der Geschichte der Wissenschaft. Er zeigte, wie man Information als statistische Größe messen kann: je unerwarteter eine Botschaft, desto mehr Information trägt sie. Seine Entropieformel funktioniert mit perfekter Präzision für die Ingenieursprobleme, die ihn interessierten — Rauschen, Kompression, Kanalkapazität.</p>
+<p>Shannon war explizit darin, was er nicht tat. „Die semantischen Aspekte der Kommunikation", schrieb er, „sind für das Ingenieursproblem irrelevant." Er klammerte Bedeutung bewusst aus. Seine Theorie sagt dir, wie man Daten zuverlässig überträgt. Sie sagt nichts darüber, ob irgendetwas davon wichtig ist, worauf es sich bezieht oder ob es wahr ist.</p>
+<p>Das ist kein Fehler. Es ist eine Grenze. Der Fehler besteht darin, sie als vollständige Informationstheorie zu behandeln.</p>
+<p>Jedes KI-System, das auf statistischem Pattern-Matching aufbaut — einschließlich großer Sprachmodelle — erbt diese Grenze. Die zugrunde liegende Mathematik ist Shannons: das nächste Token vorhersagen, Vorhersagefehler minimieren, Wahrscheinlichkeit maximieren. Bedeutung ist nicht im Modell; sie wird vom Leser projiziert. Ein System, das nur statistisch ist, kann Daten unbegrenzt anhäufen, ohne jemals etwas zu wissen.</p>
+<hr />
+<h2 id="die-frage-der-bedeutung">Die Frage der Bedeutung</h2>
+<p>Die Jahrzehnte nach Shannon brachten mehrere Versuche, die Informationstheorie in den semantischen Bereich zu erweitern.</p>
+<p><strong>Carnap und Bar-Hillel</strong> (1952) unternahmen den ersten formalen Versuch. Innerhalb der Logik definierten sie semantische Information als die Menge möglicher Sachverhalte, die ein Satz ausschließt — je mehr er ausschließt, desto mehr sagt er. Das war elegant, enthüllte aber sofort ein Paradox: ein Widerspruch schließt <em>alles</em> aus und sollte daher maximale Information tragen. Doch Widersprüche sind falsch, und falsche Aussagen sind schlechte Kandidaten für maximalen Informationsgehalt. Die Theorie bot keinen prinzipiellen Weg, sie auszuschließen.</p>
+<p><strong>Fred Dretske</strong> (1981) näherte sich dem Problem anders. In <em>Knowledge and the Flow of Information</em> definierte er Information in Begriffen kausaler Abhängigkeit: ein Signal trägt Information über eine Quelle, wenn es eine gesetzmäßige, zuverlässige Verbindung zwischen ihnen gibt. Rauch trägt Information über Feuer nicht aufgrund einer Konvention, sondern aufgrund der physikalischen Beziehung zwischen ihnen. Information existiert in der Welt; sie wird nicht durch Konvention zugewiesen. Und Wissen ist das, was passiert, wenn ein solches Signal eine Überzeugung verursacht: etwas zu <em>wissen</em> bedeutet, eine Überzeugung zu haben, die durch ein echtes informationstragendes Signal erzeugt wurde.</p>
+<p>Das ist für jedes System relevant, das behauptet, Wissen zu verwalten. Die Frage ist nicht nur, ob Daten gespeichert werden, sondern ob gespeicherte Repräsentationen mit etwas Realem über die Person verbunden sind, der das System dienen soll.</p>
+<p><strong>Gregory Bateson</strong> (1972) bot vielleicht die komprimierteste Definition: Information ist „ein Unterschied, der einen Unterschied macht". Ein Unterschied in der Welt und ein Unterschied im Beobachter — beides ist erforderlich. Daten, die keine Veränderung im empfangenden System erzeugen, sind in keinem sinnvollen Sinne Information. Relevanz ist keine Eigenschaft, die Information nachträglich hinzugefügt wird; sie ist Teil dessen, was etwas überhaupt zu Information macht.</p>
+<p><strong>Luciano Floridi</strong> (2004, 2011) brachte diese Fäden in einer formalen Theorie zusammen. Seine Definition: semantische Information ist <em>wohlgeformte, bedeutungsvolle und wahre</em> Daten. Die dritte Bedingung — Wahrhaftigkeit — ist die umstrittenste und wichtigste. Floridi argumentiert, dass ein Signal, das die Welt falsch darstellt, keine Information über die Welt trägt; es trägt Rauschen, das wie Information aussieht. Er nennt das die Veridicality-These.</p>
+<p>Die Debatte geht weiter. Scarantino und Piccinini (2010) argumentieren, dass Information keine Wahrheitsbedingung erfordert — dass kognitive Systeme und Ingenieurspraxis „Information" auf Weisen verwenden, die Falschheit erlauben. Die Meinungsverschiedenheit ist nicht rein akademisch: sie bestimmt, welche Verpflichtungen ein Wissensmanagement-System gegenüber Genauigkeit hat.</p>
+<hr />
+<h2 id="was-das-fur-outheis-bedeutet">Was das für outheis bedeutet</h2>
+<p>Diese Unterscheidungen sind nicht abstrakt. Jede hat direkte Konsequenzen dafür, wie ein persönliches KI-System gestaltet sein sollte.</p>
+<p><strong>Die Daten/Information-Lücke</strong> ist der Unterschied zwischen einem System, das alles protokolliert, und einem, das versteht, was es wert ist, behalten zu werden. Ein Gespräch, das stattgefunden hat, ist eine Tatsache — ein Datum. Dass du konsequent morgendliche Termine bevorzugst, ist <em>Information</em> im Sinne von Dretske: ein zuverlässiges Muster, das kausal mit deinem tatsächlichen Verhalten verbunden ist. Ein System, das nur protokolliert, kann sie nicht unterscheiden. outheis macht diese Unterscheidung explizit: Nachrichten werden protokolliert, Muster werden destilliert, und der Destillationsprozess ist nicht automatisch, sondern evaluativ.</p>
+<p><strong>Batesons Relevanzkriterium</strong> ist das Gestaltungsprinzip hinter der Destillation. Die Frage ist nicht „was sollen wir speichern?", sondern „was erzeugt einen Unterschied im zukünftigen Verhalten?" Skills ersetzen lange Erklärungen nicht weil sie kürzer sind, sondern weil sie die Aufmerksamkeit anders lenken — sie verändern, was der agent tut. Eine Anweisung, die nie aktiviert wird, ist keine Information; sie ist gespeicherter Text. Destillation ist keine Kompression; sie ist ein Urteil darüber, was einen Unterschied macht.</p>
+<p><strong>Floridis Veridicality-Prinzip</strong> erklärt, warum der Pattern-agent eher verwirft als anhäuft. Ein Gedächtnissystem, das falsche oder veraltete Einträge toleriert, degradiert nicht graceful — es wird in dem Maß unzuverlässig, wie das enthaltene Rauschen zunimmt. Die Frage „ist das noch wahr?" ist keine Ordnungsfreundlichkeit; sie ist konstitutiv dafür, ob der Eintrag überhaupt Information ist. Vergessen ist in outheis eine Form epistemischer Hygiene.</p>
+<p><strong>Die DIKW-Unterscheidung</strong> (Ackoff, 1989) — Daten, Information, Wissen, Weisheit — erklärt, warum outheis Gedächtnis, Skills und Regeln in separate Ebenen aufteilt. Das sind keine technischen Kategorien, die aus Implementierungsbequemlichkeit erfunden wurden. Das Gedächtnis hält, was dir eigen ist: Ereignisse, Präferenzen, beobachtete Muster. Skills halten, was verallgemeinert: wie man einen Tag strukturiert, wie man eine Anfrage interpretiert. Regeln halten, was invariant ist: Einschränkungen, die unabhängig vom Kontext nicht verletzt werden sollten. Die drei Ebenen entsprechen epistemisch unterschiedlichen Arten von Dingen. Sie in einen einzigen Speicher zu kollabieren wäre nicht einfacher; es wäre konfus.</p>
+<hr />
+<h2 id="ein-zweiter-rahmen-betriebssysteme">Ein zweiter Rahmen: Betriebssysteme</h2>
+<p>Neben der Informationstheorie entwickelte eine andere Disziplin komplementäre Lösungen für verwandte Probleme — nicht philosophisch, sondern durch Ingenieurswesen unter Einschränkungen.</p>
+<p>Betriebssysteme verwalten Ressourcen unter Knappheit: begrenzter Speicher, begrenzte Prozessorzeit, mehrere Prozesse, die um beides konkurrieren. Die Abstraktionen, die sie über Jahrzehnte entwickelten — Demand-Paging, Prozessisolation, virtueller Speicher, Scheduling — sind Antworten auf die Frage, wie ein System kohärent agieren kann, wenn es nicht alles auf einmal halten kann.</p>
+<p>Die Parallele ist direkt. Das Kontextfenster eines Sprachmodells ist ein Arbeitsgedächtnis mit harten Grenzen. Die Frage, was wann und in welcher Form geladen werden soll, ist genau die Frage, die Betriebssysteme für Prozesse beantworten. Skills, die bei Auftreten eines Themas bei Bedarf geladen werden, entsprechen Pages, die aus dem Speicher eingelagert werden. Die nächtliche Musterüberprüfung entspricht einem Hintergrundprozess mit niedriger Priorität, der läuft, wenn der Vordergrund inaktiv ist. Die drei Speicherebenen entsprechen der Speicherhierarchie, die jedes Betriebssystem verwaltet: schnell und flüchtig oben, langsam und persistent unten.</p>
+<p>Das ist keine Metapher, die aus Eleganzgründen eingesetzt wird. Es ist eine Reihe getesteter Abstraktionen für ressourcenbeschränkte Kognition, entwickelt unter Einschränkungen, die weit schwerwiegender sind als das, was ein modernes Kontextfenster auferlegt. Die Lösungen lohnen es, entliehen zu werden, weil die Probleme strukturell ähnlich sind.</p>
+<hr />
+<h2 id="weiterfuhrende-literatur">Weiterführende Literatur</h2>
+<p><strong>Zur semantischen Informationstheorie:</strong></p>
+<ul>
+<li>Floridi, L. <em>The Philosophy of Information</em>. Oxford University Press, 2011. — Die umfassendste Behandlung; Kapitel 4–7 behandeln die Veridicality-These und die logische Theorie semantischer Information.</li>
+<li>Dretske, F. <em>Knowledge and the Flow of Information</em>. MIT Press, 1981. — Der kausal-nomologische Ansatz; wesentlich für das Verständnis, was es bedeutet, dass ein System etwas wirklich <em>weiß</em>.</li>
+<li>Shannon, C. E. &amp; Weaver, W. <em>The Mathematical Theory of Communication</em>. University of Illinois Press, 1949. — Weavers Einleitungsessay für die explizite Drei-Ebenen-Rahmung und die Anerkennung dessen, was die Theorie offenlässt.</li>
+<li>Bateson, G. „Form, Substance and Difference." In <em>Steps to an Ecology of Mind</em>. Chandler, 1972. — Der „Unterschied, der einen Unterschied macht"-Essay; kurz, direkt und grundlegend.</li>
+</ul>
+<p><strong>Zur Wissensarchitektur:</strong></p>
+<ul>
+<li>Ackoff, R. L. „From Data to Wisdom." <em>Journal of Applied Systems Analysis</em>, 16, 1989. — Vier Seiten. Die DIKW-Hierarchie in ihrer Originalform, sofort lesbar.</li>
+<li>Polanyi, M. <em>The Tacit Dimension</em>. Doubleday, 1966. — Der Grenzfall: was kein Informationssystem vollständig erfassen kann, und warum das wichtig ist.</li>
+</ul>
+    <hr>
+    <p class="footer">Open source under AGPL-3.0 · <a href="https://github.com/outheis-labs/outheis-minimal">Code on GitHub</a></p>
+  </main>
+</body>
+</html>

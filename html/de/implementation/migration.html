@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Migration · outheis</title>
+  <link rel="icon" type="image/png" href="../../favicon-96x96.png" sizes="96x96">
+  <link rel="icon" type="image/svg+xml" href="../../favicon.svg">
+  <link rel="shortcut icon" href="../../favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="../../apple-touch-icon.png">
+  <link rel="manifest" href="../../site.webmanifest">
+  <style>
+    @font-face {
+      font-family: 'Inter';
+      src: url('../../assets/fonts/InterVariable.woff2') format('woff2'),
+           url('../../assets/fonts/InterVariable.ttf') format('truetype');
+      font-weight: 100 900;
+      font-style: normal;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'Inter';
+      src: url('../../assets/fonts/InterVariable-Italic.woff2') format('woff2');
+      font-weight: 100 900;
+      font-style: italic;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'Inter var';
+      src: url('../../assets/fonts/InterVariable.woff2') format('woff2'),
+           url('../../assets/fonts/InterVariable.ttf') format('truetype');
+      font-weight: 100 900;
+      font-style: normal;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'Inter var';
+      src: url('../../assets/fonts/InterVariable-Italic.woff2') format('woff2');
+      font-weight: 100 900;
+      font-style: italic;
+      font-display: swap;
+    }
+  </style>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --font-body: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-ui: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-mono: SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      --color-text: #1a1a1a;
+      --color-text-muted: #666;
+      --color-text-faint: #999;
+      --color-border: #e0e0e0;
+      --color-bg-code: #f5f5f5;
+      --header-height: 52px;
+      --subnav-height: 40px;
+    }
+
+    @supports (font-variation-settings: normal) {
+      :root { --font-body: "Inter var", sans-serif; --font-ui: "Inter var", sans-serif; }
+    }
+
+    html, body {
+      width: 100%;
+      min-height: 100vh;
+      background: #fff;
+      font-family: var(--font-body);
+      font-size: 15px;
+      line-height: 1.6;
+      color: var(--color-text);
+    }
+
+    /* ── Header ── */
+
+    .header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: #fff;
+      border-bottom: 1px solid var(--color-border);
+    }
+
+    .header-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0 2rem;
+      height: var(--header-height);
+      gap: 2rem;
+    }
+
+    .logo-link {
+      display: flex;
+      align-items: center;
+      text-decoration: none;
+      flex-shrink: 0;
+    }
+
+    .site-name {
+      font-family: var(--font-ui);
+      font-size: 20px;
+      font-weight: 600;
+      color: var(--color-text);
+      letter-spacing: -0.01em;
+    }
+
+    .topnav {
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
+    }
+
+    .topnav a {
+      font-family: var(--font-ui);
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--color-text-muted);
+      text-decoration: none;
+      padding: 0.3rem 0.65rem;
+      border-radius: 4px;
+      white-space: nowrap;
+    }
+
+    .topnav a:hover { color: var(--color-text); background: var(--color-bg-code); }
+    .topnav a.active { color: var(--color-text); font-weight: 600; }
+    .topnav a.external { color: var(--color-text-faint); }
+
+    /* ── Sub-nav ── */
+
+    .subnav-bar {
+      border-bottom: 1px solid var(--color-border);
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+    .subnav-bar::-webkit-scrollbar { display: none; }
+    .subnav-bar:empty,
+    .subnav-bar.hidden { display: none; }
+
+    .subnav-inner {
+      display: flex;
+      align-items: center;
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0 2rem;
+      gap: 0.1rem;
+      height: var(--subnav-height);
+    }
+
+    .subnav-inner a {
+      font-family: var(--font-ui);
+      font-size: 13px;
+      color: var(--color-text-muted);
+      text-decoration: none;
+      padding: 0.25rem 0.6rem;
+      border-radius: 3px;
+      white-space: nowrap;
+    }
+
+    .subnav-inner a:hover { color: var(--color-text); background: var(--color-bg-code); }
+    .subnav-inner a.active { color: var(--color-text); font-weight: 500; }
+
+    /* ── Content ── */
+
+    .content {
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 2.5rem 2rem 4rem;
+    }
+
+    .content > *:first-child { margin-top: 0; }
+
+    .content h1 { font-family: var(--font-ui); font-size: 28px; font-weight: 600; margin-bottom: 0.5rem; letter-spacing: -0.02em; }
+    .content h2 { font-family: var(--font-ui); font-size: 18px; font-weight: 600; margin-top: 2rem; margin-bottom: 1.25rem; }
+    .content h3 { font-family: var(--font-ui); font-size: 15px; font-weight: 600; margin-top: 1.5rem; margin-bottom: 0.75rem; }
+    .content p { margin-bottom: 1rem; }
+    .content a { color: var(--color-text-muted); }
+    .content a:hover { color: var(--color-text); }
+    .content ul, .content ol { margin-bottom: 1rem; padding-left: 1.5rem; }
+    .content li { margin-bottom: 0.4rem; }
+
+    .content table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; font-family: var(--font-ui); font-size: 13px; }
+    .content th, .content td { text-align: left; padding: 0.5rem 0.75rem; border-bottom: 1px solid var(--color-border); }
+    .content th { font-weight: 500; font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--color-text-muted); }
+
+    .content code { font-family: var(--font-mono); font-size: 14px; background: var(--color-bg-code); padding: 0.15em 0.4em; border-radius: 3px; }
+    .content pre { background: var(--color-bg-code); padding: 1rem 1.25rem; overflow-x: auto; margin: 1.5rem 0; font-size: 13px; border-radius: 4px; line-height: 1.5; }
+    .content pre code { background: none; padding: 0; border-radius: 0; }
+
+    .content hr { border: none; border-top: 1px solid var(--color-border); margin: 1.5rem 0; }
+    .content strong { font-weight: 500; }
+    .content em { font-style: italic; }
+    .content blockquote { border-left: 2px solid var(--color-border); padding-left: 1.25rem; margin: 1.5rem 0; color: var(--color-text-muted); font-style: italic; }
+    .content .lead { font-style: italic; color: var(--color-text-muted); margin-bottom: 2rem; }
+    .content .footer { font-size: 12px; color: var(--color-text-faint); font-style: italic; }
+
+    /* ── Mobile ── */
+
+    /* ── Language switch ── */
+
+    .lang-switch {
+      font-family: var(--font-ui);
+      font-size: 13px;
+      color: var(--color-text-muted);
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .lang-switch .lang-active {
+      color: var(--color-text);
+      font-weight: 500;
+    }
+
+    .lang-switch a.lang-link {
+      color: var(--color-text-muted);
+      text-decoration: none;
+    }
+
+    .lang-switch a.lang-link:hover { color: var(--color-text); }
+
+    /* ── Mobile ── */
+
+    @media (max-width: 640px) {
+      .header-inner { padding: 0 1.25rem; gap: 1rem; }
+      .topnav { gap: 0; }
+      .topnav a { padding: 0.3rem 0.5rem; font-size: 13px; }
+      .topnav a.external { display: none; }
+      .subnav-inner { padding: 0 1.25rem; }
+      .content { padding: 2rem 1.25rem 3rem; }
+      .content h1 { font-size: 24px; }
+      .content h2 { font-size: 16px; }
+    }
+  </style>
+</head>
+<body>
+  <header class="header">
+    <div class="header-inner">
+      <a href="../../index.html" class="logo-link">
+        <span class="site-name">οὐθείς</span>
+      </a>
+      <nav class="topnav">
+        <a href="../foundations/index.html">Grundlagen</a>
+        <a href="../design/index.html">Design</a>
+        <a href="../implementation/architecture.html">Implementierung</a>
+        <a href="../installation/release-notes.html" class="active">Installation</a>
+        <a href="../workflows/index.html">Workflows</a>
+        <a href="https://github.com/outheis-labs/outheis-minimal" class="external">GitHub ↗</a>
+      </nav>
+      <div class="lang-switch"><a href="../../implementation/migration.html" class="lang-link">EN</a> · <span class="lang-active">DE</span></div>
+    </div>
+  </header>
+  <div class="subnav-bar">
+    <div class="subnav-inner">
+      <a href="../installation/release-notes.html">Release Notes</a>
+      <a href="../implementation/guide.html">Erste Schritte</a>
+      <a href="../implementation/config.html">Konfiguration</a>
+      <a href="../implementation/signal.html">Signal</a>
+      <a href="../implementation/migration.html" class="active">Migration</a>
+      <a href="../implementation/webui.html">Web UI</a>
+    </div>
+  </div>
+  <main class="content">
+    <h1 id="migration">Migration</h1>
+<p><em>Wie du bestehendes Wissen in outheis bringst.</em></p>
+<h2 id="uberblick">Überblick</h2>
+<p>outheis lernt durch:
+1. <strong>Direkte Interaktion</strong> — Gespräche mit dir
+2. <strong>Muster-Extraktion</strong> — Pattern-Agent beobachtet und fördert Rules
+3. <strong>Manuelle Migration</strong> — Bestehendes Wissen über den Vault importieren</p>
+<p>Diese Anleitung behandelt Option 3: Daten von Claude.ai oder anderen Quellen migrieren.</p>
+<h2 id="das-migrationsverzeichnis">Das Migrationsverzeichnis</h2>
+<p>Platziere zu migrierende Dateien in deinem Vault:</p>
+<pre><code>vault/Migration/
+├── claude-export.json    # Your data
+├── preferences.md        # Your rules/preferences
+└── data.md               # Rules for Data agent
+</code></pre>
+<p>Dieses Verzeichnis ist <strong>temporär</strong> — erstelle es, wenn du etwas zu migrieren hast, lösche es wenn fertig.</p>
+<h2 id="chat-befehle">Chat-Befehle</h2>
+<p>Alle Migration geschieht durch natürliches Gespräch:</p>
+<table>
+<thead>
+<tr>
+<th>Du sagst</th>
+<th>Was passiert</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>"memory migrate"</td>
+<td>Migration/-Dateien parsen, Kandidaten in Exchange.md schreiben</td>
+</tr>
+<tr>
+<td>"migriere memory"</td>
+<td>Dasselbe, auf Deutsch</td>
+</tr>
+<tr>
+<td>"memory traits"</td>
+<td>Aktuellen Memory und Rules anzeigen</td>
+</tr>
+<tr>
+<td>"zeige traits"</td>
+<td>Dasselbe, auf Deutsch</td>
+</tr>
+<tr>
+<td>"was weißt du über mich"</td>
+<td>Dasselbe, umgangssprachlich</td>
+</tr>
+<tr>
+<td>"schreibe regel: ..."</td>
+<td>Rule direkt hinzufügen, Pattern-Agent umgehen</td>
+</tr>
+</tbody>
+</table>
+<p>Keine CLI-Befehle nötig. Einfach mit outheis sprechen.</p>
+<h2 id="dateiformate">Dateiformate</h2>
+<h3 id="json-dateien">JSON-Dateien</h3>
+<pre><code class="language-json">{
+  &quot;entries&quot;: [
+    {
+      &quot;content&quot;: &quot;User arbeitet bei senswork&quot;,
+      &quot;type&quot;: &quot;user&quot;
+    },
+    {
+      &quot;content&quot;: &quot;Antworte knapp und direkt&quot;,
+      &quot;type&quot;: &quot;feedback&quot;
+    },
+    {
+      &quot;content&quot;: &quot;Arbeitet gerade an outheis&quot;,
+      &quot;type&quot;: &quot;context&quot;
+    }
+  ]
+}
+</code></pre>
+<p><strong>Typen:</strong>
+- <code>user</code> — Fakten über dich (dauerhaft)
+- <code>feedback</code> — Wie du möchtest, dass outheis sich verhält (dauerhaft)
+- <code>context</code> — Aktueller Fokus (zerfällt nach 14 Tagen)</p>
+<p>Wenn <code>type</code> fehlt, erschließt outheis ihn aus dem Inhalt.</p>
+<h3 id="markdown-dateien">Markdown-Dateien</h3>
+<pre><code class="language-markdown"># Preferences
+
+## user
+- Lebt in München
+- Arbeitet als Software-Entwickler
+
+## feedback
+- Antworte immer auf Deutsch
+- Bevorzuge kurze Antworten
+
+## rule:agenda
+- MAX 10 Items in Daily.md
+- Keine Meetings vor 10 Uhr
+
+## rule:data
+- Durchsuche auch PDF-Dateien
+</code></pre>
+<p>Abschnitte entsprechen Memory-Typen oder Rules:
+- <code>## user</code>, <code>## feedback</code>, <code>## context</code> → Memory
+- <code>## rule:agenda</code>, <code>## rule:data</code>, <code>## rule:relay</code> → Rules-Dateien</p>
+<p>Jede Markdown- oder JSON-Struktur ist akzeptabel — outheis verwendet LLM-Parsing und erfordert kein bestimmtes Schema.</p>
+<h2 id="workflow">Workflow</h2>
+<h3 id="1-migrationsverzeichnis-erstellen">1. Migrationsverzeichnis erstellen</h3>
+<pre><code class="language-bash">mkdir ~/Documents/Vault/Migration
+</code></pre>
+<h3 id="2-deine-dateien-hinzufugen">2. Deine Dateien hinzufügen</h3>
+<p>Kopiere deine Daten:
+- Export von Claude.ai → <code>claude-export.json</code>
+- Deine Präferenzen → <code>preferences.md</code>
+- Agenten-spezifische Rules → <code>agenda.md</code>, <code>data.md</code></p>
+<h3 id="3-memory-migrate-sagen">3. "memory migrate" sagen</h3>
+<p>outheis parst alle Dateien in <code>vault/Migration/</code>, dedupliziert Kandidaten gegen bestehendes Memory via LLM und schreibt konsolidierte Einträge als Block in <code>vault/Agenda/Exchange.md</code>:</p>
+<pre><code>&lt;!-- outheis:migration:start --&gt;
+## Migration-Vorschläge
+
+*2026-04-03 14:30 — Bitte prüfen und markieren:*
+*`[x]` übernehmen · `[-]` ablehnen · `[ ]` offen lassen*
+*Anschließend: `memory migrate` erneut ausführen.*
+
+- [ ] Works as Director Innovation Lab [user]
+- [ ] Prefers short, direct answers [feedback]
+- [ ] Respond in German [rule:relay]
+
+&lt;!-- outheis:migration:end --&gt;
+</code></pre>
+<p>Duplikate sind immer zu erwarten — der LLM-Deduplizierungsschritt behandelt sie. Nur neue oder eigenständige Einträge erscheinen im Block.</p>
+<h3 id="4-exchangemd-prufen">4. Exchange.md prüfen</h3>
+<p>Öffne <code>vault/Agenda/Exchange.md</code> — dieselbe Datei, die du bereits für asynchrone Kommunikation mit outheis nutzt. Der Migrationsblock erscheint oben oder eingebettet, klar abgegrenzt.</p>
+<p>Markiere jeden Eintrag:</p>
+<pre><code>- [x] Works as Director Innovation Lab [user]
+- [x] Prefers short, direct answers [feedback]
+- [-] Respond in German [rule:relay]
+- [ ] Lebt in München [user]
+</code></pre>
+<ul>
+<li><code>[x]</code> — auf Memory/Rules anwenden</li>
+<li><code>[-]</code> — verwerfen</li>
+<li><code>[ ]</code> — für nächste Runde offen lassen</li>
+</ul>
+<p>Cato (Agenda-Agent) ignoriert den Migrationsblock bei der Verarbeitung von Exchange.md.</p>
+<h3 id="5-erneut-memory-migrate-sagen">5. Erneut "memory migrate" sagen</h3>
+<pre><code>Du: memory migrate
+Ou: Migration verarbeitet:
+    - 2 übernommen
+    - 1 abgelehnt
+    - 1 noch offen
+</code></pre>
+<ul>
+<li><code>[x]</code>-Einträge werden in Memory und Rules geschrieben</li>
+<li><code>[-]</code>-Einträge werden verworfen</li>
+<li><code>[ ]</code>-Einträge verbleiben im Block für die nächste Runde</li>
+<li>Der Block wird aus Exchange.md entfernt, sobald alle Einträge aufgelöst sind (oder auf deine Anfrage)</li>
+</ul>
+<h3 id="6-verarbeitete-quelldateien">6. Verarbeitete Quelldateien</h3>
+<p>Nach dem Parsen erhalten Quelldateien in <code>vault/Migration/</code> ein <code>x-</code>-Präfix:</p>
+<pre><code>vault/Migration/
+├── x-claude-export.json    # Processed
+├── x-preferences.md        # Processed
+</code></pre>
+<p>Das verhindert erneutes Verarbeiten. Lösche die <code>x-</code>-Dateien selbst, wenn bereit, oder nutze die WebUI-Migrationsansicht.</p>
+<h2 id="webui-migrationsansicht">WebUI-Migrationsansicht</h2>
+<p>Die Migrationsansicht in der Web-Oberfläche bietet:
+- Vollständige Liste der Dateien in <code>vault/Migration/</code>
+- Jede Datei direkt ansehen und bearbeiten
+- Drop-Zone zum Hochladen neuer Migrationsdateien</p>
+<p>Verwende sie, um Dateien hinzuzufügen ohne den Browser zu verlassen, oder um zu prüfen, was bereits verarbeitet wurde.</p>
+<h2 id="direkte-rule-eingabe">Direkte Rule-Eingabe</h2>
+<p>Um eine Rule sofort ohne den Migrations-Workflow hinzuzufügen:</p>
+<pre><code>Du: schreibe regel: antworte immer auf Deutsch
+Ou: ✓ Regel hinzugefügt zu relay: antworte immer auf Deutsch
+</code></pre>
+<p>Oder den Agenten angeben:</p>
+<pre><code>Du: schreibe regel für agenda: keine Meetings vor 10 Uhr
+Ou: ✓ Regel hinzugefügt zu agenda: keine Meetings vor 10 Uhr
+</code></pre>
+<p>Das umgeht Pattern-Agent und schreibt direkt in <code>~/.outheis/human/rules/{agent}.md</code>.</p>
+<h2 id="aktuellen-zustand-ansehen">Aktuellen Zustand ansehen</h2>
+<p>Um zu sehen, was outheis weiß:</p>
+<pre><code>Du: memory traits
+
+Ou: Erkannte Eigenschaften:
+
+    ## Identität
+      • User arbeitet bei senswork
+      • User lebt in München
+
+    ## Präferenzen
+      • Antworte knapp und direkt
+      • Bevorzuge deutsche Sprache
+
+    ## Etablierte Regeln
+      • agenda: 2 Regeln
+      • relay: 1 Regel
+</code></pre>
+<p>Oder umgangssprachlicher:</p>
+<pre><code>Du: was weißt du über mich?
+</code></pre>
+<h2 id="memory-vs-rules">Memory vs. Rules</h2>
+<table>
+<thead>
+<tr>
+<th>Aspekt</th>
+<th>Memory</th>
+<th>Rules</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Ort</td>
+<td><code>~/.outheis/human/memory/</code></td>
+<td><code>~/.outheis/human/rules/</code></td>
+</tr>
+<tr>
+<td>Format</td>
+<td>JSON</td>
+<td>Markdown</td>
+</tr>
+<tr>
+<td>Flüchtigkeit</td>
+<td>Kann sich ändern, Kontext zerfällt</td>
+<td>Stabil einmal gesetzt</td>
+</tr>
+<tr>
+<td>Beispiel</td>
+<td>"User ist 35"</td>
+<td>"Antworte auf Deutsch"</td>
+</tr>
+</tbody>
+</table>
+<p>Memory = "was ich über dich weiß"
+Rules = "wie ich mich verhalten soll"</p>
+<p>Beide werden durch Migration oder laufende Gespräche befüllt.</p>
+<h2 id="datenschutz">Datenschutz</h2>
+<p>Alle Daten bleiben lokal:
+- Migrationsdateien sind in deinem Vault
+- Memory ist in <code>~/.outheis/human/memory/</code>
+- Rules sind in <code>~/.outheis/human/rules/</code>
+- Nichts wird extern übertragen</p>
+<p>Lösche jede Datei jederzeit — outheis passt sich dem an, was verbleibt.</p>
+    <hr>
+    <p class="footer">Open source under AGPL-3.0 · <a href="https://github.com/outheis-labs/outheis-minimal">Code on GitHub</a></p>
+  </main>
+</body>
+</html>

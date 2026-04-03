@@ -199,6 +199,30 @@
 
     /* ── Mobile ── */
 
+    /* ── Language switch ── */
+
+    .lang-switch {
+      font-family: var(--font-ui);
+      font-size: 13px;
+      color: var(--color-text-muted);
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .lang-switch .lang-active {
+      color: var(--color-text);
+      font-weight: 500;
+    }
+
+    .lang-switch a.lang-link {
+      color: var(--color-text-muted);
+      text-decoration: none;
+    }
+
+    .lang-switch a.lang-link:hover { color: var(--color-text); }
+
+    /* ── Mobile ── */
+
     @media (max-width: 640px) {
       .header-inner { padding: 0 1.25rem; gap: 1rem; }
       .topnav { gap: 0; }
@@ -220,6 +244,7 @@
       <nav class="topnav">
         <!-- TOPNAV -->
       </nav>
+      <div class="lang-switch"><!-- LANG_SWITCH --></div>
     </div>
   </header>
   <!-- SUBNAVBAR -->

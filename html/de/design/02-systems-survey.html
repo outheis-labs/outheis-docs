@@ -1,0 +1,791 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Systemüberblick: Betriebssysteme und anwendbare Konzepte · outheis</title>
+  <link rel="icon" type="image/png" href="../../favicon-96x96.png" sizes="96x96">
+  <link rel="icon" type="image/svg+xml" href="../../favicon.svg">
+  <link rel="shortcut icon" href="../../favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="../../apple-touch-icon.png">
+  <link rel="manifest" href="../../site.webmanifest">
+  <style>
+    @font-face {
+      font-family: 'Inter';
+      src: url('../../assets/fonts/InterVariable.woff2') format('woff2'),
+           url('../../assets/fonts/InterVariable.ttf') format('truetype');
+      font-weight: 100 900;
+      font-style: normal;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'Inter';
+      src: url('../../assets/fonts/InterVariable-Italic.woff2') format('woff2');
+      font-weight: 100 900;
+      font-style: italic;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'Inter var';
+      src: url('../../assets/fonts/InterVariable.woff2') format('woff2'),
+           url('../../assets/fonts/InterVariable.ttf') format('truetype');
+      font-weight: 100 900;
+      font-style: normal;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'Inter var';
+      src: url('../../assets/fonts/InterVariable-Italic.woff2') format('woff2');
+      font-weight: 100 900;
+      font-style: italic;
+      font-display: swap;
+    }
+  </style>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --font-body: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-ui: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-mono: SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      --color-text: #1a1a1a;
+      --color-text-muted: #666;
+      --color-text-faint: #999;
+      --color-border: #e0e0e0;
+      --color-bg-code: #f5f5f5;
+      --header-height: 52px;
+      --subnav-height: 40px;
+    }
+
+    @supports (font-variation-settings: normal) {
+      :root { --font-body: "Inter var", sans-serif; --font-ui: "Inter var", sans-serif; }
+    }
+
+    html, body {
+      width: 100%;
+      min-height: 100vh;
+      background: #fff;
+      font-family: var(--font-body);
+      font-size: 15px;
+      line-height: 1.6;
+      color: var(--color-text);
+    }
+
+    /* ── Header ── */
+
+    .header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: #fff;
+      border-bottom: 1px solid var(--color-border);
+    }
+
+    .header-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0 2rem;
+      height: var(--header-height);
+      gap: 2rem;
+    }
+
+    .logo-link {
+      display: flex;
+      align-items: center;
+      text-decoration: none;
+      flex-shrink: 0;
+    }
+
+    .site-name {
+      font-family: var(--font-ui);
+      font-size: 20px;
+      font-weight: 600;
+      color: var(--color-text);
+      letter-spacing: -0.01em;
+    }
+
+    .topnav {
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
+    }
+
+    .topnav a {
+      font-family: var(--font-ui);
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--color-text-muted);
+      text-decoration: none;
+      padding: 0.3rem 0.65rem;
+      border-radius: 4px;
+      white-space: nowrap;
+    }
+
+    .topnav a:hover { color: var(--color-text); background: var(--color-bg-code); }
+    .topnav a.active { color: var(--color-text); font-weight: 600; }
+    .topnav a.external { color: var(--color-text-faint); }
+
+    /* ── Sub-nav ── */
+
+    .subnav-bar {
+      border-bottom: 1px solid var(--color-border);
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+    .subnav-bar::-webkit-scrollbar { display: none; }
+    .subnav-bar:empty,
+    .subnav-bar.hidden { display: none; }
+
+    .subnav-inner {
+      display: flex;
+      align-items: center;
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0 2rem;
+      gap: 0.1rem;
+      height: var(--subnav-height);
+    }
+
+    .subnav-inner a {
+      font-family: var(--font-ui);
+      font-size: 13px;
+      color: var(--color-text-muted);
+      text-decoration: none;
+      padding: 0.25rem 0.6rem;
+      border-radius: 3px;
+      white-space: nowrap;
+    }
+
+    .subnav-inner a:hover { color: var(--color-text); background: var(--color-bg-code); }
+    .subnav-inner a.active { color: var(--color-text); font-weight: 500; }
+
+    /* ── Content ── */
+
+    .content {
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 2.5rem 2rem 4rem;
+    }
+
+    .content > *:first-child { margin-top: 0; }
+
+    .content h1 { font-family: var(--font-ui); font-size: 28px; font-weight: 600; margin-bottom: 0.5rem; letter-spacing: -0.02em; }
+    .content h2 { font-family: var(--font-ui); font-size: 18px; font-weight: 600; margin-top: 2rem; margin-bottom: 1.25rem; }
+    .content h3 { font-family: var(--font-ui); font-size: 15px; font-weight: 600; margin-top: 1.5rem; margin-bottom: 0.75rem; }
+    .content p { margin-bottom: 1rem; }
+    .content a { color: var(--color-text-muted); }
+    .content a:hover { color: var(--color-text); }
+    .content ul, .content ol { margin-bottom: 1rem; padding-left: 1.5rem; }
+    .content li { margin-bottom: 0.4rem; }
+
+    .content table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; font-family: var(--font-ui); font-size: 13px; }
+    .content th, .content td { text-align: left; padding: 0.5rem 0.75rem; border-bottom: 1px solid var(--color-border); }
+    .content th { font-weight: 500; font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--color-text-muted); }
+
+    .content code { font-family: var(--font-mono); font-size: 14px; background: var(--color-bg-code); padding: 0.15em 0.4em; border-radius: 3px; }
+    .content pre { background: var(--color-bg-code); padding: 1rem 1.25rem; overflow-x: auto; margin: 1.5rem 0; font-size: 13px; border-radius: 4px; line-height: 1.5; }
+    .content pre code { background: none; padding: 0; border-radius: 0; }
+
+    .content hr { border: none; border-top: 1px solid var(--color-border); margin: 1.5rem 0; }
+    .content strong { font-weight: 500; }
+    .content em { font-style: italic; }
+    .content blockquote { border-left: 2px solid var(--color-border); padding-left: 1.25rem; margin: 1.5rem 0; color: var(--color-text-muted); font-style: italic; }
+    .content .lead { font-style: italic; color: var(--color-text-muted); margin-bottom: 2rem; }
+    .content .footer { font-size: 12px; color: var(--color-text-faint); font-style: italic; }
+
+    /* ── Mobile ── */
+
+    /* ── Language switch ── */
+
+    .lang-switch {
+      font-family: var(--font-ui);
+      font-size: 13px;
+      color: var(--color-text-muted);
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .lang-switch .lang-active {
+      color: var(--color-text);
+      font-weight: 500;
+    }
+
+    .lang-switch a.lang-link {
+      color: var(--color-text-muted);
+      text-decoration: none;
+    }
+
+    .lang-switch a.lang-link:hover { color: var(--color-text); }
+
+    /* ── Mobile ── */
+
+    @media (max-width: 640px) {
+      .header-inner { padding: 0 1.25rem; gap: 1rem; }
+      .topnav { gap: 0; }
+      .topnav a { padding: 0.3rem 0.5rem; font-size: 13px; }
+      .topnav a.external { display: none; }
+      .subnav-inner { padding: 0 1.25rem; }
+      .content { padding: 2rem 1.25rem 3rem; }
+      .content h1 { font-size: 24px; }
+      .content h2 { font-size: 16px; }
+    }
+  </style>
+</head>
+<body>
+  <header class="header">
+    <div class="header-inner">
+      <a href="../../index.html" class="logo-link">
+        <span class="site-name">οὐθείς</span>
+      </a>
+      <nav class="topnav">
+        <a href="../foundations/index.html">Grundlagen</a>
+        <a href="../design/index.html" class="active">Design</a>
+        <a href="../implementation/architecture.html">Implementierung</a>
+        <a href="../installation/release-notes.html">Installation</a>
+        <a href="../workflows/index.html">Workflows</a>
+        <a href="https://github.com/outheis-labs/outheis-minimal" class="external">GitHub ↗</a>
+      </nav>
+      <div class="lang-switch"><a href="../../design/02-systems-survey.html" class="lang-link">EN</a> · <span class="lang-active">DE</span></div>
+    </div>
+  </header>
+  <div class="subnav-bar">
+    <div class="subnav-inner">
+      <a href="../design/index.html">Überblick</a>
+      <a href="../design/01-why-os-principles.html">OS-Prinzipien</a>
+      <a href="../design/02-systems-survey.html" class="active">Systemvergleich</a>
+      <a href="../design/03-architecture.html">Architektur</a>
+      <a href="../design/04-data-formats.html">Datenformate</a>
+      <a href="../design/05-related-work.html">Verwandte Ansätze</a>
+      <a href="../design/06-agent-prompts.html">Agenten-Prompts</a>
+      <a href="../design/07-hybrid-memory-stack.html">Hybrider Memory-Stack</a>
+    </div>
+  </div>
+  <main class="content">
+    <h1 id="systemuberblick-betriebssysteme-und-anwendbare-konzepte">Systemüberblick: Betriebssysteme und anwendbare Konzepte</h1>
+<p>Dieses Dokument gibt einen Überblick über Betriebssysteme und Architekturmuster, die für das Design von Multi-agent-KI-Systemen relevant sind.</p>
+<hr />
+<h2 id="dragonflybsd">DragonFlyBSD</h2>
+<p><strong>Ursprung</strong>: Abgespalten von FreeBSD 4.x im Jahr 2003 von Matthew Dillon
+<strong>Fokus</strong>: SMP-Skalierbarkeit durch Message-Passing</p>
+<h3 id="relevante-konzepte">Relevante Konzepte</h3>
+<h4 id="lwkt-light-weight-kernel-threads">LWKT (Light Weight Kernel Threads)</h4>
+<p>Traditionelle Unix-Kernel verwenden einen Big Kernel Lock (BKL) oder Fein-Locking. Beides hat Probleme: BKL skaliert nicht; Fein-Locking ist komplex und deadlock-anfällig.</p>
+<p>DragonFlyBSDs Ansatz: <strong>Per-CPU-Scheduling mit Message-Passing</strong>.</p>
+<ul>
+<li>Jede CPU betreibt ihren eigenen Scheduler</li>
+<li>Keine globale Run-Queue-Lock</li>
+<li>Threads migrieren zwischen CPUs über explizite Nachrichten</li>
+</ul>
+<h4 id="ipi-message-queues">IPI-Message-Queues</h4>
+<p>Inter-Processor Interrupts (IPIs) übermitteln Nachrichten zwischen CPUs:</p>
+<pre><code>CPU 0                CPU 1                CPU 2
+┌─────────┐          ┌─────────┐          ┌─────────┐
+│ Queue 0 │          │ Queue 1 │          │ Queue 2 │
+└────▲────┘          └────▲────┘          └────▲────┘
+     │                    │                    │
+     └────────────────────┴────────────────────┘
+              Nachrichten gehen direkt zum Ziel
+</code></pre>
+<p><strong>Keine zentrale Queue</strong>. Jede CPU hat ihre eigene. Produzenten schreiben in die Queue des Ziels; Konsumenten lesen nur aus ihrer eigenen.</p>
+<h4 id="ownership-semantik">Ownership-Semantik</h4>
+<p>Daten „gehören" einer CPU. Nur der Eigentümer modifiziert sie. Andere senden Nachrichten und fordern Änderungen an.</p>
+<p>Das eliminiert:
+- Lock-Contention
+- Cache-Line-Bouncing
+- Deadlocks</p>
+<h3 id="anwendbarkeit-auf-agent-systeme">Anwendbarkeit auf agent-Systeme</h3>
+<table>
+<thead>
+<tr>
+<th>DragonFlyBSD</th>
+<th>agent-System</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>CPU</td>
+<td>Agent</td>
+</tr>
+<tr>
+<td>Per-CPU-Queue</td>
+<td>Per-agent-Posteingang</td>
+</tr>
+<tr>
+<td>IPI-Nachricht</td>
+<td>Inter-agent-Nachricht</td>
+</tr>
+<tr>
+<td>Ownership</td>
+<td>Domain-Verantwortung</td>
+</tr>
+<tr>
+<td>Keine geteilten Locks</td>
+<td>Kein geteilter veränderbarer Zustand</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="erlangotp">Erlang/OTP</h2>
+<p><strong>Ursprung</strong>: Entwickelt bei Ericsson für Telecom-Switches (1986)
+<strong>Fokus</strong>: Fehlertoleranz, Parallelität, Hot-Code-Reloading</p>
+<h3 id="relevante-konzepte_1">Relevante Konzepte</h3>
+<h4 id="actor-modell">Actor-Modell</h4>
+<p>Prozesse (Actors) sind:
+- Isoliert (kein gemeinsamer Speicher)
+- Durch PID identifiziert
+- Kommunizieren nur über asynchrone Nachrichten</p>
+<pre><code>┌─────────┐    Nachricht    ┌─────────┐
+│ Actor A │──────────────►  │ Actor B │
+└─────────┘                 └─────────┘
+     │                           │
+     │    (kein gemeinsamer      │
+     │         Zustand)          │
+     └───────────────────────────┘
+</code></pre>
+<h4 id="supervision-trees">Supervision-Trees</h4>
+<p>Prozesse sind hierarchisch organisiert. Eltern überwachen Kinder:</p>
+<pre><code>        ┌──────────────┐
+        │  Supervisor  │
+        └──────┬───────┘
+               │
+    ┌──────────┼──────────┐
+    ▼          ▼          ▼
+┌───────┐ ┌───────┐ ┌───────┐
+│Worker │ │Worker │ │Worker │
+└───────┘ └───────┘ └───────┘
+</code></pre>
+<p>Supervisor-Strategien:
+- <strong>one_for_one</strong>: Nur das fehlgeschlagene Kind neustarten
+- <strong>one_for_all</strong>: Alle Kinder neustarten, wenn eines scheitert
+- <strong>rest_for_one</strong>: Fehlgeschlagenes Kind und danach gestartete neustarten</p>
+<h4 id="let-it-crash">„Let It Crash"</h4>
+<p>Nicht defensiv programmieren. Prozesse scheitern lassen. Der Supervisor startet sie in einem bekannten guten Zustand neu.</p>
+<p>Das ist kontraintuitiv, aber leistungsstark: Fehlerbehandlung wird von der Geschäftslogik getrennt.</p>
+<h3 id="anwendbarkeit-auf-agent-systeme_1">Anwendbarkeit auf agent-Systeme</h3>
+<table>
+<thead>
+<tr>
+<th>Erlang/OTP</th>
+<th>agent-System</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Prozess</td>
+<td>Agent</td>
+</tr>
+<tr>
+<td>PID</td>
+<td>Agent-ID</td>
+</tr>
+<tr>
+<td>Mailbox</td>
+<td>Message-Queue</td>
+</tr>
+<tr>
+<td>Supervisor</td>
+<td>Dispatcher</td>
+</tr>
+<tr>
+<td>Neustartstrategie</td>
+<td>agent-Wiederherstellungsrichtlinie</td>
+</tr>
+<tr>
+<td>Hot-Code-Reload</td>
+<td>agent-Update ohne Ausfallzeit</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="sel4">seL4</h2>
+<p><strong>Ursprung</strong>: Formal verifizierter Microkernel (NICTA/Data61)
+<strong>Fokus</strong>: Sicherheit durch minimale Trusted Computing Base</p>
+<h3 id="relevante-konzepte_2">Relevante Konzepte</h3>
+<h4 id="capabilities">Capabilities</h4>
+<p>Eine Capability ist ein unfälschbares Token, das spezifische Rechte für ein spezifisches Objekt gewährt.</p>
+<pre><code>┌─────────────────────────────────────┐
+│ Capability                          │
+│                                     │
+│  Object: FileHandle_42              │
+│  Rights: Read, Write                │
+│  Holder: Process_7                  │
+└─────────────────────────────────────┘
+</code></pre>
+<p>Man kann nur zugreifen, wofür man Capabilities hat. Keine Ambient Authority.</p>
+<h4 id="minimaler-kernel">Minimaler Kernel</h4>
+<p>seL4s Kernel bietet nur:
+- Threads
+- Adressräume
+- IPC
+- Capability-Verwaltung</p>
+<p>Alles andere (Dateisysteme, Treiber, Netzwerke) läuft im User Space.</p>
+<h3 id="anwendbarkeit-auf-agent-systeme_2">Anwendbarkeit auf agent-Systeme</h3>
+<table>
+<thead>
+<tr>
+<th>seL4</th>
+<th>agent-System</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Capability</td>
+<td>Berechtigungs-Token</td>
+</tr>
+<tr>
+<td>Objekt</td>
+<td>Ressource (Datei, API, Domain)</td>
+</tr>
+<tr>
+<td>Rechte</td>
+<td>Lesen, schreiben, ausführen, delegieren</td>
+</tr>
+<tr>
+<td>Minimaler Kernel</td>
+<td>Minimaler dispatcher</td>
+</tr>
+</tbody>
+</table>
+<p>Beispiel: Ein Pattern-agent hat Schreib-Capability für insights; andere haben nur Lese-Capability.</p>
+<hr />
+<h2 id="openbsd">OpenBSD</h2>
+<p><strong>Ursprung</strong>: Abgespalten von NetBSD im Jahr 1995 von Theo de Raadt
+<strong>Fokus</strong>: Sicherheit, Korrektheit, Einfachheit</p>
+<h3 id="relevante-konzepte_3">Relevante Konzepte</h3>
+<p>OpenBSD hat viele Sicherheitsinnovationen beigetragen. Für agent-Architekturen sind zwei besonders anwendbar:</p>
+<h4 id="pledge2">pledge(2)</h4>
+<p>Ein Prozess erklärt vorab, welche Syscall-Klassen er benötigt. Nach dem Pledge terminiert jeder andere Syscall den Prozess.</p>
+<pre><code class="language-c">pledge(&quot;stdio rpath&quot;, NULL);  // Only stdio and read-only file access
+// From here: no network, no write, no exec—enforced by kernel
+</code></pre>
+<p>Das ist <strong>selbst auferlegte Einschränkung</strong>. Der Prozess gibt Capabilities auf, die er nicht braucht.</p>
+<h4 id="unveil2">unveil(2)</h4>
+<p>Ein Prozess erklärt, auf welche Dateisystempfade er zugreifen kann. Alles andere wird unsichtbar.</p>
+<pre><code class="language-c">unveil(&quot;/var/data&quot;, &quot;r&quot;);   // Read-only access to /var/data
+unveil(&quot;/tmp&quot;, &quot;rwc&quot;);      // Read, write, create in /tmp
+unveil(NULL, NULL);         // Lock it down—no more unveil calls allowed
+</code></pre>
+<p>Nach dem letzten <code>unveil(NULL, NULL)</code> kann der Prozess seine Sicht nicht erweitern. Das Dateisystem ist effektiv auf die deklarierten Pfade geschrumpft.</p>
+<h4 id="privilegtrennung">Privilegtrennung</h4>
+<p>OpenBSD-Daemons teilen sich in zwei Prozesse auf:</p>
+<pre><code>┌─────────────────┐
+│ Parent (root)   │  ← Hält Socket, Keys, minimalen Code
+└────────┬────────┘
+         │ fork
+         ▼
+┌─────────────────┐
+│ Child (nobody)  │  ← Parst Eingabe, erledigt Arbeit, unprivilegiert
+└─────────────────┘
+</code></pre>
+<p>Der Child-Prozess verarbeitet nicht vertrauenswürdige Eingabe. Wenn er kompromittiert wird, hat er keine Privilegien. Der Elternteil führt nur minimale, auditierte Operationen im Namen des Kindes durch.</p>
+<h4 id="historischer-kontext-jails-und-container">Historischer Kontext: Jails und Container</h4>
+<p>Prozessisolation hat sich durch mehrere Stufen entwickelt: chroot (1979), FreeBSD-Jails (1999), Solaris-Zones, Linux-Container, Docker. Diese bieten <strong>statische Isolation</strong> — du baust den Container, dann läufst du darin.</p>
+<p>pledge/unveil repräsentieren einen anderen Ansatz: <strong>dynamische Einschränkung</strong>. Ein Prozess startet mit vollen Capabilities und gibt sie schrittweise auf, während er sich initialisiert. Das ist oft praktischer für Anwendungen, die Ressourcen beim Start, aber nicht während des Betriebs benötigen.</p>
+<h3 id="anwendbarkeit-auf-agent-systeme_3">Anwendbarkeit auf agent-Systeme</h3>
+<table>
+<thead>
+<tr>
+<th>OpenBSD</th>
+<th>agent-System</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>pledge</td>
+<td>agent erklärt Capabilities beim Start</td>
+</tr>
+<tr>
+<td>unveil</td>
+<td>agent sieht nur relevante Pfade</td>
+</tr>
+<tr>
+<td>privsep</td>
+<td>dispatcher privilegiert, agents eingeschränkt</td>
+</tr>
+<tr>
+<td>Sicher per Standard</td>
+<td>Keine impliziten Berechtigungen</td>
+</tr>
+</tbody>
+</table>
+<p>Beispiel: Ein Daten-agent pledged <code>["vault:read", "vault:write"]</code> und unveiled nur <code>vault/</code>. Er kann nicht auf <code>human/</code> zugreifen, keine Netzwerkanrufe machen, keinen Code ausführen.</p>
+<hr />
+<h2 id="macos-darwin">macOS / Darwin</h2>
+<p><strong>Ursprung</strong>: Apples XNU-Kernel, kombiniert Mach-Microkernel mit BSD
+<strong>Fokus</strong>: Verbraucherfreundlichkeit mit Unix-Unterbau</p>
+<h3 id="relevante-konzepte_4">Relevante Konzepte</h3>
+<h4 id="grand-central-dispatch-gcd">Grand Central Dispatch (GCD)</h4>
+<p>Ein systemweites Framework für parallele Ausführung. Statt Threads direkt zu verwalten, wird Arbeit in Dispatch-Queues eingereicht:</p>
+<pre><code>┌─────────────────────────────────────────┐
+│           Dispatch Queues               │
+├─────────────────────────────────────────┤
+│  Main Queue      │ Seriell, UI-Thread   │
+├──────────────────┼──────────────────────┤
+│  Global Queues   │ Parallel, nach       │
+│  (QoS-Stufen)    │ Priorität:           │
+│                  │  - User Interactive  │
+│                  │  - User Initiated    │
+│                  │  - Utility           │
+│                  │  - Background        │
+├──────────────────┼──────────────────────┤
+│  Custom Queues   │ Seriell oder parallel│
+└──────────────────┴──────────────────────┘
+</code></pre>
+<p>Das System verwaltet Thread-Pools. Du sagst einfach „mach diese Arbeit" und „wie wichtig ist sie".</p>
+<h4 id="quality-of-service-qos">Quality of Service (QoS)</h4>
+<p>Arbeit wird mit ihrer Prioritätsstufe markiert. Das System kann:
+- Hintergrundarbeit drosseln, wenn der Nutzer aktiv ist
+- Priorität erhöhen, wenn Ergebnisse sofort benötigt werden
+- Energieverbrauch auf Laptops/Phones ausbalancieren</p>
+<h3 id="anwendbarkeit-auf-agent-systeme_4">Anwendbarkeit auf agent-Systeme</h3>
+<table>
+<thead>
+<tr>
+<th>GCD</th>
+<th>agent-System</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Dispatch-Queue</td>
+<td>agent-Message-Queue</td>
+</tr>
+<tr>
+<td>QoS-Stufen</td>
+<td>agent-Priorität</td>
+</tr>
+<tr>
+<td>Main Queue</td>
+<td>Nutzerseitiger relay-agent</td>
+</tr>
+<tr>
+<td>Background Queue</td>
+<td>Pattern-recognition-agent</td>
+</tr>
+<tr>
+<td>Serielle Queue</td>
+<td>Sequentielle Operationen (Schreibvorgänge)</td>
+</tr>
+<tr>
+<td>Parallele Queue</td>
+<td>Parallele Operationen (Lesevorgänge)</td>
+</tr>
+</tbody>
+</table>
+<p>Beispiel: Ein relay-agent, der Nutzereingaben verarbeitet, läuft mit hoher Priorität. Ein Pattern-agent, der Geschichte analysiert, läuft im Hintergrund. Der dispatcher verwaltet Queue-Prioritäten basierend auf Systemlast und Nutzeraktivität.</p>
+<hr />
+<h2 id="plan-9">Plan 9</h2>
+<p><strong>Ursprung</strong>: Bell Labs (1980er–2000er), Nachfolger von Unix
+<strong>Fokus</strong>: Verteilte Systeme, einheitliche Schnittstellen</p>
+<h3 id="relevante-konzepte_5">Relevante Konzepte</h3>
+<h4 id="alles-ist-eine-datei">Alles ist eine Datei</h4>
+<p>Nicht nur Dateien und Geräte — Prozesse, Netzwerkverbindungen, Fenster, sogar andere Maschinen erscheinen als Dateien.</p>
+<pre><code>/proc/42/mem      # Prozess-Speicher
+/net/tcp/clone    # Neue TCP-Verbindung
+/mnt/remote/      # Dateisystem einer Remote-Maschine
+</code></pre>
+<h4 id="9p-protokoll">9P-Protokoll</h4>
+<p>Ein einfaches Protokoll für den Dateizugriff über ein Netzwerk. Jede Ressource, die 9P implementiert, kann eingehängt und einheitlich zugegriffen werden.</p>
+<h4 id="per-prozess-namespaces">Per-Prozess-Namespaces</h4>
+<p>Jeder Prozess kann seine eigene Sicht auf das Dateisystem haben. Das Einhängen von Ressourcen ist lokal zum Prozess.</p>
+<h3 id="anwendbarkeit-auf-agent-systeme_5">Anwendbarkeit auf agent-Systeme</h3>
+<table>
+<thead>
+<tr>
+<th>Plan 9</th>
+<th>agent-System</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Datei</td>
+<td>Ressource</td>
+</tr>
+<tr>
+<td>9P</td>
+<td>Ressourcenzugriffsprotokoll</td>
+</tr>
+<tr>
+<td>Mount</td>
+<td>Wissensdatenbank einbinden</td>
+</tr>
+<tr>
+<td>Namespace</td>
+<td>agent-Sicht auf verfügbare Ressourcen</td>
+</tr>
+</tbody>
+</table>
+<p>Beispiel: Ein vault wird in den Namespace eines agents eingehängt. Der agent interagiert damit durch eine einheitliche dateiähnliche Schnittstelle.</p>
+<hr />
+<h2 id="event-sourcing">Event Sourcing</h2>
+<p><strong>Ursprung</strong>: Domain-Driven-Design-Community
+<strong>Fokus</strong>: Zustand als abgeleitet aus unveränderlichen Ereignissen</p>
+<h3 id="relevante-konzepte_6">Relevante Konzepte</h3>
+<h4 id="append-only-log">Append-Only-Log</h4>
+<p>Zustand wird nicht direkt gespeichert. Stattdessen werden Ereignisse an ein unveränderliches Log angehängt:</p>
+<pre><code>┌─────────────────────────────────────────────┐
+│ Event Log                                   │
+│                                             │
+│ 1. UserCreated {id: 1, name: &quot;...&quot;}         │
+│ 2. UserEmailChanged {id: 1, email: &quot;...&quot;}   │
+│ 3. UserDeleted {id: 1}                      │
+└─────────────────────────────────────────────┘
+</code></pre>
+<p>Aktueller Zustand = Fold über alle Ereignisse.</p>
+<h4 id="vorteile">Vorteile</h4>
+<ul>
+<li><strong>Audit-Trail</strong>: Vollständige Geschichte</li>
+<li><strong>Replay</strong>: Jeden vergangenen Zustand rekonstruieren</li>
+<li><strong>Debugging</strong>: Genau sehen, was passiert ist</li>
+<li><strong>Temporale Abfragen</strong>: „Was war der Zustand zu Zeit T?"</li>
+</ul>
+<h3 id="anwendbarkeit-auf-agent-systeme_6">Anwendbarkeit auf agent-Systeme</h3>
+<table>
+<thead>
+<tr>
+<th>Event Sourcing</th>
+<th>agent-System</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Ereignis</td>
+<td>Nachricht</td>
+</tr>
+<tr>
+<td>Ereignislog</td>
+<td>Message-Queue (append-only)</td>
+</tr>
+<tr>
+<td>Projektion</td>
+<td>Aktueller Gesprächszustand</td>
+</tr>
+<tr>
+<td>Replay</td>
+<td>Debuggen, wiederholen, wiederherstellen</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="unikernels">Unikernels</h2>
+<p><strong>Ursprung</strong>: Akademische Forschung (MirageOS, IncludeOS, Nanos)
+<strong>Fokus</strong>: Einzelzweck, minimale Angriffsfläche</p>
+<h3 id="relevante-konzepte_7">Relevante Konzepte</h3>
+<h4 id="library-operating-system">Library Operating System</h4>
+<p>Die Anwendung verlinkt direkt gegen OS-Bibliotheken. Kein separater Kernel. Das Ergebnis ist ein einzelnes bootfähiges Image.</p>
+<pre><code>Traditionell:
+┌─────────────┐
+│ Anwendung   │
+├─────────────┤
+│   Kernel    │
+└─────────────┘
+
+Unikernel:
+┌─────────────────────┐
+│ Anwendung + LibOS   │
+└─────────────────────┘
+</code></pre>
+<h4 id="spezialisierung">Spezialisierung</h4>
+<p>Jeder Unikernel macht eine Sache. Keine Shell, keine Benutzer, keine unnötigen Treiber.</p>
+<h3 id="anwendbarkeit-auf-agent-systeme_7">Anwendbarkeit auf agent-Systeme</h3>
+<table>
+<thead>
+<tr>
+<th>Unikernel</th>
+<th>agent-System</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Einzelzweck-Image</td>
+<td>Einzelzweck-agent</td>
+</tr>
+<tr>
+<td>Keine Shell</td>
+<td>Keine allgemeinen Capabilities</td>
+</tr>
+<tr>
+<td>Minimale Oberfläche</td>
+<td>Minimaler Prompt, fokussierte Rolle</td>
+</tr>
+</tbody>
+</table>
+<p>Beispiel: Ein action-agent ist spezialisiert — er führt Aufgaben aus. Er analysiert keine Muster oder verfasst keine Nachrichten.</p>
+<hr />
+<h2 id="vergleichsmatrix">Vergleichsmatrix</h2>
+<table>
+<thead>
+<tr>
+<th>System</th>
+<th>Primärer Beitrag</th>
+<th>Schlüsselmechanismus</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>DragonFlyBSD</td>
+<td>Skalierbare Parallelität</td>
+<td>Per-CPU-Queues, Ownership</td>
+</tr>
+<tr>
+<td>Erlang/OTP</td>
+<td>Fehlertoleranz</td>
+<td>Supervision, let it crash</td>
+</tr>
+<tr>
+<td>seL4</td>
+<td>Formale Sicherheit</td>
+<td>Capabilities</td>
+</tr>
+<tr>
+<td>OpenBSD</td>
+<td>Praktische Sicherheit</td>
+<td>pledge, unveil, privsep</td>
+</tr>
+<tr>
+<td>macOS/GCD</td>
+<td>Prioritäts-Scheduling</td>
+<td>QoS-markierte Dispatch-Queues</td>
+</tr>
+<tr>
+<td>Plan 9</td>
+<td>Einheitlicher Zugang</td>
+<td>Alles ist eine Datei</td>
+</tr>
+<tr>
+<td>Event Sourcing</td>
+<td>Auditierbarkeit</td>
+<td>Append-only-Log</td>
+</tr>
+<tr>
+<td>Unikernels</td>
+<td>Minimalismus</td>
+<td>Einzelzweck-Images</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="synthese-fur-agent-architekturen">Synthese für agent-Architekturen</h2>
+<p>Ein gut entworfenes Multi-agent-System kann kombinieren:</p>
+<ol>
+<li><strong>DragonFlyBSDs Message-Passing</strong> für agent-Kommunikation</li>
+<li><strong>Erlangs Supervision</strong> für Fehlertoleranz</li>
+<li><strong>seL4s Capabilities</strong> für formale Zugangskontrolle</li>
+<li><strong>OpenBSDs pledge/unveil</strong> für praktische, selbst auferlegte Einschränkungen</li>
+<li><strong>GCDs Prioritäts-Queues</strong> für Workload-Management</li>
+<li><strong>Plan 9s einheitliche Schnittstelle</strong> für Ressourcenzugang</li>
+<li><strong>Event-Sourcings append-only-Log</strong> für Auditierbarkeit</li>
+<li><strong>Unikernels Spezialisierung</strong> für fokussierte agent-Rollen</li>
+</ol>
+<p>Das sind keine konkurrierenden Ansätze — sie addressieren orthogonale Belange und kombinieren sich natürlich.</p>
+<hr />
+<p>Weiter: <a href="03-architecture.md">03-architecture.md</a> — Die outheis-Architektur, abgeleitet aus diesen Prinzipien.</p>
+    <hr>
+    <p class="footer">Open source under AGPL-3.0 · <a href="https://github.com/outheis-labs/outheis-minimal">Code on GitHub</a></p>
+  </main>
+</body>
+</html>

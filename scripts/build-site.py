@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """
-Build the outheis website from docs_source/.
+Build the outheis website from docs/ and docs-de/.
 
-Reads Markdown from docs_source/, converts to HTML, wraps in the layout template,
-and outputs to docs/. Run locally or via GitHub Actions.
+Reads Markdown, converts to HTML, wraps in the layout template,
+and outputs to html/ (EN) and html/de/ (DE). Run locally or via GitHub Actions.
 
 Usage:
     python scripts/build-site.py
@@ -16,13 +16,14 @@ import markdown
 
 ROOT = Path(__file__).parent.parent
 DOCS_SOURCE = ROOT / "docs"
-DOCS = ROOT / "html"  # Output (served by GitHub Pages)
+DOCS_DE = ROOT / "docs-de"
+DOCS = ROOT / "html"  # Output root (served by GitHub Pages)
 TEMPLATES = ROOT / "templates"
 
 SITE_TITLE = "outheis"
 
-# Navigation: four top-level sections, each with sub-pages.
-# 'match' is a regex tested against the current page's relative path.
+# Navigation: five top-level sections, each with sub-pages.
+# 'match' is a regex tested against the current page's path (without lang prefix).
 NAV_SECTIONS = [
     {
         "label": "Foundations",
@@ -84,45 +85,99 @@ NAV_SECTIONS = [
     },
 ]
 
+NAV_SECTIONS_DE = [
+    {
+        "label": "Grundlagen",
+        "url": "foundations/index.html",
+        "match": "foundations",
+        "items": [
+            {"label": "Warum outheis",                  "url": "foundations/index.html",                       "match": "foundations/index"},
+            {"label": "Information und Semantik",       "url": "foundations/02-semantic-foundations.html",      "match": "02-semantic"},
+            {"label": "Aufmerksamkeit als Architektur", "url": "foundations/03-attention-as-architecture.html", "match": "03-attention"},
+        ],
+    },
+    {
+        "label": "Design",
+        "url": "design/index.html",
+        "match": "^design/",
+        "items": [
+            {"label": "Überblick",             "url": "design/index.html",                        "match": "^design/index"},
+            {"label": "OS-Prinzipien",         "url": "design/01-why-os-principles.html",         "match": "01-why-os"},
+            {"label": "Systemvergleich",       "url": "design/02-systems-survey.html",            "match": "02-systems"},
+            {"label": "Architektur",           "url": "design/03-architecture.html",              "match": "03-architecture"},
+            {"label": "Datenformate",          "url": "design/04-data-formats.html",              "match": "04-data"},
+            {"label": "Verwandte Ansätze",     "url": "design/05-related-work.html",              "match": "05-related"},
+            {"label": "Agenten-Prompts",       "url": "design/06-agent-prompts.html",             "match": "06-agent"},
+            {"label": "Hybrider Memory-Stack", "url": "design/07-hybrid-memory-stack.html",       "match": "07-hybrid"},
+        ],
+    },
+    {
+        "label": "Implementierung",
+        "url": "implementation/architecture.html",
+        "match": "implementation/(architecture|memory|agenda|skills|alan)",
+        "items": [
+            {"label": "Aktueller Stand", "url": "implementation/architecture.html", "match": "implementation/architecture"},
+            {"label": "Memory & Regeln", "url": "implementation/memory.html",       "match": "implementation/memory"},
+            {"label": "Agenda",          "url": "implementation/agenda.html",       "match": "implementation/agenda"},
+            {"label": "Skills",          "url": "implementation/skills.html",       "match": "implementation/skills"},
+            {"label": "Code-Agent",      "url": "implementation/alan.html",         "match": "implementation/alan"},
+        ],
+    },
+    {
+        "label": "Installation",
+        "url": "installation/release-notes.html",
+        "match": "installation|guide|config|migration|webui|signal",
+        "items": [
+            {"label": "Release Notes",  "url": "installation/release-notes.html",  "match": "release-notes"},
+            {"label": "Erste Schritte", "url": "implementation/guide.html",        "match": "implementation/guide"},
+            {"label": "Konfiguration",  "url": "implementation/config.html",       "match": "implementation/config"},
+            {"label": "Signal",         "url": "implementation/signal.html",       "match": "implementation/signal"},
+            {"label": "Migration",      "url": "implementation/migration.html",    "match": "implementation/migration"},
+            {"label": "Web UI",         "url": "implementation/webui.html",        "match": "implementation/webui"},
+        ],
+    },
+    {
+        "label": "Workflows",
+        "url": "workflows/index.html",
+        "match": "^workflows/",
+        "items": [
+            {"label": "Überblick", "url": "workflows/index.html", "match": "workflows/index"},
+        ],
+    },
+]
+
 
 def relative_url(from_path: str, to_path: str) -> str:
     """Calculate relative URL from one page to another."""
     from_parts = from_path.split('/')
-    # From root (index.html) — no prefix needed
     if len(from_parts) == 1:
         return to_path
-    # From subdir (design/foo.html) — need ../ prefix
     depth = len(from_parts) - 1
     return '../' * depth + to_path
 
 
-def build_nav(current_rel: str) -> tuple[str, str]:
+def build_nav(current_rel: str, nav_sections: list) -> tuple[str, str]:
     """
     Build top nav and sub-nav HTML for the current page.
 
     Returns (topnav_html, subnav_html).
-    topnav_html: the four section links + GitHub
-    subnav_html: the sub-pages of the active section (empty string if none)
+    current_rel: path relative to the language output dir (no lang prefix).
     """
-    # Determine active section
     active_section = None
-    for section in NAV_SECTIONS:
+    for section in nav_sections:
         if re.search(section["match"], current_rel):
             active_section = section
             break
 
-    # Top nav
     top_items = []
-    for section in NAV_SECTIONS:
+    for section in nav_sections:
         is_active = section is active_section
         active_cls = ' class="active"' if is_active else ''
         url = relative_url(current_rel, section["url"])
         top_items.append(f'<a href="{url}"{active_cls}>{section["label"]}</a>')
-    # GitHub link (hidden on mobile via CSS)
     top_items.append('<a href="https://github.com/outheis-labs/outheis-minimal" class="external">GitHub ↗</a>')
     topnav_html = "\n        ".join(top_items)
 
-    # Sub nav (only for the active section)
     subnav_html = ""
     if active_section:
         sub_items = []
@@ -165,27 +220,32 @@ def md_to_html(content: str) -> str:
     )
 
 
-def output_path(src: Path) -> Path:
-    """Determine output path: docs_source/foo/bar.md -> docs/foo/bar.html"""
-    rel = src.relative_to(DOCS_SOURCE)
-    return DOCS / rel.with_suffix('.html')
-
-
-def build_page(src: Path, template: str):
+def build_page(src: Path, src_root: Path, out_root: Path, template: str,
+               nav_sections: list, lang: str):
     """Build one page: Markdown → HTML → wrapped in template."""
     raw = src.read_text(encoding='utf-8')
     content_md = strip_frontmatter(raw)
     title = extract_title(content_md, src)
     content_html = md_to_html(content_md)
 
-    dst = output_path(src)
-    rel = str(dst.relative_to(DOCS))
+    rel_local = str(src.relative_to(src_root).with_suffix('.html'))  # e.g. "design/03-architecture.html"
+    dst = out_root / rel_local
+    rel_from_html = str(dst.relative_to(DOCS))  # e.g. "design/..." or "de/design/..."
 
-    # Calculate path to root (e.g., "" for index.html, "../" for design/foo.html)
-    depth = len(rel.split('/')) - 1
+    depth = len(rel_from_html.split('/')) - 1
     root = '../' * depth if depth > 0 else ''
 
-    topnav_html, subnav_html = build_nav(rel)
+    topnav_html, subnav_html = build_nav(rel_local, nav_sections)
+
+    # Language switcher: link to the equivalent page in the other language
+    if lang == 'en':
+        other_href = f'{root}de/{rel_local}'
+        lang_switch_html = f'<span class="lang-active">EN</span> · <a href="{other_href}" class="lang-link">DE</a>'
+    else:
+        other_href = f'{root}{rel_local}'  # root goes to html/de/, then back to html/ via rel
+        # Actually root already brings us to html/ for DE pages (depth accounts for de/ prefix)
+        # From html/de/design/foo.html: root = ../../, rel_local = design/foo.html → ../../design/foo.html ✓
+        lang_switch_html = f'<a href="{other_href}" class="lang-link">EN</a> · <span class="lang-active">DE</span>'
 
     if subnav_html:
         subnavbar_html = (
@@ -203,15 +263,16 @@ def build_page(src: Path, template: str):
             .replace('<!-- TITLE -->', f'{title} · {SITE_TITLE}' if title != SITE_TITLE else SITE_TITLE)
             .replace('<!-- TOPNAV -->', topnav_html)
             .replace('<!-- SUBNAVBAR -->', subnavbar_html)
+            .replace('<!-- LANG_SWITCH -->', lang_switch_html)
             .replace('<!-- CONTENT -->', content_html))
 
     dst.parent.mkdir(parents=True, exist_ok=True)
     dst.write_text(page, encoding='utf-8')
-    print(f"  {src.relative_to(DOCS_SOURCE)} → {dst.relative_to(DOCS)}")
+    print(f"  {src.relative_to(src_root)} → {dst.relative_to(DOCS)}")
 
 
 def copy_assets():
-    """Copy assets from docs_source/assets/ to docs/."""
+    """Copy assets from docs/assets/ to html/."""
     assets_src = DOCS_SOURCE / "assets"
     if not assets_src.exists():
         return
@@ -246,16 +307,21 @@ def copy_assets():
 def main():
     template = (TEMPLATES / "default.html").read_text(encoding='utf-8')
 
-    # Clean and recreate output
     if DOCS.exists():
         shutil.rmtree(DOCS)
     DOCS.mkdir(exist_ok=True)
 
-    print(f"Building {DOCS_SOURCE.name}/ → {DOCS.name}/")
+    print(f"Building EN: {DOCS_SOURCE.name}/ → {DOCS.name}/")
     for md_file in sorted(DOCS_SOURCE.rglob("*.md")):
         if any(part.startswith('_') for part in md_file.parts):
             continue
-        build_page(md_file, template)
+        build_page(md_file, DOCS_SOURCE, DOCS, template, NAV_SECTIONS, 'en')
+
+    print(f"\nBuilding DE: {DOCS_DE.name}/ → {DOCS.name}/de/")
+    for md_file in sorted(DOCS_DE.rglob("*.md")):
+        if any(part.startswith('_') for part in md_file.parts):
+            continue
+        build_page(md_file, DOCS_DE, DOCS / 'de', template, NAV_SECTIONS_DE, 'de')
 
     print("\nCopying assets...")
     copy_assets()

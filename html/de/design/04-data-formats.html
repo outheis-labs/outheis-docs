@@ -1,0 +1,1614 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Datenformate und Konventionen · outheis</title>
+  <link rel="icon" type="image/png" href="../../favicon-96x96.png" sizes="96x96">
+  <link rel="icon" type="image/svg+xml" href="../../favicon.svg">
+  <link rel="shortcut icon" href="../../favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="../../apple-touch-icon.png">
+  <link rel="manifest" href="../../site.webmanifest">
+  <style>
+    @font-face {
+      font-family: 'Inter';
+      src: url('../../assets/fonts/InterVariable.woff2') format('woff2'),
+           url('../../assets/fonts/InterVariable.ttf') format('truetype');
+      font-weight: 100 900;
+      font-style: normal;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'Inter';
+      src: url('../../assets/fonts/InterVariable-Italic.woff2') format('woff2');
+      font-weight: 100 900;
+      font-style: italic;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'Inter var';
+      src: url('../../assets/fonts/InterVariable.woff2') format('woff2'),
+           url('../../assets/fonts/InterVariable.ttf') format('truetype');
+      font-weight: 100 900;
+      font-style: normal;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'Inter var';
+      src: url('../../assets/fonts/InterVariable-Italic.woff2') format('woff2');
+      font-weight: 100 900;
+      font-style: italic;
+      font-display: swap;
+    }
+  </style>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --font-body: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-ui: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-mono: SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      --color-text: #1a1a1a;
+      --color-text-muted: #666;
+      --color-text-faint: #999;
+      --color-border: #e0e0e0;
+      --color-bg-code: #f5f5f5;
+      --header-height: 52px;
+      --subnav-height: 40px;
+    }
+
+    @supports (font-variation-settings: normal) {
+      :root { --font-body: "Inter var", sans-serif; --font-ui: "Inter var", sans-serif; }
+    }
+
+    html, body {
+      width: 100%;
+      min-height: 100vh;
+      background: #fff;
+      font-family: var(--font-body);
+      font-size: 15px;
+      line-height: 1.6;
+      color: var(--color-text);
+    }
+
+    /* ── Header ── */
+
+    .header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: #fff;
+      border-bottom: 1px solid var(--color-border);
+    }
+
+    .header-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0 2rem;
+      height: var(--header-height);
+      gap: 2rem;
+    }
+
+    .logo-link {
+      display: flex;
+      align-items: center;
+      text-decoration: none;
+      flex-shrink: 0;
+    }
+
+    .site-name {
+      font-family: var(--font-ui);
+      font-size: 20px;
+      font-weight: 600;
+      color: var(--color-text);
+      letter-spacing: -0.01em;
+    }
+
+    .topnav {
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
+    }
+
+    .topnav a {
+      font-family: var(--font-ui);
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--color-text-muted);
+      text-decoration: none;
+      padding: 0.3rem 0.65rem;
+      border-radius: 4px;
+      white-space: nowrap;
+    }
+
+    .topnav a:hover { color: var(--color-text); background: var(--color-bg-code); }
+    .topnav a.active { color: var(--color-text); font-weight: 600; }
+    .topnav a.external { color: var(--color-text-faint); }
+
+    /* ── Sub-nav ── */
+
+    .subnav-bar {
+      border-bottom: 1px solid var(--color-border);
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+    .subnav-bar::-webkit-scrollbar { display: none; }
+    .subnav-bar:empty,
+    .subnav-bar.hidden { display: none; }
+
+    .subnav-inner {
+      display: flex;
+      align-items: center;
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0 2rem;
+      gap: 0.1rem;
+      height: var(--subnav-height);
+    }
+
+    .subnav-inner a {
+      font-family: var(--font-ui);
+      font-size: 13px;
+      color: var(--color-text-muted);
+      text-decoration: none;
+      padding: 0.25rem 0.6rem;
+      border-radius: 3px;
+      white-space: nowrap;
+    }
+
+    .subnav-inner a:hover { color: var(--color-text); background: var(--color-bg-code); }
+    .subnav-inner a.active { color: var(--color-text); font-weight: 500; }
+
+    /* ── Content ── */
+
+    .content {
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 2.5rem 2rem 4rem;
+    }
+
+    .content > *:first-child { margin-top: 0; }
+
+    .content h1 { font-family: var(--font-ui); font-size: 28px; font-weight: 600; margin-bottom: 0.5rem; letter-spacing: -0.02em; }
+    .content h2 { font-family: var(--font-ui); font-size: 18px; font-weight: 600; margin-top: 2rem; margin-bottom: 1.25rem; }
+    .content h3 { font-family: var(--font-ui); font-size: 15px; font-weight: 600; margin-top: 1.5rem; margin-bottom: 0.75rem; }
+    .content p { margin-bottom: 1rem; }
+    .content a { color: var(--color-text-muted); }
+    .content a:hover { color: var(--color-text); }
+    .content ul, .content ol { margin-bottom: 1rem; padding-left: 1.5rem; }
+    .content li { margin-bottom: 0.4rem; }
+
+    .content table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; font-family: var(--font-ui); font-size: 13px; }
+    .content th, .content td { text-align: left; padding: 0.5rem 0.75rem; border-bottom: 1px solid var(--color-border); }
+    .content th { font-weight: 500; font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--color-text-muted); }
+
+    .content code { font-family: var(--font-mono); font-size: 14px; background: var(--color-bg-code); padding: 0.15em 0.4em; border-radius: 3px; }
+    .content pre { background: var(--color-bg-code); padding: 1rem 1.25rem; overflow-x: auto; margin: 1.5rem 0; font-size: 13px; border-radius: 4px; line-height: 1.5; }
+    .content pre code { background: none; padding: 0; border-radius: 0; }
+
+    .content hr { border: none; border-top: 1px solid var(--color-border); margin: 1.5rem 0; }
+    .content strong { font-weight: 500; }
+    .content em { font-style: italic; }
+    .content blockquote { border-left: 2px solid var(--color-border); padding-left: 1.25rem; margin: 1.5rem 0; color: var(--color-text-muted); font-style: italic; }
+    .content .lead { font-style: italic; color: var(--color-text-muted); margin-bottom: 2rem; }
+    .content .footer { font-size: 12px; color: var(--color-text-faint); font-style: italic; }
+
+    /* ── Mobile ── */
+
+    /* ── Language switch ── */
+
+    .lang-switch {
+      font-family: var(--font-ui);
+      font-size: 13px;
+      color: var(--color-text-muted);
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .lang-switch .lang-active {
+      color: var(--color-text);
+      font-weight: 500;
+    }
+
+    .lang-switch a.lang-link {
+      color: var(--color-text-muted);
+      text-decoration: none;
+    }
+
+    .lang-switch a.lang-link:hover { color: var(--color-text); }
+
+    /* ── Mobile ── */
+
+    @media (max-width: 640px) {
+      .header-inner { padding: 0 1.25rem; gap: 1rem; }
+      .topnav { gap: 0; }
+      .topnav a { padding: 0.3rem 0.5rem; font-size: 13px; }
+      .topnav a.external { display: none; }
+      .subnav-inner { padding: 0 1.25rem; }
+      .content { padding: 2rem 1.25rem 3rem; }
+      .content h1 { font-size: 24px; }
+      .content h2 { font-size: 16px; }
+    }
+  </style>
+</head>
+<body>
+  <header class="header">
+    <div class="header-inner">
+      <a href="../../index.html" class="logo-link">
+        <span class="site-name">οὐθείς</span>
+      </a>
+      <nav class="topnav">
+        <a href="../foundations/index.html">Grundlagen</a>
+        <a href="../design/index.html" class="active">Design</a>
+        <a href="../implementation/architecture.html">Implementierung</a>
+        <a href="../installation/release-notes.html">Installation</a>
+        <a href="../workflows/index.html">Workflows</a>
+        <a href="https://github.com/outheis-labs/outheis-minimal" class="external">GitHub ↗</a>
+      </nav>
+      <div class="lang-switch"><a href="../../design/04-data-formats.html" class="lang-link">EN</a> · <span class="lang-active">DE</span></div>
+    </div>
+  </header>
+  <div class="subnav-bar">
+    <div class="subnav-inner">
+      <a href="../design/index.html">Überblick</a>
+      <a href="../design/01-why-os-principles.html">OS-Prinzipien</a>
+      <a href="../design/02-systems-survey.html">Systemvergleich</a>
+      <a href="../design/03-architecture.html">Architektur</a>
+      <a href="../design/04-data-formats.html" class="active">Datenformate</a>
+      <a href="../design/05-related-work.html">Verwandte Ansätze</a>
+      <a href="../design/06-agent-prompts.html">Agenten-Prompts</a>
+      <a href="../design/07-hybrid-memory-stack.html">Hybrider Memory-Stack</a>
+    </div>
+  </div>
+  <main class="content">
+    <h1 id="datenformate-und-konventionen">Datenformate und Konventionen</h1>
+<p>Dieses Dokument legt die Struktur und das Format der Daten in outheis fest und ermöglicht es Agenten, verlässliche Annahmen über Inhalte zu treffen.</p>
+<hr />
+<h2 id="kernprinzip-datenlokalitat">Kernprinzip: Datenlokalität</h2>
+<p><strong>Benutzerdaten existieren nur an zwei Orten:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Ort</th>
+<th>Geschrieben von</th>
+<th>Enthält</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>~/.outheis/human/</code></td>
+<td>outheis-System, Benutzer über Web UI, manuelle Bearbeitung</td>
+<td>Konfiguration, Insights, Regeln</td>
+</tr>
+<tr>
+<td><code>vault/</code> (extern)</td>
+<td>Benutzer</td>
+<td>Wissen, Dokumente, Assets</td>
+</tr>
+</tbody>
+</table>
+<p>Keine Benutzerdaten werden anderswo gespeichert. Das Entfernen dieser Verzeichnisse löscht alle Benutzerspuren.</p>
+<hr />
+<h2 id="verzeichnisstruktur">Verzeichnisstruktur</h2>
+<h3 id="systemverzeichnis">Systemverzeichnis</h3>
+<pre><code>~/.outheis/                      # System directory
+├── agents/                      # Agent implementations
+├── transport/                   # Transport daemon
+├── dispatcher/                  # Dispatcher
+├── web/                         # Web UI (localhost-only)
+└── human/                       # ALL user-specific data
+    ├── config.json              # User configuration
+    ├── insights.jsonl           # Pattern agent output
+    ├── rules/                   # Agenda agent rules
+    │   └── priorities.md
+    ├── messages.jsonl           # Message queue (append-only)
+    ├── archive/                 # Cold storage for old conversations
+    │   ├── messages-2025-01.jsonl
+    │   └── ...
+    ├── index.jsonl              # Search index (across all vaults)
+    ├── tag-weights.jsonl        # Learned tag importance
+    ├── cache/                   # Cached data
+    │   └── agenda/              # Previous versions for diff
+    │       ├── Daily.md.prev
+    │       ├── Inbox.md.prev
+    │       └── Exchange.md.prev
+    ├── imports/                 # Imported external data
+    │   ├── calendar/
+    │   │   └── 2025-03-27.jsonl
+    │   ├── email/
+    │   │   └── inbox.jsonl
+    │   ├── tasks/
+    │   └── contacts/
+    └── vault/                   # Minimal starter vault
+</code></pre>
+<h3 id="vault-extern-vom-benutzer-verwaltet">Vault (Extern, vom Benutzer verwaltet)</h3>
+<p>Vaults können sich überall im Dateisystem befinden. Mehrere Vaults werden unterstützt.</p>
+<pre><code>~/Documents/MyVault/             # Example: user's primary vault
+├── Agenda/                      # Special directory (required in primary vault)
+│   ├── Daily.md
+│   ├── Inbox.md
+│   └── Exchange.md
+├── notes/
+│   └── project-alpha.md
+├── projects/
+│   └── project-alpha/
+│       ├── README.md
+│       └── assets/
+│           └── diagram.png
+└── archive/
+    └── 2024/
+
+~/Documents/Obsidian/            # Example: second vault
+├── ...
+</code></pre>
+<h3 id="konfiguration">Konfiguration</h3>
+<pre><code class="language-json">{
+  &quot;vault&quot;: [
+    &quot;~/Documents/MyVault&quot;,
+    &quot;~/Documents/Obsidian&quot;
+  ]
+}
+</code></pre>
+<p>Der erste Vault in der Liste ist der <strong>primäre Vault</strong> — enthält <code>Agenda/</code>.</p>
+<hr />
+<h2 id="vault-struktur">Vault-Struktur</h2>
+<h3 id="konventionen">Konventionen</h3>
+<table>
+<thead>
+<tr>
+<th>Regel</th>
+<th>Beschreibung</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Agenda/</code></td>
+<td>Im primären Vault erforderlich, besondere Behandlung</td>
+</tr>
+<tr>
+<td>Benutzerverzeichnisse</td>
+<td>Beliebige Struktur, beliebige Tiefe</td>
+</tr>
+<tr>
+<td>Verzeichnisnamen</td>
+<td>Können als Organisationshinweise dienen</td>
+</tr>
+<tr>
+<td>Markdown-Dateien</td>
+<td>Primäres Wissensformat, selbstbeschreibend über Tags</td>
+</tr>
+<tr>
+<td>Andere Dateien</td>
+<td>Assets, Anhänge, verlinkt oder lose</td>
+</tr>
+</tbody>
+</table>
+<h3 id="philosophie">Philosophie</h3>
+<p>Gemäß dem Prinzip der <em>prospektiven Informationsarchitektur</em>:</p>
+<ul>
+<li><strong>Selbstbeschreibung</strong>: Dateien tragen ihre Bedeutung über Tags, nicht über Position</li>
+<li><strong>Position als Hinweis</strong>: Verzeichnisstruktur liefert Kontext, nicht Identität</li>
+<li><strong>Mehrere Zugriffspfade</strong>: Tags ermöglichen Abruf aus beliebiger Perspektive</li>
+<li><strong>Struktur zur Abfragezeit</strong>: Hierarchien werden berechnet, nicht gespeichert</li>
+</ul>
+<hr />
+<h2 id="dateitypen">Dateitypen</h2>
+<h3 id="primar-markdown-md">Primär: Markdown (.md)</h3>
+<p>Das primäre Wissensformat. Menschenlesbar, maschinell verarbeitbar, selbstbeschreibend.</p>
+<h3 id="haufige-assets">Häufige Assets</h3>
+<p>Dateien, die häufig neben Markdown auftauchen oder darin verlinkt sind:</p>
+<table>
+<thead>
+<tr>
+<th>Kategorie</th>
+<th>Erweiterungen</th>
+<th>Behandlung</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Dokumente</td>
+<td><code>.docx</code>, <code>.xlsx</code>, <code>.pptx</code>, <code>.pdf</code></td>
+<td>Metadaten indexieren, Text extrahieren wo möglich</td>
+</tr>
+<tr>
+<td>Archive</td>
+<td><code>.zip</code>, <code>.tgz</code>, <code>.tar.gz</code>, <code>.tar</code>, <code>.7z</code></td>
+<td>Als Container indexieren, Inhalte auflisten</td>
+</tr>
+<tr>
+<td>Bilder</td>
+<td><code>.png</code>, <code>.jpg</code>, <code>.jpeg</code>, <code>.gif</code>, <code>.svg</code>, <code>.webp</code></td>
+<td>Metadaten indexieren, OCR wenn konfiguriert</td>
+</tr>
+<tr>
+<td>Code</td>
+<td><code>.py</code>, <code>.js</code>, <code>.ts</code>, <code>.sh</code>, <code>.json</code>, <code>.yaml</code></td>
+<td>Als Text indexieren</td>
+</tr>
+<tr>
+<td>Repositories</td>
+<td><code>.git/</code> (Verzeichnis)</td>
+<td>Als Git-Repo erkennen, Metadaten indexieren</td>
+</tr>
+<tr>
+<td>Daten</td>
+<td><code>.csv</code>, <code>.tsv</code>, <code>.jsonl</code></td>
+<td>Als strukturierte Daten indexieren</td>
+</tr>
+</tbody>
+</table>
+<h3 id="beziehungsmuster">Beziehungsmuster</h3>
+<p>Dateien stehen auf verschiedene Weisen zueinander in Beziehung:</p>
+<table>
+<thead>
+<tr>
+<th>Muster</th>
+<th>Beschreibung</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Eingebettet</strong></td>
+<td>Bild/Asset in Markdown referenziert (<code>![](path)</code>)</td>
+</tr>
+<tr>
+<td><strong>Verlinkt</strong></td>
+<td>Dokument über Pfad oder Wiki-Link referenziert (<code>[[name]]</code>)</td>
+</tr>
+<tr>
+<td><strong>Geschwister</strong></td>
+<td>Verwandte Dateien im selben Verzeichnis</td>
+</tr>
+<tr>
+<td><strong>Lose</strong></td>
+<td>Dateien ohne explizite Links (über Suche auffindbar)</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="markdown-format">Markdown-Format</h2>
+<h3 id="frontmatter">Frontmatter</h3>
+<p>Optionales YAML-Frontmatter für explizite Metadaten:</p>
+<pre><code class="language-markdown">---
+title: Project Alpha Notes
+created: 2025-01-15
+modified: 2025-03-27
+tags: [project/alpha, important]
+---
+
+# Project Alpha Notes
+
+Content here...
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>Feld</th>
+<th>Typ</th>
+<th>Beschreibung</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>title</code></td>
+<td>string</td>
+<td>Anzeigename</td>
+</tr>
+<tr>
+<td><code>created</code></td>
+<td>date</td>
+<td>Erstellungsdatum (ISO 8601)</td>
+</tr>
+<tr>
+<td><code>modified</code></td>
+<td>date</td>
+<td>Letzte Änderung (ISO 8601)</td>
+</tr>
+<tr>
+<td><code>tags</code></td>
+<td>array</td>
+<td>Semantische Tags</td>
+</tr>
+</tbody>
+</table>
+<p>Wenn kein Frontmatter vorhanden ist, leiten Agenten Metadaten ab aus:
+- Titel: Erste <code># Überschrift</code> oder Dateiname
+- Erstellt/Geändert: Dateisystem-Zeitstempel
+- Tags: Inline-Tags im Inhalt</p>
+<h3 id="tags">Tags</h3>
+<p>Tags können aus <strong>zwei Quellen</strong> stammen (beide funktionieren, werden automatisch zusammengeführt):</p>
+<ol>
+<li><strong>YAML-Frontmatter</strong> (optional):</li>
+</ol>
+<pre><code class="language-yaml">---
+tags: [project/alpha, important]
+---
+</code></pre>
+<ol>
+<li><strong>Inline-#Tags</strong> im Fließtext (bevorzugt):</li>
+</ol>
+<pre><code class="language-markdown">This is an #important note about #project/alpha.
+
+Meeting scheduled for tomorrow #deadline #priority-high.
+</code></pre>
+<p>outheis extrahiert Tags aus beiden Quellen und dedupliziert sie.</p>
+<h3 id="tag-formate">Tag-Formate</h3>
+<table>
+<thead>
+<tr>
+<th>Format</th>
+<th>Beispiel</th>
+<th>Bedeutung</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Einfach</td>
+<td><code>#important</code></td>
+<td>Einfaches Flag</td>
+</tr>
+<tr>
+<td>Schlüssel-Wert</td>
+<td><code>#priority-high</code></td>
+<td>Attribut mit Wert</td>
+</tr>
+<tr>
+<td>Hierarchisch</td>
+<td><code>#project/alpha</code></td>
+<td>Verschachtelter Namensraum</td>
+</tr>
+<tr>
+<td>Datum</td>
+<td><code>#date-2026-03-24</code></td>
+<td>Spezifisches Datum</td>
+</tr>
+<tr>
+<td>Status</td>
+<td><code>#status-active</code></td>
+<td>Zustandsindikator</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Das Format des Benutzers wird beibehalten.</strong> outheis erlernt, ob <code>-</code> oder <code>/</code> als Trennzeichen verwendet wird.</p>
+<h3 id="tag-normalisierung">Tag-Normalisierung</h3>
+<p>Zur Indizierung und Suche werden Tags normalisiert:</p>
+<pre><code>#Important     → important
+#Priority-High → priority-high
+#Project/Alpha → project/alpha
+</code></pre>
+<p>Regeln:
+- Kleinbuchstaben für die Suche
+- Bindestriche und Schrägstriche beibehalten
+- Führendes <code>#</code> entfernen</p>
+<h3 id="tag-analyse">Tag-Analyse</h3>
+<p>outheis verfolgt die Tag-Nutzung und kann berichten:</p>
+<ul>
+<li><strong>Top-Tags</strong> — am häufigsten verwendet</li>
+<li><strong>Tag-Hierarchien</strong> — Präfixe wie <code>status-*</code>, <code>project/*</code></li>
+<li><strong>Einzelne Tags</strong> — nur einmal verwendet (Bereinigungskandidaten)</li>
+</ul>
+<p>Im Chat fragen: "welche tags habe ich?" oder "tag-analyse"</p>
+<h3 id="tag-philosophie">Tag-Philosophie</h3>
+<p><strong>outheis erfindet keine Tags.</strong> Es verwendet deine Tags, erlernt dein Format und kann:
+- Bereinigung für einzelne Tags vorschlagen
+- Auf inkonsistente Formate hinweisen
+- Ähnliche vorhandene Tags vorschlagen, wenn neue erstellt werden</p>
+<p>Du bestimmst das Vokabular.</p>
+<h3 id="links">Links</h3>
+<p>Wiki-Style-Links für interne Referenzen:</p>
+<pre><code class="language-markdown">See [[meeting-notes]] for details.
+Related: [[projects/alpha/README]]
+</code></pre>
+<p>Standard-Markdown-Links für externe Referenzen:</p>
+<pre><code class="language-markdown">Based on [this paper](https://example.com/paper.pdf).
+</code></pre>
+<hr />
+<h2 id="importierte-daten">Importierte Daten</h2>
+<p>Externe Daten (Kalender, E-Mail usw.) werden vom Action-Agenten in <code>~/.outheis/human/imports/</code> importiert. Diese Daten sind kanonisch — strukturierte Repräsentationen externer Quellen.</p>
+<h3 id="verzeichnisstruktur_1">Verzeichnisstruktur</h3>
+<pre><code>~/.outheis/human/imports/
+├── calendar/
+│   ├── 2025-03-27.jsonl
+│   └── recurring.jsonl
+├── email/
+│   ├── inbox.jsonl
+│   └── sent.jsonl
+├── tasks/
+│   └── tasks.jsonl
+└── contacts/
+    └── contacts.jsonl
+</code></pre>
+<h3 id="kalendereintrage">Kalendereinträge</h3>
+<pre><code class="language-json">{
+  &quot;id&quot;: &quot;evt_abc123&quot;,
+  &quot;source&quot;: &quot;google_calendar&quot;,
+  &quot;title&quot;: &quot;Team Meeting&quot;,
+  &quot;start&quot;: &quot;2025-03-27T10:00:00Z&quot;,
+  &quot;end&quot;: &quot;2025-03-27T11:00:00Z&quot;,
+  &quot;location&quot;: &quot;Room 3B&quot;,
+  &quot;description&quot;: &quot;Weekly sync&quot;,
+  &quot;attendees&quot;: [&quot;alice@example.com&quot;, &quot;bob@example.com&quot;],
+  &quot;recurring&quot;: false,
+  &quot;imported_at&quot;: &quot;2025-03-27T08:00:00Z&quot;
+}
+</code></pre>
+<h3 id="e-mail">E-Mail</h3>
+<pre><code class="language-json">{
+  &quot;id&quot;: &quot;msg_xyz789&quot;,
+  &quot;source&quot;: &quot;gmail&quot;,
+  &quot;from&quot;: {&quot;name&quot;: &quot;Alice&quot;, &quot;email&quot;: &quot;alice@example.com&quot;},
+  &quot;to&quot;: [{&quot;name&quot;: &quot;User&quot;, &quot;email&quot;: &quot;user@example.com&quot;}],
+  &quot;cc&quot;: [],
+  &quot;subject&quot;: &quot;Project Update&quot;,
+  &quot;body_text&quot;: &quot;Plain text body...&quot;,
+  &quot;date&quot;: &quot;2025-03-27T09:15:00Z&quot;,
+  &quot;thread_id&quot;: &quot;thread_123&quot;,
+  &quot;labels&quot;: [&quot;inbox&quot;, &quot;important&quot;],
+  &quot;attachments&quot;: [
+    {&quot;filename&quot;: &quot;report.pdf&quot;, &quot;mime_type&quot;: &quot;application/pdf&quot;, &quot;size&quot;: 102400}
+  ],
+  &quot;imported_at&quot;: &quot;2025-03-27T10:00:00Z&quot;
+}
+</code></pre>
+<h3 id="aufgaben">Aufgaben</h3>
+<pre><code class="language-json">{
+  &quot;id&quot;: &quot;task_456&quot;,
+  &quot;source&quot;: &quot;todoist&quot;,
+  &quot;title&quot;: &quot;Review proposal&quot;,
+  &quot;description&quot;: &quot;Review and comment on Q2 proposal&quot;,
+  &quot;due&quot;: &quot;2025-03-28T17:00:00Z&quot;,
+  &quot;priority&quot;: 2,
+  &quot;status&quot;: &quot;pending&quot;,
+  &quot;project&quot;: &quot;Work&quot;,
+  &quot;labels&quot;: [&quot;review&quot;, &quot;q2&quot;],
+  &quot;imported_at&quot;: &quot;2025-03-27T08:00:00Z&quot;
+}
+</code></pre>
+<h3 id="kontakte">Kontakte</h3>
+<pre><code class="language-json">{
+  &quot;id&quot;: &quot;contact_789&quot;,
+  &quot;source&quot;: &quot;google_contacts&quot;,
+  &quot;name&quot;: &quot;Alice Smith&quot;,
+  &quot;email&quot;: [&quot;alice@example.com&quot;, &quot;alice.smith@work.com&quot;],
+  &quot;phone&quot;: [&quot;+1-555-123-4567&quot;],
+  &quot;organization&quot;: &quot;Acme Corp&quot;,
+  &quot;notes&quot;: &quot;Met at conference 2024&quot;,
+  &quot;imported_at&quot;: &quot;2025-03-27T08:00:00Z&quot;
+}
+</code></pre>
+<hr />
+<h2 id="index">Index</h2>
+<p>Der Data-Agent pflegt einen Suchindex unter <code>~/.outheis/human/index.jsonl</code>:</p>
+<pre><code class="language-json">{
+  &quot;vault&quot;: &quot;~/Documents/MyVault&quot;,
+  &quot;path&quot;: &quot;notes/project-alpha.md&quot;,
+  &quot;type&quot;: &quot;markdown&quot;,
+  &quot;title&quot;: &quot;Project Alpha Notes&quot;,
+  &quot;tags&quot;: [&quot;project/alpha&quot;, &quot;important&quot;],
+  &quot;links_to&quot;: [&quot;meeting-notes.md&quot;, &quot;assets/diagram.png&quot;],
+  &quot;linked_from&quot;: [&quot;README.md&quot;],
+  &quot;modified&quot;: &quot;2025-03-27T10:00:00Z&quot;,
+  &quot;accessed_at&quot;: &quot;2025-03-27T14:00:00Z&quot;,
+  &quot;access_count&quot;: 12,
+  &quot;checksum&quot;: &quot;sha256:abc123...&quot;,
+  &quot;indexed_at&quot;: &quot;2025-03-27T10:05:00Z&quot;
+}
+</code></pre>
+<p>Der Index umfasst alle konfigurierten Vaults. Jeder Eintrag enthält das <code>vault</code>-Feld.</p>
+<hr />
+<h2 id="human-verzeichnis">Human-Verzeichnis</h2>
+<h3 id="struktur">Struktur</h3>
+<pre><code>~/.outheis/human/
+├── config.json                  # User configuration
+├── insights.jsonl               # Pattern agent output
+├── rules/                       # Agenda agent rules
+│   └── priorities.md
+└── vault/                       # Minimal starter vault
+</code></pre>
+<h3 id="schreibzugriff">Schreibzugriff</h3>
+<table>
+<thead>
+<tr>
+<th>Komponente</th>
+<th>Kann schreiben</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>outheis-System</td>
+<td>config.json, insights.jsonl</td>
+</tr>
+<tr>
+<td>Pattern-Agent</td>
+<td>insights.jsonl</td>
+</tr>
+<tr>
+<td>Benutzer (Web UI)</td>
+<td>config.json, rules/</td>
+</tr>
+<tr>
+<td>Benutzer (manuell)</td>
+<td>Jede Datei</td>
+</tr>
+<tr>
+<td>Andere Agenten</td>
+<td><strong>Niemals</strong> (nur Lesen)</td>
+</tr>
+</tbody>
+</table>
+<h3 id="configjson">config.json</h3>
+<p>Benutzerkonfiguration:</p>
+<pre><code class="language-json">{
+  &quot;name&quot;: &quot;Markus&quot;,
+  &quot;language&quot;: &quot;en&quot;,
+  &quot;timezone&quot;: &quot;Europe/Berlin&quot;,
+  &quot;vault&quot;: [
+    &quot;~/Documents/MyVault&quot;,
+    &quot;~/Documents/Obsidian&quot;
+  ]
+}
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>Feld</th>
+<th>Typ</th>
+<th>Beschreibung</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>name</code></td>
+<td>string</td>
+<td>Anzeigename des Benutzers</td>
+</tr>
+<tr>
+<td><code>language</code></td>
+<td>string</td>
+<td>Bevorzugte Sprache (ISO 639-1)</td>
+</tr>
+<tr>
+<td><code>timezone</code></td>
+<td>string</td>
+<td>IANA-Zeitzone</td>
+</tr>
+<tr>
+<td><code>vault</code></td>
+<td>array</td>
+<td>Pfade zu Vaults (erster = primär)</td>
+</tr>
+</tbody>
+</table>
+<h3 id="insightsjsonl">insights.jsonl</h3>
+<p>Pattern-Agent schreibt Beobachtungen:</p>
+<pre><code class="language-json">{
+  &quot;v&quot;: 1,
+  &quot;id&quot;: &quot;ins_20251115_001&quot;,
+  &quot;type&quot;: &quot;strategy&quot;,
+  &quot;domain&quot;: &quot;communication&quot;,
+  &quot;insight&quot;: &quot;When formatting for Signal, use emoji headers instead of markdown&quot;,
+  &quot;confidence&quot;: 0.8,
+  &quot;evidence_count&quot;: 5,
+  &quot;source_sessions&quot;: [&quot;sess_001&quot;, &quot;sess_003&quot;, &quot;sess_007&quot;],
+  &quot;created_at&quot;: &quot;2025-11-15T04:12:00Z&quot;
+}
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>Feld</th>
+<th>Typ</th>
+<th>Beschreibung</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>type</code></td>
+<td>string</td>
+<td><code>strategy</code>, <code>preference</code>, <code>pattern</code>, <code>capability</code></td>
+</tr>
+<tr>
+<td><code>domain</code></td>
+<td>string</td>
+<td>Anwendungsbereich</td>
+</tr>
+<tr>
+<td><code>confidence</code></td>
+<td>float</td>
+<td>0,0–1,0, nimmt mit Belegen zu</td>
+</tr>
+<tr>
+<td><code>evidence_count</code></td>
+<td>int</td>
+<td>Anzahl unterstützender Instanzen</td>
+</tr>
+<tr>
+<td><code>source_sessions</code></td>
+<td>array</td>
+<td>Rückverfolgbarkeit zu Gesprächen</td>
+</tr>
+</tbody>
+</table>
+<h3 id="session_notesjsonl">session_notes.jsonl</h3>
+<p>Temporäre Lernnotizen, die vom Pattern-Agenten bei geplanten Läufen geprüft werden:</p>
+<pre><code class="language-json">{
+  &quot;v&quot;: 1,
+  &quot;id&quot;: &quot;note_20251115_001&quot;,
+  &quot;session_id&quot;: &quot;sess_007&quot;,
+  &quot;agent&quot;: &quot;relay&quot;,
+  &quot;problem&quot;: &quot;User asked for table formatting in Signal&quot;,
+  &quot;solution&quot;: &quot;Replace markdown tables with emoji-separated rows&quot;,
+  &quot;context&quot;: {
+    &quot;channel&quot;: &quot;signal&quot;,
+    &quot;user_feedback&quot;: &quot;positive&quot;
+  },
+  &quot;created_at&quot;: &quot;2025-11-15T10:30:00Z&quot;,
+  &quot;reviewed&quot;: false
+}
+</code></pre>
+<p>Sitzungsnotizen werden:
+- Von jedem Agenten geschrieben, wenn der Benutzer bei der Problemlösung hilft
+- Vom Pattern-Agenten beim nächtlichen Lauf gelesen
+- Nach der Verarbeitung als <code>reviewed: true</code> markiert
+- Regelmäßig bereinigt (geprüfte Notizen älter als 30 Tage)</p>
+<p>Der Pattern-Agent entscheidet: auf Insight verallgemeinern oder als spezifische Instanz im Archiv belassen.</p>
+<h3 id="agenda-regeln">Agenda-Regeln</h3>
+<p>Markdown-Dateien in <code>human/rules/</code> definieren Benutzerpräferenzen:</p>
+<pre><code class="language-markdown"># Priorities
+
+## Work vs Personal
+- Work appointments take priority over personal, except:
+  - Family events always take priority
+  - Health appointments always take priority
+
+## Time Blocks
+- Monday mornings: no meetings before 10:00
+- Friday afternoons: no meetings after 15:00
+
+## Notifications
+- Deadline &lt; 3 days: always remind
+- Emails from boss: always show immediately
+</code></pre>
+<hr />
+<h2 id="textextraktion">Textextraktion</h2>
+<p>Für Nicht-Markdown-Dateien extrahieren Agenten Text wo möglich:</p>
+<table>
+<thead>
+<tr>
+<th>Typ</th>
+<th>Extraktionsmethode</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>PDF</td>
+<td><code>pdftotext</code>, <code>pymupdf</code> oder ähnlich</td>
+</tr>
+<tr>
+<td>DOCX/XLSX/PPTX</td>
+<td><code>python-docx</code>, <code>openpyxl</code>, <code>python-pptx</code></td>
+</tr>
+<tr>
+<td>Bilder</td>
+<td>OCR (optional, konfigurierbar)</td>
+</tr>
+<tr>
+<td>Archive</td>
+<td>Inhalte auflisten, Text aus enthaltenen Dateien extrahieren</td>
+</tr>
+<tr>
+<td>Code</td>
+<td>Als Klartext behandeln</td>
+</tr>
+</tbody>
+</table>
+<p>Extrahierter Text wird im Index gespeichert, nicht als separate Dateien.</p>
+<hr />
+<h2 id="binardateien">Binärdateien</h2>
+<p>Binärdateien (Bilder, PDFs, Office-Dokumente) werden:</p>
+<ol>
+<li><strong>Indiziert</strong> nach Metadaten (Größe, Typ, Änderungsdatum)</li>
+<li><strong>Textextrahiert</strong> wo möglich</li>
+<li><strong>Verlinkt</strong> über Referenzen in Markdown</li>
+<li><strong>Nicht verändert</strong> von outheis (aus Agentenperspektive nur Lesen)</li>
+</ol>
+<hr />
+<h2 id="git-repositories">Git-Repositories</h2>
+<p>Wenn ein Verzeichnis <code>.git/</code> enthält:</p>
+<ol>
+<li><strong>Erkannt</strong> als Git-Repository</li>
+<li><strong>Indiziert</strong> nach Metadaten (Remotes, Branches, aktuelle Commits)</li>
+<li><strong>Nicht verändert</strong> von outheis-Agenten</li>
+<li><strong>Action-Agent</strong> kann Git-Befehle ausführen, wenn angewiesen</li>
+</ol>
+<hr />
+<h2 id="zeitstempel">Zeitstempel</h2>
+<p>Alle Zeitstempel verwenden ISO 8601-Format in UTC:</p>
+<pre><code>2025-03-27T10:00:00Z
+</code></pre>
+<p>Agenten konvertieren zur Anzeige in die lokale Zeitzone basierend auf der Zeitzoneneinstellung in <code>human/config.json</code>.</p>
+<hr />
+<h2 id="dateinamen">Dateinamen</h2>
+<h3 id="konventionen_1">Konventionen</h3>
+<table>
+<thead>
+<tr>
+<th>Typ</th>
+<th>Konvention</th>
+<th>Beispiel</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Notizen</td>
+<td>Kleinbuchstaben, Bindestriche</td>
+<td><code>project-alpha-notes.md</code></td>
+</tr>
+<tr>
+<td>Importe</td>
+<td>Datum- oder Typpräfix</td>
+<td><code>2025-03-27.jsonl</code></td>
+</tr>
+<tr>
+<td>System</td>
+<td>Beschreibend</td>
+<td><code>index.jsonl</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="verbotene-zeichen">Verbotene Zeichen</h3>
+<p>Dateinamen dürfen nicht enthalten:
+- <code>/</code> <code>\</code> <code>:</code> <code>*</code> <code>?</code> <code>"</code> <code>&lt;</code> <code>&gt;</code> <code>|</code>
+- Führende/abschließende Leerzeichen
+- Führenden <code>.</code> in Benutzerdateien (für System reserviert)</p>
+<hr />
+<h2 id="kodierung">Kodierung</h2>
+<p>Alle Textdateien verwenden UTF-8-Kodierung ohne BOM.</p>
+<hr />
+<h2 id="zusammenfassung">Zusammenfassung</h2>
+<table>
+<thead>
+<tr>
+<th>Datentyp</th>
+<th>Ort</th>
+<th>Format</th>
+<th>Geschrieben von</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Benutzernotizen</td>
+<td><code>vault/</code></td>
+<td>Markdown</td>
+<td>Benutzer</td>
+</tr>
+<tr>
+<td>Benutzer-Assets</td>
+<td><code>vault/</code></td>
+<td>Verschiedene</td>
+<td>Benutzer</td>
+</tr>
+<tr>
+<td>Suchindex</td>
+<td><code>~/.outheis/human/index.jsonl</code></td>
+<td>JSONL</td>
+<td>Data-Agent</td>
+</tr>
+<tr>
+<td>Tag-Gewichte</td>
+<td><code>~/.outheis/human/tag-weights.jsonl</code></td>
+<td>JSONL</td>
+<td>Pattern-Agent</td>
+</tr>
+<tr>
+<td>Importierte Daten</td>
+<td><code>~/.outheis/human/imports/</code></td>
+<td>JSONL</td>
+<td>Action-Agent</td>
+</tr>
+<tr>
+<td>Nachrichtenwarteschlange</td>
+<td><code>~/.outheis/human/messages.jsonl</code></td>
+<td>JSONL</td>
+<td>Alle Agenten</td>
+</tr>
+<tr>
+<td>Archiv</td>
+<td><code>~/.outheis/human/archive/</code></td>
+<td>JSONL</td>
+<td>Dispatcher</td>
+</tr>
+<tr>
+<td>Benutzerkonfiguration</td>
+<td><code>~/.outheis/human/config.json</code></td>
+<td>JSON</td>
+<td>System, Benutzer</td>
+</tr>
+<tr>
+<td>Insights</td>
+<td><code>~/.outheis/human/insights.jsonl</code></td>
+<td>JSONL</td>
+<td>Pattern-Agent</td>
+</tr>
+<tr>
+<td>Agenda-Regeln</td>
+<td><code>~/.outheis/human/rules/</code></td>
+<td>Markdown</td>
+<td>Benutzer</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="schema-versionierung">Schema-Versionierung</h2>
+<h3 id="das-problem">Das Problem</h3>
+<p>Datenstrukturen entwickeln sich weiter. Nachrichten, Insights und andere Formate werden sich im Laufe der Zeit ändern. Ohne Versionierung:</p>
+<ul>
+<li>Alte Daten werden nach Upgrades unlesbar</li>
+<li>Gemischte Versionen in derselben Datei verursachen Parsing-Fehler</li>
+<li>Kein Migrationspfad für vorhandene Daten</li>
+</ul>
+<h3 id="versionsfeld">Versionsfeld</h3>
+<p>Jeder Datensatz in outheis-verwalteten JSONL-Dateien trägt eine Version:</p>
+<pre><code class="language-json">{&quot;v&quot;: 1, &quot;id&quot;: &quot;msg_001&quot;, &quot;from&quot;: {&quot;agent&quot;: &quot;zeno&quot;}, ...}
+{&quot;v&quot;: 1, &quot;id&quot;: &quot;msg_002&quot;, &quot;from&quot;: {&quot;agent&quot;: &quot;cato&quot;}, ...}
+{&quot;v&quot;: 2, &quot;id&quot;: &quot;msg_003&quot;, &quot;from&quot;: {&quot;agent&quot;: &quot;zeno&quot;}, &quot;priority&quot;: &quot;high&quot;, ...}
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>Feld</th>
+<th>Typ</th>
+<th>Bedeutung</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>v</code></td>
+<td>integer</td>
+<td>Schema-Version dieses Datensatzes</td>
+</tr>
+</tbody>
+</table>
+<p>Kurzer Feldname (<code>v</code> statt <code>version</code>), weil JSONL kompakt sein sollte.</p>
+<h3 id="versionsautoritat">Versionsautorität</h3>
+<p>Die Schema-Version ist in <code>core/schema.py</code> definiert:</p>
+<pre><code class="language-python"># core/schema.py — single source of truth
+
+MESSAGES_VERSION = 2
+INSIGHTS_VERSION = 1
+CONFIG_VERSION = 1
+
+def write_message(msg):
+    msg[&quot;v&quot;] = MESSAGES_VERSION
+    return json.dumps(msg)
+</code></pre>
+<p>Alle Agenten importieren dieses Modul. Kein Agent schreibt JSON direkt.</p>
+<h3 id="lesen-mit-versionsuberprufung">Lesen mit Versionsüberprüfung</h3>
+<pre><code class="language-python">def read_message(line):
+    msg = json.loads(line)
+    version = msg.get(&quot;v&quot;, 0)  # v0 = pre-versioning
+
+    if version == MESSAGES_VERSION:
+        return msg  # Hot path, no overhead
+
+    if version &gt; MESSAGES_VERSION:
+        raise UnsupportedVersion(
+            f&quot;Message v{version} requires newer outheis&quot;
+        )
+
+    # Only old messages go through migration
+    return migrate_message(msg, from_version=version)
+</code></pre>
+<p><strong>Performance:</strong> 99 % der Nachrichten entsprechen der aktuellen Version → einzelner Integer-Vergleich, kein Overhead.</p>
+<h3 id="migrationslogik">Migrationslogik</h3>
+<p>Migration erfolgt schrittweise (v0 → v1 → v2), in <code>core/schema.py</code>:</p>
+<pre><code class="language-python">def migrate_message(msg, from_version):
+    &quot;&quot;&quot;Stepwise migration: v0 → v1 → v2 → ...&quot;&quot;&quot;
+
+    if from_version &lt; 1:
+        # v0 → v1: &quot;from&quot; was string, now object
+        if isinstance(msg.get(&quot;from&quot;), str):
+            msg[&quot;from&quot;] = {&quot;agent&quot;: msg[&quot;from&quot;]}
+        msg[&quot;v&quot;] = 1
+        from_version = 1
+
+    if from_version &lt; 2:
+        # v1 → v2: New field &quot;priority&quot; with default
+        msg.setdefault(&quot;priority&quot;, &quot;normal&quot;)
+        msg[&quot;v&quot;] = 2
+        from_version = 2
+
+    return msg
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>Prinzip</th>
+<th>Grund</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Schrittweise (v0→v1→v2)</td>
+<td>Jeder Schritt isoliert, testbar</td>
+</tr>
+<tr>
+<td>Verlustfrei</td>
+<td>Alte Daten bleiben vollständig lesbar</td>
+</tr>
+<tr>
+<td>Migration zur Lesezeit</td>
+<td>Originaldatei unverändert</td>
+</tr>
+<tr>
+<td>Schreiben immer aktuell</td>
+<td>Niemals alte Versionen erstellen</td>
+</tr>
+</tbody>
+</table>
+<h3 id="migrations-cli">Migrations-CLI</h3>
+<pre><code class="language-bash"># Scan for outdated records
+outheis migrate --scan
+
+&gt; Found 47 messages at v1 (current: v2)
+&gt; Found 12 insights at v0 (current: v1)
+&gt;
+&gt; Run 'outheis migrate --apply' to convert
+
+# Apply migration
+outheis migrate --apply
+
+&gt; Migrating messages.jsonl: 47 entries v1 → v2
+&gt; Migrating archive/messages-2025-01.jsonl: 128 entries v1 → v2
+&gt; Migrating insights.jsonl: 12 entries v0 → v1
+&gt; Done. Backup in human/.migrate-backup/2025-11-15T10:00:00/
+
+# Quiet mode for automation
+outheis migrate --apply --quiet
+</code></pre>
+<h3 id="automatische-migration">Automatische Migration</h3>
+<p>Optional: Migration im nächtlichen Batch mit Pattern-Agent ausführen.</p>
+<pre><code class="language-json">{
+  &quot;system&quot;: {
+    &quot;auto_migrate&quot;: true,
+    &quot;migrate_schedule&quot;: &quot;04:00&quot;
+  }
+}
+</code></pre>
+<h3 id="versionshistorie">Versionshistorie</h3>
+<table>
+<thead>
+<tr>
+<th>Datei</th>
+<th>Aktuell</th>
+<th>Änderungen</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>messages.jsonl</td>
+<td>v1</td>
+<td>Initial</td>
+</tr>
+<tr>
+<td>insights.jsonl</td>
+<td>v1</td>
+<td>Initial</td>
+</tr>
+<tr>
+<td>config.json</td>
+<td>v1</td>
+<td>Initial</td>
+</tr>
+<tr>
+<td>tag-weights.jsonl</td>
+<td>v1</td>
+<td>Initial</td>
+</tr>
+<tr>
+<td>index.jsonl</td>
+<td>v1</td>
+<td>Initial</td>
+</tr>
+</tbody>
+</table>
+<p><em>Wird mit jeder Schema-Änderung aktualisiert.</em></p>
+<hr />
+<h2 id="theoretischer-hintergrund">Theoretischer Hintergrund</h2>
+<p>Die Vault-Architektur implementiert Prinzipien der <em>prospektiven Informationsarchitektur</em>:</p>
+<ul>
+<li><strong>Selbstbeschreibende Objekte</strong>: Dateien tragen Bedeutung über Tags, nicht Position</li>
+<li><strong>Multiple Relationierung</strong>: Tags und Links ermöglichen mehrere Zugriffspfade</li>
+<li><strong>Struktur zur Abfragezeit</strong>: Hierarchien werden berechnet, nicht gespeichert</li>
+<li><strong>Klartext als Fundament</strong>: Universelle Lesbarkeit, langfristige Stabilität</li>
+</ul>
+<p>Siehe: <a href="https://github.com/outheis-labs/research-base/blob/main/temporalization-of-order/temporalization-of-order.md">Temporalization of Order</a> für theoretische Grundlagen.</p>
+<hr />
+<h2 id="randfalle">Randfälle</h2>
+<h3 id="symlinks">Symlinks</h3>
+<table>
+<thead>
+<tr>
+<th>Typ</th>
+<th>Behandlung</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Symlink innerhalb des Vault</td>
+<td>Folgen, Ziel indexieren</td>
+</tr>
+<tr>
+<td>Symlink außerhalb des Vault</td>
+<td><strong>Nicht folgen</strong>, als Fehler protokollieren</td>
+</tr>
+</tbody>
+</table>
+<p>Begründung: Symlinks außerhalb des Vault könnten Daten leaken oder die Zugriffskontrolle umgehen.</p>
+<h3 id="versteckte-dateien">Versteckte Dateien</h3>
+<p>Dateien und Verzeichnisse, die mit <code>.</code> beginnen, werden ignoriert, außer:</p>
+<table>
+<thead>
+<tr>
+<th>Pfad</th>
+<th>Behandlung</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>.git/</code></td>
+<td>Als Repository-Metadaten erkannt</td>
+</tr>
+<tr>
+<td>Alle anderen <code>.*</code></td>
+<td>Ignoriert (nicht indexiert, nicht verarbeitet)</td>
+</tr>
+</tbody>
+</table>
+<p>Dies umfasst <code>.obsidian/</code>, <code>.DS_Store</code>, <code>.gitignore</code> usw.</p>
+<h3 id="groe-dateien">Große Dateien</h3>
+<table>
+<thead>
+<tr>
+<th>Größe</th>
+<th>Behandlung</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>&lt; 50 MB</td>
+<td>Vollständige Textextraktion</td>
+</tr>
+<tr>
+<td>50 MB - 200 MB</td>
+<td>Erste/letzte Seiten extrahieren, nur Metadaten</td>
+</tr>
+<tr>
+<td>&gt; 200 MB</td>
+<td>Nur Metadaten, Warnung protokollieren</td>
+</tr>
+</tbody>
+</table>
+<p>Schwellenwerte sind konfigurierbar.</p>
+<h3 id="kodierungsprobleme">Kodierungsprobleme</h3>
+<p>Wenn eine Datei kein gültiges UTF-8 ist:</p>
+<ol>
+<li>Erkennung versuchen (ISO-8859-1, Windows-1252 usw.)</li>
+<li>Wenn Konvertierung erfolgreich: konvertierten Text indexieren</li>
+<li>Wenn Konvertierung fehlschlägt: nur Metadaten indexieren, <strong>Benutzer benachrichtigen</strong></li>
+</ol>
+<p>Benachrichtigungspfad: Data-Agent → Dispatcher → Agenda-Agent (Persönlicher Modus) oder Relay (Domain-Expert-Modus) → Benutzer</p>
+<hr />
+<h2 id="domain-expert-modus-administratorrolle">Domain-Expert-Modus: Administratorrolle</h2>
+<p>Im Domain-Expert-Modus dient das <code>human/</code>-Verzeichnis einem anderen Zweck:</p>
+<table>
+<thead>
+<tr>
+<th>Aspekt</th>
+<th>Persönlicher Modus</th>
+<th>Domain-Expert-Modus</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>human/</code> repräsentiert</td>
+<td>Einzelner Benutzer</td>
+<td>Systemadministrator</td>
+</tr>
+<tr>
+<td>Agenda-Agent</td>
+<td>Aktiv (persönlicher Sekretär)</td>
+<td>Deaktiviert</td>
+</tr>
+<tr>
+<td>Pattern-Agent</td>
+<td>Reflektiert über Benutzerverhalten</td>
+<td>Reflektiert über Domänenwissen</td>
+</tr>
+<tr>
+<td>Konfigurationszugriff</td>
+<td>Benutzer über Web UI</td>
+<td>Admin über Web UI</td>
+</tr>
+<tr>
+<td>Regeln</td>
+<td>Benutzerpräferenzen</td>
+<td>Systemrichtlinien</td>
+</tr>
+</tbody>
+</table>
+<p>Die Administratorrolle im Domain-Expert-Modus:</p>
+<ul>
+<li>Konfiguriert Agenten, Modelle, Routing</li>
+<li>Definiert domänenspezifische Regeln</li>
+<li>Überwacht Systemzustand</li>
+<li>Empfängt <strong>kein</strong> persönliches Filtern (kein Agenda)</li>
+</ul>
+<p>Mehrere Endbenutzer interagieren über Transport, aber nur der Administrator konfiguriert <code>human/</code>.</p>
+<hr />
+<h2 id="agenda-verzeichnis">Agenda-Verzeichnis</h2>
+<p>Der primäre Vault enthält ein spezielles <code>Agenda/</code>-Verzeichnis, das als strukturierte Schnittstelle zwischen Benutzer und System dient.</p>
+<h3 id="struktur_1">Struktur</h3>
+<pre><code>vault/Agenda/
+├── Daily.md
+├── Inbox.md
+└── Exchange.md
+</code></pre>
+<p>Drei Dateien, keine Unterverzeichnisse.</p>
+<h3 id="zweck">Zweck</h3>
+<table>
+<thead>
+<tr>
+<th>Datei</th>
+<th>Richtung</th>
+<th>Zweck</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Daily.md</code></td>
+<td>Bidirektional</td>
+<td>Heute: Termine, Aufgaben, Notizen</td>
+</tr>
+<tr>
+<td><code>Inbox.md</code></td>
+<td>Benutzer → System</td>
+<td>Schnelleingabe, unstrukturierte Gedanken</td>
+</tr>
+<tr>
+<td><code>Exchange.md</code></td>
+<td>System ↔ Benutzer</td>
+<td>Fragen, Klärungen, Lernen</td>
+</tr>
+</tbody>
+</table>
+<h3 id="dailymd">Daily.md</h3>
+<p>Der aktuelle Tag. Agenda-Agent pflegt die Struktur, Benutzer fügt Inhalte hinzu.</p>
+<pre><code class="language-markdown"># 2025-03-27
+
+## Appointments
+- 09:00 Standup
+- 14:00 Workshop
+
+## Focus
+- [ ] Finish report #deadline
+- [ ] Review proposal
+
+## Notes
+
+</code></pre>
+<h3 id="inboxmd">Inbox.md</h3>
+<p>Schnellerfassung. Benutzer schreibt, System verarbeitet.</p>
+<pre><code class="language-markdown">meeting with X next week, important
+
+remember to call Y about the contract
+
+#idea redesign the onboarding flow
+</code></pre>
+<p>Agenda-Agent liest, klassifiziert und leitet an passende Agenten weiter.</p>
+<h3 id="exchangemd">Exchange.md</h3>
+<p>Asynchroner Dialog. System fragt, Benutzer antwortet wenn es passt. Kein Druck.</p>
+<pre><code class="language-markdown"># Open
+
+## Scheduling conflict
+&gt; Friday 28.03 you have:
+&gt; - 10:00 Team meeting
+&gt; - 10:00 Dentist
+&gt;
+&gt; Which takes priority?
+
+Your answer:
+
+
+---
+
+# Resolved
+
+## Tag meaning
+&gt; You use #wip and #in-progress. Synonyms?
+
+Your answer: Yes, merge to #wip
+
+Learned: #in-progress → #wip
+</code></pre>
+<h3 id="besondere-behandlung">Besondere Behandlung</h3>
+<p>Das <code>Agenda/</code>-Verzeichnis erhält besondere Behandlung:</p>
+<table>
+<thead>
+<tr>
+<th>Aspekt</th>
+<th>Behandlung</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Änderungserkennung</td>
+<td>Prüfsumme + Diff (vorherige Version gecacht)</td>
+</tr>
+<tr>
+<td>Eigentümerschaft</td>
+<td>Agenda-Agent</td>
+</tr>
+<tr>
+<td>Indizierung</td>
+<td>Höhere Priorität, immer aktuell</td>
+</tr>
+<tr>
+<td>Diff-Analyse</td>
+<td>Kommentare, Hinzufügungen, Löschungen werden verfolgt</td>
+</tr>
+</tbody>
+</table>
+<p>Dies ermöglicht dem Agenda-Agenten zu verstehen, <em>was</em> sich geändert hat, nicht nur <em>dass</em> sich etwas geändert hat.</p>
+<h3 id="cache-ort">Cache-Ort</h3>
+<pre><code>~/.outheis/human/cache/agenda/
+├── Daily.md.prev
+├── Inbox.md.prev
+└── Exchange.md.prev
+</code></pre>
+<p>Vorherige Versionen werden im Systemverzeichnis gecacht, um Diffs zu berechnen.</p>
+<hr />
+<h2 id="zugriffsstrategien">Zugriffsstrategien</h2>
+<p>Ohne Datenbank erfordert schneller Zugriff clevere Strategien auf Basis von Klartext.</p>
+<h3 id="index-als-primarer-nachschlageort">Index als primärer Nachschlageort</h3>
+<p>Der Index (<code>~/.outheis/human/index.jsonl</code>) dient als erster Zugangspunkt. Dateiinhalte werden nur bei Bedarf geladen.</p>
+<pre><code>Query
+  │
+  ▼
+Index (fast, in-memory)
+  │
+  ├── Filter by tags, type, date
+  ├── Rank candidates
+  │
+  ▼
+Top-N file access (lazy load)
+</code></pre>
+<h3 id="ranking-heuristiken">Ranking-Heuristiken</h3>
+<p>Kandidaten aus dem Index werden nach mehreren Signalen gerankt:</p>
+<table>
+<thead>
+<tr>
+<th>Signal</th>
+<th>Gewicht</th>
+<th>Begründung</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Aktualität</strong></td>
+<td>Hoch</td>
+<td>Kürzlich geändert = wahrscheinlich relevant</td>
+</tr>
+<tr>
+<td><strong>Zugriffshäufigkeit</strong></td>
+<td>Mittel</td>
+<td>Oft zugegriffen = wichtig</td>
+</tr>
+<tr>
+<td><strong>Link-Dichte</strong></td>
+<td>Mittel</td>
+<td>Viele Backlinks = zentraler Knoten</td>
+</tr>
+<tr>
+<td><strong>Tag-Übereinstimmung</strong></td>
+<td>Hoch</td>
+<td>Direkte Tag-Übereinstimmung = starkes Signal</td>
+</tr>
+<tr>
+<td><strong>Tag-Gewicht</strong></td>
+<td>Mittel</td>
+<td>Gelernte Tag-Bedeutung</td>
+</tr>
+</tbody>
+</table>
+<h3 id="tag-lernen">Tag-Lernen</h3>
+<p>Pattern-Agent analysiert Tag-Nutzung und erlernt Gewichte:</p>
+<pre><code class="language-json">{
+  &quot;tag&quot;: &quot;project/alpha&quot;,
+  &quot;weight&quot;: 0.85,
+  &quot;access_count&quot;: 47,
+  &quot;co_occurs_with&quot;: [&quot;deadline&quot;, &quot;important&quot;],
+  &quot;last_accessed&quot;: &quot;2025-03-27T10:00:00Z&quot;
+}
+</code></pre>
+<p>Gespeichert in <code>~/.outheis/human/tag-weights.jsonl</code>.</p>
+<p>Gewichte werden aktualisiert basierend auf:
+- Zugriffshäufigkeit (Tag erscheint in aufgerufenen Dateien)
+- Gemeinsames Auftreten mit erfolgreichen Suchen
+- Implizitem Feedback (wurde Ergebnis verwendet?)</p>
+<h3 id="volltextsuche">Volltextsuche</h3>
+<p>Für Inhalte, die nicht im Index erfasst sind:</p>
+<table>
+<thead>
+<tr>
+<th>Ansatz</th>
+<th>Anwendungsfall</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Grep + Cache</td>
+<td>Einfache Teilstring-Suche</td>
+</tr>
+<tr>
+<td>Invertierter Index</td>
+<td>Häufige Volltextabfragen</td>
+</tr>
+<tr>
+<td>Embedding-Suche</td>
+<td>Semantische Ähnlichkeit (optional, lokal)</td>
+</tr>
+</tbody>
+</table>
+<p>Implementierungswahl hängt von Vault-Größe und Hardware ab.</p>
+<h3 id="index-aktualisierungen">Index-Aktualisierungen</h3>
+<table>
+<thead>
+<tr>
+<th>Auslöser</th>
+<th>Aktion</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Dateiwatcher auf Vault</td>
+<td>Änderungen erkennen</td>
+</tr>
+<tr>
+<td>Prüfsummen-Mismatch</td>
+<td>Datei neu indexieren</td>
+</tr>
+<tr>
+<td>Periodischer Scan</td>
+<td>Verpasste Änderungen erfassen</td>
+</tr>
+</tbody>
+</table>
+<p>Dateiwatcher verwendet <code>inotify</code> (Linux) oder <code>kqueue</code> (macOS/BSD) — ereignisgesteuert, kein Polling.</p>
+<h3 id="kaltspeicherzugriff">Kaltspeicherzugriff</h3>
+<p>Für archivierte Gespräche (<code>~/.outheis/human/archive/messages-*.jsonl</code>):</p>
+<pre><code>Query about old conversation
+  │
+  ▼
+Data agent identifies relevant archive
+  │
+  ▼
+Load archive file (slower)
+  │
+  ▼
+Search within archive
+  │
+  ▼
+Return results, unload archive
+</code></pre>
+<p>Kein dauerhafter Speichereinfluss. Bei Bedarf laden, nach Verwendung freigeben.</p>
+    <hr>
+    <p class="footer">Open source under AGPL-3.0 · <a href="https://github.com/outheis-labs/outheis-minimal">Code on GitHub</a></p>
+  </main>
+</body>
+</html>

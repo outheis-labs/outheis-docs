@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Web UI · outheis</title>
+  <link rel="icon" type="image/png" href="../../favicon-96x96.png" sizes="96x96">
+  <link rel="icon" type="image/svg+xml" href="../../favicon.svg">
+  <link rel="shortcut icon" href="../../favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="../../apple-touch-icon.png">
+  <link rel="manifest" href="../../site.webmanifest">
+  <style>
+    @font-face {
+      font-family: 'Inter';
+      src: url('../../assets/fonts/InterVariable.woff2') format('woff2'),
+           url('../../assets/fonts/InterVariable.ttf') format('truetype');
+      font-weight: 100 900;
+      font-style: normal;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'Inter';
+      src: url('../../assets/fonts/InterVariable-Italic.woff2') format('woff2');
+      font-weight: 100 900;
+      font-style: italic;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'Inter var';
+      src: url('../../assets/fonts/InterVariable.woff2') format('woff2'),
+           url('../../assets/fonts/InterVariable.ttf') format('truetype');
+      font-weight: 100 900;
+      font-style: normal;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'Inter var';
+      src: url('../../assets/fonts/InterVariable-Italic.woff2') format('woff2');
+      font-weight: 100 900;
+      font-style: italic;
+      font-display: swap;
+    }
+  </style>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --font-body: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-ui: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-mono: SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      --color-text: #1a1a1a;
+      --color-text-muted: #666;
+      --color-text-faint: #999;
+      --color-border: #e0e0e0;
+      --color-bg-code: #f5f5f5;
+      --header-height: 52px;
+      --subnav-height: 40px;
+    }
+
+    @supports (font-variation-settings: normal) {
+      :root { --font-body: "Inter var", sans-serif; --font-ui: "Inter var", sans-serif; }
+    }
+
+    html, body {
+      width: 100%;
+      min-height: 100vh;
+      background: #fff;
+      font-family: var(--font-body);
+      font-size: 15px;
+      line-height: 1.6;
+      color: var(--color-text);
+    }
+
+    /* ── Header ── */
+
+    .header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: #fff;
+      border-bottom: 1px solid var(--color-border);
+    }
+
+    .header-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0 2rem;
+      height: var(--header-height);
+      gap: 2rem;
+    }
+
+    .logo-link {
+      display: flex;
+      align-items: center;
+      text-decoration: none;
+      flex-shrink: 0;
+    }
+
+    .site-name {
+      font-family: var(--font-ui);
+      font-size: 20px;
+      font-weight: 600;
+      color: var(--color-text);
+      letter-spacing: -0.01em;
+    }
+
+    .topnav {
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
+    }
+
+    .topnav a {
+      font-family: var(--font-ui);
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--color-text-muted);
+      text-decoration: none;
+      padding: 0.3rem 0.65rem;
+      border-radius: 4px;
+      white-space: nowrap;
+    }
+
+    .topnav a:hover { color: var(--color-text); background: var(--color-bg-code); }
+    .topnav a.active { color: var(--color-text); font-weight: 600; }
+    .topnav a.external { color: var(--color-text-faint); }
+
+    /* ── Sub-nav ── */
+
+    .subnav-bar {
+      border-bottom: 1px solid var(--color-border);
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+    .subnav-bar::-webkit-scrollbar { display: none; }
+    .subnav-bar:empty,
+    .subnav-bar.hidden { display: none; }
+
+    .subnav-inner {
+      display: flex;
+      align-items: center;
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0 2rem;
+      gap: 0.1rem;
+      height: var(--subnav-height);
+    }
+
+    .subnav-inner a {
+      font-family: var(--font-ui);
+      font-size: 13px;
+      color: var(--color-text-muted);
+      text-decoration: none;
+      padding: 0.25rem 0.6rem;
+      border-radius: 3px;
+      white-space: nowrap;
+    }
+
+    .subnav-inner a:hover { color: var(--color-text); background: var(--color-bg-code); }
+    .subnav-inner a.active { color: var(--color-text); font-weight: 500; }
+
+    /* ── Content ── */
+
+    .content {
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 2.5rem 2rem 4rem;
+    }
+
+    .content > *:first-child { margin-top: 0; }
+
+    .content h1 { font-family: var(--font-ui); font-size: 28px; font-weight: 600; margin-bottom: 0.5rem; letter-spacing: -0.02em; }
+    .content h2 { font-family: var(--font-ui); font-size: 18px; font-weight: 600; margin-top: 2rem; margin-bottom: 1.25rem; }
+    .content h3 { font-family: var(--font-ui); font-size: 15px; font-weight: 600; margin-top: 1.5rem; margin-bottom: 0.75rem; }
+    .content p { margin-bottom: 1rem; }
+    .content a { color: var(--color-text-muted); }
+    .content a:hover { color: var(--color-text); }
+    .content ul, .content ol { margin-bottom: 1rem; padding-left: 1.5rem; }
+    .content li { margin-bottom: 0.4rem; }
+
+    .content table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; font-family: var(--font-ui); font-size: 13px; }
+    .content th, .content td { text-align: left; padding: 0.5rem 0.75rem; border-bottom: 1px solid var(--color-border); }
+    .content th { font-weight: 500; font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--color-text-muted); }
+
+    .content code { font-family: var(--font-mono); font-size: 14px; background: var(--color-bg-code); padding: 0.15em 0.4em; border-radius: 3px; }
+    .content pre { background: var(--color-bg-code); padding: 1rem 1.25rem; overflow-x: auto; margin: 1.5rem 0; font-size: 13px; border-radius: 4px; line-height: 1.5; }
+    .content pre code { background: none; padding: 0; border-radius: 0; }
+
+    .content hr { border: none; border-top: 1px solid var(--color-border); margin: 1.5rem 0; }
+    .content strong { font-weight: 500; }
+    .content em { font-style: italic; }
+    .content blockquote { border-left: 2px solid var(--color-border); padding-left: 1.25rem; margin: 1.5rem 0; color: var(--color-text-muted); font-style: italic; }
+    .content .lead { font-style: italic; color: var(--color-text-muted); margin-bottom: 2rem; }
+    .content .footer { font-size: 12px; color: var(--color-text-faint); font-style: italic; }
+
+    /* ── Mobile ── */
+
+    /* ── Language switch ── */
+
+    .lang-switch {
+      font-family: var(--font-ui);
+      font-size: 13px;
+      color: var(--color-text-muted);
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .lang-switch .lang-active {
+      color: var(--color-text);
+      font-weight: 500;
+    }
+
+    .lang-switch a.lang-link {
+      color: var(--color-text-muted);
+      text-decoration: none;
+    }
+
+    .lang-switch a.lang-link:hover { color: var(--color-text); }
+
+    /* ── Mobile ── */
+
+    @media (max-width: 640px) {
+      .header-inner { padding: 0 1.25rem; gap: 1rem; }
+      .topnav { gap: 0; }
+      .topnav a { padding: 0.3rem 0.5rem; font-size: 13px; }
+      .topnav a.external { display: none; }
+      .subnav-inner { padding: 0 1.25rem; }
+      .content { padding: 2rem 1.25rem 3rem; }
+      .content h1 { font-size: 24px; }
+      .content h2 { font-size: 16px; }
+    }
+  </style>
+</head>
+<body>
+  <header class="header">
+    <div class="header-inner">
+      <a href="../../index.html" class="logo-link">
+        <span class="site-name">οὐθείς</span>
+      </a>
+      <nav class="topnav">
+        <a href="../foundations/index.html">Grundlagen</a>
+        <a href="../design/index.html">Design</a>
+        <a href="../implementation/architecture.html">Implementierung</a>
+        <a href="../installation/release-notes.html" class="active">Installation</a>
+        <a href="../workflows/index.html">Workflows</a>
+        <a href="https://github.com/outheis-labs/outheis-minimal" class="external">GitHub ↗</a>
+      </nav>
+      <div class="lang-switch"><a href="../../implementation/webui.html" class="lang-link">EN</a> · <span class="lang-active">DE</span></div>
+    </div>
+  </header>
+  <div class="subnav-bar">
+    <div class="subnav-inner">
+      <a href="../installation/release-notes.html">Release Notes</a>
+      <a href="../implementation/guide.html">Erste Schritte</a>
+      <a href="../implementation/config.html">Konfiguration</a>
+      <a href="../implementation/signal.html">Signal</a>
+      <a href="../implementation/migration.html">Migration</a>
+      <a href="../implementation/webui.html" class="active">Web UI</a>
+    </div>
+  </div>
+  <main class="content">
+    <h1 id="web-ui">Web UI</h1>
+<p><em>Lokale Verwaltungsoberfläche für outheis.</em></p>
+<h2 id="uberblick">Überblick</h2>
+<p>Die Web-Oberfläche bietet eine browserbasierte Schnittstelle zur Konfiguration und Überwachung von outheis. Sie läuft auf <code>localhost:8080</code> und ist ausdrücklich <strong>nicht</strong> für Remote-Zugriff konzipiert — alle Benutzerdaten bleiben lokal.</p>
+<pre><code>┌─────────────────────────────────────────────────────────────┐
+│ outheis                              [Overview] [Save]       │
+├─────────────┬───────────────────────────────────────────────┤
+│ System      │                                               │
+│  Overview   │  ┌─────────┐ ┌─────────┐ ┌─────────┐         │
+│  Config     │  │Dispatcher│ │ Agents │ │Messages │         │
+│  Messages   │  │ Running  │ │  5/6   │ │   42    │         │
+│  Scheduler  │  └─────────┘ └─────────┘ └─────────┘         │
+│             │                                               │
+│ Knowledge   │  Recent messages                              │
+│  Memory     │  ┌─────────────────────────────────────────┐ │
+│  Skills     │  │ 14:32  cato → relay  Daily updated      │ │
+│  Rules      │  │ 14:30  scheduler     agenda_review      │ │
+│  Patterns   │  │ 14:15  zeno → relay  Found 3 matches    │ │
+│             │  └─────────────────────────────────────────┘ │
+│ Vault       │                                               │
+│  Agenda     │                                               │
+│  Codebase   │                                               │
+│  Migration  │                                               │
+│  Tags       │                                               │
+└─────────────┴───────────────────────────────────────────────┘
+</code></pre>
+<h2 id="server-starten">Server starten</h2>
+<pre><code class="language-bash">cd outheis-minimal/webui
+pip install fastapi uvicorn
+python server.py
+</code></pre>
+<p>Öffnet unter <code>http://localhost:8080</code>. Der Server überwacht <code>~/.outheis/human/</code> auf Änderungen.</p>
+<h2 id="navigation">Navigation</h2>
+<h3 id="system">System</h3>
+<table>
+<thead>
+<tr>
+<th>Ansicht</th>
+<th>Zweck</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Overview</strong></td>
+<td>Dashboard mit Dispatcher-Status, aktiven Agenten, Nachrichtenanzahl, aktuellen Nachrichten</td>
+</tr>
+<tr>
+<td><strong>Configuration</strong></td>
+<td>Vollständiger Konfig-Editor mit Tabs: General, Providers, Models, Agents, Signal</td>
+</tr>
+<tr>
+<td><strong>Messages</strong></td>
+<td>Live-Ansicht von <code>messages.jsonl</code> mit WebSocket-Updates</td>
+</tr>
+<tr>
+<td><strong>Scheduler</strong></td>
+<td>Geplante Aufgaben verwalten (agenda_review, shadow_scan, pattern_nightly)</td>
+</tr>
+</tbody>
+</table>
+<h3 id="knowledge">Knowledge</h3>
+<table>
+<thead>
+<tr>
+<th>Ansicht</th>
+<th>Zweck</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Memory</strong></td>
+<td>Dateien in <code>~/.outheis/human/memory/</code> anzeigen/bearbeiten</td>
+</tr>
+<tr>
+<td><strong>Skills</strong></td>
+<td>Dateien in <code>~/.outheis/human/skills/</code> anzeigen/bearbeiten</td>
+</tr>
+<tr>
+<td><strong>Rules</strong></td>
+<td>Dateien in <code>~/.outheis/human/rules/</code> anzeigen/bearbeiten</td>
+</tr>
+<tr>
+<td><strong>Patterns</strong></td>
+<td>Dateien in <code>~/.outheis/human/cache/patterns/</code> anzeigen (nur Lesen)</td>
+</tr>
+</tbody>
+</table>
+<h3 id="vault">Vault</h3>
+<table>
+<thead>
+<tr>
+<th>Ansicht</th>
+<th>Zweck</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Files</strong></td>
+<td>Vollständiger Vault-Browser — alle konfigurierten Vaults, Verzeichnisbaum, bearbeiten und löschen</td>
+</tr>
+<tr>
+<td><strong>Agenda</strong></td>
+<td>Dateien in <code>vault/Agenda/</code> anzeigen/bearbeiten (Daily.md, Inbox.md, Exchange.md)</td>
+</tr>
+<tr>
+<td><strong>Codebase</strong></td>
+<td>Dateien in <code>vault/Codebase/</code> anzeigen (alans Vorschläge)</td>
+</tr>
+<tr>
+<td><strong>Migration</strong></td>
+<td>Migrationsdateien hochladen (Drop-Zone), Dateien anzeigen und bearbeiten, Migration/-Verzeichnis verwalten</td>
+</tr>
+<tr>
+<td><strong>Tags</strong></td>
+<td>Vault nach #Tags scannen, nach Namensraum-Gruppe auflisten, Tags in allen Dateien umbenennen oder löschen</td>
+</tr>
+</tbody>
+</table>
+<h2 id="files-ansicht">Files-Ansicht</h2>
+<p>Vollständiger Browser für alle konfigurierten Vault-Verzeichnisse:</p>
+<ul>
+<li><strong>Verzeichnisbaum</strong> links — alle Vaults als Wurzeln, Verzeichnisse standardmäßig zugeklappt, zum Aufklappen klicken</li>
+<li><strong>Datei-Viewer/-Editor</strong> rechts — gleicher Rendered/Source-Umschalter wie andere Dateiansichten</li>
+<li><strong>Alle Dateitypen</strong> im Baum sichtbar:</li>
+<li>Textdateien (<code>.md</code>, <code>.txt</code>, <code>.json</code>, <code>.py</code>, …) — bearbeitbar, Speichern-Schaltfläche</li>
+<li>Bilddateien (<code>.png</code>, <code>.jpg</code>, <code>.svg</code>, …) — inline gerendert, Download-Schaltfläche</li>
+<li>Binärdateien (<code>.pdf</code>, <code>.docx</code>, …) — Download-Schaltfläche</li>
+<li><strong>Obsidian-Wikilinks</strong> — <code>![[image.jpg]]</code> und <code>![[image.jpg|WxH]]</code> werden aufgelöst und als Inline-Bilder gerendert</li>
+<li><strong>Löschen</strong> — Bestätigungsdialog, entfernt Datei aus Vault</li>
+</ul>
+<h2 id="tags-ansicht">Tags-Ansicht</h2>
+<p>Die Tags-Ansicht scannt den Vault nach allen <code>#Tags</code> und zeigt sie nach Namensraum-Präfix gruppiert:</p>
+<ul>
+<li><strong>Scan-Schaltfläche</strong> — stellt eine <code>tag_scan</code>-Dispatcher-Aufgabe in die Warteschlange (gleiche asynchrone UX wie Scheduler)</li>
+<li>Ergebnisse werden gecacht; Scan-Schaltfläche führt bei Bedarf erneut aus</li>
+<li>Tags werden nach Namensraum-Präfix gruppiert (<code>#action-*</code>, <code>#date-*</code>, <code>#rank-*</code> usw.), standardmäßig alle zugeklappt</li>
+<li>Jede Gruppe zeigt Tag-Anzahl und Gesamtaufkommen im Vault</li>
+<li>Pro Tag: Aufkommensanzahl, Dateianzahl, Umbenennen-Eingabefeld, Löschen-Schaltfläche</li>
+<li><code>#outheis-*</code>-Tags sind ausgeblendet (nur interne Systemnutzung)</li>
+</ul>
+<h2 id="konfigurationseditor">Konfigurationseditor</h2>
+<p>Die Konfigurationsansicht bietet einen vollständigen Editor für <code>~/.outheis/human/config.json</code>:</p>
+<h3 id="general-tab">General-Tab</h3>
+<ul>
+<li><strong>Benutzerprofil</strong>: Name, E-Mail, Telefon, Sprache, Zeitzone</li>
+<li><strong>Vaults</strong>: Liste der Vault-Verzeichnisse (primär + sekundär)</li>
+</ul>
+<h3 id="providers-tab">Providers-Tab</h3>
+<p>Drei Anbieter-Karten (Anthropic, OpenAI, Ollama):
+- API-Schlüssel (Passwortfeld, nicht als Klartext in der UI gespeichert)
+- Basis-URL (für benutzerdefinierte Endpunkte oder Proxys)
+- Status-Indikator (grüner Punkt wenn konfiguriert)</p>
+<h3 id="models-tab">Models-Tab</h3>
+<p>Modell-Alias-Zuordnung:</p>
+<pre><code>fast      → claude-haiku-4-5
+capable   → claude-sonnet-4-20250514
+reasoning → claude-opus-4-5
+</code></pre>
+<p>Aliase mit Anbieterauswahl hinzufügen/entfernen.</p>
+<h3 id="agents-tab">Agents-Tab</h3>
+<p>Agenten-Konfiguration pro Agent:</p>
+<table>
+<thead>
+<tr>
+<th>Agent</th>
+<th>Name</th>
+<th>Modell</th>
+<th>Aktiviert</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>relay</td>
+<td>ou</td>
+<td>capable</td>
+<td>✓</td>
+</tr>
+<tr>
+<td>data</td>
+<td>zeno</td>
+<td>capable</td>
+<td>✓</td>
+</tr>
+<tr>
+<td>agenda</td>
+<td>cato</td>
+<td>capable</td>
+<td>✓</td>
+</tr>
+<tr>
+<td>action</td>
+<td>hiro</td>
+<td>capable</td>
+<td>☐</td>
+</tr>
+<tr>
+<td>pattern</td>
+<td>rumi</td>
+<td>capable</td>
+<td>✓</td>
+</tr>
+<tr>
+<td>code</td>
+<td>alan</td>
+<td>capable</td>
+<td>☐</td>
+</tr>
+</tbody>
+</table>
+<p>Jeder Agent kann einen anderen Modell-Alias verwenden (fast/capable/reasoning).</p>
+<h3 id="signal-tab">Signal-Tab</h3>
+<p>Signal-Transport-Konfiguration:
+- Aktiviert-Umschalter
+- Telefonnummer (bei signal-cli registriert)
+- CLI-Pfad (Standard: <code>/usr/local/bin/signal-cli</code>)
+- Whitelist (Telefonnummern zur Interaktion erlaubt)</p>
+<h2 id="scheduler">Scheduler</h2>
+<p>Geplante Aufgaben verwalten:</p>
+<pre><code>┌─ Task Type ─────────┬─ Times ──────────────┬─ Enabled ─┐
+│ agenda_review       │ 06:00 12:00 18:00 +  │    ✓      │
+│ shadow_scan         │ 03:30              +  │    ✓      │
+│ pattern_nightly     │ 04:00              +  │    ✓      │
+└─────────────────────┴──────────────────────┴───────────┘
+</code></pre>
+<ul>
+<li><strong>+-Schaltfläche</strong>: Weitere Zeit hinzufügen (erhöht automatisch um 1 Stunde)</li>
+<li><strong>×-Schaltfläche</strong>: Zeit entfernen (mindestens eine verbleibt)</li>
+<li><strong>Checkbox</strong>: Aufgabe aktivieren/deaktivieren</li>
+<li><strong>History-Tab</strong>: Vergangene Scheduler-Ereignisse aus messages.jsonl anzeigen</li>
+</ul>
+<h2 id="datei-browser">Datei-Browser</h2>
+<p>Memory-, Skills-, Rules-, Patterns-, Agenda- und Codebase-Ansichten teilen sich einen Datei-Browser:</p>
+<pre><code>┌─ Files ───────┬─ Content ──────────────────────────────┐
+│ common.md  ✓  │  [Rendered] [Source]                   │
+│ relay.md      │                                        │
+│ data.md       │  # Common Skills                       │
+│               │                                        │
+│               │  ## Dates                              │
+│               │  Always use ISO format (YYYY-MM-DD)    │
+│               │                                        │
+└───────────────┴────────────────────────────────────────┘
+</code></pre>
+<ul>
+<li><strong>Rendered</strong>: Markdown als HTML gerendert (via marked.js)</li>
+<li><strong>Source</strong>: Rohtext, bearbeitbar (contenteditable)</li>
+<li><strong>Save</strong>: Schreibt Änderungen zurück auf Disk</li>
+</ul>
+<h2 id="live-updates">Live-Updates</h2>
+<p>Die Messages-Ansicht verwendet WebSocket für Echtzeit-Updates:</p>
+<ol>
+<li>Server überwacht <code>messages.jsonl</code> auf Änderungen</li>
+<li>Neue Zeilen werden geparst und an verbundene Clients gesendet</li>
+<li>Nachrichten erscheinen sofort in der UI</li>
+</ol>
+<p>Verbindungsstatus in der Statusleiste:
+- <code>Connected</code> — WebSocket aktiv
+- <code>Disconnected</code> — Verbinde in 3 Sekunden erneut
+- <code>Error</code> — Verbindung fehlgeschlagen</p>
+<h2 id="api-endpunkte">API-Endpunkte</h2>
+<p>Der Server stellt REST-Endpunkte bereit:</p>
+<h3 id="config">Config</h3>
+<ul>
+<li><code>GET /api/config</code> — config.json lesen</li>
+<li><code>POST /api/config</code> — config.json schreiben</li>
+</ul>
+<h3 id="status">Status</h3>
+<ul>
+<li><code>GET /api/status</code> — Dispatcher läuft, PID, Agenten-Anzahl, Nachrichten heute</li>
+</ul>
+<h3 id="messages">Messages</h3>
+<ul>
+<li><code>GET /api/messages?limit=50</code> — Aktuelle Nachrichten aus messages.jsonl</li>
+</ul>
+<h3 id="files">Files</h3>
+<ul>
+<li><code>GET /api/{type}</code> — Dateien auflisten (type: memory, skills, rules, patterns, agenda, codebase)</li>
+<li><code>GET /api/{type}/{filename}</code> — Dateiinhalt lesen</li>
+<li><code>PUT /api/{type}/{filename}</code> — Dateiinhalt schreiben</li>
+</ul>
+<h3 id="tags">Tags</h3>
+<ul>
+<li><code>GET /api/tags</code> — Tag-Scan-Ergebnisse (gecacht, gefiltert, lexikalisch sortiert)</li>
+<li><code>POST /api/tags/scan</code> — tag_scan-Dispatcher-Aufgabe einreihen, gibt conversation_id zurück</li>
+<li><code>POST /api/tags/rename</code> — Tag in allen Vault-Dateien umbenennen</li>
+<li><code>POST /api/tags/delete</code> — Tag aus allen Vault-Dateien entfernen</li>
+</ul>
+<h3 id="vault-files">Vault Files</h3>
+<ul>
+<li><code>GET /api/vault/tree</code> — Rekursiver Baum aller konfigurierten Vaults</li>
+<li><code>GET /api/vault/file?path=</code> — Datei lesen (Text-/Bild-/Binärerkennung, Wikilinks für .md aufgelöst)</li>
+<li><code>PUT /api/vault/file</code> — Dateiinhalt schreiben</li>
+<li><code>DELETE /api/vault/file?path=</code> — Datei löschen</li>
+<li><code>GET /api/vault/raw?path=</code> — Rohdatei bereitstellen (für Inline-Bilder und Downloads)</li>
+</ul>
+<h3 id="migration">Migration</h3>
+<ul>
+<li><code>GET /api/migration</code> — Dateien in vault/Migration/ auflisten</li>
+<li><code>GET /api/migration/{filename}</code> — Dateiinhalt lesen</li>
+<li><code>PUT /api/migration/{filename}</code> — Dateiinhalt schreiben</li>
+<li><code>POST /api/migration/create</code> — vault/Migration-Verzeichnis erstellen</li>
+<li><code>POST /api/migration/upload</code> — Datei per Multipart-Formular hochladen</li>
+</ul>
+<h3 id="websocket">WebSocket</h3>
+<ul>
+<li><code>WS /ws</code> — Live-Nachrichten-Stream</li>
+</ul>
+<h2 id="dateiorte">Dateiorte</h2>
+<pre><code>outheis-minimal/
+└── webui/
+    ├── server.py      # FastAPI backend
+    ├── index.html     # HTML structure
+    ├── style.css      # Lexend Deca, light/dark mode
+    ├── app.js         # View routing, WebSocket, forms
+    └── assets/
+        ├── logo.svg   # outheis labs logo
+        └── logo.png   # Fallback
+</code></pre>
+<h2 id="designentscheidungen">Designentscheidungen</h2>
+<h3 id="typografie">Typografie</h3>
+<p>Einzelne Schriftfamilie (Lexend Deca) in zwei Stärken:
+- <strong>400</strong> — Fließtext, Labels, Eingaben
+- <strong>500</strong> — Titel, Hervorhebungen, Agentennamen</p>
+<h3 id="farbmodi">Farbmodi</h3>
+<p>CSS-Variablen unterstützen automatischen Hell-/Dunkel-Modus über <code>prefers-color-scheme</code>. Das Logo kehrt im Dunkelmodus die Farben um.</p>
+<h3 id="keine-authentifizierung">Keine Authentifizierung</h3>
+<p>Die UI ist aus Design-Gründen nur auf localhost. Kein Login, keine Sitzungen. Wenn du Port 8080 erreichen kannst, hast du vollen Zugriff.</p>
+<h3 id="kein-chat">Kein Chat</h3>
+<p>Das ist eine Verwaltungsoberfläche, keine Chat-UI. Für Chat verwende die CLI (<code>nous chat</code>) oder den Signal-Transport.</p>
+<h2 id="abhangigkeiten">Abhängigkeiten</h2>
+<p>Server-seitig:
+- <code>fastapi</code> — Web-Framework
+- <code>uvicorn</code> — ASGI-Server</p>
+<p>Client-seitig:
+- <code>marked.js</code> — Markdown-Rendering (CDN)
+- Lexend Deca — Typografie (Google Fonts)</p>
+<p>Kein Build-Schritt. Kein Bundler. Einfache Dateien direkt ausgeliefert.</p>
+    <hr>
+    <p class="footer">Open source under AGPL-3.0 · <a href="https://github.com/outheis-labs/outheis-minimal">Code on GitHub</a></p>
+  </main>
+</body>
+</html>

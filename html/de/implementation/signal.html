@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Signal · outheis</title>
+  <link rel="icon" type="image/png" href="../../favicon-96x96.png" sizes="96x96">
+  <link rel="icon" type="image/svg+xml" href="../../favicon.svg">
+  <link rel="shortcut icon" href="../../favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="../../apple-touch-icon.png">
+  <link rel="manifest" href="../../site.webmanifest">
+  <style>
+    @font-face {
+      font-family: 'Inter';
+      src: url('../../assets/fonts/InterVariable.woff2') format('woff2'),
+           url('../../assets/fonts/InterVariable.ttf') format('truetype');
+      font-weight: 100 900;
+      font-style: normal;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'Inter';
+      src: url('../../assets/fonts/InterVariable-Italic.woff2') format('woff2');
+      font-weight: 100 900;
+      font-style: italic;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'Inter var';
+      src: url('../../assets/fonts/InterVariable.woff2') format('woff2'),
+           url('../../assets/fonts/InterVariable.ttf') format('truetype');
+      font-weight: 100 900;
+      font-style: normal;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'Inter var';
+      src: url('../../assets/fonts/InterVariable-Italic.woff2') format('woff2');
+      font-weight: 100 900;
+      font-style: italic;
+      font-display: swap;
+    }
+  </style>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --font-body: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-ui: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-mono: SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      --color-text: #1a1a1a;
+      --color-text-muted: #666;
+      --color-text-faint: #999;
+      --color-border: #e0e0e0;
+      --color-bg-code: #f5f5f5;
+      --header-height: 52px;
+      --subnav-height: 40px;
+    }
+
+    @supports (font-variation-settings: normal) {
+      :root { --font-body: "Inter var", sans-serif; --font-ui: "Inter var", sans-serif; }
+    }
+
+    html, body {
+      width: 100%;
+      min-height: 100vh;
+      background: #fff;
+      font-family: var(--font-body);
+      font-size: 15px;
+      line-height: 1.6;
+      color: var(--color-text);
+    }
+
+    /* ── Header ── */
+
+    .header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: #fff;
+      border-bottom: 1px solid var(--color-border);
+    }
+
+    .header-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0 2rem;
+      height: var(--header-height);
+      gap: 2rem;
+    }
+
+    .logo-link {
+      display: flex;
+      align-items: center;
+      text-decoration: none;
+      flex-shrink: 0;
+    }
+
+    .site-name {
+      font-family: var(--font-ui);
+      font-size: 20px;
+      font-weight: 600;
+      color: var(--color-text);
+      letter-spacing: -0.01em;
+    }
+
+    .topnav {
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
+    }
+
+    .topnav a {
+      font-family: var(--font-ui);
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--color-text-muted);
+      text-decoration: none;
+      padding: 0.3rem 0.65rem;
+      border-radius: 4px;
+      white-space: nowrap;
+    }
+
+    .topnav a:hover { color: var(--color-text); background: var(--color-bg-code); }
+    .topnav a.active { color: var(--color-text); font-weight: 600; }
+    .topnav a.external { color: var(--color-text-faint); }
+
+    /* ── Sub-nav ── */
+
+    .subnav-bar {
+      border-bottom: 1px solid var(--color-border);
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+    .subnav-bar::-webkit-scrollbar { display: none; }
+    .subnav-bar:empty,
+    .subnav-bar.hidden { display: none; }
+
+    .subnav-inner {
+      display: flex;
+      align-items: center;
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0 2rem;
+      gap: 0.1rem;
+      height: var(--subnav-height);
+    }
+
+    .subnav-inner a {
+      font-family: var(--font-ui);
+      font-size: 13px;
+      color: var(--color-text-muted);
+      text-decoration: none;
+      padding: 0.25rem 0.6rem;
+      border-radius: 3px;
+      white-space: nowrap;
+    }
+
+    .subnav-inner a:hover { color: var(--color-text); background: var(--color-bg-code); }
+    .subnav-inner a.active { color: var(--color-text); font-weight: 500; }
+
+    /* ── Content ── */
+
+    .content {
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 2.5rem 2rem 4rem;
+    }
+
+    .content > *:first-child { margin-top: 0; }
+
+    .content h1 { font-family: var(--font-ui); font-size: 28px; font-weight: 600; margin-bottom: 0.5rem; letter-spacing: -0.02em; }
+    .content h2 { font-family: var(--font-ui); font-size: 18px; font-weight: 600; margin-top: 2rem; margin-bottom: 1.25rem; }
+    .content h3 { font-family: var(--font-ui); font-size: 15px; font-weight: 600; margin-top: 1.5rem; margin-bottom: 0.75rem; }
+    .content p { margin-bottom: 1rem; }
+    .content a { color: var(--color-text-muted); }
+    .content a:hover { color: var(--color-text); }
+    .content ul, .content ol { margin-bottom: 1rem; padding-left: 1.5rem; }
+    .content li { margin-bottom: 0.4rem; }
+
+    .content table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; font-family: var(--font-ui); font-size: 13px; }
+    .content th, .content td { text-align: left; padding: 0.5rem 0.75rem; border-bottom: 1px solid var(--color-border); }
+    .content th { font-weight: 500; font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--color-text-muted); }
+
+    .content code { font-family: var(--font-mono); font-size: 14px; background: var(--color-bg-code); padding: 0.15em 0.4em; border-radius: 3px; }
+    .content pre { background: var(--color-bg-code); padding: 1rem 1.25rem; overflow-x: auto; margin: 1.5rem 0; font-size: 13px; border-radius: 4px; line-height: 1.5; }
+    .content pre code { background: none; padding: 0; border-radius: 0; }
+
+    .content hr { border: none; border-top: 1px solid var(--color-border); margin: 1.5rem 0; }
+    .content strong { font-weight: 500; }
+    .content em { font-style: italic; }
+    .content blockquote { border-left: 2px solid var(--color-border); padding-left: 1.25rem; margin: 1.5rem 0; color: var(--color-text-muted); font-style: italic; }
+    .content .lead { font-style: italic; color: var(--color-text-muted); margin-bottom: 2rem; }
+    .content .footer { font-size: 12px; color: var(--color-text-faint); font-style: italic; }
+
+    /* ── Mobile ── */
+
+    /* ── Language switch ── */
+
+    .lang-switch {
+      font-family: var(--font-ui);
+      font-size: 13px;
+      color: var(--color-text-muted);
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .lang-switch .lang-active {
+      color: var(--color-text);
+      font-weight: 500;
+    }
+
+    .lang-switch a.lang-link {
+      color: var(--color-text-muted);
+      text-decoration: none;
+    }
+
+    .lang-switch a.lang-link:hover { color: var(--color-text); }
+
+    /* ── Mobile ── */
+
+    @media (max-width: 640px) {
+      .header-inner { padding: 0 1.25rem; gap: 1rem; }
+      .topnav { gap: 0; }
+      .topnav a { padding: 0.3rem 0.5rem; font-size: 13px; }
+      .topnav a.external { display: none; }
+      .subnav-inner { padding: 0 1.25rem; }
+      .content { padding: 2rem 1.25rem 3rem; }
+      .content h1 { font-size: 24px; }
+      .content h2 { font-size: 16px; }
+    }
+  </style>
+</head>
+<body>
+  <header class="header">
+    <div class="header-inner">
+      <a href="../../index.html" class="logo-link">
+        <span class="site-name">οὐθείς</span>
+      </a>
+      <nav class="topnav">
+        <a href="../foundations/index.html">Grundlagen</a>
+        <a href="../design/index.html">Design</a>
+        <a href="../implementation/architecture.html">Implementierung</a>
+        <a href="../installation/release-notes.html" class="active">Installation</a>
+        <a href="../workflows/index.html">Workflows</a>
+        <a href="https://github.com/outheis-labs/outheis-minimal" class="external">GitHub ↗</a>
+      </nav>
+      <div class="lang-switch"><a href="../../implementation/signal.html" class="lang-link">EN</a> · <span class="lang-active">DE</span></div>
+    </div>
+  </header>
+  <div class="subnav-bar">
+    <div class="subnav-inner">
+      <a href="../installation/release-notes.html">Release Notes</a>
+      <a href="../implementation/guide.html">Erste Schritte</a>
+      <a href="../implementation/config.html">Konfiguration</a>
+      <a href="../implementation/signal.html" class="active">Signal</a>
+      <a href="../implementation/migration.html">Migration</a>
+      <a href="../implementation/webui.html">Web UI</a>
+    </div>
+  </div>
+  <main class="content">
+    <h1 id="signal">Signal</h1>
+<p><em>Signal Messenger Transport über signal-cli JSON-RPC.</em></p>
+<h2 id="uberblick">Überblick</h2>
+<p>Der Signal-Transport verbindet outheis mit Signal Messenger. Er läuft als eigenständiger Prozess (<code>outheis signal</code>), getrennt vom Haupt-Daemon. Er empfängt Nachrichten von Signal, leitet sie an relay weiter und sendet Antworten zurück.</p>
+<p>Zugrundeliegender Mechanismus: signal-cli im <code>--json-rpc</code>-Modus, kommuniziert über stdin/stdout.</p>
+<h2 id="architektur">Architektur</h2>
+<p>Das zentrale Design ist ein <strong>dedizierter Leser-Thread</strong>, der den gesamten stdout von signal-cli besitzt. Dies löst eine Race Condition, die entsteht, wenn Senden und Empfangen beide versuchen, vom selben Subprozess-stdout zu lesen.</p>
+<pre><code>signal-cli (jsonRpc)
+     │
+     ▼
+ _read_loop() thread
+     ├── receive events → Queue (for incoming messages)
+     └── RPC responses → dict + Event (for send confirmations)
+
+Main thread: read_message() ← Queue.get()
+Send path:  _send_request() → stdin write → Event.wait()
+</code></pre>
+<h3 id="klassen">Klassen</h3>
+<ul>
+<li><code>SignalRPC</code> — <code>transport/signal_rpc.py</code>: verwaltet den signal-cli-Subprozess, Leser-Thread, Sende-/Empfangs-Primitiven</li>
+<li><code>SignalTransport</code> — <code>transport/signal.py</code>: Nachrichten-Schleife, Autorisierung, Watcher-Thread, Markdown-Entfernung</li>
+</ul>
+<h3 id="nebenlaufigkeitsmodell">Nebenläufigkeitsmodell</h3>
+<table>
+<thead>
+<tr>
+<th>Komponente</th>
+<th>Mechanismus</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Eingehende Nachrichten</td>
+<td><code>_receive_queue</code> — <code>Queue.get()</code> blockiert bis eine Nachricht eintrifft</td>
+</tr>
+<tr>
+<td>RPC-Antworten (Sendebestätigungen)</td>
+<td><code>_response_map</code> + <code>threading.Event</code> pro Anfrage-ID</td>
+</tr>
+<tr>
+<td>Stdin-Schreibvorgänge</td>
+<td><code>_stdin_lock</code> — verhindert verschachtelte Schreibvorgänge</td>
+</tr>
+</tbody>
+</table>
+<p>Der Leser-Thread ist der einzige Konsument von signal-cli stdout. Sonst liest nichts davon.</p>
+<h2 id="nachrichtenfluss">Nachrichtenfluss</h2>
+<ol>
+<li>signal-cli gibt ein Empfangsereignis auf stdout aus</li>
+<li><code>_read_loop</code> parst das JSON und legt es in <code>_receive_queue</code></li>
+<li><code>read_message()</code> gibt die geparste <code>SignalMessage</code> zurück</li>
+<li><code>SignalTransport._handle_message()</code> prüft Autorisierung, erstellt eine Benutzernachricht, hängt an <code>messages.jsonl</code> an</li>
+<li>Ein Watcher-Thread (<code>_watch_responses</code>) fragt nach einer an <code>transport</code> adressierten Relay-Antwort</li>
+<li>Wenn gefunden, ruft <code>send_message(sender_uuid, text)</code> über <code>_send_request()</code> auf</li>
+</ol>
+<h2 id="markdown-entfernung">Markdown-Entfernung</h2>
+<p>Vor dem Senden entfernt <code>_strip_markdown()</code> deterministisch Markdown-Syntax. Das ist ein Transport-Anliegen — das Modell gibt Inhalte unverändert zurück; die Entfernung geschieht hier.</p>
+<table>
+<thead>
+<tr>
+<th>Eingabe</th>
+<th>Ausgabe</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>**bold**</code>, <code>__bold__</code></td>
+<td>Klartext</td>
+</tr>
+<tr>
+<td><code>*italic*</code>, <code>_italic_</code></td>
+<td>Klartext</td>
+</tr>
+<tr>
+<td><code>## Heading</code></td>
+<td>Überschriftentext ohne <code>#</code></td>
+</tr>
+<tr>
+<td><code>`inline code`</code></td>
+<td>Code-Text</td>
+</tr>
+<tr>
+<td><code>- [ ]</code>, <code>- [x]</code> Checkboxen</td>
+<td>Klartext</td>
+</tr>
+<tr>
+<td><code>- item</code>, <code>* item</code> Aufzählungen</td>
+<td>Klartext</td>
+</tr>
+<tr>
+<td><code>---</code> horizontale Linie</td>
+<td><code>____________________</code> (20 Unterstriche)</td>
+</tr>
+</tbody>
+</table>
+<p>Der Ersatz für horizontale Linien erscheint in Signals UI als solide Trennlinie.</p>
+<h2 id="autorisierung">Autorisierung</h2>
+<ul>
+<li><code>signal.allowed</code> in <code>config.json</code>: Whitelist von Telefonnummern, die Nachrichten senden dürfen</li>
+<li><code>human.phone</code> ist unabhängig von der Whitelist immer erlaubt</li>
+<li>UUIDs werden beim ersten Kontakt gelernt und in <code>~/.outheis/human/signal.json</code> gespeichert</li>
+<li>Ersteinrichtung erfordert Vertrauen des Identitätsschlüssels über <code>signal-cli trust</code> (siehe Installationsanleitung)</li>
+</ul>
+<p>Ein leeres <code>allowed</code>-Array bedeutet, dass nur <code>human.phone</code> mit dem Bot interagieren kann.</p>
+<h2 id="profilname">Profilname</h2>
+<p>Beim Start wird der Signal-Profil-Anzeigename des Bots aus <code>config.signal.bot_name</code> über den <code>updateProfile</code>-RPC-Aufruf gesetzt. Das ist, was Signal-Kontakte als Namen des Bots sehen.</p>
+<h2 id="sprachtranskription">Sprachtranskription</h2>
+<p>Wenn <code>faster-whisper</code> installiert ist, werden Sprachnachrichten vor der Weiterleitung an relay transkribiert. Das ist eine optionale Abhängigkeit — der Transport funktioniert ohne sie; Sprachnachrichten werden still übersprungen, wenn <code>faster-whisper</code> fehlt.</p>
+<h2 id="konfiguration">Konfiguration</h2>
+<pre><code class="language-json">{
+  &quot;signal&quot;: {
+    &quot;enabled&quot;: true,
+    &quot;bot_name&quot;: &quot;Ou&quot;,
+    &quot;bot_phone&quot;: &quot;+49...&quot;,
+    &quot;allowed&quot;: []
+  }
+}
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>Schlüssel</th>
+<th>Beschreibung</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>enabled</code></td>
+<td>Signal-Transport aktivieren</td>
+</tr>
+<tr>
+<td><code>bot_name</code></td>
+<td>Anzeigename, der beim Start im Signal-Profil gesetzt wird</td>
+</tr>
+<tr>
+<td><code>bot_phone</code></td>
+<td>Die bei signal-cli registrierte Telefonnummer</td>
+</tr>
+<tr>
+<td><code>allowed</code></td>
+<td>Whitelist von Telefonnummern. Leer = nur human.phone</td>
+</tr>
+</tbody>
+</table>
+<h2 id="ausfuhren">Ausführen</h2>
+<pre><code class="language-bash">outheis signal        # foreground
+outheis signal -v     # verbose (shows tool calls)
+</code></pre>
+<p>Signal-Transport läuft getrennt vom Haupt-Daemon. Beide können gleichzeitig laufen — der Daemon behandelt geplante Aufgaben und direkte CLI-Abfragen; der Signal-Transport behandelt eingehende Signal-Nachrichten.</p>
+<h2 id="dateiorte">Dateiorte</h2>
+<pre><code>src/outheis/transport/
+├── signal.py        # SignalTransport: message loop, watcher, markdown stripping
+└── signal_rpc.py    # SignalRPC: jsonRpc subprocess, reader thread, send/receive
+</code></pre>
+    <hr>
+    <p class="footer">Open source under AGPL-3.0 · <a href="https://github.com/outheis-labs/outheis-minimal">Code on GitHub</a></p>
+  </main>
+</body>
+</html>

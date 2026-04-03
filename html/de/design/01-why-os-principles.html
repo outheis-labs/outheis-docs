@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Warum Betriebssystemprinzipien auf agent-Architekturen zutreffen · outheis</title>
+  <link rel="icon" type="image/png" href="../../favicon-96x96.png" sizes="96x96">
+  <link rel="icon" type="image/svg+xml" href="../../favicon.svg">
+  <link rel="shortcut icon" href="../../favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="../../apple-touch-icon.png">
+  <link rel="manifest" href="../../site.webmanifest">
+  <style>
+    @font-face {
+      font-family: 'Inter';
+      src: url('../../assets/fonts/InterVariable.woff2') format('woff2'),
+           url('../../assets/fonts/InterVariable.ttf') format('truetype');
+      font-weight: 100 900;
+      font-style: normal;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'Inter';
+      src: url('../../assets/fonts/InterVariable-Italic.woff2') format('woff2');
+      font-weight: 100 900;
+      font-style: italic;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'Inter var';
+      src: url('../../assets/fonts/InterVariable.woff2') format('woff2'),
+           url('../../assets/fonts/InterVariable.ttf') format('truetype');
+      font-weight: 100 900;
+      font-style: normal;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'Inter var';
+      src: url('../../assets/fonts/InterVariable-Italic.woff2') format('woff2');
+      font-weight: 100 900;
+      font-style: italic;
+      font-display: swap;
+    }
+  </style>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --font-body: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-ui: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-mono: SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      --color-text: #1a1a1a;
+      --color-text-muted: #666;
+      --color-text-faint: #999;
+      --color-border: #e0e0e0;
+      --color-bg-code: #f5f5f5;
+      --header-height: 52px;
+      --subnav-height: 40px;
+    }
+
+    @supports (font-variation-settings: normal) {
+      :root { --font-body: "Inter var", sans-serif; --font-ui: "Inter var", sans-serif; }
+    }
+
+    html, body {
+      width: 100%;
+      min-height: 100vh;
+      background: #fff;
+      font-family: var(--font-body);
+      font-size: 15px;
+      line-height: 1.6;
+      color: var(--color-text);
+    }
+
+    /* ── Header ── */
+
+    .header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: #fff;
+      border-bottom: 1px solid var(--color-border);
+    }
+
+    .header-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0 2rem;
+      height: var(--header-height);
+      gap: 2rem;
+    }
+
+    .logo-link {
+      display: flex;
+      align-items: center;
+      text-decoration: none;
+      flex-shrink: 0;
+    }
+
+    .site-name {
+      font-family: var(--font-ui);
+      font-size: 20px;
+      font-weight: 600;
+      color: var(--color-text);
+      letter-spacing: -0.01em;
+    }
+
+    .topnav {
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
+    }
+
+    .topnav a {
+      font-family: var(--font-ui);
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--color-text-muted);
+      text-decoration: none;
+      padding: 0.3rem 0.65rem;
+      border-radius: 4px;
+      white-space: nowrap;
+    }
+
+    .topnav a:hover { color: var(--color-text); background: var(--color-bg-code); }
+    .topnav a.active { color: var(--color-text); font-weight: 600; }
+    .topnav a.external { color: var(--color-text-faint); }
+
+    /* ── Sub-nav ── */
+
+    .subnav-bar {
+      border-bottom: 1px solid var(--color-border);
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+    .subnav-bar::-webkit-scrollbar { display: none; }
+    .subnav-bar:empty,
+    .subnav-bar.hidden { display: none; }
+
+    .subnav-inner {
+      display: flex;
+      align-items: center;
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0 2rem;
+      gap: 0.1rem;
+      height: var(--subnav-height);
+    }
+
+    .subnav-inner a {
+      font-family: var(--font-ui);
+      font-size: 13px;
+      color: var(--color-text-muted);
+      text-decoration: none;
+      padding: 0.25rem 0.6rem;
+      border-radius: 3px;
+      white-space: nowrap;
+    }
+
+    .subnav-inner a:hover { color: var(--color-text); background: var(--color-bg-code); }
+    .subnav-inner a.active { color: var(--color-text); font-weight: 500; }
+
+    /* ── Content ── */
+
+    .content {
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 2.5rem 2rem 4rem;
+    }
+
+    .content > *:first-child { margin-top: 0; }
+
+    .content h1 { font-family: var(--font-ui); font-size: 28px; font-weight: 600; margin-bottom: 0.5rem; letter-spacing: -0.02em; }
+    .content h2 { font-family: var(--font-ui); font-size: 18px; font-weight: 600; margin-top: 2rem; margin-bottom: 1.25rem; }
+    .content h3 { font-family: var(--font-ui); font-size: 15px; font-weight: 600; margin-top: 1.5rem; margin-bottom: 0.75rem; }
+    .content p { margin-bottom: 1rem; }
+    .content a { color: var(--color-text-muted); }
+    .content a:hover { color: var(--color-text); }
+    .content ul, .content ol { margin-bottom: 1rem; padding-left: 1.5rem; }
+    .content li { margin-bottom: 0.4rem; }
+
+    .content table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; font-family: var(--font-ui); font-size: 13px; }
+    .content th, .content td { text-align: left; padding: 0.5rem 0.75rem; border-bottom: 1px solid var(--color-border); }
+    .content th { font-weight: 500; font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--color-text-muted); }
+
+    .content code { font-family: var(--font-mono); font-size: 14px; background: var(--color-bg-code); padding: 0.15em 0.4em; border-radius: 3px; }
+    .content pre { background: var(--color-bg-code); padding: 1rem 1.25rem; overflow-x: auto; margin: 1.5rem 0; font-size: 13px; border-radius: 4px; line-height: 1.5; }
+    .content pre code { background: none; padding: 0; border-radius: 0; }
+
+    .content hr { border: none; border-top: 1px solid var(--color-border); margin: 1.5rem 0; }
+    .content strong { font-weight: 500; }
+    .content em { font-style: italic; }
+    .content blockquote { border-left: 2px solid var(--color-border); padding-left: 1.25rem; margin: 1.5rem 0; color: var(--color-text-muted); font-style: italic; }
+    .content .lead { font-style: italic; color: var(--color-text-muted); margin-bottom: 2rem; }
+    .content .footer { font-size: 12px; color: var(--color-text-faint); font-style: italic; }
+
+    /* ── Mobile ── */
+
+    /* ── Language switch ── */
+
+    .lang-switch {
+      font-family: var(--font-ui);
+      font-size: 13px;
+      color: var(--color-text-muted);
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .lang-switch .lang-active {
+      color: var(--color-text);
+      font-weight: 500;
+    }
+
+    .lang-switch a.lang-link {
+      color: var(--color-text-muted);
+      text-decoration: none;
+    }
+
+    .lang-switch a.lang-link:hover { color: var(--color-text); }
+
+    /* ── Mobile ── */
+
+    @media (max-width: 640px) {
+      .header-inner { padding: 0 1.25rem; gap: 1rem; }
+      .topnav { gap: 0; }
+      .topnav a { padding: 0.3rem 0.5rem; font-size: 13px; }
+      .topnav a.external { display: none; }
+      .subnav-inner { padding: 0 1.25rem; }
+      .content { padding: 2rem 1.25rem 3rem; }
+      .content h1 { font-size: 24px; }
+      .content h2 { font-size: 16px; }
+    }
+  </style>
+</head>
+<body>
+  <header class="header">
+    <div class="header-inner">
+      <a href="../../index.html" class="logo-link">
+        <span class="site-name">οὐθείς</span>
+      </a>
+      <nav class="topnav">
+        <a href="../foundations/index.html">Grundlagen</a>
+        <a href="../design/index.html" class="active">Design</a>
+        <a href="../implementation/architecture.html">Implementierung</a>
+        <a href="../installation/release-notes.html">Installation</a>
+        <a href="../workflows/index.html">Workflows</a>
+        <a href="https://github.com/outheis-labs/outheis-minimal" class="external">GitHub ↗</a>
+      </nav>
+      <div class="lang-switch"><a href="../../design/01-why-os-principles.html" class="lang-link">EN</a> · <span class="lang-active">DE</span></div>
+    </div>
+  </header>
+  <div class="subnav-bar">
+    <div class="subnav-inner">
+      <a href="../design/index.html">Überblick</a>
+      <a href="../design/01-why-os-principles.html" class="active">OS-Prinzipien</a>
+      <a href="../design/02-systems-survey.html">Systemvergleich</a>
+      <a href="../design/03-architecture.html">Architektur</a>
+      <a href="../design/04-data-formats.html">Datenformate</a>
+      <a href="../design/05-related-work.html">Verwandte Ansätze</a>
+      <a href="../design/06-agent-prompts.html">Agenten-Prompts</a>
+      <a href="../design/07-hybrid-memory-stack.html">Hybrider Memory-Stack</a>
+    </div>
+  </div>
+  <main class="content">
+    <h1 id="warum-betriebssystemprinzipien-auf-agent-architekturen-zutreffen">Warum Betriebssystemprinzipien auf agent-Architekturen zutreffen</h1>
+<h2 id="das-problem">Das Problem</h2>
+<p>Multi-agent-KI-Systeme stehen vor Herausforderungen, die Betriebssysteme vor Jahrzehnten gelöst haben:</p>
+<ul>
+<li>Mehrere gleichzeitige Prozesse konkurrieren um Ressourcen</li>
+<li>Kommunikation zwischen unabhängigen Komponenten</li>
+<li>Zustandsverwaltung über Grenzen hinweg</li>
+<li>Fehlertoleranz und Wiederherstellung</li>
+<li>Scheduling und Priorisierung</li>
+</ul>
+<p>Die meisten aktuellen agent-Frameworks erfinden diese Lösungen mangelhaft nach und führen zu fragilen Architekturen, die unter Komplexität scheitern.</p>
+<h2 id="die-erkenntnis">Die Erkenntnis</h2>
+<p>Ein Betriebssystem ist im Grunde ein System zur Koordination unabhängiger Prozesse, die:</p>
+<ol>
+<li>Kommunizieren müssen, ohne gemeinsamen Zustand zu korrumpieren</li>
+<li>Auf Ressourcen zugreifen müssen, ohne Konflikte zu erzeugen</li>
+<li>Graceful scheitern müssen, ohne das gesamte System zum Absturz zu bringen</li>
+<li>Von einfachen zu komplexen Workloads skalieren müssen</li>
+</ol>
+<p>Ein Multi-agent-KI-System hat dieselben Anforderungen. Der Unterschied besteht darin, dass statt Prozessen, die Speicher und Dateien manipulieren, agents Kontext manipulieren und Antworten generieren.</p>
+<h2 id="schlusselmappings">Schlüsselmappings</h2>
+<table>
+<thead>
+<tr>
+<th>OS-Konzept</th>
+<th>Agenten-System-Äquivalent</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Prozess</td>
+<td>Agent</td>
+</tr>
+<tr>
+<td>IPC (Inter-Process Communication)</td>
+<td>Agent-zu-agent-Messaging</td>
+</tr>
+<tr>
+<td>Kernel</td>
+<td>Dispatcher / Orchestrator</td>
+</tr>
+<tr>
+<td>Dateisystem</td>
+<td>Gemeinsame Wissensbasis (vault)</td>
+</tr>
+<tr>
+<td>User space</td>
+<td>Individueller agent-Kontext</td>
+</tr>
+<tr>
+<td>Scheduler</td>
+<td>agent-Invokationslogik</td>
+</tr>
+<tr>
+<td>Capabilities / Berechtigungen</td>
+<td>agent-Domain-Ownership</td>
+</tr>
+</tbody>
+</table>
+<h2 id="warum-das-wichtig-ist">Warum das wichtig ist</h2>
+<h3 id="1-parallelitat-ohne-korrumpierung">1. Parallelität ohne Korrumpierung</h3>
+<p>Wenn mehrere agents auf gemeinsamen Daten operieren, führen naive Implementierungen zu Race-Conditions — nicht im traditionellen Sinne von Speicherkorrumpierung, sondern im Sinne von konfligierenden Aktionen, doppelter Arbeit oder verlorenem Kontext.</p>
+<p>OS-Lösungen: Message-Passing, Ownership-Semantik, Locks.</p>
+<h3 id="2-klare-grenzen">2. Klare Grenzen</h3>
+<p>Prozesse haben isolierte Adressräume. Agents sollten isolierte Domains haben. Wenn ein Daten-agent alle Datenoperationen besitzt, können andere agents diese Domain nicht korrumpieren — sie müssen durch eine definierte Schnittstelle anfragen.</p>
+<h3 id="3-fehler-isolation">3. Fehler-Isolation</h3>
+<p>Ein abstürzender Prozess sollte das System nicht zum Absturz bringen. Ebenso sollte ein halluzinierter oder fehlschlagender agent nicht das gesamte Gespräch oder die Wissensbasis korrumpieren.</p>
+<h3 id="4-kompositionsfahigkeit">4. Kompositionsfähigkeit</h3>
+<p>Unix-Philosophie: kleine Werkzeuge, die eine Sache gut machen, durch Pipes kombiniert. agent-Philosophie: spezialisierte agents mit klaren Verantwortlichkeiten, durch Message-Passing kombiniert.</p>
+<h2 id="was-wir-davon-lernen-konnen">Was wir davon lernen können</h2>
+<h3 id="dragonflybsd">DragonFlyBSD</h3>
+<ul>
+<li><strong>LWKT (Light Weight Kernel Threads)</strong>: Per-CPU-Scheduling ohne globale Locks</li>
+<li><strong>Message-Passing</strong>: Serialisierung durch Ownership, nicht durch Locks</li>
+<li><strong>IPI-Queues</strong>: Jede CPU hat ihre eigene Queue — kein zentraler Engpass</li>
+</ul>
+<p>Übersetzung: Jeder agent kann seine eigene Message-Queue haben. Kein zentraler dispatcher-Engpass. Ownership bestimmt, wer was modifizieren kann.</p>
+<h3 id="erlangotp">Erlang/OTP</h3>
+<ul>
+<li><strong>Actor-Modell</strong>: Isolierte Prozesse, die über Nachrichten kommunizieren</li>
+<li><strong>Supervision-Trees</strong>: Elternprozesse überwachen und starten Kinder neu</li>
+<li><strong>„Let it crash"</strong>: Für Fehler entwerfen, graceful wiederherstellen</li>
+</ul>
+<p>Übersetzung: Agents sind Actors. Ein dispatcher überwacht agents. Fehlgeschlagene agents können neugestartet werden, ohne den Systemzustand zu verlieren.</p>
+<h3 id="sel4-capability-systeme">seL4 / Capability-Systeme</h3>
+<ul>
+<li><strong>Capabilities</strong>: Unfälschbare Token, die spezifische Berechtigungen gewähren</li>
+<li><strong>Minimaler Kernel</strong>: Nur die wesentlichen Primitive</li>
+</ul>
+<p>Übersetzung: Agents haben explizite Capabilities. Ein Pattern-agent kann Insights schreiben; andere können nur lesen. Der dispatcher ist minimal — nur Routing.</p>
+<h3 id="openbsd">OpenBSD</h3>
+<ul>
+<li><strong>pledge(2)</strong>: Prozess erklärt vorab, welche Syscalls er benötigt; alles andere ist verboten</li>
+<li><strong>unveil(2)</strong>: Prozess erklärt, welche Pfade er sehen kann; der Rest des Dateisystems verschwindet</li>
+<li><strong>Privilegtrennung</strong>: Aufgeteilt in privilegierten Elternteil (hält Ressourcen) und unprivilegierten Kindprozess (erledigt die Arbeit)</li>
+<li><strong>Sicher per Standard</strong>: Alles aus, bis explizit aktiviert</li>
+</ul>
+<p>Übersetzung: Agents erklären ihre Capabilities beim Start — keine impliziten Berechtigungen. Jeder agent sieht nur seine relevanten Pfade (vault, insights). Der dispatcher hält Zugang zur Queue; agents laufen mit minimalem Zugang.</p>
+<h3 id="macos-grand-central-dispatch">macOS / Grand Central Dispatch</h3>
+<ul>
+<li><strong>Dispatch-Queues</strong>: Arbeit in Queues einreichen statt Threads zu verwalten</li>
+<li><strong>Quality of Service</strong>: Arbeit mit Prioritätsstufen markieren (user interactive, background usw.)</li>
+<li><strong>Systemverwaltete Parallelität</strong>: Das OS entscheidet, wie viele Threads verwendet werden</li>
+</ul>
+<p>Übersetzung: Ein dispatcher mit prioritätsbewussten Queues. Nutzerseitige agents laufen mit hoher Priorität; Hintergrundanalyse läuft, wenn Ressourcen vorhanden sind. Das System balanciert Last automatisch.</p>
+<h3 id="plan-9">Plan 9</h3>
+<ul>
+<li><strong>„Everything is a file"</strong>: Einheitliche Schnittstelle zu allen Ressourcen</li>
+<li><strong>9P-Protokoll</strong>: Netzwerktransparenter Dateizugriff</li>
+</ul>
+<p>Übersetzung: Wissensdatenbanken als Dateisystemschnittstelle. Agents interagieren mit Daten durch eine einheitliche Abstraktion.</p>
+<h3 id="event-sourcing">Event Sourcing</h3>
+<ul>
+<li><strong>Append-only-Log</strong>: Zustand aus unveränderlicher Ereignisgeschichte abgeleitet</li>
+<li><strong>Replay</strong>: Jeden vergangenen Zustand rekonstruieren</li>
+</ul>
+<p>Übersetzung: Message-Queue als append-only-Log. Vollständige Gesprächshistorie. Debugging durch Replay.</p>
+<h2 id="design-prinzipien-fur-outheis">Design-Prinzipien für outheis</h2>
+<p>Abgeleitet aus OS-Forschung:</p>
+<ol>
+<li>
+<p><strong>Message-Passing statt Shared State</strong>
+   Agents kommunizieren über Nachrichten, nicht durch Mutation gemeinsamer Variablen.</p>
+</li>
+<li>
+<p><strong>Ownership-Semantik</strong>
+   Jede Domain hat einen Eigentümer. Andere fragen um Zugang.</p>
+</li>
+<li>
+<p><strong>Append-Only-Logging</strong>
+   Die Message-Queue ist die Quelle der Wahrheit. Niemals mutieren, nur anhängen.</p>
+</li>
+<li>
+<p><strong>Supervisor-Hierarchie</strong>
+   Der dispatcher überwacht agents und kann fehlgeschlagene neustarten.</p>
+</li>
+<li>
+<p><strong>Capability-basierter Zugang</strong>
+   Agents haben explizite Berechtigungen. Ein relay-agent kann auf externe Schnittstellen zugreifen; ein action-agent nicht.</p>
+</li>
+<li>
+<p><strong>Minimaler Dispatcher</strong>
+   Der dispatcher routet und überwacht. Er interpretiert oder transformiert Inhalte nicht.</p>
+</li>
+<li>
+<p><strong>Sicher per Standard</strong>
+   Kein agent hat implizite Capabilities. Jeder Zugang ist deklariert und eingeschränkt.</p>
+</li>
+<li>
+<p><strong>Prioritätsbewusstes Scheduling</strong>
+   Nutzerseitige Arbeit hat Vorrang. Hintergrundarbeit weicht interaktiven Aufgaben.</p>
+</li>
+</ol>
+<h2 id="weiterfuhrende-literatur">Weiterführende Literatur</h2>
+<ul>
+<li>Matthew Dillons DragonFlyBSD-Design-Dokumente</li>
+<li>Joe Armstrongs Dissertation über Erlang</li>
+<li>seL4-Capability-Modell-Whitepaper</li>
+<li>OpenBSD pledge(2) und unveil(2) Man-Pages</li>
+<li>Apples Grand-Central-Dispatch-Dokumentation</li>
+<li>Martin Kleppmanns Werk über Event-Sourcing</li>
+<li>Rob Pikes Plan-9-Papers</li>
+</ul>
+<hr />
+<p>Weiter: <a href="02-systems-survey.md">02-systems-survey.md</a> — Ein Überblick über relevante Betriebssysteme und ihre anwendbaren Konzepte.</p>
+    <hr>
+    <p class="footer">Open source under AGPL-3.0 · <a href="https://github.com/outheis-labs/outheis-minimal">Code on GitHub</a></p>
+  </main>
+</body>
+</html>

@@ -199,6 +199,30 @@
 
     /* ── Mobile ── */
 
+    /* ── Language switch ── */
+
+    .lang-switch {
+      font-family: var(--font-ui);
+      font-size: 13px;
+      color: var(--color-text-muted);
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .lang-switch .lang-active {
+      color: var(--color-text);
+      font-weight: 500;
+    }
+
+    .lang-switch a.lang-link {
+      color: var(--color-text-muted);
+      text-decoration: none;
+    }
+
+    .lang-switch a.lang-link:hover { color: var(--color-text); }
+
+    /* ── Mobile ── */
+
     @media (max-width: 640px) {
       .header-inner { padding: 0 1.25rem; gap: 1rem; }
       .topnav { gap: 0; }
@@ -225,6 +249,7 @@
         <a href="../workflows/index.html">Workflows</a>
         <a href="https://github.com/outheis-labs/outheis-minimal" class="external">GitHub ↗</a>
       </nav>
+      <div class="lang-switch"><span class="lang-active">EN</span> · <a href="../de/implementation/architecture.html" class="lang-link">DE</a></div>
     </div>
   </header>
   <div class="subnav-bar">
