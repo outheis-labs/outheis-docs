@@ -12,6 +12,11 @@ title: Guide
 - An Anthropic API key
 - A vault directory — a folder of Markdown files (Obsidian works directly)
 
+Optional — required only if you configure a local model via Ollama:
+
+- [Ollama](https://ollama.com) installed and running
+- `pip install openai` (outheis uses the OpenAI-compatible Ollama API)
+
 Optional for messaging via Signal:
 
 - A registered Signal account for the bot phone number
@@ -282,6 +287,16 @@ outheis start
 export ANTHROPIC_API_KEY="sk-ant-..."
 # Or add to ~/.bashrc / ~/.zshrc
 ```
+
+### "openai package not installed" (Ollama models)
+
+If you configure a model with `"provider": "ollama"`, outheis uses the OpenAI-compatible Ollama API and requires the `openai` Python package:
+
+```bash
+pip install openai
+```
+
+Also make sure Ollama itself is running (`ollama serve`) and the model is pulled (`ollama pull <model>`).
 
 ### macOS: Daemon won't start in background
 
