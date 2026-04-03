@@ -311,7 +311,7 @@ outheis stop         # Stop daemon
 </code></pre>
 <p>Then open <code>http://localhost:8080</code> in your local browser. The tunnel stays open as long as the SSH connection is active.</p>
 <h2 id="vault-setup">Vault Setup</h2>
-<p>outheis treats your vault as a read-only knowledge source. Structure is flexible — any Markdown files work. The recommended Agenda layout:</p>
+<p>Your vault is your primary knowledge store. outheis reads from it, writes to it (via cato and the Web UI), and learns from it over time. Structure is flexible — any Markdown files work. The recommended Agenda layout:</p>
 <pre><code>vault/
 └── Agenda/
     ├── Daily.md      # Today's schedule — written by cato

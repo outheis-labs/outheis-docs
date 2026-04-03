@@ -111,7 +111,7 @@ Then open `http://localhost:8080` in your local browser. The tunnel stays open a
 
 ## Vault Setup
 
-outheis treats your vault as a read-only knowledge source. Structure is flexible — any Markdown files work. The recommended Agenda layout:
+Your vault is your primary knowledge store. outheis reads from it, writes to it (via cato and the Web UI), and learns from it over time. Structure is flexible — any Markdown files work. The recommended Agenda layout:
 
 ```
 vault/
