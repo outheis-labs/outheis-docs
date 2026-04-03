@@ -1,19 +1,23 @@
+---
+title: Workflows
+---
+
 # Workflows
 
 *Practical guides — how to work with outheis day to day.*
 
-These documents are task-oriented. They describe what you do, not how outheis is built.
+---
 
-## Documents
+This section is planned but not yet written.
 
-### [Tags](tags.md)
+The intent: task-oriented guides that describe real usage patterns — not how outheis is built, but what you actually do with it. Each workflow will walk through a concrete scenario from start to finish.
 
-How outheis learns your tag system, works within it, and proposes improvements — without inventing anything on its own.
+Planned content includes:
 
-### [Daily Planning](daily.md)
+- **Daily planning** — how the morning review works, how to use Inbox.md for quick capture, how to read and annotate Daily.md
+- **Vault-based research** — using zeno to find connections across notes, tagging, migration from other systems
+- **Memory and correction** — how to tell outheis things explicitly, how to correct it, how to review what it knows
+- **Signal as interface** — using outheis entirely from your phone, voice messages, quick updates on the go
+- **Short screencasts** — recorded walkthroughs of each workflow
 
-How the daily review works, how to use Inbox.md for quick capture, and how to read Daily.md.
-
-### [Memory](memory.md)
-
-How to tell outheis things explicitly, how to correct it, and how to review what it knows.
+None of this exists yet. It will be added as the system matures.

@@ -62,6 +62,14 @@ NAV_SECTIONS = [
         ],
     },
     {
+        "label": "Workflows",
+        "url": "workflows/index.html",
+        "match": "^workflows/",
+        "items": [
+            {"label": "Overview", "url": "workflows/index.html", "match": "workflows/index"},
+        ],
+    },
+    {
         "label": "Installation",
         "url": "installation/index.html",
         "match": "installation|guide|config|migration|webui|signal",
