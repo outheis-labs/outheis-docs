@@ -22,6 +22,12 @@ Optional für Messaging über Signal:
 - Ein registriertes Signal-Konto für die Bot-Telefonnummer
 - `signal-cli` installiert und konfiguriert
 
+## Schnellstart
+
+Der schnellste Weg zu einem funktionierenden Setup ist ein Anthropic-API-Schlüssel. Keine zusätzlichen Abhängigkeiten — outheis läuft damit sofort mit Claude als einzigem Modellanbieter.
+
+Lokale Modelle über Ollama sind optional und erfordern zusätzliche Einrichtung (siehe unten).
+
 ## Installation
 
 Modernes pip erzwingt virtuelle Umgebungen. Erstelle zuerst eine:

@@ -22,6 +22,12 @@ Optional for messaging via Signal:
 - A registered Signal account for the bot phone number
 - `signal-cli` installed and configured
 
+## Quickstart
+
+The fastest path to a working setup is an Anthropic API key. No additional dependencies — outheis works out of the box with Claude as the only model provider.
+
+Local models via Ollama are optional and require extra setup (see below).
+
 ## Installation
 
 Modern pip enforces virtual environments. Create one first:
