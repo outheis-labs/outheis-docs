@@ -8,8 +8,8 @@ Documentation for [outheis](https://github.com/outheis-labs/outheis-minimal) —
 
 ```
 outheis-docs/
-├── docs_source/       # Source (Markdown)
-├── docs/              # Built site (HTML) — served by GitHub Pages
+├── docs/              # Source (Markdown)
+├── html/              # Built site (HTML) — served by GitHub Pages
 ├── templates/         # Page template
 └── scripts/
     └── build-site.py  # Build script
@@ -22,8 +22,8 @@ pip install markdown
 python scripts/build-site.py
 ```
 
-Generates `docs/` from `docs_source/`.
+Generates `html/` from `docs/`.
 
 ## Deployment
 
-GitHub Pages serves `docs/` directly on push to `main`.
+GitHub Pages serves `html/` via GitHub Actions on push to `main`.
