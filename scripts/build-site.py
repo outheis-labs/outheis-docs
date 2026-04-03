@@ -30,7 +30,7 @@ NAV_SECTIONS = [
         "match": "philosophy",
         "items": [
             {"label": "Why outheis",          "url": "philosophy/index.html",                "match": "philosophy/index"},
-            {"label": "Semantic Foundations", "url": "philosophy/02-semantic-foundations.html", "match": "02-semantic"},
+            {"label": "Memory and Semantics", "url": "philosophy/02-semantic-foundations.html", "match": "02-semantic"},
         ],
     },
     {

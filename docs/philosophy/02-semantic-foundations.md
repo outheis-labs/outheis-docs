@@ -1,4 +1,4 @@
-# Semantic Foundations
+# Memory and Semantics
 
 *Why information is not data — and what follows from that for a personal AI system.*
 
