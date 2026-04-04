@@ -402,67 +402,75 @@
 <p><strong>Recommendation for alan:</strong> <code>llama3.1:8b</code> is the best balance of speed and reliability. <code>llama3.2:3b</code> works if RAM is limited. <code>devstral-small-2:24b</code> gives the best quality if you have the RAM.</p>
 <p><strong>Test tool:</strong> <code>python tools/test_ollama_tool_use.py</code> from the outheis-beta repository.</p>
 <h3 id="generic-agents-relay-data-agenda">Generic Agents (relay, data, agenda)</h3>
-<p>Generic agents run with full system prompts: user memory, vault context, language settings, skills, and rules. This raises the bar beyond raw tool-use — the model must also route correctly between agents, synthesize results across multiple tool calls, and report "no results" without inventing data.</p>
-<p><code>llama3.1:8b</code> was tested under these conditions using <code>tools/test_agent_capability.py</code>, which runs 9 scenarios covering relay routing, vault search and file read, error recovery, hallucination detection, and agenda operations:</p>
+<p>Generic agents run with full system prompts: user memory, vault context, language settings, skills, and rules. The bar is higher than raw tool-use — the model must route correctly between agents, synthesize results across multiple tool calls, and report "no results" without inventing data.</p>
+<p>Models tested using <code>tools/test_agent_capability.py</code> (9 scenarios: relay routing, vault search, file read, error recovery, hallucination detection, agenda read and add):</p>
 <table>
 <thead>
 <tr>
-<th>Scenario</th>
-<th>Result</th>
+<th>Model</th>
+<th>Size</th>
+<th>OK</th>
+<th>Partial</th>
+<th>Fail</th>
 <th>Notes</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>Relay: route to agenda</td>
-<td>~</td>
-<td>Correct tool, answer incomplete</td>
+<td><strong>voytas26/openclaw-oss-20b-deterministic</strong></td>
+<td>20B</td>
+<td>6/9</td>
+<td>2</td>
+<td>1</td>
+<td>Best routing and error recovery</td>
 </tr>
 <tr>
-<td>Relay: route to data</td>
-<td>✗</td>
-<td>Called wrong agent</td>
+<td><strong>gpt-oss:20b</strong></td>
+<td>20B</td>
+<td>6/9</td>
+<td>2</td>
+<td>1</td>
+<td>Strong error recovery</td>
 </tr>
 <tr>
-<td>Relay: answer without tool</td>
-<td>✗</td>
-<td>Called tool unnecessarily</td>
+<td><strong>glm-4.7-flash-32k</strong></td>
+<td>17B</td>
+<td>6/9</td>
+<td>1</td>
+<td>2</td>
+<td>Slowest (~180s total for all scenarios)</td>
 </tr>
 <tr>
-<td>Data: search by tag</td>
-<td>✓</td>
-<td></td>
+<td>devstral-small-2:24b</td>
+<td>24B</td>
+<td>5/9</td>
+<td>3</td>
+<td>1</td>
+<td>Hallucination flag on empty-results test</td>
 </tr>
 <tr>
-<td>Data: read file</td>
-<td>~</td>
-<td>Tool correct, result not fully synthesized</td>
+<td>mistral-nemo:12b</td>
+<td>12B</td>
+<td>3/9</td>
+<td>4</td>
+<td>2</td>
+<td>Routing: no tool calls</td>
 </tr>
 <tr>
-<td>Data: error recovery</td>
-<td>~</td>
-<td>Recovered from error, synthesis weak</td>
-</tr>
-<tr>
-<td>Data: no results (hallucination check)</td>
-<td>~</td>
-<td>No hallucination, but unclear response</td>
-</tr>
-<tr>
-<td>Agenda: read today</td>
-<td>✓</td>
-<td></td>
-</tr>
-<tr>
-<td>Agenda: add event</td>
-<td>✗</td>
-<td>Wrong tool, wrong date computed</td>
+<td>llama3.1:8b</td>
+<td>8B</td>
+<td>2/9</td>
+<td>4</td>
+<td>3</td>
+<td>—</td>
 </tr>
 </tbody>
 </table>
-<p><strong>2/9 fully correct, 4 partial, 3 fail.</strong> Relay routing is unreliable; multi-step result synthesis is weak. Agenda reads work well. No local model has been confirmed suitable for the full generic agent stack under current hardware.</p>
-<p><strong>Privacy note:</strong> If data privacy is a concern, all agents that process personal vault content (relay, data, agenda) must use local models — not just the code agent. This currently requires a cloud provider or a hardware upgrade that enables larger models.</p>
-<p><strong>Re-evaluation on M5:</strong> Larger models (32B+) and faster inference may change this picture significantly. Use <code>python tools/test_agent_capability.py</code> to re-test after a hardware upgrade.</p>
+<p><strong>The 20B class shows a clear step up.</strong> Routing, multi-step result synthesis, and error recovery work reliably. Consistent weakness across all models: date arithmetic in agenda operations (computing "tomorrow" from the system prompt date).</p>
+<p><code>devstral-small-2:24b</code> carries a hallucination flag on the empty-results scenario — the model reported a filename that appeared only in the "no results" explanation, not as an actual match.</p>
+<p>No model scores fully correct on all scenarios. The 20B class is the current lower bound for practical use as generic agents.</p>
+<p><strong>Privacy note:</strong> If data privacy is a concern, all agents that process personal vault content (relay, data, agenda) must use local models — not just the code agent. This currently requires a cloud provider or a hardware upgrade that enables 20B+ inference at acceptable speed.</p>
+<p><strong>Re-evaluation on M5:</strong> The 20B class will run significantly faster on M5 hardware. Use <code>python tools/test_agent_capability.py</code> to re-test after a hardware upgrade — and extend to 32B+ models.</p>
 <hr />
 <h2 id="openai">OpenAI</h2>
 <p>Supported as a provider. Configuration is identical to Anthropic — set <code>"provider": "openai"</code> and provide an API key.</p>

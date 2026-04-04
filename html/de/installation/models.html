@@ -403,66 +403,74 @@
 <p><strong>Test-Tool:</strong> <code>python tools/test_ollama_tool_use.py</code> im outheis-beta-Repository.</p>
 <h3 id="generische-agenten-relay-data-agenda">Generische Agenten (relay, data, agenda)</h3>
 <p>Generische Agenten laufen mit vollem System-Prompt: User-Memory, Vault-Kontext, Spracheinstellung, Skills und Rules. Die Anforderungen gehen über reinen Tool-Use hinaus — das Modell muss Anfragen korrekt zwischen Agenten routen, Ergebnisse über mehrere Tool-Calls hinweg synthetisieren und bei leeren Ergebnissen korrekt antworten, ohne Daten zu erfinden.</p>
-<p><code>llama3.1:8b</code> wurde unter diesen Bedingungen mit <code>tools/test_agent_capability.py</code> getestet — 9 Szenarien zu Relay-Routing, Vault-Suche und Datei-Lesen, Fehlerbehandlung, Halluzinationserkennung und Agenda-Operationen:</p>
+<p>Getestet mit <code>tools/test_agent_capability.py</code> — 9 Szenarien zu Relay-Routing, Vault-Suche, Datei-Lesen, Fehlerbehandlung, Halluzinationserkennung und Agenda-Operationen:</p>
 <table>
 <thead>
 <tr>
-<th>Szenario</th>
-<th>Ergebnis</th>
+<th>Modell</th>
+<th>Größe</th>
+<th>OK</th>
+<th>Partiell</th>
+<th>Fail</th>
 <th>Anmerkung</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>Relay: Weiterleitung an Agenda</td>
-<td>~</td>
-<td>Richtiges Tool, Antwort unvollständig</td>
+<td><strong>voytas26/openclaw-oss-20b-deterministic</strong></td>
+<td>20B</td>
+<td>6/9</td>
+<td>2</td>
+<td>1</td>
+<td>Bestes Routing und Fehlerbehandlung</td>
 </tr>
 <tr>
-<td>Relay: Weiterleitung an Data</td>
-<td>✗</td>
-<td>Falscher Agent aufgerufen</td>
+<td><strong>gpt-oss:20b</strong></td>
+<td>20B</td>
+<td>6/9</td>
+<td>2</td>
+<td>1</td>
+<td>Starke Fehlerbehandlung</td>
 </tr>
 <tr>
-<td>Relay: Antwort ohne Tool</td>
-<td>✗</td>
-<td>Tool unnötig aufgerufen</td>
+<td><strong>glm-4.7-flash-32k</strong></td>
+<td>17B</td>
+<td>6/9</td>
+<td>1</td>
+<td>2</td>
+<td>Langsamster (~180s gesamt)</td>
 </tr>
 <tr>
-<td>Data: Suche nach Tag</td>
-<td>✓</td>
-<td></td>
+<td>devstral-small-2:24b</td>
+<td>24B</td>
+<td>5/9</td>
+<td>3</td>
+<td>1</td>
+<td>Halluzinations-Flag beim Leer-Ergebnis-Test</td>
 </tr>
 <tr>
-<td>Data: Datei lesen</td>
-<td>~</td>
-<td>Tool korrekt, Ergebnis nicht vollständig synthetisiert</td>
+<td>mistral-nemo:12b</td>
+<td>12B</td>
+<td>3/9</td>
+<td>4</td>
+<td>2</td>
+<td>Routing: keine Tool-Calls</td>
 </tr>
 <tr>
-<td>Data: Fehlerbehandlung</td>
-<td>~</td>
-<td>Fehler behoben, Synthese schwach</td>
-</tr>
-<tr>
-<td>Data: Kein Ergebnis (Halluzinationstest)</td>
-<td>~</td>
-<td>Keine Halluzination, Antwort unklar</td>
-</tr>
-<tr>
-<td>Agenda: Heutigen Plan lesen</td>
-<td>✓</td>
-<td></td>
-</tr>
-<tr>
-<td>Agenda: Termin hinzufügen</td>
-<td>✗</td>
-<td>Falsches Tool, falsches Datum berechnet</td>
+<td>llama3.1:8b</td>
+<td>8B</td>
+<td>2/9</td>
+<td>4</td>
+<td>3</td>
+<td>—</td>
 </tr>
 </tbody>
 </table>
-<p><strong>2/9 vollständig korrekt, 4 partiell, 3 fehlgeschlagen.</strong> Relay-Routing ist unzuverlässig, mehrstufige Synthese schwach. Agenda-Reads funktionieren gut. Kein lokales Modell wurde bisher für den vollständigen generischen Agenten-Stack unter aktueller Hardware bestätigt.</p>
-<p><strong>Datenschutz-Hinweis:</strong> Wenn Datenschutz ein Thema ist, müssen alle Agenten, die persönliche Vault-Inhalte verarbeiten (relay, data, agenda), lokale Modelle nutzen — nicht nur der Code-Agent. Das erfordert derzeit einen Cloud-Anbieter oder ein Hardware-Upgrade, das größere Modelle ermöglicht.</p>
-<p><strong>Neu-Evaluierung auf M5:</strong> Größere Modelle (32B+) und schnellere Inferenz könnten dieses Bild deutlich verändern. Für Re-Tests nach einem Hardware-Upgrade: <code>python tools/test_agent_capability.py</code>.</p>
+<p><strong>Die 20B-Klasse zeigt einen deutlichen Sprung.</strong> Routing, mehrstufige Synthese und Fehlerbehandlung funktionieren zuverlässig. Konsistente Schwäche quer durch alle Modelle: Datumsberechnung bei Agenda-Operationen (Berechnung von "morgen" aus dem System-Prompt-Datum).</p>
+<p><code>devstral-small-2:24b</code> hat einen Halluzinations-Flag beim Leer-Ergebnis-Szenario — das Modell meldete einen Dateinamen, der nur in der "Keine Ergebnisse"-Erklärung des Tools vorkam, nicht als tatsächlichen Treffer.</p>
+<p>Kein Modell schneidet in allen Szenarien vollständig korrekt ab. Die 20B-Klasse ist die aktuelle untere Grenze für den praktischen Einsatz als generische Agenten.</p>
+<p><strong>Datenschutz-Hinweis:</strong> Wenn Datenschutz ein Thema ist, müssen alle Agenten, die persönliche Vault-Inhalte verarbeiten (relay, data, agenda), lokale Modelle nutzen — nicht nur der Code-Agent. Das erfordert derzeit einen Cloud-Anbieter oder ein Hardware-Upgrade, das 20B+-Inferenz in akzeptabler Geschwindigkeit ermöglicht.</p>
+<p><strong>Neu-Evaluierung auf M5:</strong> Die 20B-Klasse wird auf M5-Hardware deutlich schneller laufen. Für Re-Tests nach dem Hardware-Upgrade: <code>python tools/test_agent_capability.py</code> — und Erweiterung auf 32B+-Modelle.</p>
 <hr />
 <h2 id="openai">OpenAI</h2>
 <p>Als Anbieter unterstützt. Konfiguration identisch zu Anthropic — <code>"provider": "openai"</code> setzen und API-Schlüssel angeben.</p>

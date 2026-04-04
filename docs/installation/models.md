@@ -60,27 +60,28 @@ Alan's system prompt contains only source root, role, and open proposals — no 
 
 ### Generic Agents (relay, data, agenda)
 
-Generic agents run with full system prompts: user memory, vault context, language settings, skills, and rules. This raises the bar beyond raw tool-use — the model must also route correctly between agents, synthesize results across multiple tool calls, and report "no results" without inventing data.
+Generic agents run with full system prompts: user memory, vault context, language settings, skills, and rules. The bar is higher than raw tool-use — the model must route correctly between agents, synthesize results across multiple tool calls, and report "no results" without inventing data.
 
-`llama3.1:8b` was tested under these conditions using `tools/test_agent_capability.py`, which runs 9 scenarios covering relay routing, vault search and file read, error recovery, hallucination detection, and agenda operations:
+Models tested using `tools/test_agent_capability.py` (9 scenarios: relay routing, vault search, file read, error recovery, hallucination detection, agenda read and add):
 
-| Scenario | Result | Notes |
-|----------|--------|-------|
-| Relay: route to agenda | ~ | Correct tool, answer incomplete |
-| Relay: route to data | ✗ | Called wrong agent |
-| Relay: answer without tool | ✗ | Called tool unnecessarily |
-| Data: search by tag | ✓ | |
-| Data: read file | ~ | Tool correct, result not fully synthesized |
-| Data: error recovery | ~ | Recovered from error, synthesis weak |
-| Data: no results (hallucination check) | ~ | No hallucination, but unclear response |
-| Agenda: read today | ✓ | |
-| Agenda: add event | ✗ | Wrong tool, wrong date computed |
+| Model | Size | OK | Partial | Fail | Notes |
+|-------|------|----|---------|------|-------|
+| **voytas26/openclaw-oss-20b-deterministic** | 20B | 6/9 | 2 | 1 | Best routing and error recovery |
+| **gpt-oss:20b** | 20B | 6/9 | 2 | 1 | Strong error recovery |
+| **glm-4.7-flash-32k** | 17B | 6/9 | 1 | 2 | Slowest (~180s total for all scenarios) |
+| devstral-small-2:24b | 24B | 5/9 | 3 | 1 | Hallucination flag on empty-results test |
+| mistral-nemo:12b | 12B | 3/9 | 4 | 2 | Routing: no tool calls |
+| llama3.1:8b | 8B | 2/9 | 4 | 3 | — |
 
-**2/9 fully correct, 4 partial, 3 fail.** Relay routing is unreliable; multi-step result synthesis is weak. Agenda reads work well. No local model has been confirmed suitable for the full generic agent stack under current hardware.
+**The 20B class shows a clear step up.** Routing, multi-step result synthesis, and error recovery work reliably. Consistent weakness across all models: date arithmetic in agenda operations (computing "tomorrow" from the system prompt date).
 
-**Privacy note:** If data privacy is a concern, all agents that process personal vault content (relay, data, agenda) must use local models — not just the code agent. This currently requires a cloud provider or a hardware upgrade that enables larger models.
+`devstral-small-2:24b` carries a hallucination flag on the empty-results scenario — the model reported a filename that appeared only in the "no results" explanation, not as an actual match.
 
-**Re-evaluation on M5:** Larger models (32B+) and faster inference may change this picture significantly. Use `python tools/test_agent_capability.py` to re-test after a hardware upgrade.
+No model scores fully correct on all scenarios. The 20B class is the current lower bound for practical use as generic agents.
+
+**Privacy note:** If data privacy is a concern, all agents that process personal vault content (relay, data, agenda) must use local models — not just the code agent. This currently requires a cloud provider or a hardware upgrade that enables 20B+ inference at acceptable speed.
+
+**Re-evaluation on M5:** The 20B class will run significantly faster on M5 hardware. Use `python tools/test_agent_capability.py` to re-test after a hardware upgrade — and extend to 32B+ models.
 
 ---
 
