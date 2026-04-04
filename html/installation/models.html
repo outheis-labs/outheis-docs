@@ -490,12 +490,16 @@
   &quot;models&quot;: { ... }
 }
 </code></pre>
-<p><code>local_fallback</code> is a model alias — it must be defined in <code>llm.models</code> and point to an Ollama model. Example:</p>
-<pre><code class="language-json">&quot;models&quot;: {
-  &quot;llama3.1:8b&quot;: { &quot;provider&quot;: &quot;ollama&quot;, &quot;name&quot;: &quot;llama3.1:8b&quot; },
-  ...
+<p><code>local_fallback</code> is a model alias — it must be defined in <code>llm.models</code> and point to an Ollama model. The recommended convention is to name both the alias and the model entry <code>local-fallback</code>, which makes the intent self-documenting:</p>
+<pre><code class="language-json">&quot;llm&quot;: {
+  &quot;local_fallback&quot;: &quot;local-fallback&quot;,
+  &quot;models&quot;: {
+    &quot;local-fallback&quot;: { &quot;provider&quot;: &quot;ollama&quot;, &quot;name&quot;: &quot;llama3.1:8b&quot; },
+    ...
+  }
 }
 </code></pre>
+<p>Changing the target model later only requires updating the <code>name</code> field inside <code>local-fallback</code> — the alias reference stays stable.</p>
 <p>If <code>local_fallback</code> is not set, outheis logs the billing error but does not switch — requests will continue to fail until credits are restored.</p>
 <p><strong>Limitations:</strong> Fallback mode is not automatically cleared when credits are restored. Restart the daemon to return to cloud models.</p>
 <hr />

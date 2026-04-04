@@ -490,12 +490,16 @@
   &quot;models&quot;: { ... }
 }
 </code></pre>
-<p><code>local_fallback</code> ist ein Modell-Alias — er muss in <code>llm.models</code> definiert sein und auf ein Ollama-Modell zeigen. Beispiel:</p>
-<pre><code class="language-json">&quot;models&quot;: {
-  &quot;llama3.1:8b&quot;: { &quot;provider&quot;: &quot;ollama&quot;, &quot;name&quot;: &quot;llama3.1:8b&quot; },
-  ...
+<p><code>local_fallback</code> ist ein Modell-Alias — er muss in <code>llm.models</code> definiert sein und auf ein Ollama-Modell zeigen. Die empfohlene Konvention ist, sowohl den Alias als auch den Modelleintrag <code>local-fallback</code> zu nennen, was die Absicht selbst dokumentiert:</p>
+<pre><code class="language-json">&quot;llm&quot;: {
+  &quot;local_fallback&quot;: &quot;local-fallback&quot;,
+  &quot;models&quot;: {
+    &quot;local-fallback&quot;: { &quot;provider&quot;: &quot;ollama&quot;, &quot;name&quot;: &quot;llama3.1:8b&quot; },
+    ...
+  }
 }
 </code></pre>
+<p>Das Zielmodell lässt sich später durch Änderung des <code>name</code>-Felds innerhalb von <code>local-fallback</code> anpassen — der Alias-Verweis bleibt stabil.</p>
 <p>Ist <code>local_fallback</code> nicht gesetzt, protokolliert outheis den Billing-Fehler, schaltet aber nicht um — Anfragen schlagen weiterhin fehl, bis das Guthaben aufgefüllt wird.</p>
 <p><strong>Einschränkung:</strong> Der Fallback-Modus wird nicht automatisch aufgehoben, wenn das Guthaben wieder vorhanden ist. Ein Neustart des Daemons stellt den Cloud-Betrieb wieder her.</p>
 <hr />

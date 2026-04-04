@@ -107,14 +107,19 @@ outheis kann automatisch auf ein lokales Ollama-Modell umschalten, wenn ein Clou
 }
 ```
 
-`local_fallback` ist ein Modell-Alias — er muss in `llm.models` definiert sein und auf ein Ollama-Modell zeigen. Beispiel:
+`local_fallback` ist ein Modell-Alias — er muss in `llm.models` definiert sein und auf ein Ollama-Modell zeigen. Die empfohlene Konvention ist, sowohl den Alias als auch den Modelleintrag `local-fallback` zu nennen, was die Absicht selbst dokumentiert:
 
 ```json
-"models": {
-  "llama3.1:8b": { "provider": "ollama", "name": "llama3.1:8b" },
-  ...
+"llm": {
+  "local_fallback": "local-fallback",
+  "models": {
+    "local-fallback": { "provider": "ollama", "name": "llama3.1:8b" },
+    ...
+  }
 }
 ```
+
+Das Zielmodell lässt sich später durch Änderung des `name`-Felds innerhalb von `local-fallback` anpassen — der Alias-Verweis bleibt stabil.
 
 Ist `local_fallback` nicht gesetzt, protokolliert outheis den Billing-Fehler, schaltet aber nicht um — Anfragen schlagen weiterhin fehl, bis das Guthaben aufgefüllt wird.
 
