@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Release Notes · outheis</title>
+  <title>Versionshinweise · outheis</title>
   <link rel="icon" type="image/png" href="../../favicon-96x96.png" sizes="96x96">
   <link rel="icon" type="image/svg+xml" href="../../favicon.svg">
   <link rel="shortcut icon" href="../../favicon.ico">
@@ -263,7 +263,7 @@
     </div>
   </div>
   <main class="content">
-    <h1 id="release-notes">Release Notes</h1>
+    <h1 id="versionshinweise">Versionshinweise</h1>
 <p><em>Private Beta — April 2026.</em></p>
 <hr />
 <h2 id="was-funktioniert">Was funktioniert</h2>
@@ -277,47 +277,47 @@
 </thead>
 <tbody>
 <tr>
-<td>Dispatcher — Microkernel, Scheduler, Lock Manager</td>
+<td>Dispatcher — Microkernel, Scheduler, Lock-Manager</td>
 <td>✓</td>
 <td></td>
 </tr>
 <tr>
-<td>relay (ou) — Routing, Memory-Integration</td>
+<td>Relay (ou) — Routing, Memory-Integration</td>
 <td>✓</td>
 <td></td>
 </tr>
 <tr>
-<td>data (zeno) — vault-Suche, Tag-Analyse</td>
+<td>Data (zeno) — Vault-Suche, Tag-Analyse</td>
 <td>✓</td>
 <td></td>
 </tr>
 <tr>
-<td>agenda (cato) — Daily, Inbox, Exchange, Shadow</td>
+<td>Agenda (cato) — Daily, Inbox, Exchange, Shadow</td>
 <td>✓</td>
 <td></td>
 </tr>
 <tr>
-<td>pattern (rumi) — nächtliche Memory-Extraktion</td>
+<td>Pattern (rumi) — nächtliche Memory-Extraktion</td>
 <td>✓</td>
 <td></td>
 </tr>
 <tr>
-<td>Web UI — Config, Memory, Scheduler, vault, Tags, Migration</td>
+<td>Web UI — Konfig, Memory, Scheduler, Vault, Tags, Migration</td>
 <td>✓</td>
 <td></td>
 </tr>
 <tr>
-<td>Signal-Transport — Empfangen, Antworten, Sprachtranskription</td>
+<td>Signal-Transport — empfangen, antworten, Sprachtranskription</td>
 <td>✓</td>
 <td></td>
 </tr>
 <tr>
-<td>vault-Datei-Browser — alle Dateitypen, Bilder, Obsidian-Wikilinks</td>
+<td>Vault-Datei-Browser — alle Dateitypen, Bilder, Obsidian-Wikilinks</td>
 <td>✓</td>
 <td></td>
 </tr>
 <tr>
-<td>Tags — Scannen, Namespace-Gruppierung, Umbenennen, Löschen</td>
+<td>Tags — scannen, Namensraum-Gruppierung, umbenennen, löschen</td>
 <td>✓</td>
 <td></td>
 </tr>
@@ -339,24 +339,24 @@
 </thead>
 <tbody>
 <tr>
-<td>action (hiro) — externe Aufgaben, E-Mail, Kalender</td>
+<td>Action (hiro) — externe Aufgaben, E-Mail, Kalender</td>
 <td>nicht implementiert</td>
 <td>Framework vorhanden, keine Fähigkeiten</td>
 </tr>
 <tr>
-<td>code (alan) — Codebase-Introspektion</td>
+<td>Code (alan) — Codebase-Introspektion</td>
 <td>nur Entwicklung</td>
 <td>In Produktion deaktiviert</td>
 </tr>
 </tbody>
 </table>
-<p><strong>hiro ist vorhanden, aber leer.</strong> Der agent startet und routet, aber keine externen Integrationen existieren — keine E-Mail, kein Kalender, keine Shell-Ausführung. Das Aktivieren in config.json hat derzeit keine praktische Wirkung.</p>
-<p><strong>alan erfordert manuelle Aktivierung.</strong> Der code-agent bietet Introspektion in die outheis-Codebase — nützlich für alle, die erkunden möchten, wie sie funktioniert oder den Code erklärt haben möchten. In <code>config.json</code> unter <code>agents.code.enabled: true</code> aktivieren.</p>
+<p><strong>hiro ist vorhanden, aber leer.</strong> Der Agent startet und leitet weiter, aber keine externen Integrationen existieren — keine E-Mail, kein Kalender, keine Shell-Ausführung. ihn in config.json zu aktivieren hat noch keine praktische Auswirkung.</p>
+<p><strong>alan erfordert manuelle Aktivierung.</strong> Der Code-Agent bietet Introspektion in die outheis-Codebasis — nützlich für jeden, der erkunden möchte, wie es funktioniert, oder sich den Code erklären lassen möchte. In <code>config.json</code> aktivieren unter <code>agents.code.enabled: true</code>.</p>
 <h2 id="bekannte-lucken">Bekannte Lücken</h2>
-<p><strong>pattern-agent benötigt Verlauf.</strong> rumi hat bei einer frischen Installation nichts zu extrahieren. Memory baut sich über Tage auf, nicht sofort.</p>
-<p><strong>Tag-Scan erfolgt auf Anfrage.</strong> Tags werden beim Start nicht indiziert. Aus der Web UI ausführen (vault → Tags → Scan) oder im Chat <code>analyze tags</code> sagen.</p>
-<p><strong>Keine mobile UI.</strong> Web UI ist nur für localhost. Signal-Transport für mobilen Zugriff verwenden.</p>
-<p><strong>Kontext nach Neustart.</strong> Beim Neustart wiederholt relay die letzten 20 Nachrichten, um den kürzlichen Kontext wiederherzustellen. Älterer Gesprächsverlauf wird nicht wiedergegeben.</p>
+<p><strong>Pattern-Agent benötigt Verlauf.</strong> rumi hat bei einer frischen Installation nichts zu extrahieren. Memory baut sich über Tage auf, nicht sofort.</p>
+<p><strong>Tag-Scan ist auf Anfrage.</strong> Tags werden nicht beim Start indexiert. Über Web UI ausführen (Vault → Tags → Scan) oder im Chat <code>analyze tags</code> sagen.</p>
+<p><strong>Keine mobile UI.</strong> Web-Oberfläche ist nur localhost. Signal-Transport für mobilen Zugriff verwenden.</p>
+<p><strong>Kontext nach Neustart.</strong> Beim Neustart gibt relay die letzten 20 Nachrichten zurück, um den aktuellen Kontext wiederherzustellen. Älterer Gesprächsverlauf wird nicht zurückgespielt.</p>
     <hr>
     <p class="footer">Open source under AGPL-3.0 · <a href="https://github.com/outheis-labs/outheis-minimal">Code on GitHub</a></p>
   </main>

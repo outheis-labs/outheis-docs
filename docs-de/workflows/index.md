@@ -4,20 +4,20 @@ title: Workflows
 
 # Workflows
 
-*Praktische Anleitungen — wie man täglich mit outheis arbeitet.*
+*Praktische Anleitungen — wie man outheis im Alltag nutzt.*
 
 ---
 
 Dieser Abschnitt ist geplant, aber noch nicht geschrieben.
 
-Die Absicht: aufgabenorientierte Anleitungen, die echte Nutzungsmuster beschreiben — nicht wie outheis gebaut ist, sondern was man tatsächlich damit macht. Jeder Workflow wird ein konkretes Szenario von Anfang bis Ende durchgehen.
+Die Absicht: aufgabenorientierte Anleitungen, die reale Nutzungsmuster beschreiben — nicht wie outheis aufgebaut ist, sondern was man tatsächlich damit macht. Jeder Workflow wird ein konkretes Szenario von Anfang bis Ende durchgehen.
 
 Geplante Inhalte:
 
-- **Tagesplanung** — wie die Morgenüberprüfung funktioniert, wie man Inbox.md für schnelle Erfassung nutzt, wie man Daily.md liest und annotiert
-- **vault-basierte Recherche** — zeno verwenden, um Verbindungen über Notizen hinweg zu finden, Tagging, Migration aus anderen Systemen
-- **Memory und Korrektur** — wie man outheis explizit Dinge mitteilt, wie man es korrigiert, wie man überprüft, was es weiß
-- **Signal als Oberfläche** — outheis vollständig vom Telefon aus nutzen, Sprachnachrichten, schnelle Updates unterwegs
+- **Tagesplanung** — wie die Morgenüberprüfung funktioniert, wie man Inbox.md für Schnellerfassung nutzt, wie man Daily.md liest und kommentiert
+- **Vault-basierte Recherche** — zeno verwenden, um Verbindungen zwischen Notizen zu finden, Tagging, Migration von anderen Systemen
+- **Memory und Korrektur** — outheis explizit Dinge sagen, es korrigieren, überprüfen was es weiß
+- **Signal als Schnittstelle** — outheis ausschließlich vom Telefon nutzen, Sprachnachrichten, schnelle Updates unterwegs
 - **Kurze Screencasts** — aufgezeichnete Walkthroughs zu jedem Workflow
 
-Nichts davon existiert noch. Es wird hinzugefügt, wenn das System reift.
+Nichts davon existiert noch. Es wird ergänzt, wenn das System ausgereift ist.

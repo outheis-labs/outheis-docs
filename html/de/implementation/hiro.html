@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Skills · outheis</title>
+  <title>Hiro · outheis</title>
   <link rel="icon" type="image/png" href="../../favicon-96x96.png" sizes="96x96">
   <link rel="icon" type="image/svg+xml" href="../../favicon.svg">
   <link rel="shortcut icon" href="../../favicon.ico">
@@ -249,7 +249,7 @@
         <a href="../workflows/index.html">Workflows</a>
         <a href="https://github.com/outheis-labs/outheis-minimal" class="external">GitHub ↗</a>
       </nav>
-      <div class="lang-switch"><a href="../../implementation/skills.html" class="lang-link">EN</a> · <span class="lang-active">DE</span></div>
+      <div class="lang-switch"><a href="../../implementation/hiro.html" class="lang-link">EN</a> · <span class="lang-active">DE</span></div>
     </div>
   </header>
   <div class="subnav-bar">
@@ -257,201 +257,97 @@
       <a href="../implementation/architecture.html">Aktueller Stand</a>
       <a href="../implementation/memory.html">Memory & Regeln</a>
       <a href="../implementation/agenda.html">Agenda</a>
-      <a href="../implementation/skills.html" class="active">Skills</a>
+      <a href="../implementation/skills.html">Skills</a>
       <a href="../implementation/alan.html">Code-Agent</a>
-      <a href="../implementation/hiro.html">Action-Agent</a>
+      <a href="../implementation/hiro.html" class="active">Action-Agent</a>
     </div>
   </div>
   <main class="content">
-    <h1 id="skills">Skills</h1>
-<p><em>Was Agenten darüber wissen, wie sie handeln sollen.</em></p>
-<h2 id="uberblick">Überblick</h2>
-<p>Skills sind die internen Fähigkeiten eines Agenten — Strategien, Methoden, Heuristiken zur Erledigung von Aufgaben. Anders als Rules (externe Anweisungen) repräsentieren Skills das eigene Wissen des Agenten darüber, <em>wie</em> Dinge zu tun sind.</p>
-<h2 id="die-drei-speicher">Die drei Speicher</h2>
+    <h1 id="hiro">Hiro</h1>
+<p><em>Action-Agent — noch nicht implementiert.</em></p>
+<h2 id="was-hiro-tut">Was hiro tut</h2>
+<p>hiro ist der Action-Agent von outheis. Während zeno den Vault durchsucht und cato die Zeit verwaltet, handelt hiro in der Außenwelt: E-Mails versenden, Kalender aktualisieren, externe Dienste auslösen.</p>
+<p><strong>hiro ist in der aktuellen Version vorhanden, hat aber keine Fähigkeiten.</strong> Der Agent startet, routet Nachrichten und antwortet — aber es existiert noch keine externe Integration. Das Aktivieren in <code>config.json</code> hat derzeit keine praktische Wirkung.</p>
+<h2 id="geplante-architektur">Geplante Architektur</h2>
+<p>hiro wird als <strong>MCP-Client</strong> gebaut. Statt Integrationen direkt in outheis zu implementieren, verbindet sich hiro mit externen MCP-Servern — einen pro Dienst — und stellt deren Tools über die Standard-Agenten-Schnittstelle bereit.</p>
+<h3 id="warum-mcp">Warum MCP</h3>
+<p>Das Model Context Protocol bietet eine standardisierte Schnittstelle zwischen LLMs und externen Tools. Das MCP-Ökosystem deckt viele gängige Integrationen bereits ab (E-Mail, Kalender, Browser, Shell). hiro als MCP-Client zu bauen bedeutet:</p>
+<ul>
+<li>Kein Integrationscode lebt in outheis selbst</li>
+<li>Neue Fähigkeiten werden durch das Konfigurieren eines Servers hinzugefügt, nicht durch das Schreiben von Code</li>
+<li>Jeder Server läuft als isolierter Prozess mit eigenen Berechtigungen</li>
+</ul>
+<h3 id="server-lifecycle">Server-Lifecycle</h3>
+<p>MCP-Server laufen als Subprozesse, die vom Dispatcher verwaltet werden. hiro verwaltet den Server-Lifecycle nicht selbst — der Dispatcher startet konfigurierte Server beim Launch, überwacht sie und startet sie bei Bedarf neu. hiro verbindet sich mit bereits laufenden Servern.</p>
+<p>Zwei Modi sind geplant:</p>
 <table>
 <thead>
 <tr>
-<th>Speicher</th>
-<th>Was er enthält</th>
-<th>Wer schreibt</th>
-<th>Beispiel</th>
+<th>Modus</th>
+<th>Verhalten</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td><strong>memory</strong></td>
-<td>Fakten, Beobachtungen, Zustand</td>
-<td>Pattern-Agent</td>
-<td>"User lives in Munich"</td>
+<td>Persistent</td>
+<td>Server läuft kontinuierlich neben dem Dispatcher</td>
 </tr>
 <tr>
-<td><strong>rules</strong></td>
-<td>Anweisungen, Beschränkungen</td>
-<td>Benutzer, Pattern-Agent</td>
-<td>"Respond in German"</td>
-</tr>
-<tr>
-<td><strong>skills</strong></td>
-<td>Fähigkeiten, Strategien</td>
-<td>Agent selbst, Pattern-Agent</td>
-<td>"Date formats I recognize: ..."</td>
+<td>On-demand</td>
+<td>Server wird gestartet, wenn hiro ihn benötigt, und nach einem konfigurierbaren Idle-Timeout gestoppt</td>
 </tr>
 </tbody>
 </table>
-<h2 id="wie-sie-zusammenwirken">Wie sie zusammenwirken</h2>
-<p>Wenn ein Agent eine Anfrage verarbeitet:</p>
-<pre><code>Agent receives message
-    ↓
-Skills: &quot;How do I approach this?&quot;
-    ↓
-Rules: &quot;What constraints apply?&quot;
-    ↓
-Memory: &quot;What do I know about this user/context?&quot;
-    ↓
-Action
+<h3 id="kuratierte-server-liste">Kuratierte Server-Liste</h3>
+<p>hiro akzeptiert keine beliebigen MCP-Server-Konfigurationen. Unterstützte Server werden in einer kuratierten Liste geführt, die festhält, welcher Server getestet wurde, gegen welche Version und wann. Ein Server erscheint auf der Liste erst, nachdem er verifiziert wurde.</p>
+<p>Das ist eine bewusste Einschränkung. Das MCP-Ökosystem ist groß und uneinheitlich — die Qualität variiert erheblich. Ein Whitelist-Ansatz bedeutet, dass bekannt ist, was hiro kann, und dass es funktioniert.</p>
+<p>Die Liste wird im outheis-Repository gepflegt und aktualisiert, wenn Server getestet werden.</p>
+<h3 id="konfiguration">Konfiguration</h3>
+<p>Wenn implementiert, werden hiros Server in <code>config.json</code> konfiguriert:</p>
+<pre><code class="language-json">{
+  &quot;agents&quot;: {
+    &quot;action&quot;: {
+      &quot;enabled&quot;: true,
+      &quot;servers&quot;: [
+        {&quot;name&quot;: &quot;gmail&quot;,  &quot;command&quot;: &quot;npx&quot;, &quot;args&quot;: [&quot;-y&quot;, &quot;@modelcontextprotocol/server-gmail&quot;]},
+        {&quot;name&quot;: &quot;gcal&quot;,   &quot;command&quot;: &quot;npx&quot;, &quot;args&quot;: [&quot;-y&quot;, &quot;@modelcontextprotocol/server-gcal&quot;]}
+      ]
+    }
+  }
+}
 </code></pre>
-<h2 id="verzeichnisstruktur">Verzeichnisstruktur</h2>
-<pre><code># System skills (in package, read-only)
-src/outheis/agents/skills/
-├── common.md       # Shared by all agents
-├── relay.md        # Relay-specific
-├── agenda.md       # Agenda-specific
-├── data.md         # Data-specific
-└── pattern.md      # Pattern-specific
-
-# User skills (learned, mutable)
-~/.outheis/human/skills/
-├── common.md       # Learned strategies (all agents)
-├── relay.md        # Relay refinements
-├── agenda.md       # Agenda refinements
-└── data.md         # Data refinements
-</code></pre>
-<h2 id="system-skills">System Skills</h2>
-<p>Vom Entwickler definierte Basisfähigkeiten. Beispiele:</p>
-<p><strong>Agenda-Agent:</strong>
-- Datumsformate erkennen
-- Daily.md-Struktur
-- Inbox-Verarbeitungsstrategie
-- Exchange.md-Nutzung</p>
-<p><strong>Data-Agent:</strong>
-- Datei-Suchstrategien
-- Tag-Interpretation
-- JSON-Struktur-Parsing
-- Ergebnis-Ranking</p>
-<p><strong>Relay-Agent:</strong>
-- Anfragen-Routing
-- Tool-Auswahl
-- Migrations-Behandlung
-- Korrektur-Verarbeitung</p>
-<p><strong>Pattern-Agent:</strong>
-- Memory-Extraktion
-- Rule-Förderung
-- Konflikt-Erkennung
-- Selbstbewertung</p>
-<h2 id="user-skills-gelernt">User Skills (gelernt)</h2>
-<p>Durch Nutzung und Korrektur verfeinerte Skills. Geschrieben von:</p>
-<ol>
-<li><strong>Agent selbst</strong> — wenn eine Strategie konsistent funktioniert</li>
-<li><strong>Pattern-Agent</strong> — beim Beobachten stabiler Muster</li>
-</ol>
-<p>Beispiel-Evolution:</p>
-<pre><code class="language-markdown"># ~/.outheis/human/skills/agenda.md
-
-## Date Formats
-
-- User writes dates as DD.MM.YYYY, not MM/DD/YYYY
-- &quot;nächste Woche&quot; means Monday, not 7 days from now
-
-## Daily Structure
-
-- User prefers 🧘/🔴/🟠 emoji sections
-- No &quot;Evening&quot; section needed — user doesn't use it
-</code></pre>
-<h2 id="skill-vs-rule">Skill vs. Rule</h2>
+<p>Nur Server auf der kuratierten Liste werden akzeptiert. Unbekannte Server werden beim Start ignoriert und mit einer Warnung protokolliert.</p>
+<h2 id="aktueller-stand">Aktueller Stand</h2>
 <table>
 <thead>
 <tr>
-<th>Aspekt</th>
-<th>Skill</th>
-<th>Rule</th>
+<th>Komponente</th>
+<th>Status</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>Perspektive</td>
-<td>"Wie ich das angehe"</td>
-<td>"Was ich beachten soll"</td>
+<td>Agent-Shell (Routing, Dispatch)</td>
+<td>✓ vorhanden</td>
 </tr>
 <tr>
-<td>Herkunft</td>
-<td>Vom Agenten gelernt</td>
-<td>Vom Benutzer/Pattern gegeben</td>
+<td>MCP-Client</td>
+<td>nicht implementiert</td>
 </tr>
 <tr>
-<td>Bereich</td>
-<td>Interne Fähigkeit</td>
-<td>Externe Beschränkung</td>
+<td>Server-Lifecycle-Verwaltung</td>
+<td>nicht implementiert</td>
 </tr>
 <tr>
-<td>Beispiel</td>
-<td>"I recognize dates like..."</td>
-<td>"Always respond in German"</td>
+<td>Kuratierte Server-Liste</td>
+<td>nicht begonnen</td>
+</tr>
+<tr>
+<td>Externe Integrationen</td>
+<td>nicht implementiert</td>
 </tr>
 </tbody>
 </table>
-<p>Rules beschränken Verhalten von außen.
-Skills ermöglichen Verhalten von innen.</p>
-<h2 id="ladereihenfolge">Ladereihenfolge</h2>
-<p>Im System-Prompt:</p>
-<ol>
-<li><strong>Skills</strong> (common + agentenspezifisch)</li>
-<li><strong>Rules</strong> (common + agentenspezifisch)</li>
-<li><strong>Memory-Kontext</strong> (user + feedback + context)</li>
-</ol>
-<p>System-Versionen zuerst, Benutzer-Versionen ergänzen/überschreiben.</p>
-<h2 id="skills-schreiben">Skills schreiben</h2>
-<p>Skills sollten sein:</p>
-<ul>
-<li><strong>Konkret</strong>: Spezifische Muster, keine vagen Prinzipien</li>
-<li><strong>Handlungsorientiert</strong>: Dem Agenten sagen, was zu tun ist</li>
-<li><strong>Lernbar</strong>: Kann durch Feedback verfeinert werden</li>
-</ul>
-<p>Guter Skill:</p>
-<pre><code class="language-markdown">## Date Recognition
-- &quot;morgen&quot; → tomorrow's date
-- &quot;nächsten Montag&quot; → next Monday (not today if today is Monday)
-- &quot;24.03.2026&quot; → parse as YYYY-MM-DD internally
-</code></pre>
-<p>Schwacher Skill:</p>
-<pre><code class="language-markdown">## Dates
-- Understand dates properly
-- Be smart about date parsing
-</code></pre>
-<h2 id="skill-verfeinerung">Skill-Verfeinerung</h2>
-<p>Wenn ein Benutzer einen Agenten korrigiert:</p>
-<ol>
-<li>Agent speichert Korrektur in Memory (feedback)</li>
-<li>Pattern-Agent beobachtet wiederholte Korrekturen</li>
-<li>Wenn stabil: wird zu User-Skill gefördert</li>
-<li>Skill beeinflusst jetzt alle zukünftigen Aktionen</li>
-</ol>
-<p>Das erzeugt eine Lernschleife, bei der Korrekturen zu dauerhaften Verbesserungen werden.</p>
-<h3 id="destillations-ausloser">Destillations-Auslöser</h3>
-<p>Der Pattern-Agent verwendet Urteilsvermögen, keine festen Schwellenwerte. Aber diese Bedingungen zeigen an, dass ein Muster bereit ist:</p>
-<ul>
-<li><strong>3+ ähnliche Beobachtungen</strong> → Muster erkennbar</li>
-<li><strong>Wiederholte Korrekturen</strong> → Prinzip extrahierbar</li>
-<li><strong>Stabile Präferenz</strong> → Bereit für Skill</li>
-</ul>
-<p>Eine einmal klar geäußerte starke Präferenz kann ein Skill werden. Etwas oft beiläufig Erwähntes vielleicht nicht. Explizite Korrekturen haben immer mehr Gewicht als erschlossene Muster.</p>
-<h3 id="qualitatskriterien">Qualitätskriterien</h3>
-<p>Ein guter Skill:</p>
-<ul>
-<li><strong>Lenkt Aufmerksamkeit</strong> — sagt dem Agenten, was zu beachten ist, nicht was zu tun ist</li>
-<li><strong>Verallgemeinert</strong> — gilt über die spezifische Instanz hinaus, die ihn ausgelöst hat</li>
-<li><strong>Ersetzt</strong> — macht einen oder mehrere Memory-Einträge unnötig</li>
-</ul>
-<p>Wenn ein Skill nichts ersetzt, könnte er zu spezifisch sein. Wenn er keine Aufmerksamkeit lenkt, könnte er eine verkleidete Rule sein.</p>
     <hr>
     <p class="footer">Open source under AGPL-3.0 · <a href="https://github.com/outheis-labs/outheis-minimal">Code on GitHub</a></p>
   </main>

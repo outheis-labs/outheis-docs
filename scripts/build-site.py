@@ -53,13 +53,14 @@ NAV_SECTIONS = [
     {
         "label": "Implementation",
         "url": "implementation/architecture.html",
-        "match": "implementation/(architecture|memory|agenda|skills|alan)",
+        "match": "implementation/(architecture|memory|agenda|skills|alan|hiro)",
         "items": [
             {"label": "Current State",  "url": "implementation/architecture.html", "match": "implementation/architecture"},
             {"label": "Memory & Rules", "url": "implementation/memory.html",       "match": "implementation/memory"},
             {"label": "Agenda",         "url": "implementation/agenda.html",       "match": "implementation/agenda"},
             {"label": "Skills",         "url": "implementation/skills.html",       "match": "implementation/skills"},
             {"label": "Code Agent",     "url": "implementation/alan.html",         "match": "implementation/alan"},
+            {"label": "Action Agent",   "url": "implementation/hiro.html",         "match": "implementation/hiro"},
         ],
     },
     {
@@ -114,13 +115,14 @@ NAV_SECTIONS_DE = [
     {
         "label": "Implementierung",
         "url": "implementation/architecture.html",
-        "match": "implementation/(architecture|memory|agenda|skills|alan)",
+        "match": "implementation/(architecture|memory|agenda|skills|alan|hiro)",
         "items": [
             {"label": "Aktueller Stand", "url": "implementation/architecture.html", "match": "implementation/architecture"},
             {"label": "Memory & Regeln", "url": "implementation/memory.html",       "match": "implementation/memory"},
             {"label": "Agenda",          "url": "implementation/agenda.html",       "match": "implementation/agenda"},
             {"label": "Skills",          "url": "implementation/skills.html",       "match": "implementation/skills"},
             {"label": "Code-Agent",      "url": "implementation/alan.html",         "match": "implementation/alan"},
+            {"label": "Action-Agent",   "url": "implementation/hiro.html",         "match": "implementation/hiro"},
         ],
     },
     {

@@ -3,39 +3,39 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Mit Tags arbeiten · outheis</title>
-  <link rel="icon" type="image/png" href="../../favicon-96x96.png" sizes="96x96">
-  <link rel="icon" type="image/svg+xml" href="../../favicon.svg">
-  <link rel="shortcut icon" href="../../favicon.ico">
-  <link rel="apple-touch-icon" sizes="180x180" href="../../apple-touch-icon.png">
-  <link rel="manifest" href="../../site.webmanifest">
+  <title>Hiro · outheis</title>
+  <link rel="icon" type="image/png" href="../favicon-96x96.png" sizes="96x96">
+  <link rel="icon" type="image/svg+xml" href="../favicon.svg">
+  <link rel="shortcut icon" href="../favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="../apple-touch-icon.png">
+  <link rel="manifest" href="../site.webmanifest">
   <style>
     @font-face {
       font-family: 'Inter';
-      src: url('../../assets/fonts/InterVariable.woff2') format('woff2'),
-           url('../../assets/fonts/InterVariable.ttf') format('truetype');
+      src: url('../assets/fonts/InterVariable.woff2') format('woff2'),
+           url('../assets/fonts/InterVariable.ttf') format('truetype');
       font-weight: 100 900;
       font-style: normal;
       font-display: swap;
     }
     @font-face {
       font-family: 'Inter';
-      src: url('../../assets/fonts/InterVariable-Italic.woff2') format('woff2');
+      src: url('../assets/fonts/InterVariable-Italic.woff2') format('woff2');
       font-weight: 100 900;
       font-style: italic;
       font-display: swap;
     }
     @font-face {
       font-family: 'Inter var';
-      src: url('../../assets/fonts/InterVariable.woff2') format('woff2'),
-           url('../../assets/fonts/InterVariable.ttf') format('truetype');
+      src: url('../assets/fonts/InterVariable.woff2') format('woff2'),
+           url('../assets/fonts/InterVariable.ttf') format('truetype');
       font-weight: 100 900;
       font-style: normal;
       font-display: swap;
     }
     @font-face {
       font-family: 'Inter var';
-      src: url('../../assets/fonts/InterVariable-Italic.woff2') format('woff2');
+      src: url('../assets/fonts/InterVariable-Italic.woff2') format('woff2');
       font-weight: 100 900;
       font-style: italic;
       font-display: swap;
@@ -238,80 +238,116 @@
 <body>
   <header class="header">
     <div class="header-inner">
-      <a href="../../index.html" class="logo-link">
+      <a href="../index.html" class="logo-link">
         <span class="site-name">οὐθείς</span>
       </a>
       <nav class="topnav">
-        <a href="../foundations/index.html">Grundlagen</a>
+        <a href="../foundations/index.html">Foundations</a>
         <a href="../design/index.html">Design</a>
-        <a href="../implementation/architecture.html">Implementierung</a>
+        <a href="../implementation/architecture.html" class="active">Implementation</a>
         <a href="../installation/release-notes.html">Installation</a>
-        <a href="../workflows/index.html" class="active">Workflows</a>
+        <a href="../workflows/index.html">Workflows</a>
         <a href="https://github.com/outheis-labs/outheis-minimal" class="external">GitHub ↗</a>
       </nav>
-      <div class="lang-switch"><a href="../../workflows/tags.html" class="lang-link">EN</a> · <span class="lang-active">DE</span></div>
+      <div class="lang-switch"><span class="lang-active">EN</span> · <a href="../de/implementation/hiro.html" class="lang-link">DE</a></div>
     </div>
   </header>
   <div class="subnav-bar">
     <div class="subnav-inner">
-      <a href="../workflows/index.html">Überblick</a>
+      <a href="../implementation/architecture.html">Current State</a>
+      <a href="../implementation/memory.html">Memory & Rules</a>
+      <a href="../implementation/agenda.html">Agenda</a>
+      <a href="../implementation/skills.html">Skills</a>
+      <a href="../implementation/alan.html">Code Agent</a>
+      <a href="../implementation/hiro.html" class="active">Action Agent</a>
     </div>
   </div>
   <main class="content">
-    <h1 id="mit-tags-arbeiten">Mit Tags arbeiten</h1>
-<p><em>Wie outheis dein Tag-System erlernt und darin arbeitet.</em></p>
-<h2 id="das-prinzip">Das Prinzip</h2>
-<p>outheis kommt ohne Tag-Schema. Es erlernt deines.</p>
-<p>Wenn du outheis zum ersten Mal startest, sind deine Vault-Tags unbekannt. Der Data-Agent kann deine Tag-Taxonomie scannen und extrahieren — aber nur wenn du fragst. Keine automatische Umstrukturierung, keine erfundenen Tags.</p>
-<p>Die eine Ausnahme: Datum-Tags. Wenn outheis eine Notiz erstellt oder kommentiert, kann es einen <code>#date-JJJJ-MM-TT</code>-Tag hinzufügen, um sie zeitlich zu verankern. Alles andere bleibt unberührt.</p>
-<h2 id="analyse-starten">Analyse starten</h2>
-<p>Sobald dein Vault verbunden ist, führe aus:</p>
-<pre><code>analyze tags
+    <h1 id="hiro">Hiro</h1>
+<p><em>External action agent — not yet implemented.</em></p>
+<h2 id="what-hiro-does">What hiro does</h2>
+<p>hiro is outheis's action agent. Where zeno searches the vault and cato manages time, hiro acts on the outside world: sending email, updating calendars, triggering external services.</p>
+<p><strong>hiro is present in the current release but has no capabilities.</strong> The agent starts, routes messages, and responds, but no external integrations exist yet. Enabling it in <code>config.json</code> has no practical effect.</p>
+<h2 id="planned-architecture">Planned Architecture</h2>
+<p>hiro will be built as an <strong>MCP client</strong>. Rather than implementing integrations directly in outheis, hiro connects to external MCP servers — one per service — and exposes their tools through the standard agent interface.</p>
+<h3 id="why-mcp">Why MCP</h3>
+<p>Model Context Protocol provides a standardized interface between LLMs and external tools. The MCP server ecosystem already covers many common integrations (email, calendar, browser, shell). Building hiro as an MCP client means:</p>
+<ul>
+<li>No integration code lives in outheis itself</li>
+<li>New capabilities are added by configuring a server, not by writing code</li>
+<li>Each server runs as an isolated process with its own permissions</li>
+</ul>
+<h3 id="server-lifecycle">Server Lifecycle</h3>
+<p>MCP servers run as subprocesses managed by the dispatcher. hiro does not manage server lifecycle directly — the dispatcher starts configured servers at launch, monitors them, and restarts them if they exit. hiro connects to already-running servers.</p>
+<p>Two modes are planned:</p>
+<table>
+<thead>
+<tr>
+<th>Mode</th>
+<th>Behavior</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Persistent</td>
+<td>Server runs continuously alongside the dispatcher</td>
+</tr>
+<tr>
+<td>On-demand</td>
+<td>Server is started when hiro needs it, stopped after a configurable idle timeout</td>
+</tr>
+</tbody>
+</table>
+<h3 id="curated-server-list">Curated Server List</h3>
+<p>hiro will not accept arbitrary MCP server configurations. Supported servers are maintained in a curated list that records which server was tested, against which version, and when. A server appears in the list only after it has been verified to work correctly with outheis.</p>
+<p>This is a deliberate constraint. The MCP ecosystem is large and uneven — quality varies significantly. A whitelist approach means you know exactly what hiro can do and that it works.</p>
+<p>The list will be maintained in the outheis repository and updated as servers are tested.</p>
+<h3 id="configuration">Configuration</h3>
+<p>When implemented, hiro's servers will be configured in <code>config.json</code>:</p>
+<pre><code class="language-json">{
+  &quot;agents&quot;: {
+    &quot;action&quot;: {
+      &quot;enabled&quot;: true,
+      &quot;servers&quot;: [
+        {&quot;name&quot;: &quot;gmail&quot;,  &quot;command&quot;: &quot;npx&quot;, &quot;args&quot;: [&quot;-y&quot;, &quot;@modelcontextprotocol/server-gmail&quot;]},
+        {&quot;name&quot;: &quot;gcal&quot;,   &quot;command&quot;: &quot;npx&quot;, &quot;args&quot;: [&quot;-y&quot;, &quot;@modelcontextprotocol/server-gcal&quot;]}
+      ]
+    }
+  }
+}
 </code></pre>
-<p>Der Data-Agent scannt alle Markdown-Dateien, extrahiert jeden gefundenen Tag und reflektiert die Struktur zurück. Zum Beispiel:</p>
-<pre><code>Found 847 tags across 134 files.
-
-Tag categories detected:
-  action-*   (required, waiting, idle, now, call, send)
-  status-*   (active, linger, completed, init)
-  rank-*     (urgent, high, medium, low)
-  unit-*     (work, self, family, ...)
-  topic-*    (12 values)
-  size-*     (S, M, L)
-  recurring
-
-No fixed schema assumed. Does this match how you use these tags?
-</code></pre>
-<p>Du bestätigst oder korrigierst. Von diesem Punkt an sucht, plant und denkt outheis innerhalb deines Systems.</p>
-<h2 id="was-outheis-mit-tags-macht">Was outheis mit Tags macht</h2>
-<p><strong>Tagesplanung</strong> — der Agenda-Agent verwendet <code>#action-required</code>, <code>#action-now</code>, <code>#focus-today</code> und Datum-Tags beim Erstellen deiner Tagesansicht. Für heute markierte Einträge erscheinen automatisch.</p>
-<p><strong>Suche</strong> — du kannst direkt nach Tags abfragen:</p>
-<pre><code>show everything tagged #unit-work and #action-waiting
-what's tagged #recurring this week?
-</code></pre>
-<p><strong>Shadow.md</strong> — der nächtliche Vault-Scan verwendet deine Tags, um zeitrelevante Einträge zu identifizieren. Einträge mit <code>#recurring</code>, <code>#date-*</code> oder Aktions-Tags erscheinen im chronologischen Index, den der Agenda-Agent jeden Morgen liest.</p>
-<h2 id="tag-systeme-variieren">Tag-Systeme variieren</h2>
-<p>outheis arbeitet mit der Konvention, die du verwendest:</p>
-<pre><code>#todo #project #someday           ← flat
-#work/client/project              ← hierarchical with /
-#action-required #status-active   ← namespaced with -
-</code></pre>
-<p>Der Data-Agent kartiert die gefundene Struktur. Er schreibt deine Tags nicht um, um einem bevorzugten Format zu entsprechen.</p>
-<h2 id="das-facettierte-namensraum-muster">Das facettierte Namensraum-Muster</h2>
-<p>Eine besonders effektive Konvention verwendet einen <code>Kategorie-Wert</code>-Namensraum getrennt durch Bindestriche. Jeder Tag trägt zwei Informationen: welche Dimension er beschreibt und welchen Wert er enthält.</p>
-<pre><code>#action-required    what needs to happen
-#status-active      current state
-#rank-high          priority
-#unit-work          context
-#topic-design       subject matter
-#size-M             estimated effort
-#recurring          repeats
-</code></pre>
-<p>Das macht jede Datei entlang mehrerer Achsen abfragbar — ohne verschachtelte Ordner oder formale Metadaten. Eine Datei mit den Tags <code>#action-required #rank-urgent #unit-work</code> sagt dir sofort, was sie ist, wie dringend sie ist und wohin sie gehört.</p>
-<p>Die zeitliche Dimension dieses Musters — wie zeitverankerte Tags mit wiederkehrender Struktur interagieren — wird in der <a href="https://github.com/outheis-labs/research-base/tree/main/temporalization-of-order">research-base</a> untersucht.</p>
-<h2 id="verbesserungen-und-vorschlage">Verbesserungen und Vorschläge</h2>
-<p>Mit der Zeit kann der Data-Agent Dinge bemerken: eine Kategorie mit nur einem Wert, zwei Tags die immer gemeinsam auftrauchen, eine Inkonsistenz die eine kleine Konventionsänderung lösen würde. Wenn das passiert, bringt er es direkt im Gespräch auf — nicht still, nicht automatisch.</p>
-<p>Du entscheidest, ob du den Vorschlag übernimmst. Wenn ja, hilft outheis dir, ihn umzusetzen. Das Tag-System bleibt deins.</p>
+<p>Only servers on the curated list will be accepted. Unknown servers are ignored with a warning at startup.</p>
+<h2 id="current-status">Current Status</h2>
+<table>
+<thead>
+<tr>
+<th>Component</th>
+<th>Status</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Agent shell (routing, dispatch)</td>
+<td>✓ present</td>
+</tr>
+<tr>
+<td>MCP client</td>
+<td>not implemented</td>
+</tr>
+<tr>
+<td>Server lifecycle management</td>
+<td>not implemented</td>
+</tr>
+<tr>
+<td>Curated server list</td>
+<td>not started</td>
+</tr>
+<tr>
+<td>Any external integration</td>
+<td>not implemented</td>
+</tr>
+</tbody>
+</table>
     <hr>
     <p class="footer">Open source under AGPL-3.0 · <a href="https://github.com/outheis-labs/outheis-minimal">Code on GitHub</a></p>
   </main>

@@ -1,8 +1,8 @@
 ---
-title: Release Notes
+title: Versionshinweise
 ---
 
-# Release Notes
+# Versionshinweise
 
 *Private Beta — April 2026.*
 
@@ -11,35 +11,35 @@ title: Release Notes
 ## Was funktioniert
 
 | Komponente | Status | Hinweise |
-|-----------|--------|-------|
-| Dispatcher — Microkernel, Scheduler, Lock Manager | ✓ | |
-| relay (ou) — Routing, Memory-Integration | ✓ | |
-| data (zeno) — vault-Suche, Tag-Analyse | ✓ | |
-| agenda (cato) — Daily, Inbox, Exchange, Shadow | ✓ | |
-| pattern (rumi) — nächtliche Memory-Extraktion | ✓ | |
-| Web UI — Config, Memory, Scheduler, vault, Tags, Migration | ✓ | |
-| Signal-Transport — Empfangen, Antworten, Sprachtranskription | ✓ | |
-| vault-Datei-Browser — alle Dateitypen, Bilder, Obsidian-Wikilinks | ✓ | |
-| Tags — Scannen, Namespace-Gruppierung, Umbenennen, Löschen | ✓ | |
+|------------|--------|---------|
+| Dispatcher — Microkernel, Scheduler, Lock-Manager | ✓ | |
+| Relay (ou) — Routing, Memory-Integration | ✓ | |
+| Data (zeno) — Vault-Suche, Tag-Analyse | ✓ | |
+| Agenda (cato) — Daily, Inbox, Exchange, Shadow | ✓ | |
+| Pattern (rumi) — nächtliche Memory-Extraktion | ✓ | |
+| Web UI — Konfig, Memory, Scheduler, Vault, Tags, Migration | ✓ | |
+| Signal-Transport — empfangen, antworten, Sprachtranskription | ✓ | |
+| Vault-Datei-Browser — alle Dateitypen, Bilder, Obsidian-Wikilinks | ✓ | |
+| Tags — scannen, Namensraum-Gruppierung, umbenennen, löschen | ✓ | |
 | Migration — Exchange.md-Genehmigungsworkflow | ✓ | |
 
 ## Was nicht funktioniert
 
 | Komponente | Status | Hinweise |
-|-----------|--------|-------|
-| action (hiro) — externe Aufgaben, E-Mail, Kalender | nicht implementiert | Framework vorhanden, keine Fähigkeiten |
-| code (alan) — Codebase-Introspektion | nur Entwicklung | In Produktion deaktiviert |
+|------------|--------|---------|
+| Action (hiro) — externe Aufgaben, E-Mail, Kalender | nicht implementiert | Framework vorhanden, keine Fähigkeiten |
+| Code (alan) — Codebase-Introspektion | nur Entwicklung | In Produktion deaktiviert |
 
-**hiro ist vorhanden, aber leer.** Der agent startet und routet, aber keine externen Integrationen existieren — keine E-Mail, kein Kalender, keine Shell-Ausführung. Das Aktivieren in config.json hat derzeit keine praktische Wirkung.
+**hiro ist vorhanden, aber leer.** Der Agent startet und leitet weiter, aber keine externen Integrationen existieren — keine E-Mail, kein Kalender, keine Shell-Ausführung. ihn in config.json zu aktivieren hat noch keine praktische Auswirkung.
 
-**alan erfordert manuelle Aktivierung.** Der code-agent bietet Introspektion in die outheis-Codebase — nützlich für alle, die erkunden möchten, wie sie funktioniert oder den Code erklärt haben möchten. In `config.json` unter `agents.code.enabled: true` aktivieren.
+**alan erfordert manuelle Aktivierung.** Der Code-Agent bietet Introspektion in die outheis-Codebasis — nützlich für jeden, der erkunden möchte, wie es funktioniert, oder sich den Code erklären lassen möchte. In `config.json` aktivieren unter `agents.code.enabled: true`.
 
 ## Bekannte Lücken
 
-**pattern-agent benötigt Verlauf.** rumi hat bei einer frischen Installation nichts zu extrahieren. Memory baut sich über Tage auf, nicht sofort.
+**Pattern-Agent benötigt Verlauf.** rumi hat bei einer frischen Installation nichts zu extrahieren. Memory baut sich über Tage auf, nicht sofort.
 
-**Tag-Scan erfolgt auf Anfrage.** Tags werden beim Start nicht indiziert. Aus der Web UI ausführen (vault → Tags → Scan) oder im Chat `analyze tags` sagen.
+**Tag-Scan ist auf Anfrage.** Tags werden nicht beim Start indexiert. Über Web UI ausführen (Vault → Tags → Scan) oder im Chat `analyze tags` sagen.
 
-**Keine mobile UI.** Web UI ist nur für localhost. Signal-Transport für mobilen Zugriff verwenden.
+**Keine mobile UI.** Web-Oberfläche ist nur localhost. Signal-Transport für mobilen Zugriff verwenden.
 
-**Kontext nach Neustart.** Beim Neustart wiederholt relay die letzten 20 Nachrichten, um den kürzlichen Kontext wiederherzustellen. Älterer Gesprächsverlauf wird nicht wiedergegeben.
+**Kontext nach Neustart.** Beim Neustart gibt relay die letzten 20 Nachrichten zurück, um den aktuellen Kontext wiederherzustellen. Älterer Gesprächsverlauf wird nicht zurückgespielt.

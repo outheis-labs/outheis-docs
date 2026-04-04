@@ -1,24 +1,24 @@
 # Mit Tags arbeiten
 
-*Wie outheis dein Tag-System lernt und damit arbeitet.*
+*Wie outheis dein Tag-System erlernt und darin arbeitet.*
 
 ## Das Prinzip
 
-outheis bringt kein Tag-Schema mit. Es lernt deins.
+outheis kommt ohne Tag-Schema. Es erlernt deines.
 
-Wenn du outheis zum ersten Mal startest, sind deine vault-Tags ihm unbekannt. Der data-agent kann deine Tag-Taxonomie scannen und extrahieren — aber nur wenn du ihn darum bittest. Keine automatische Umstrukturierung, keine erfundenen Tags.
+Wenn du outheis zum ersten Mal startest, sind deine Vault-Tags unbekannt. Der Data-Agent kann deine Tag-Taxonomie scannen und extrahieren — aber nur wenn du fragst. Keine automatische Umstrukturierung, keine erfundenen Tags.
 
-Die eine Ausnahme: Datums-Tags. Wenn outheis eine Notiz erstellt oder annotiert, kann es einen `#date-YYYY-MM-DD`-Tag hinzufügen, um sie zeitlich zu verankern. Alles andere bleibt unberührt.
+Die eine Ausnahme: Datum-Tags. Wenn outheis eine Notiz erstellt oder kommentiert, kann es einen `#date-JJJJ-MM-TT`-Tag hinzufügen, um sie zeitlich zu verankern. Alles andere bleibt unberührt.
 
-## Die Analyse starten
+## Analyse starten
 
-Sobald dein vault verbunden ist, ausführen:
+Sobald dein Vault verbunden ist, führe aus:
 
 ```
 analyze tags
 ```
 
-Der data-agent scannt alle Markdown-Dateien, extrahiert jeden gefundenen Tag und spiegelt die Struktur zurück. Zum Beispiel:
+Der Data-Agent scannt alle Markdown-Dateien, extrahiert jeden gefundenen Tag und reflektiert die Struktur zurück. Zum Beispiel:
 
 ```
 Found 847 tags across 134 files.
@@ -35,11 +35,11 @@ Tag categories detected:
 No fixed schema assumed. Does this match how you use these tags?
 ```
 
-Du bestätigst oder korrigierst. Ab diesem Punkt sucht, plant und denkt outheis innerhalb deines Systems.
+Du bestätigst oder korrigierst. Von diesem Punkt an sucht, plant und denkt outheis innerhalb deines Systems.
 
 ## Was outheis mit Tags macht
 
-**Tagesplanung** — der agenda-agent verwendet `#action-required`, `#action-now`, `#focus-today` und Datums-Tags beim Erstellen deiner Tagesansicht. Für heute markierte Einträge erscheinen automatisch.
+**Tagesplanung** — der Agenda-Agent verwendet `#action-required`, `#action-now`, `#focus-today` und Datum-Tags beim Erstellen deiner Tagesansicht. Für heute markierte Einträge erscheinen automatisch.
 
 **Suche** — du kannst direkt nach Tags abfragen:
 
@@ -48,32 +48,32 @@ show everything tagged #unit-work and #action-waiting
 what's tagged #recurring this week?
 ```
 
-**Shadow.md** — der nächtliche vault-Scan nutzt deine Tags, um zeitrelevante Einträge zu identifizieren. Einträge mit `#recurring`, `#date-*` oder Aktions-Tags erscheinen im chronologischen Index, den der agenda-agent jeden Morgen liest.
+**Shadow.md** — der nächtliche Vault-Scan verwendet deine Tags, um zeitrelevante Einträge zu identifizieren. Einträge mit `#recurring`, `#date-*` oder Aktions-Tags erscheinen im chronologischen Index, den der Agenda-Agent jeden Morgen liest.
 
 ## Tag-Systeme variieren
 
-outheis arbeitet mit jeder Konvention, die du verwendest:
+outheis arbeitet mit der Konvention, die du verwendest:
 
 ```
-#todo #project #someday           ← flach
-#work/client/project              ← hierarchisch mit /
-#action-required #status-active   ← Namespace mit -
+#todo #project #someday           ← flat
+#work/client/project              ← hierarchical with /
+#action-required #status-active   ← namespaced with -
 ```
 
-Der data-agent kartiert die gefundene Struktur. Er schreibt deine Tags nicht um, um einem bevorzugten Format zu entsprechen.
+Der Data-Agent kartiert die gefundene Struktur. Er schreibt deine Tags nicht um, um einem bevorzugten Format zu entsprechen.
 
-## Das facettierte Namespace-Muster
+## Das facettierte Namensraum-Muster
 
-Eine besonders effektive Konvention verwendet einen `Kategorie-Wert`-Namespace mit Bindestrichen. Jeder Tag trägt zwei Informationen: welche Dimension er beschreibt und welchen Wert er enthält.
+Eine besonders effektive Konvention verwendet einen `Kategorie-Wert`-Namensraum getrennt durch Bindestriche. Jeder Tag trägt zwei Informationen: welche Dimension er beschreibt und welchen Wert er enthält.
 
 ```
-#action-required    was geschehen muss
-#status-active      aktueller Zustand
-#rank-high          Priorität
-#unit-work          Kontext
-#topic-design       Thema
-#size-M             geschätzter Aufwand
-#recurring          wiederholt sich
+#action-required    what needs to happen
+#status-active      current state
+#rank-high          priority
+#unit-work          context
+#topic-design       subject matter
+#size-M             estimated effort
+#recurring          repeats
 ```
 
 Das macht jede Datei entlang mehrerer Achsen abfragbar — ohne verschachtelte Ordner oder formale Metadaten. Eine Datei mit den Tags `#action-required #rank-urgent #unit-work` sagt dir sofort, was sie ist, wie dringend sie ist und wohin sie gehört.
@@ -82,6 +82,6 @@ Die zeitliche Dimension dieses Musters — wie zeitverankerte Tags mit wiederkeh
 
 ## Verbesserungen und Vorschläge
 
-Im Laufe der Zeit kann der data-agent Dinge bemerken: eine Kategorie mit nur einem Wert, zwei Tags die immer zusammen auftreten, eine Inkonsistenz, die eine kleine Konventionsänderung lösen würde. Wenn das passiert, spricht er das direkt im Gespräch an — nicht still, nicht automatisch.
+Mit der Zeit kann der Data-Agent Dinge bemerken: eine Kategorie mit nur einem Wert, zwei Tags die immer gemeinsam auftrauchen, eine Inkonsistenz die eine kleine Konventionsänderung lösen würde. Wenn das passiert, bringt er es direkt im Gespräch auf — nicht still, nicht automatisch.
 
-Du entscheidest, ob du den Vorschlag annimmst. Wenn ja, hilft outheis dir, ihn umzusetzen. Das Tag-System bleibt deins.
+Du entscheidest, ob du den Vorschlag übernimmst. Wenn ja, hilft outheis dir, ihn umzusetzen. Das Tag-System bleibt deins.
