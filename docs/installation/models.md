@@ -33,6 +33,8 @@ Recommended starting point. No additional setup beyond an API key.
 
 Runs entirely on your hardware. No API costs, no data leaves the system. Requires `ollama` installed and `pip install openai`.
 
+> **Test environment:** All benchmarks were measured on Apple M4, 24 GB unified memory. Results are a good basis for estimating performance on comparable hardware.
+
 **GPU acceleration:** On Apple Silicon (M-series), Ollama uses Metal automatically — no configuration needed. On Linux/Windows, Vulkan support is available for AMD and Intel GPUs via `OLLAMA_VULKAN=1` (experimental). Environment variables for the Ollama server can be stored in outheis config under `llm.providers.ollama.env_vars` and are shown in the Web UI as a reference.
 
 ### Code Agent (alan)

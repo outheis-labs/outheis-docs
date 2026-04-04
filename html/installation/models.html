@@ -312,6 +312,9 @@
 <hr />
 <h2 id="ollama-local">Ollama (local)</h2>
 <p>Runs entirely on your hardware. No API costs, no data leaves the system. Requires <code>ollama</code> installed and <code>pip install openai</code>.</p>
+<blockquote>
+<p><strong>Test environment:</strong> All benchmarks were measured on Apple M4, 24 GB unified memory. Results are a good basis for estimating performance on comparable hardware.</p>
+</blockquote>
 <p><strong>GPU acceleration:</strong> On Apple Silicon (M-series), Ollama uses Metal automatically — no configuration needed. On Linux/Windows, Vulkan support is available for AMD and Intel GPUs via <code>OLLAMA_VULKAN=1</code> (experimental). Environment variables for the Ollama server can be stored in outheis config under <code>llm.providers.ollama.env_vars</code> and are shown in the Web UI as a reference.</p>
 <h3 id="code-agent-alan">Code Agent (alan)</h3>
 <p>Alan's system prompt contains only source root, role, and open proposals — no user memory. Tool-use reliability is the main requirement. Models are tested via the Ollama OpenAI-compatible endpoint with realistic tool schemas.</p>
