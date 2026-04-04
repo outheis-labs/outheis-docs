@@ -88,6 +88,20 @@ No model scores fully correct on all scenarios. The 20B class (and gemma4:e4b) i
 
 **Re-evaluation on M5:** The 20B class will run significantly faster on M5 hardware. Use `python tools/test_agent_capability.py` to re-test after a hardware upgrade — and extend to 32B+ models, and larger gemma4 variants.
 
+### Pattern Agent (rumi)
+
+rumi runs nightly with no user waiting — latency is irrelevant. The bar is quality: extract memory entries without hallucination, consolidate duplicates and contradictions, distill skills from mature memory, promote stable patterns to rules, and reflect on meta-learning.
+
+Tested with `tools/test_pattern_agent.py` — 10 scenarios across all 5 phases of `run_scheduled()`:
+
+| Model | Size | OK | Partial | Fail | Notes |
+|-------|------|----|---------|------|-------|
+| gemma4:26b | 26B | 6/10 | 2 | 2 | Hallucination flag (extract_empty); distill_quality failure; ~270s total |
+
+`gemma4:26b` is a dense 26B model (all parameters active per token). It scores 6/10 with two flags: a hallucination on the empty-extraction scenario (invented a memory entry from casual chat where none should be extracted), and a failure to distill when the memory was clearly ready. The consolidate phase finds 0 of 2 duplicates (partial). At ~270s total for all 10 scenarios on M4/24 GB, nightly runtime is acceptable — but the hallucination flag means rumi would occasionally create false memory entries. Not yet suitable for production use as a local rumi.
+
+**Test tool:** `python tools/test_pattern_agent.py` from the outheis-beta repository.
+
 ---
 
 ## OpenAI
