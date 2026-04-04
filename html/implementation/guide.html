@@ -256,8 +256,9 @@
     <div class="subnav-inner">
       <a href="../installation/release-notes.html">Release Notes</a>
       <a href="../implementation/guide.html" class="active">Getting Started</a>
+      <a href="../installation/models.html">Models</a>
+      <a href="../installation/communication.html">Communication</a>
       <a href="../implementation/config.html">Configuration</a>
-      <a href="../implementation/signal.html">Signal</a>
       <a href="../implementation/migration.html">Migration</a>
       <a href="../implementation/webui.html">Web UI</a>
     </div>
@@ -271,11 +272,19 @@
 <li>An Anthropic API key</li>
 <li>A vault directory — a folder of Markdown files (Obsidian works directly)</li>
 </ul>
+<p>Optional — required only if you configure a local model via Ollama:</p>
+<ul>
+<li><a href="https://ollama.com">Ollama</a> installed and running</li>
+<li><code>pip install openai</code> (outheis uses the OpenAI-compatible Ollama API)</li>
+</ul>
 <p>Optional for messaging via Signal:</p>
 <ul>
 <li>A registered Signal account for the bot phone number</li>
 <li><code>signal-cli</code> installed and configured</li>
 </ul>
+<h2 id="quickstart">Quickstart</h2>
+<p>The fastest path to a working setup is an Anthropic API key. No additional dependencies — outheis works out of the box with Claude as the only model provider.</p>
+<p>Local models via Ollama are optional and require extra setup (see below).</p>
 <h2 id="installation">Installation</h2>
 <p>Modern pip enforces virtual environments. Create one first:</p>
 <pre><code class="language-bash">git clone https://github.com/outheis-labs/outheis-minimal.git
@@ -348,33 +357,6 @@ outheis stop         # Stop daemon
     └── Exchange.md   # Async back-and-forth with cato
 </code></pre>
 <p>Create the <code>Agenda/</code> directory and empty files. cato generates <code>Daily.md</code> on first run.</p>
-<h2 id="signal-setup-optional">Signal Setup (optional)</h2>
-<p>To receive and send messages via Signal:</p>
-<ol>
-<li>Register a dedicated phone number with Signal</li>
-<li>Install and configure <code>signal-cli</code> for that number</li>
-<li>Add to <code>config.json</code>:</li>
-</ol>
-<pre><code class="language-json">{
-  &quot;signal&quot;: {
-    &quot;enabled&quot;: true,
-    &quot;bot_name&quot;: &quot;ou&quot;,
-    &quot;bot_phone&quot;: &quot;+49...&quot;,
-    &quot;allowed&quot;: []
-  }
-}
-</code></pre>
-<p>Set <code>allowed</code> to an empty array to allow all contacts, or list specific numbers: <code>["+49..."]</code>.</p>
-<p>Edit <code>~/.outheis/human/config.json</code> for the full config:</p>
-<pre><code class="language-json">{
-  &quot;user&quot;: {
-    &quot;name&quot;: &quot;your-name&quot;,
-    &quot;language&quot;: &quot;en&quot;,
-    &quot;timezone&quot;: &quot;Europe/Berlin&quot;,
-    &quot;vault&quot;: [&quot;~/Documents/Vault&quot;]
-  }
-}
-</code></pre>
 <h2 id="cli-commands">CLI Commands</h2>
 <h3 id="daemon-control">Daemon Control</h3>
 <pre><code class="language-bash">outheis start       # Start dispatcher (background)
@@ -500,6 +482,11 @@ outheis start
 <pre><code class="language-bash">export ANTHROPIC_API_KEY=&quot;sk-ant-...&quot;
 # Or add to ~/.bashrc / ~/.zshrc
 </code></pre>
+<h3 id="openai-package-not-installed-ollama-models">"openai package not installed" (Ollama models)</h3>
+<p>If you configure a model with <code>"provider": "ollama"</code>, outheis uses the OpenAI-compatible Ollama API and requires the <code>openai</code> Python package:</p>
+<pre><code class="language-bash">pip install openai
+</code></pre>
+<p>Also make sure Ollama itself is running (<code>ollama serve</code>) and the model is pulled (<code>ollama pull &lt;model&gt;</code>).</p>
 <h3 id="macos-daemon-wont-start-in-background">macOS: Daemon won't start in background</h3>
 <p>Use foreground mode:</p>
 <pre><code class="language-bash">outheis start -f &amp;

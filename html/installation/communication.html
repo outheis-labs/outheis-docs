@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Release Notes · outheis</title>
+  <title>Communicating with outheis · outheis</title>
   <link rel="icon" type="image/png" href="../favicon-96x96.png" sizes="96x96">
   <link rel="icon" type="image/svg+xml" href="../favicon.svg">
   <link rel="shortcut icon" href="../favicon.ico">
@@ -249,115 +249,90 @@
         <a href="../workflows/index.html">Workflows</a>
         <a href="https://github.com/outheis-labs/outheis-minimal" class="external">GitHub ↗</a>
       </nav>
-      <div class="lang-switch"><span class="lang-active">EN</span> · <a href="../de/installation/release-notes.html" class="lang-link">DE</a></div>
+      <div class="lang-switch"><span class="lang-active">EN</span> · <a href="../de/installation/communication.html" class="lang-link">DE</a></div>
     </div>
   </header>
   <div class="subnav-bar">
     <div class="subnav-inner">
-      <a href="../installation/release-notes.html" class="active">Release Notes</a>
+      <a href="../installation/release-notes.html">Release Notes</a>
       <a href="../implementation/guide.html">Getting Started</a>
       <a href="../installation/models.html">Models</a>
-      <a href="../installation/communication.html">Communication</a>
+      <a href="../installation/communication.html" class="active">Communication</a>
       <a href="../implementation/config.html">Configuration</a>
       <a href="../implementation/migration.html">Migration</a>
       <a href="../implementation/webui.html">Web UI</a>
     </div>
   </div>
   <main class="content">
-    <h1 id="release-notes">Release Notes</h1>
-<p><em>Private beta — April 2026.</em></p>
+    <h1 id="communicating-with-outheis">Communicating with outheis</h1>
+<p>outheis can be reached through three channels. All channels connect to the same dispatcher and agents — the difference is where you type and how you receive responses.</p>
 <hr />
-<h2 id="what-works">What Works</h2>
-<table>
-<thead>
-<tr>
-<th>Component</th>
-<th>Status</th>
-<th>Notes</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Dispatcher — microkernel, scheduler, lock manager</td>
-<td>✓</td>
-<td></td>
-</tr>
-<tr>
-<td>Relay (ou) — routing, memory integration</td>
-<td>✓</td>
-<td></td>
-</tr>
-<tr>
-<td>Data (zeno) — vault search, tag analysis</td>
-<td>✓</td>
-<td></td>
-</tr>
-<tr>
-<td>Agenda (cato) — Daily, Inbox, Exchange, Shadow</td>
-<td>✓</td>
-<td></td>
-</tr>
-<tr>
-<td>Pattern (rumi) — nightly memory extraction</td>
-<td>✓</td>
-<td></td>
-</tr>
-<tr>
-<td>Web UI — config, memory, scheduler, vault, tags, migration</td>
-<td>✓</td>
-<td></td>
-</tr>
-<tr>
-<td>Signal transport — receive, respond, voice transcription</td>
-<td>✓</td>
-<td></td>
-</tr>
-<tr>
-<td>Vault file browser — all file types, images, Obsidian wikilinks</td>
-<td>✓</td>
-<td></td>
-</tr>
-<tr>
-<td>Tags — scan, namespace grouping, rename, delete</td>
-<td>✓</td>
-<td></td>
-</tr>
-<tr>
-<td>Migration — Exchange.md approval workflow</td>
-<td>✓</td>
-<td></td>
-</tr>
-</tbody>
-</table>
-<h2 id="what-doesnt">What Doesn't</h2>
-<table>
-<thead>
-<tr>
-<th>Component</th>
-<th>Status</th>
-<th>Notes</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Action (hiro) — external tasks, email, calendar</td>
-<td>not implemented</td>
-<td>Framework present, no capabilities</td>
-</tr>
-<tr>
-<td>Code (alan) — codebase introspection</td>
-<td>dev only</td>
-<td>Disabled in production</td>
-</tr>
-</tbody>
-</table>
-<p><strong>hiro is present but empty.</strong> The agent starts and routes, but no external integrations exist — no email, no calendar, no shell execution. Enabling it in config.json has no practical effect yet.</p>
-<p><strong>alan requires manual activation.</strong> The Code agent provides introspection into the outheis codebase — useful for anyone who wants to explore how it works or have the code explained. Enable in <code>config.json</code> under <code>agents.code.enabled: true</code>.</p>
-<h2 id="known-gaps">Known Gaps</h2>
-<p><strong>Pattern agent requires history.</strong> rumi has nothing to extract on a fresh install. Memory builds over days, not immediately.</p>
-<p><strong>Tag scan is on demand.</strong> Tags are not indexed at startup. Run from Web UI (Vault → Tags → Scan) or say <code>analyze tags</code> in chat.</p>
-<p><strong>No mobile UI.</strong> Web UI is localhost-only. Use Signal transport for mobile access.</p>
-<p><strong>Context after restart.</strong> On restart, relay replays the last 20 messages to restore recent context. Older conversation history is not replayed.</p>
+<h2 id="web-ui">Web UI</h2>
+<p>A browser-based interface served locally by the dispatcher. No separate server needed — the Web UI is built into the daemon and starts automatically with it.</p>
+<p><strong>Access:</strong> <code>http://127.0.0.1:8080</code> (while dispatcher is running)</p>
+<p><strong>What it provides:</strong>
+- Live message feed showing all agent conversations in real time
+- Prompt input — send messages to the relay agent directly from the browser
+- Configuration editor (models, agents, providers, scheduler)
+- Memory, Rules, Skills viewer and editor
+- Vault file browser — browse, edit, and delete files across all configured vaults
+- Tags view — scan for <code>#tags</code>, rename or remove them across the vault
+- Scheduler — manage recurring tasks, view history</p>
+<p><strong>Configuration:</strong> Enabled by default. Port and host can be changed in <code>config.json</code>:</p>
+<pre><code class="language-json">&quot;webui&quot;: { &quot;host&quot;: &quot;127.0.0.1&quot;, &quot;port&quot;: 8080 }
+</code></pre>
+<p><strong>Remote access:</strong> The UI binds to localhost only. To reach it from another machine, use SSH port forwarding:</p>
+<pre><code class="language-bash">ssh -L 8080:localhost:8080 user@your-server
+</code></pre>
+<p>Then open <code>http://localhost:8080</code> in your local browser. The tunnel stays active as long as the SSH connection is open.</p>
+<p>For a full description of all views and API endpoints, see <a href="../implementation/webui.md">Web UI</a>.</p>
+<hr />
+<h2 id="cli">CLI</h2>
+<p>Command-line interface for sending messages and managing the daemon. Available as <code>outheis</code> after installation.</p>
+<p><strong>Setup:</strong> Available after <code>pip install -e .</code> with the venv active.</p>
+<p><strong>Sending messages:</strong></p>
+<pre><code class="language-bash">outheis send &quot;What's on my agenda today?&quot;
+outheis send &quot;@zeno find notes about project alpha&quot;
+outheis chat                                        # interactive mode with history
+</code></pre>
+<p>The relay agent handles all messages and routes to the right agent automatically. Use <code>@name</code> to address an agent directly (<code>@zeno</code>, <code>@cato</code>, <code>@alan</code>, …).</p>
+<p><strong>Daemon control:</strong></p>
+<pre><code class="language-bash">outheis start         # start in background
+outheis start -f      # start in foreground
+outheis start -fv     # foreground + verbose (shows tool calls)
+outheis stop          # stop daemon
+outheis status        # show PID, uptime, agent status
+</code></pre>
+<p><strong>Inspecting memory and rules:</strong></p>
+<pre><code class="language-bash">outheis memory              # show all stored memories
+outheis memory --type user  # show only user facts
+outheis rules               # show all rules (system + user)
+outheis rules relay         # show rules for a specific agent
+</code></pre>
+<hr />
+<h2 id="signal">Signal</h2>
+<p>Receive and send messages via the Signal messenger app. Requires a dedicated phone number for the bot and <code>signal-cli</code> installed and registered.</p>
+<p><strong>How it works:</strong> The Signal transport runs as a separate process alongside the daemon. It listens for incoming Signal messages from authorized numbers, routes them to the relay agent, and sends the responses back as Signal messages. Voice messages are transcribed automatically if <code>faster-whisper</code> is installed.</p>
+<p><strong>Requirements:</strong>
+- A phone number registered with <code>signal-cli</code> for the bot
+- <code>signal-cli</code> installed and configured
+- <code>pip install -e ".[signal]"</code> for voice transcription (optional)</p>
+<p><strong>Configuration:</strong></p>
+<pre><code class="language-json">&quot;signal&quot;: {
+  &quot;enabled&quot;: true,
+  &quot;bot_name&quot;: &quot;Ou&quot;,
+  &quot;bot_phone&quot;: &quot;+49...&quot;,
+  &quot;allowed&quot;: []
+}
+</code></pre>
+<p><code>allowed</code> is a whitelist of phone numbers permitted to interact with the bot. An empty list means only <code>human.phone</code> can send messages.</p>
+<p><strong>Running:</strong></p>
+<pre><code class="language-bash">outheis signal        # foreground
+outheis signal -v     # verbose
+</code></pre>
+<p>Signal transport and the main daemon run independently and can be active simultaneously.</p>
+<p><strong>When to use:</strong> The primary channel for interacting with outheis from a phone without opening a browser or terminal.</p>
+<p>For full setup instructions, see <a href="../implementation/signal.md">Signal</a>.</p>
     <hr>
     <p class="footer">Open source under AGPL-3.0 · <a href="https://github.com/outheis-labs/outheis-minimal">Code on GitHub</a></p>
   </main>

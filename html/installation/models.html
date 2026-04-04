@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Release Notes · outheis</title>
+  <title>Model Selection · outheis</title>
   <link rel="icon" type="image/png" href="../favicon-96x96.png" sizes="96x96">
   <link rel="icon" type="image/svg+xml" href="../favicon.svg">
   <link rel="shortcut icon" href="../favicon.ico">
@@ -249,14 +249,14 @@
         <a href="../workflows/index.html">Workflows</a>
         <a href="https://github.com/outheis-labs/outheis-minimal" class="external">GitHub ↗</a>
       </nav>
-      <div class="lang-switch"><span class="lang-active">EN</span> · <a href="../de/installation/release-notes.html" class="lang-link">DE</a></div>
+      <div class="lang-switch"><span class="lang-active">EN</span> · <a href="../de/installation/models.html" class="lang-link">DE</a></div>
     </div>
   </header>
   <div class="subnav-bar">
     <div class="subnav-inner">
-      <a href="../installation/release-notes.html" class="active">Release Notes</a>
+      <a href="../installation/release-notes.html">Release Notes</a>
       <a href="../implementation/guide.html">Getting Started</a>
-      <a href="../installation/models.html">Models</a>
+      <a href="../installation/models.html" class="active">Models</a>
       <a href="../installation/communication.html">Communication</a>
       <a href="../implementation/config.html">Configuration</a>
       <a href="../implementation/migration.html">Migration</a>
@@ -264,100 +264,152 @@
     </div>
   </div>
   <main class="content">
-    <h1 id="release-notes">Release Notes</h1>
-<p><em>Private beta — April 2026.</em></p>
+    <h1 id="model-selection">Model Selection</h1>
+<p><em>Which LLM to use with outheis — and for which agent.</em></p>
+<p>outheis supports three model providers: Anthropic (cloud), Ollama (local), and OpenAI (cloud). Each agent has a model alias (<code>fast</code>, <code>capable</code>, <code>reasoning</code>, or a custom name) that maps to a concrete model in <code>config.json</code>.</p>
 <hr />
-<h2 id="what-works">What Works</h2>
+<h2 id="anthropic">Anthropic</h2>
+<p>Recommended starting point. No additional setup beyond an API key.</p>
 <table>
 <thead>
 <tr>
-<th>Component</th>
-<th>Status</th>
-<th>Notes</th>
+<th>Model</th>
+<th>ID</th>
+<th>Speed</th>
+<th>Cost</th>
+<th>Context</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>Dispatcher — microkernel, scheduler, lock manager</td>
-<td>✓</td>
-<td></td>
+<td>Claude Haiku 4.5</td>
+<td><code>claude-haiku-4-5-20251001</code></td>
+<td>Fast</td>
+<td>Low</td>
+<td>200k</td>
 </tr>
 <tr>
-<td>Relay (ou) — routing, memory integration</td>
-<td>✓</td>
-<td></td>
+<td>Claude Sonnet 4.5</td>
+<td><code>claude-sonnet-4-5</code></td>
+<td>Medium</td>
+<td>Medium</td>
+<td>200k</td>
 </tr>
 <tr>
-<td>Data (zeno) — vault search, tag analysis</td>
-<td>✓</td>
-<td></td>
-</tr>
-<tr>
-<td>Agenda (cato) — Daily, Inbox, Exchange, Shadow</td>
-<td>✓</td>
-<td></td>
-</tr>
-<tr>
-<td>Pattern (rumi) — nightly memory extraction</td>
-<td>✓</td>
-<td></td>
-</tr>
-<tr>
-<td>Web UI — config, memory, scheduler, vault, tags, migration</td>
-<td>✓</td>
-<td></td>
-</tr>
-<tr>
-<td>Signal transport — receive, respond, voice transcription</td>
-<td>✓</td>
-<td></td>
-</tr>
-<tr>
-<td>Vault file browser — all file types, images, Obsidian wikilinks</td>
-<td>✓</td>
-<td></td>
-</tr>
-<tr>
-<td>Tags — scan, namespace grouping, rename, delete</td>
-<td>✓</td>
-<td></td>
-</tr>
-<tr>
-<td>Migration — Exchange.md approval workflow</td>
-<td>✓</td>
-<td></td>
+<td>Claude Opus 4.5</td>
+<td><code>claude-opus-4-5</code></td>
+<td>Slow</td>
+<td>High</td>
+<td>200k</td>
 </tr>
 </tbody>
 </table>
-<h2 id="what-doesnt">What Doesn't</h2>
+<p><strong>Tool-use reliability:</strong> Excellent across all models.</p>
+<p><strong>Recommendation for outheis:</strong>
+- <code>fast</code> alias → Haiku — for relay, data, agenda (high-frequency, tool-heavy)
+- <code>capable</code> alias → Sonnet — for pattern, action (reasoning-heavy tasks)
+- <code>reasoning</code> alias → Opus — optional, for complex multi-step analysis</p>
+<hr />
+<h2 id="ollama-local">Ollama (local)</h2>
+<p>Runs entirely on your hardware. No API costs, no data leaves the system. Requires <code>ollama</code> installed and <code>pip install openai</code>.</p>
+<p><strong>Important:</strong> Local models vary significantly in their ability to follow system prompts and use tools reliably. Tested models:</p>
 <table>
 <thead>
 <tr>
-<th>Component</th>
-<th>Status</th>
-<th>Notes</th>
+<th>Model</th>
+<th>Size</th>
+<th>Tool-use</th>
+<th>Follows instructions</th>
+<th>Verdict</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>Action (hiro) — external tasks, email, calendar</td>
-<td>not implemented</td>
-<td>Framework present, no capabilities</td>
+<td>qwen3:8b</td>
+<td>8B</td>
+<td>✗ None</td>
+<td>Partial</td>
+<td>Not suitable</td>
 </tr>
 <tr>
-<td>Code (alan) — codebase introspection</td>
-<td>dev only</td>
-<td>Disabled in production</td>
+<td>mistral-nemo:12b</td>
+<td>12B</td>
+<td>✗ None</td>
+<td>Partial</td>
+<td>Not suitable</td>
+</tr>
+<tr>
+<td>mistral:7b</td>
+<td>7B</td>
+<td>✗ None</td>
+<td>Partial</td>
+<td>Not suitable</td>
+</tr>
+<tr>
+<td>gemma4:e4b</td>
+<td>4B</td>
+<td>✗ Unreliable</td>
+<td>Weak</td>
+<td>Not suitable</td>
+</tr>
+<tr>
+<td>qwen2.5-coder:14b</td>
+<td>14B</td>
+<td>Under evaluation</td>
+<td>—</td>
+<td>Testing</td>
+</tr>
+<tr>
+<td>qwen2.5:14b</td>
+<td>14B</td>
+<td>Under evaluation</td>
+<td>—</td>
+<td>Testing</td>
 </tr>
 </tbody>
 </table>
-<p><strong>hiro is present but empty.</strong> The agent starts and routes, but no external integrations exist — no email, no calendar, no shell execution. Enabling it in config.json has no practical effect yet.</p>
-<p><strong>alan requires manual activation.</strong> The Code agent provides introspection into the outheis codebase — useful for anyone who wants to explore how it works or have the code explained. Enable in <code>config.json</code> under <code>agents.code.enabled: true</code>.</p>
-<h2 id="known-gaps">Known Gaps</h2>
-<p><strong>Pattern agent requires history.</strong> rumi has nothing to extract on a fresh install. Memory builds over days, not immediately.</p>
-<p><strong>Tag scan is on demand.</strong> Tags are not indexed at startup. Run from Web UI (Vault → Tags → Scan) or say <code>analyze tags</code> in chat.</p>
-<p><strong>No mobile UI.</strong> Web UI is localhost-only. Use Signal transport for mobile access.</p>
-<p><strong>Context after restart.</strong> On restart, relay replays the last 20 messages to restore recent context. Older conversation history is not replayed.</p>
+<p><strong>Hardware requirements:</strong> 14B models require approximately 16–20 GB RAM. 8B models run on 8–12 GB.</p>
+<p><strong>Privacy note:</strong> If data privacy is a concern, all agents that process personal vault content (relay, data, agenda) must use local models — not just the code agent. A local model that handles tool-use reliably is required for this use case.</p>
+<p><strong>Recommendation:</strong> Start with Anthropic. Switch to local models only once you have confirmed tool-use reliability on your hardware.</p>
+<hr />
+<h2 id="openai">OpenAI</h2>
+<p>Supported as a provider. Configuration is identical to Anthropic — set <code>"provider": "openai"</code> and provide an API key.</p>
+<table>
+<thead>
+<tr>
+<th>Model</th>
+<th>ID</th>
+<th>Speed</th>
+<th>Cost</th>
+<th>Context</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>GPT-4o</td>
+<td><code>gpt-4o</code></td>
+<td>Fast</td>
+<td>Medium</td>
+<td>128k</td>
+</tr>
+<tr>
+<td>GPT-4o mini</td>
+<td><code>gpt-4o-mini</code></td>
+<td>Very fast</td>
+<td>Low</td>
+<td>128k</td>
+</tr>
+<tr>
+<td>o1</td>
+<td><code>o1</code></td>
+<td>Slow</td>
+<td>High</td>
+<td>200k</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Tool-use reliability:</strong> Good (GPT-4o, GPT-4o mini). o1 has limited tool support.</p>
+<p><strong>Recommendation:</strong> Viable alternative to Anthropic. GPT-4o mini maps well to the <code>fast</code> alias. Not tested extensively with outheis — Anthropic remains the primary supported provider.</p>
     <hr>
     <p class="footer">Open source under AGPL-3.0 · <a href="https://github.com/outheis-labs/outheis-minimal">Code on GitHub</a></p>
   </main>

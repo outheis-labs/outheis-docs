@@ -3,39 +3,39 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Release Notes · outheis</title>
-  <link rel="icon" type="image/png" href="../favicon-96x96.png" sizes="96x96">
-  <link rel="icon" type="image/svg+xml" href="../favicon.svg">
-  <link rel="shortcut icon" href="../favicon.ico">
-  <link rel="apple-touch-icon" sizes="180x180" href="../apple-touch-icon.png">
-  <link rel="manifest" href="../site.webmanifest">
+  <title>Modellauswahl · outheis</title>
+  <link rel="icon" type="image/png" href="../../favicon-96x96.png" sizes="96x96">
+  <link rel="icon" type="image/svg+xml" href="../../favicon.svg">
+  <link rel="shortcut icon" href="../../favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="../../apple-touch-icon.png">
+  <link rel="manifest" href="../../site.webmanifest">
   <style>
     @font-face {
       font-family: 'Inter';
-      src: url('../assets/fonts/InterVariable.woff2') format('woff2'),
-           url('../assets/fonts/InterVariable.ttf') format('truetype');
+      src: url('../../assets/fonts/InterVariable.woff2') format('woff2'),
+           url('../../assets/fonts/InterVariable.ttf') format('truetype');
       font-weight: 100 900;
       font-style: normal;
       font-display: swap;
     }
     @font-face {
       font-family: 'Inter';
-      src: url('../assets/fonts/InterVariable-Italic.woff2') format('woff2');
+      src: url('../../assets/fonts/InterVariable-Italic.woff2') format('woff2');
       font-weight: 100 900;
       font-style: italic;
       font-display: swap;
     }
     @font-face {
       font-family: 'Inter var';
-      src: url('../assets/fonts/InterVariable.woff2') format('woff2'),
-           url('../assets/fonts/InterVariable.ttf') format('truetype');
+      src: url('../../assets/fonts/InterVariable.woff2') format('woff2'),
+           url('../../assets/fonts/InterVariable.ttf') format('truetype');
       font-weight: 100 900;
       font-style: normal;
       font-display: swap;
     }
     @font-face {
       font-family: 'Inter var';
-      src: url('../assets/fonts/InterVariable-Italic.woff2') format('woff2');
+      src: url('../../assets/fonts/InterVariable-Italic.woff2') format('woff2');
       font-weight: 100 900;
       font-style: italic;
       font-display: swap;
@@ -238,126 +238,178 @@
 <body>
   <header class="header">
     <div class="header-inner">
-      <a href="../index.html" class="logo-link">
+      <a href="../../index.html" class="logo-link">
         <span class="site-name">οὐθείς</span>
       </a>
       <nav class="topnav">
-        <a href="../foundations/index.html">Foundations</a>
+        <a href="../foundations/index.html">Grundlagen</a>
         <a href="../design/index.html">Design</a>
-        <a href="../implementation/architecture.html">Implementation</a>
+        <a href="../implementation/architecture.html">Implementierung</a>
         <a href="../installation/release-notes.html" class="active">Installation</a>
         <a href="../workflows/index.html">Workflows</a>
         <a href="https://github.com/outheis-labs/outheis-minimal" class="external">GitHub ↗</a>
       </nav>
-      <div class="lang-switch"><span class="lang-active">EN</span> · <a href="../de/installation/release-notes.html" class="lang-link">DE</a></div>
+      <div class="lang-switch"><a href="../../installation/models.html" class="lang-link">EN</a> · <span class="lang-active">DE</span></div>
     </div>
   </header>
   <div class="subnav-bar">
     <div class="subnav-inner">
-      <a href="../installation/release-notes.html" class="active">Release Notes</a>
-      <a href="../implementation/guide.html">Getting Started</a>
-      <a href="../installation/models.html">Models</a>
-      <a href="../installation/communication.html">Communication</a>
-      <a href="../implementation/config.html">Configuration</a>
+      <a href="../installation/release-notes.html">Release Notes</a>
+      <a href="../implementation/guide.html">Erste Schritte</a>
+      <a href="../installation/models.html" class="active">Modelle</a>
+      <a href="../installation/communication.html">Kommunikation</a>
+      <a href="../implementation/config.html">Konfiguration</a>
       <a href="../implementation/migration.html">Migration</a>
       <a href="../implementation/webui.html">Web UI</a>
     </div>
   </div>
   <main class="content">
-    <h1 id="release-notes">Release Notes</h1>
-<p><em>Private beta — April 2026.</em></p>
+    <h1 id="modellauswahl">Modellauswahl</h1>
+<p><em>Welches LLM für outheis — und für welchen Agenten.</em></p>
+<p>outheis unterstützt drei Modellanbieter: Anthropic (Cloud), Ollama (lokal) und OpenAI (Cloud). Jeder Agent hat einen Modell-Alias (<code>fast</code>, <code>capable</code>, <code>reasoning</code> oder ein eigener Name), der in <code>config.json</code> auf ein konkretes Modell zeigt.</p>
 <hr />
-<h2 id="what-works">What Works</h2>
+<h2 id="anthropic">Anthropic</h2>
+<p>Empfohlener Einstieg. Kein zusätzliches Setup außer einem API-Schlüssel.</p>
 <table>
 <thead>
 <tr>
-<th>Component</th>
-<th>Status</th>
-<th>Notes</th>
+<th>Modell</th>
+<th>ID</th>
+<th>Geschwindigkeit</th>
+<th>Kosten</th>
+<th>Kontext</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>Dispatcher — microkernel, scheduler, lock manager</td>
-<td>✓</td>
-<td></td>
+<td>Claude Haiku 4.5</td>
+<td><code>claude-haiku-4-5-20251001</code></td>
+<td>Schnell</td>
+<td>Niedrig</td>
+<td>200k</td>
 </tr>
 <tr>
-<td>Relay (ou) — routing, memory integration</td>
-<td>✓</td>
-<td></td>
+<td>Claude Sonnet 4.5</td>
+<td><code>claude-sonnet-4-5</code></td>
+<td>Mittel</td>
+<td>Mittel</td>
+<td>200k</td>
 </tr>
 <tr>
-<td>Data (zeno) — vault search, tag analysis</td>
-<td>✓</td>
-<td></td>
-</tr>
-<tr>
-<td>Agenda (cato) — Daily, Inbox, Exchange, Shadow</td>
-<td>✓</td>
-<td></td>
-</tr>
-<tr>
-<td>Pattern (rumi) — nightly memory extraction</td>
-<td>✓</td>
-<td></td>
-</tr>
-<tr>
-<td>Web UI — config, memory, scheduler, vault, tags, migration</td>
-<td>✓</td>
-<td></td>
-</tr>
-<tr>
-<td>Signal transport — receive, respond, voice transcription</td>
-<td>✓</td>
-<td></td>
-</tr>
-<tr>
-<td>Vault file browser — all file types, images, Obsidian wikilinks</td>
-<td>✓</td>
-<td></td>
-</tr>
-<tr>
-<td>Tags — scan, namespace grouping, rename, delete</td>
-<td>✓</td>
-<td></td>
-</tr>
-<tr>
-<td>Migration — Exchange.md approval workflow</td>
-<td>✓</td>
-<td></td>
+<td>Claude Opus 4.5</td>
+<td><code>claude-opus-4-5</code></td>
+<td>Langsam</td>
+<td>Hoch</td>
+<td>200k</td>
 </tr>
 </tbody>
 </table>
-<h2 id="what-doesnt">What Doesn't</h2>
+<p><strong>Tool-Use-Zuverlässigkeit:</strong> Ausgezeichnet bei allen Modellen.</p>
+<p><strong>Empfehlung für outheis:</strong>
+- Alias <code>fast</code> → Haiku — für relay, data, agenda (hochfrequent, viel Tool-Use)
+- Alias <code>capable</code> → Sonnet — für pattern, action (anspruchsvolle Aufgaben)
+- Alias <code>reasoning</code> → Opus — optional, für komplexe mehrstufige Analysen</p>
+<hr />
+<h2 id="ollama-lokal">Ollama (lokal)</h2>
+<p>Läuft vollständig auf eigener Hardware. Keine API-Kosten, keine Daten verlassen das System. Benötigt <code>ollama</code> installiert und <code>pip install openai</code>.</p>
+<p><strong>Wichtig:</strong> Lokale Modelle unterscheiden sich erheblich in der Fähigkeit, System-Prompts zu befolgen und Tools zuverlässig zu nutzen. Getestete Modelle:</p>
 <table>
 <thead>
 <tr>
-<th>Component</th>
-<th>Status</th>
-<th>Notes</th>
+<th>Modell</th>
+<th>Größe</th>
+<th>Tool-Use</th>
+<th>Instruktionen</th>
+<th>Bewertung</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>Action (hiro) — external tasks, email, calendar</td>
-<td>not implemented</td>
-<td>Framework present, no capabilities</td>
+<td>qwen3:8b</td>
+<td>8B</td>
+<td>✗ Keiner</td>
+<td>Teilweise</td>
+<td>Nicht geeignet</td>
 </tr>
 <tr>
-<td>Code (alan) — codebase introspection</td>
-<td>dev only</td>
-<td>Disabled in production</td>
+<td>mistral-nemo:12b</td>
+<td>12B</td>
+<td>✗ Keiner</td>
+<td>Teilweise</td>
+<td>Nicht geeignet</td>
+</tr>
+<tr>
+<td>mistral:7b</td>
+<td>7B</td>
+<td>✗ Keiner</td>
+<td>Teilweise</td>
+<td>Nicht geeignet</td>
+</tr>
+<tr>
+<td>gemma4:e4b</td>
+<td>4B</td>
+<td>✗ Unzuverlässig</td>
+<td>Schwach</td>
+<td>Nicht geeignet</td>
+</tr>
+<tr>
+<td>qwen2.5-coder:14b</td>
+<td>14B</td>
+<td>In Evaluation</td>
+<td>—</td>
+<td>In Test</td>
+</tr>
+<tr>
+<td>qwen2.5:14b</td>
+<td>14B</td>
+<td>In Evaluation</td>
+<td>—</td>
+<td>In Test</td>
 </tr>
 </tbody>
 </table>
-<p><strong>hiro is present but empty.</strong> The agent starts and routes, but no external integrations exist — no email, no calendar, no shell execution. Enabling it in config.json has no practical effect yet.</p>
-<p><strong>alan requires manual activation.</strong> The Code agent provides introspection into the outheis codebase — useful for anyone who wants to explore how it works or have the code explained. Enable in <code>config.json</code> under <code>agents.code.enabled: true</code>.</p>
-<h2 id="known-gaps">Known Gaps</h2>
-<p><strong>Pattern agent requires history.</strong> rumi has nothing to extract on a fresh install. Memory builds over days, not immediately.</p>
-<p><strong>Tag scan is on demand.</strong> Tags are not indexed at startup. Run from Web UI (Vault → Tags → Scan) or say <code>analyze tags</code> in chat.</p>
-<p><strong>No mobile UI.</strong> Web UI is localhost-only. Use Signal transport for mobile access.</p>
-<p><strong>Context after restart.</strong> On restart, relay replays the last 20 messages to restore recent context. Older conversation history is not replayed.</p>
+<p><strong>Hardware-Anforderungen:</strong> 14B-Modelle benötigen ca. 16–20 GB RAM. 8B-Modelle laufen auf 8–12 GB.</p>
+<p><strong>Datenschutz-Hinweis:</strong> Wenn Datenschutz ein Thema ist, müssen alle Agenten, die persönliche Vault-Inhalte verarbeiten (relay, data, agenda), lokale Modelle nutzen — nicht nur der Code-Agent. Dafür ist ein lokales Modell mit zuverlässigem Tool-Use erforderlich.</p>
+<p><strong>Empfehlung:</strong> Mit Anthropic starten. Auf lokale Modelle umsteigen erst, wenn Tool-Use-Zuverlässigkeit auf der eigenen Hardware bestätigt ist.</p>
+<hr />
+<h2 id="openai">OpenAI</h2>
+<p>Als Anbieter unterstützt. Konfiguration identisch zu Anthropic — <code>"provider": "openai"</code> setzen und API-Schlüssel angeben.</p>
+<table>
+<thead>
+<tr>
+<th>Modell</th>
+<th>ID</th>
+<th>Geschwindigkeit</th>
+<th>Kosten</th>
+<th>Kontext</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>GPT-4o</td>
+<td><code>gpt-4o</code></td>
+<td>Schnell</td>
+<td>Mittel</td>
+<td>128k</td>
+</tr>
+<tr>
+<td>GPT-4o mini</td>
+<td><code>gpt-4o-mini</code></td>
+<td>Sehr schnell</td>
+<td>Niedrig</td>
+<td>128k</td>
+</tr>
+<tr>
+<td>o1</td>
+<td><code>o1</code></td>
+<td>Langsam</td>
+<td>Hoch</td>
+<td>200k</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Tool-Use-Zuverlässigkeit:</strong> Gut (GPT-4o, GPT-4o mini). o1 hat eingeschränkten Tool-Support.</p>
+<p><strong>Empfehlung:</strong> Viable Alternative zu Anthropic. GPT-4o mini passt gut zum Alias <code>fast</code>. Nicht umfassend mit outheis getestet — Anthropic bleibt der primäre unterstützte Anbieter.</p>
     <hr>
     <p class="footer">Open source under AGPL-3.0 · <a href="https://github.com/outheis-labs/outheis-minimal">Code on GitHub</a></p>
   </main>
