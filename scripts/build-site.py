@@ -53,7 +53,7 @@ NAV_SECTIONS = [
     {
         "label": "Implementation",
         "url": "implementation/architecture.html",
-        "match": "implementation/(architecture|memory|agenda|skills|alan|hiro)",
+        "match": "implementation/(architecture|memory|agenda|skills|alan|hiro|signal)",
         "items": [
             {"label": "Current State",  "url": "implementation/architecture.html", "match": "implementation/architecture"},
             {"label": "Memory & Rules", "url": "implementation/memory.html",       "match": "implementation/memory"},
@@ -61,12 +61,13 @@ NAV_SECTIONS = [
             {"label": "Skills",         "url": "implementation/skills.html",       "match": "implementation/skills"},
             {"label": "Code Agent",     "url": "implementation/alan.html",         "match": "implementation/alan"},
             {"label": "Action Agent",   "url": "implementation/hiro.html",         "match": "implementation/hiro"},
+            {"label": "Signal",         "url": "implementation/signal.html",       "match": "implementation/signal"},
         ],
     },
     {
         "label": "Installation",
         "url": "installation/release-notes.html",
-        "match": "installation|guide|config|migration|webui|signal",
+        "match": "installation|guide|config|migration|webui",
         "items": [
             {"label": "Release Notes",   "url": "installation/release-notes.html",  "match": "release-notes"},
             {"label": "Getting Started", "url": "implementation/guide.html",        "match": "implementation/guide"},
@@ -115,20 +116,21 @@ NAV_SECTIONS_DE = [
     {
         "label": "Implementierung",
         "url": "implementation/architecture.html",
-        "match": "implementation/(architecture|memory|agenda|skills|alan|hiro)",
+        "match": "implementation/(architecture|memory|agenda|skills|alan|hiro|signal)",
         "items": [
             {"label": "Aktueller Stand", "url": "implementation/architecture.html", "match": "implementation/architecture"},
             {"label": "Memory & Regeln", "url": "implementation/memory.html",       "match": "implementation/memory"},
             {"label": "Agenda",          "url": "implementation/agenda.html",       "match": "implementation/agenda"},
             {"label": "Skills",          "url": "implementation/skills.html",       "match": "implementation/skills"},
             {"label": "Code-Agent",      "url": "implementation/alan.html",         "match": "implementation/alan"},
-            {"label": "Action-Agent",   "url": "implementation/hiro.html",         "match": "implementation/hiro"},
+            {"label": "Action-Agent",    "url": "implementation/hiro.html",         "match": "implementation/hiro"},
+            {"label": "Signal",          "url": "implementation/signal.html",       "match": "implementation/signal"},
         ],
     },
     {
         "label": "Installation",
         "url": "installation/release-notes.html",
-        "match": "installation|guide|config|migration|webui|signal",
+        "match": "installation|guide|config|migration|webui",
         "items": [
             {"label": "Release Notes",  "url": "installation/release-notes.html",  "match": "release-notes"},
             {"label": "Erste Schritte", "url": "implementation/guide.html",        "match": "implementation/guide"},
