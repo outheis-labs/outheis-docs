@@ -311,13 +311,41 @@ outheis rules relay         # show rules for a specific agent
 </code></pre>
 <hr />
 <h2 id="signal">Signal</h2>
-<p>Receive and send messages via the Signal messenger app. Requires a dedicated phone number for the bot and <code>signal-cli</code> installed and registered.</p>
-<p><strong>How it works:</strong> The Signal transport runs as a separate process alongside the daemon. It listens for incoming Signal messages from authorized numbers, routes them to the relay agent, and sends the responses back as Signal messages. Voice messages are transcribed automatically if <code>faster-whisper</code> is installed.</p>
-<p><strong>Requirements:</strong>
-- A phone number registered with <code>signal-cli</code> for the bot
-- <code>signal-cli</code> installed and configured
-- <code>pip install -e ".[signal]"</code> for voice transcription (optional)</p>
-<p><strong>Configuration:</strong></p>
+<p>Receive and send messages via the Signal messenger app. The bot runs as a separate process alongside the daemon — it listens for incoming Signal messages, routes them to the relay agent, and sends responses back. Voice messages are transcribed automatically if <code>faster-whisper</code> is installed.</p>
+<p><strong>When to use:</strong> The primary channel for interacting with outheis from a phone without opening a browser or terminal.</p>
+<h3 id="what-you-need">What you need</h3>
+<p>A dedicated SIM card with a phone number that is not already registered on Signal. This number becomes the bot's identity — it should not be your personal number. A prepaid SIM works fine; the number only needs to be reachable by SMS or voice call once during registration.</p>
+<h3 id="1-install-signal-cli">1. Install signal-cli</h3>
+<p>signal-cli requires Java 17+. Install it first if needed (<code>java -version</code> to check).</p>
+<p><strong>macOS (Homebrew):</strong></p>
+<pre><code class="language-bash">brew install signal-cli
+</code></pre>
+<p><strong>Linux / manual:</strong></p>
+<p>Download the latest release from <a href="https://github.com/AsamK/signal-cli/releases">github.com/AsamK/signal-cli/releases</a>. Extract and place the <code>signal-cli</code> binary somewhere on your <code>$PATH</code> (e.g. <code>/usr/local/bin/signal-cli</code>).</p>
+<p>Verify:</p>
+<pre><code class="language-bash">signal-cli --version
+</code></pre>
+<h3 id="2-register-the-bot-number">2. Register the bot number</h3>
+<p>Replace <code>+49...</code> with the bot's phone number in international format throughout.</p>
+<pre><code class="language-bash">signal-cli -a +49... register
+</code></pre>
+<p>Signal sends a verification code to the number via SMS. If SMS is not available, request a voice call instead:</p>
+<pre><code class="language-bash">signal-cli -a +49... register --voice
+</code></pre>
+<p>Confirm with the received code:</p>
+<pre><code class="language-bash">signal-cli -a +49... verify 123-456
+</code></pre>
+<p>The account is now registered. signal-cli stores credentials under <code>~/.local/share/signal-cli/</code>.</p>
+<h3 id="3-trust-your-own-number">3. Trust your own number</h3>
+<p>Before the bot can exchange messages with your personal Signal account, you need to trust the safety number once:</p>
+<pre><code class="language-bash">signal-cli -a +49... trust -v &lt;safety-number&gt; +49YOUR_PERSONAL_NUMBER
+</code></pre>
+<p>To get the safety number:</p>
+<pre><code class="language-bash">signal-cli -a +49... listIdentities
+</code></pre>
+<p>Alternatively, send a test message first — signal-cli will print an untrusted identity warning with the safety number included, which you can then use to run the trust command.</p>
+<h3 id="4-configure-outheis">4. Configure outheis</h3>
+<p>Add the Signal section to <code>~/.outheis/human/config.json</code>:</p>
 <pre><code class="language-json">&quot;signal&quot;: {
   &quot;enabled&quot;: true,
   &quot;bot_name&quot;: &quot;Ou&quot;,
@@ -325,14 +353,24 @@ outheis rules relay         # show rules for a specific agent
   &quot;allowed&quot;: []
 }
 </code></pre>
-<p><code>allowed</code> is a whitelist of phone numbers permitted to interact with the bot. An empty list means only <code>human.phone</code> can send messages.</p>
-<p><strong>Running:</strong></p>
-<pre><code class="language-bash">outheis signal        # foreground
-outheis signal -v     # verbose
+<p>Set <code>bot_phone</code> to the registered bot number. <code>bot_name</code> is the display name Signal contacts will see. <code>allowed</code> is a whitelist of phone numbers permitted to interact with the bot — an empty list means only <code>human.phone</code> (from the <code>human</code> section) can send messages.</p>
+<p>Make sure <code>human.phone</code> in the config is set to your personal number:</p>
+<pre><code class="language-json">&quot;human&quot;: {
+  &quot;phone&quot;: &quot;+49YOUR_PERSONAL_NUMBER&quot;,
+  ...
+}
 </code></pre>
-<p>Signal transport and the main daemon run independently and can be active simultaneously.</p>
-<p><strong>When to use:</strong> The primary channel for interacting with outheis from a phone without opening a browser or terminal.</p>
-<p>For full setup instructions, see <a href="../implementation/signal.md">Signal</a>.</p>
+<h3 id="5-optional-voice-transcription">5. Optional: voice transcription</h3>
+<p>To transcribe incoming voice messages before forwarding them to the relay agent:</p>
+<pre><code class="language-bash">pip install -e &quot;.[signal]&quot;
+</code></pre>
+<p>This installs <code>faster-whisper</code>. Without it the transport still works; voice messages are silently skipped.</p>
+<h3 id="6-run">6. Run</h3>
+<pre><code class="language-bash">outheis signal        # foreground
+outheis signal -v     # verbose (shows tool calls)
+</code></pre>
+<p>Signal transport and the main daemon run independently. Start the daemon first (<code>outheis start</code>), then the Signal transport in a separate terminal or as a background process.</p>
+<p>For details on the internal architecture, see <a href="../implementation/signal.md">Signal</a>.</p>
     <hr>
     <p class="footer">Open source under AGPL-3.0 · <a href="https://github.com/outheis-labs/outheis-minimal">Code on GitHub</a></p>
   </main>

@@ -311,13 +311,41 @@ outheis rules relay         # Regeln eines bestimmten Agenten anzeigen
 </code></pre>
 <hr />
 <h2 id="signal">Signal</h2>
-<p>Nachrichten über die Signal-Messenger-App empfangen und senden. Erfordert eine dedizierte Telefonnummer für den Bot und installiertes sowie registriertes <code>signal-cli</code>.</p>
-<p><strong>Funktionsweise:</strong> Der Signal-Transport läuft als separater Prozess neben dem Daemon. Er hört auf eingehende Signal-Nachrichten von autorisierten Nummern, leitet sie an den Relay-Agenten weiter und sendet die Antworten als Signal-Nachrichten zurück. Sprachnachrichten werden automatisch transkribiert, wenn <code>faster-whisper</code> installiert ist.</p>
-<p><strong>Voraussetzungen:</strong>
-- Eine bei <code>signal-cli</code> registrierte Telefonnummer für den Bot
-- <code>signal-cli</code> installiert und konfiguriert
-- <code>pip install -e ".[signal]"</code> für Sprachtranskription (optional)</p>
-<p><strong>Konfiguration:</strong></p>
+<p>Nachrichten über die Signal-Messenger-App empfangen und senden. Der Bot läuft als separater Prozess neben dem Daemon — er hört auf eingehende Signal-Nachrichten, leitet sie an den Relay-Agenten weiter und sendet die Antworten zurück. Sprachnachrichten werden automatisch transkribiert, wenn <code>faster-whisper</code> installiert ist.</p>
+<p><strong>Wann verwenden:</strong> Der primäre Kanal, wenn du vom Handy mit outheis interagieren möchtest, ohne einen Browser oder ein Terminal zu öffnen.</p>
+<h3 id="was-du-brauchst">Was du brauchst</h3>
+<p>Eine dedizierte SIM-Karte mit einer Telefonnummer, die noch nicht bei Signal registriert ist. Diese Nummer wird zur Identität des Bots — es sollte nicht deine persönliche Nummer sein. Eine Prepaid-SIM reicht aus; die Nummer muss nur einmalig während der Registrierung per SMS oder Anruf erreichbar sein.</p>
+<h3 id="1-signal-cli-installieren">1. signal-cli installieren</h3>
+<p>signal-cli benötigt Java 17+. Zuerst prüfen ob vorhanden (<code>java -version</code>), ggf. installieren.</p>
+<p><strong>macOS (Homebrew):</strong></p>
+<pre><code class="language-bash">brew install signal-cli
+</code></pre>
+<p><strong>Linux / manuell:</strong></p>
+<p>Neuestes Release herunterladen von <a href="https://github.com/AsamK/signal-cli/releases">github.com/AsamK/signal-cli/releases</a>. Archiv entpacken und das <code>signal-cli</code>-Binary in einen Pfad legen, der in <code>$PATH</code> ist (z. B. <code>/usr/local/bin/signal-cli</code>).</p>
+<p>Überprüfen:</p>
+<pre><code class="language-bash">signal-cli --version
+</code></pre>
+<h3 id="2-bot-nummer-registrieren">2. Bot-Nummer registrieren</h3>
+<p><code>+49...</code> überall durch die Bot-Telefonnummer im internationalen Format ersetzen.</p>
+<pre><code class="language-bash">signal-cli -a +49... register
+</code></pre>
+<p>Signal sendet einen Bestätigungscode per SMS an die Nummer. Falls SMS nicht verfügbar ist, alternativ einen Anruf anfordern:</p>
+<pre><code class="language-bash">signal-cli -a +49... register --voice
+</code></pre>
+<p>Mit dem erhaltenen Code bestätigen:</p>
+<pre><code class="language-bash">signal-cli -a +49... verify 123-456
+</code></pre>
+<p>Das Konto ist jetzt registriert. signal-cli speichert die Zugangsdaten unter <code>~/.local/share/signal-cli/</code>.</p>
+<h3 id="3-eigene-nummer-vertrauen">3. Eigene Nummer vertrauen</h3>
+<p>Bevor der Bot Nachrichten mit deinem persönlichen Signal-Konto austauschen kann, muss die Sicherheitsnummer einmalig bestätigt werden:</p>
+<pre><code class="language-bash">signal-cli -a +49... trust -v &lt;sicherheitsnummer&gt; +49DEINE_PERSÖNLICHE_NUMMER
+</code></pre>
+<p>Die Sicherheitsnummer ermitteln:</p>
+<pre><code class="language-bash">signal-cli -a +49... listIdentities
+</code></pre>
+<p>Alternativ zuerst eine Testnachricht senden — signal-cli gibt dann eine Warnung wegen nicht vertrauenswürdiger Identität aus, die die Sicherheitsnummer enthält.</p>
+<h3 id="4-outheis-konfigurieren">4. outheis konfigurieren</h3>
+<p>Signal-Abschnitt in <code>~/.outheis/human/config.json</code> eintragen:</p>
 <pre><code class="language-json">&quot;signal&quot;: {
   &quot;enabled&quot;: true,
   &quot;bot_name&quot;: &quot;Ou&quot;,
@@ -325,14 +353,24 @@ outheis rules relay         # Regeln eines bestimmten Agenten anzeigen
   &quot;allowed&quot;: []
 }
 </code></pre>
-<p><code>allowed</code> ist eine Whitelist von Telefonnummern, die mit dem Bot interagieren dürfen. Eine leere Liste bedeutet, dass nur <code>human.phone</code> Nachrichten senden kann.</p>
-<p><strong>Starten:</strong></p>
-<pre><code class="language-bash">outheis signal        # Vordergrund
-outheis signal -v     # verbose
+<p><code>bot_phone</code> auf die registrierte Bot-Nummer setzen. <code>bot_name</code> ist der Anzeigename, den Signal-Kontakte sehen. <code>allowed</code> ist eine Whitelist erlaubter Telefonnummern — eine leere Liste bedeutet, dass nur <code>human.phone</code> (aus dem <code>human</code>-Abschnitt) Nachrichten senden kann.</p>
+<p><code>human.phone</code> im Config auf die eigene persönliche Nummer setzen:</p>
+<pre><code class="language-json">&quot;human&quot;: {
+  &quot;phone&quot;: &quot;+49DEINE_PERSÖNLICHE_NUMMER&quot;,
+  ...
+}
 </code></pre>
-<p>Signal-Transport und Haupt-Daemon laufen unabhängig voneinander und können gleichzeitig aktiv sein.</p>
-<p><strong>Wann verwenden:</strong> Der primäre Kanal, wenn du vom Handy mit outheis interagieren möchtest, ohne einen Browser oder ein Terminal zu öffnen.</p>
-<p>Vollständige Einrichtungsanleitung: <a href="../implementation/signal.md">Signal</a>.</p>
+<h3 id="5-optional-sprachtranskription">5. Optional: Sprachtranskription</h3>
+<p>Um eingehende Sprachnachrichten vor der Weiterleitung an den Relay-Agenten zu transkribieren:</p>
+<pre><code class="language-bash">pip install -e &quot;.[signal]&quot;
+</code></pre>
+<p>Installiert <code>faster-whisper</code>. Ohne diese Abhängigkeit funktioniert der Transport weiterhin; Sprachnachrichten werden stillschweigend übersprungen.</p>
+<h3 id="6-starten">6. Starten</h3>
+<pre><code class="language-bash">outheis signal        # Vordergrund
+outheis signal -v     # verbose (zeigt Tool-Calls)
+</code></pre>
+<p>Signal-Transport und Haupt-Daemon laufen unabhängig voneinander. Zuerst den Daemon starten (<code>outheis start</code>), dann den Signal-Transport in einem separaten Terminal oder als Hintergrundprozess.</p>
+<p>Details zur internen Architektur: <a href="../implementation/signal.md">Signal</a>.</p>
     <hr>
     <p class="footer">Open source under AGPL-3.0 · <a href="https://github.com/outheis-labs/outheis-minimal">Code on GitHub</a></p>
   </main>

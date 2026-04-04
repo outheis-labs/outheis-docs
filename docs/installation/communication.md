@@ -80,16 +80,75 @@ outheis rules relay         # show rules for a specific agent
 
 ## Signal
 
-Receive and send messages via the Signal messenger app. Requires a dedicated phone number for the bot and `signal-cli` installed and registered.
+Receive and send messages via the Signal messenger app. The bot runs as a separate process alongside the daemon — it listens for incoming Signal messages, routes them to the relay agent, and sends responses back. Voice messages are transcribed automatically if `faster-whisper` is installed.
 
-**How it works:** The Signal transport runs as a separate process alongside the daemon. It listens for incoming Signal messages from authorized numbers, routes them to the relay agent, and sends the responses back as Signal messages. Voice messages are transcribed automatically if `faster-whisper` is installed.
+**When to use:** The primary channel for interacting with outheis from a phone without opening a browser or terminal.
 
-**Requirements:**
-- A phone number registered with `signal-cli` for the bot
-- `signal-cli` installed and configured
-- `pip install -e ".[signal]"` for voice transcription (optional)
+### What you need
 
-**Configuration:**
+A dedicated SIM card with a phone number that is not already registered on Signal. This number becomes the bot's identity — it should not be your personal number. A prepaid SIM works fine; the number only needs to be reachable by SMS or voice call once during registration.
+
+### 1. Install signal-cli
+
+signal-cli requires Java 17+. Install it first if needed (`java -version` to check).
+
+**macOS (Homebrew):**
+
+```bash
+brew install signal-cli
+```
+
+**Linux / manual:**
+
+Download the latest release from [github.com/AsamK/signal-cli/releases](https://github.com/AsamK/signal-cli/releases). Extract and place the `signal-cli` binary somewhere on your `$PATH` (e.g. `/usr/local/bin/signal-cli`).
+
+Verify:
+
+```bash
+signal-cli --version
+```
+
+### 2. Register the bot number
+
+Replace `+49...` with the bot's phone number in international format throughout.
+
+```bash
+signal-cli -a +49... register
+```
+
+Signal sends a verification code to the number via SMS. If SMS is not available, request a voice call instead:
+
+```bash
+signal-cli -a +49... register --voice
+```
+
+Confirm with the received code:
+
+```bash
+signal-cli -a +49... verify 123-456
+```
+
+The account is now registered. signal-cli stores credentials under `~/.local/share/signal-cli/`.
+
+### 3. Trust your own number
+
+Before the bot can exchange messages with your personal Signal account, you need to trust the safety number once:
+
+```bash
+signal-cli -a +49... trust -v <safety-number> +49YOUR_PERSONAL_NUMBER
+```
+
+To get the safety number:
+
+```bash
+signal-cli -a +49... listIdentities
+```
+
+Alternatively, send a test message first — signal-cli will print an untrusted identity warning with the safety number included, which you can then use to run the trust command.
+
+### 4. Configure outheis
+
+Add the Signal section to `~/.outheis/human/config.json`:
 
 ```json
 "signal": {
@@ -100,17 +159,34 @@ Receive and send messages via the Signal messenger app. Requires a dedicated pho
 }
 ```
 
-`allowed` is a whitelist of phone numbers permitted to interact with the bot. An empty list means only `human.phone` can send messages.
+Set `bot_phone` to the registered bot number. `bot_name` is the display name Signal contacts will see. `allowed` is a whitelist of phone numbers permitted to interact with the bot — an empty list means only `human.phone` (from the `human` section) can send messages.
 
-**Running:**
+Make sure `human.phone` in the config is set to your personal number:
+
+```json
+"human": {
+  "phone": "+49YOUR_PERSONAL_NUMBER",
+  ...
+}
+```
+
+### 5. Optional: voice transcription
+
+To transcribe incoming voice messages before forwarding them to the relay agent:
+
+```bash
+pip install -e ".[signal]"
+```
+
+This installs `faster-whisper`. Without it the transport still works; voice messages are silently skipped.
+
+### 6. Run
 
 ```bash
 outheis signal        # foreground
-outheis signal -v     # verbose
+outheis signal -v     # verbose (shows tool calls)
 ```
 
-Signal transport and the main daemon run independently and can be active simultaneously.
+Signal transport and the main daemon run independently. Start the daemon first (`outheis start`), then the Signal transport in a separate terminal or as a background process.
 
-**When to use:** The primary channel for interacting with outheis from a phone without opening a browser or terminal.
-
-For full setup instructions, see [Signal](../implementation/signal.md).
+For details on the internal architecture, see [Signal](../implementation/signal.md).
