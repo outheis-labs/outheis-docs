@@ -87,6 +87,22 @@ No model scores fully correct on all scenarios. The 20B class is the current low
 
 ---
 
+## OpenAI
+
+Supported as a provider. Configuration is identical to Anthropic — set `"provider": "openai"` and provide an API key.
+
+| Model | ID | Speed | Cost | Context |
+|-------|----|-------|------|---------|
+| GPT-4o | `gpt-4o` | Fast | Medium | 128k |
+| GPT-4o mini | `gpt-4o-mini` | Very fast | Low | 128k |
+| o1 | `o1` | Slow | High | 200k |
+
+**Tool-use reliability:** Good (GPT-4o, GPT-4o mini). o1 has limited tool support.
+
+**Recommendation:** Viable alternative to Anthropic. GPT-4o mini maps well to the `fast` alias. Not tested extensively with outheis — Anthropic remains the primary supported provider.
+
+---
+
 ## Local Fallback
 
 outheis can automatically switch to a local Ollama model when a cloud provider becomes unavailable due to exhausted credits or an invalid API key.
@@ -124,19 +140,3 @@ Changing the target model later only requires updating the `name` field inside `
 If `local_fallback` is not set, outheis logs the billing error but does not switch — requests will continue to fail until credits are restored.
 
 **Limitations:** Fallback mode is not automatically cleared when credits are restored. Restart the daemon to return to cloud models.
-
----
-
-## OpenAI
-
-Supported as a provider. Configuration is identical to Anthropic — set `"provider": "openai"` and provide an API key.
-
-| Model | ID | Speed | Cost | Context |
-|-------|----|-------|------|---------|
-| GPT-4o | `gpt-4o` | Fast | Medium | 128k |
-| GPT-4o mini | `gpt-4o-mini` | Very fast | Low | 128k |
-| o1 | `o1` | Slow | High | 200k |
-
-**Tool-use reliability:** Good (GPT-4o, GPT-4o mini). o1 has limited tool support.
-
-**Recommendation:** Viable alternative to Anthropic. GPT-4o mini maps well to the `fast` alias. Not tested extensively with outheis — Anthropic remains the primary supported provider.

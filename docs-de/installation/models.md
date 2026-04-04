@@ -87,6 +87,22 @@ Kein Modell schneidet in allen Szenarien vollständig korrekt ab. Die 20B-Klasse
 
 ---
 
+## OpenAI
+
+Als Anbieter unterstützt. Konfiguration identisch zu Anthropic — `"provider": "openai"` setzen und API-Schlüssel angeben.
+
+| Modell | ID | Geschwindigkeit | Kosten | Kontext |
+|--------|----|-----------------|--------|---------|
+| GPT-4o | `gpt-4o` | Schnell | Mittel | 128k |
+| GPT-4o mini | `gpt-4o-mini` | Sehr schnell | Niedrig | 128k |
+| o1 | `o1` | Langsam | Hoch | 200k |
+
+**Tool-Use-Zuverlässigkeit:** Gut (GPT-4o, GPT-4o mini). o1 hat eingeschränkten Tool-Support.
+
+**Empfehlung:** Viable Alternative zu Anthropic. GPT-4o mini passt gut zum Alias `fast`. Nicht umfassend mit outheis getestet — Anthropic bleibt der primäre unterstützte Anbieter.
+
+---
+
 ## Lokaler Fallback
 
 outheis kann automatisch auf ein lokales Ollama-Modell umschalten, wenn ein Cloud-Anbieter wegen aufgebrauchtem Guthaben oder ungültigem API-Schlüssel nicht mehr verfügbar ist.
@@ -124,19 +140,3 @@ Das Zielmodell lässt sich später durch Änderung des `name`-Felds innerhalb vo
 Ist `local_fallback` nicht gesetzt, protokolliert outheis den Billing-Fehler, schaltet aber nicht um — Anfragen schlagen weiterhin fehl, bis das Guthaben aufgefüllt wird.
 
 **Einschränkung:** Der Fallback-Modus wird nicht automatisch aufgehoben, wenn das Guthaben wieder vorhanden ist. Ein Neustart des Daemons stellt den Cloud-Betrieb wieder her.
-
----
-
-## OpenAI
-
-Als Anbieter unterstützt. Konfiguration identisch zu Anthropic — `"provider": "openai"` setzen und API-Schlüssel angeben.
-
-| Modell | ID | Geschwindigkeit | Kosten | Kontext |
-|--------|----|-----------------|--------|---------|
-| GPT-4o | `gpt-4o` | Schnell | Mittel | 128k |
-| GPT-4o mini | `gpt-4o-mini` | Sehr schnell | Niedrig | 128k |
-| o1 | `o1` | Langsam | Hoch | 200k |
-
-**Tool-Use-Zuverlässigkeit:** Gut (GPT-4o, GPT-4o mini). o1 hat eingeschränkten Tool-Support.
-
-**Empfehlung:** Viable Alternative zu Anthropic. GPT-4o mini passt gut zum Alias `fast`. Nicht umfassend mit outheis getestet — Anthropic bleibt der primäre unterstützte Anbieter.
