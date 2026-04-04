@@ -312,7 +312,9 @@
 <hr />
 <h2 id="ollama-local">Ollama (local)</h2>
 <p>Runs entirely on your hardware. No API costs, no data leaves the system. Requires <code>ollama</code> installed and <code>pip install openai</code>.</p>
-<p><strong>Tool-use reliability varies significantly by model.</strong> The table below reflects direct API tests — models are tested via the Ollama OpenAI-compatible endpoint with realistic outheis tool schemas, without personal user context in the system prompt (which degrades small model performance).</p>
+<p><strong>GPU acceleration:</strong> On Apple Silicon (M-series), Ollama uses Metal automatically — no configuration needed. On Linux/Windows, Vulkan support is available for AMD and Intel GPUs via <code>OLLAMA_VULKAN=1</code> (experimental). Environment variables for the Ollama server can be stored in outheis config under <code>llm.providers.ollama.env_vars</code> and are shown in the Web UI as a reference.</p>
+<h3 id="code-agent-alan">Code Agent (alan)</h3>
+<p>Alan's system prompt contains only source root, role, and open proposals — no user memory. Tool-use reliability is the main requirement. Models are tested via the Ollama OpenAI-compatible endpoint with realistic tool schemas.</p>
 <table>
 <thead>
 <tr>
@@ -397,10 +399,70 @@
 </tbody>
 </table>
 <p><strong>Hardware requirements:</strong> 24B models require approximately 16 GB RAM. 8B models run on 8–10 GB. 3B models run on 2–4 GB.</p>
-<p><strong>GPU acceleration:</strong> On Apple Silicon (M-series), Ollama uses Metal automatically — no configuration needed. On Linux/Windows, Vulkan support is available for AMD and Intel GPUs via <code>OLLAMA_VULKAN=1</code> (experimental). See the <a href="https://ollama.com/docs">Ollama documentation</a> for platform-specific setup. Environment variables for the Ollama server can be stored in outheis config under <code>llm.providers.ollama.env_vars</code> and are shown in the Web UI as a reference.</p>
-<p><strong>Privacy note:</strong> If data privacy is a concern, all agents that process personal vault content (relay, data, agenda) must use local models — not just the code agent. A local model with reliable tool-use is required for this use case.</p>
-<p><strong>Recommendation:</strong> Start with Anthropic. For local inference, <code>llama3.1:8b</code> is the best balance of speed and reliability. <code>devstral-small-2:24b</code> gives the best quality if you have the RAM.</p>
-<p><strong>Test tool:</strong> To evaluate tool-use on your own hardware, run <code>python tools/test_ollama_tool_use.py</code> from the outheis-beta repository.</p>
+<p><strong>Recommendation for alan:</strong> <code>llama3.1:8b</code> is the best balance of speed and reliability. <code>llama3.2:3b</code> works if RAM is limited. <code>devstral-small-2:24b</code> gives the best quality if you have the RAM.</p>
+<p><strong>Test tool:</strong> <code>python tools/test_ollama_tool_use.py</code> from the outheis-beta repository.</p>
+<h3 id="generic-agents-relay-data-agenda">Generic Agents (relay, data, agenda)</h3>
+<p>Generic agents run with full system prompts: user memory, vault context, language settings, skills, and rules. This raises the bar beyond raw tool-use — the model must also route correctly between agents, synthesize results across multiple tool calls, and report "no results" without inventing data.</p>
+<p><code>llama3.1:8b</code> was tested under these conditions using <code>tools/test_agent_capability.py</code>, which runs 9 scenarios covering relay routing, vault search and file read, error recovery, hallucination detection, and agenda operations:</p>
+<table>
+<thead>
+<tr>
+<th>Scenario</th>
+<th>Result</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Relay: route to agenda</td>
+<td>~</td>
+<td>Correct tool, answer incomplete</td>
+</tr>
+<tr>
+<td>Relay: route to data</td>
+<td>✗</td>
+<td>Called wrong agent</td>
+</tr>
+<tr>
+<td>Relay: answer without tool</td>
+<td>✗</td>
+<td>Called tool unnecessarily</td>
+</tr>
+<tr>
+<td>Data: search by tag</td>
+<td>✓</td>
+<td></td>
+</tr>
+<tr>
+<td>Data: read file</td>
+<td>~</td>
+<td>Tool correct, result not fully synthesized</td>
+</tr>
+<tr>
+<td>Data: error recovery</td>
+<td>~</td>
+<td>Recovered from error, synthesis weak</td>
+</tr>
+<tr>
+<td>Data: no results (hallucination check)</td>
+<td>~</td>
+<td>No hallucination, but unclear response</td>
+</tr>
+<tr>
+<td>Agenda: read today</td>
+<td>✓</td>
+<td></td>
+</tr>
+<tr>
+<td>Agenda: add event</td>
+<td>✗</td>
+<td>Wrong tool, wrong date computed</td>
+</tr>
+</tbody>
+</table>
+<p><strong>2/9 fully correct, 4 partial, 3 fail.</strong> Relay routing is unreliable; multi-step result synthesis is weak. Agenda reads work well. No local model has been confirmed suitable for the full generic agent stack under current hardware.</p>
+<p><strong>Privacy note:</strong> If data privacy is a concern, all agents that process personal vault content (relay, data, agenda) must use local models — not just the code agent. This currently requires a cloud provider or a hardware upgrade that enables larger models.</p>
+<p><strong>Re-evaluation on M5:</strong> Larger models (32B+) and faster inference may change this picture significantly. Use <code>python tools/test_agent_capability.py</code> to re-test after a hardware upgrade.</p>
 <hr />
 <h2 id="openai">OpenAI</h2>
 <p>Supported as a provider. Configuration is identical to Anthropic — set <code>"provider": "openai"</code> and provide an API key.</p>

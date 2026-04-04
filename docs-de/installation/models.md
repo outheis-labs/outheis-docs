@@ -33,7 +33,11 @@ Empfohlener Einstieg. Kein zusätzliches Setup außer einem API-Schlüssel.
 
 Läuft vollständig auf eigener Hardware. Keine API-Kosten, keine Daten verlassen das System. Benötigt `ollama` installiert und `pip install openai`.
 
-**Tool-Use-Zuverlässigkeit variiert erheblich je nach Modell.** Die folgende Tabelle basiert auf direkten API-Tests — die Modelle werden über den Ollama-kompatiblen OpenAI-Endpunkt mit realistischen outheis-Tool-Schemas getestet, ohne persönliche User-Daten im System-Prompt (die die Leistung kleiner Modelle beeinträchtigen).
+**GPU-Beschleunigung:** Auf Apple Silicon (M-Reihe) nutzt Ollama automatisch Metal — kein Setup erforderlich. Auf Linux/Windows ist Vulkan-Unterstützung für AMD- und Intel-GPUs über `OLLAMA_VULKAN=1` verfügbar (experimentell). Umgebungsvariablen für den Ollama-Server können in der outheis-Konfiguration unter `llm.providers.ollama.env_vars` gespeichert und in der Web UI eingesehen und bearbeitet werden.
+
+### Code-Agent (alan)
+
+Alans System-Prompt enthält nur Source-Root, Rolle und offene Proposals — keine User-Daten. Tool-Use-Zuverlässigkeit ist die zentrale Anforderung. Die Modelle werden über den Ollama-kompatiblen OpenAI-Endpunkt mit realistischen Tool-Schemas getestet.
 
 | Modell | Größe | Tool-Use | Geschwindigkeit | Bewertung |
 |--------|-------|----------|-----------------|-----------|
@@ -50,13 +54,33 @@ Läuft vollständig auf eigener Hardware. Keine API-Kosten, keine Daten verlasse
 
 **Hardware-Anforderungen:** 24B-Modelle benötigen ca. 16 GB RAM. 8B-Modelle laufen auf 8–10 GB. 3B-Modelle auf 2–4 GB.
 
-**GPU-Beschleunigung:** Auf Apple Silicon (M-Reihe) nutzt Ollama automatisch Metal — kein Setup erforderlich. Auf Linux/Windows ist Vulkan-Unterstützung für AMD- und Intel-GPUs über `OLLAMA_VULKAN=1` verfügbar (experimentell). Umgebungsvariablen für den Ollama-Server können in der outheis-Konfiguration unter `llm.providers.ollama.env_vars` gespeichert und in der Web UI eingesehen und bearbeitet werden.
+**Empfehlung für alan:** `llama3.1:8b` bietet das beste Verhältnis aus Geschwindigkeit und Zuverlässigkeit. `llama3.2:3b` funktioniert bei RAM-Knappheit. `devstral-small-2:24b` liefert die beste Qualität, sofern ausreichend RAM vorhanden.
 
-**Datenschutz-Hinweis:** Wenn Datenschutz ein Thema ist, müssen alle Agenten, die persönliche Vault-Inhalte verarbeiten (relay, data, agenda), lokale Modelle nutzen — nicht nur der Code-Agent. Dafür ist ein lokales Modell mit zuverlässigem Tool-Use erforderlich.
+**Test-Tool:** `python tools/test_ollama_tool_use.py` im outheis-beta-Repository.
 
-**Empfehlung:** Mit Anthropic starten. Für lokale Inferenz bietet `llama3.1:8b` das beste Verhältnis aus Geschwindigkeit und Zuverlässigkeit. `devstral-small-2:24b` liefert die beste Qualität, sofern ausreichend RAM vorhanden.
+### Generische Agenten (relay, data, agenda)
 
-**Test-Tool:** Tool-Use auf eigener Hardware evaluieren: `python tools/test_ollama_tool_use.py` im outheis-beta-Repository.
+Generische Agenten laufen mit vollem System-Prompt: User-Memory, Vault-Kontext, Spracheinstellung, Skills und Rules. Die Anforderungen gehen über reinen Tool-Use hinaus — das Modell muss Anfragen korrekt zwischen Agenten routen, Ergebnisse über mehrere Tool-Calls hinweg synthetisieren und bei leeren Ergebnissen korrekt antworten, ohne Daten zu erfinden.
+
+`llama3.1:8b` wurde unter diesen Bedingungen mit `tools/test_agent_capability.py` getestet — 9 Szenarien zu Relay-Routing, Vault-Suche und Datei-Lesen, Fehlerbehandlung, Halluzinationserkennung und Agenda-Operationen:
+
+| Szenario | Ergebnis | Anmerkung |
+|----------|----------|-----------|
+| Relay: Weiterleitung an Agenda | ~ | Richtiges Tool, Antwort unvollständig |
+| Relay: Weiterleitung an Data | ✗ | Falscher Agent aufgerufen |
+| Relay: Antwort ohne Tool | ✗ | Tool unnötig aufgerufen |
+| Data: Suche nach Tag | ✓ | |
+| Data: Datei lesen | ~ | Tool korrekt, Ergebnis nicht vollständig synthetisiert |
+| Data: Fehlerbehandlung | ~ | Fehler behoben, Synthese schwach |
+| Data: Kein Ergebnis (Halluzinationstest) | ~ | Keine Halluzination, Antwort unklar |
+| Agenda: Heutigen Plan lesen | ✓ | |
+| Agenda: Termin hinzufügen | ✗ | Falsches Tool, falsches Datum berechnet |
+
+**2/9 vollständig korrekt, 4 partiell, 3 fehlgeschlagen.** Relay-Routing ist unzuverlässig, mehrstufige Synthese schwach. Agenda-Reads funktionieren gut. Kein lokales Modell wurde bisher für den vollständigen generischen Agenten-Stack unter aktueller Hardware bestätigt.
+
+**Datenschutz-Hinweis:** Wenn Datenschutz ein Thema ist, müssen alle Agenten, die persönliche Vault-Inhalte verarbeiten (relay, data, agenda), lokale Modelle nutzen — nicht nur der Code-Agent. Das erfordert derzeit einen Cloud-Anbieter oder ein Hardware-Upgrade, das größere Modelle ermöglicht.
+
+**Neu-Evaluierung auf M5:** Größere Modelle (32B+) und schnellere Inferenz könnten dieses Bild deutlich verändern. Für Re-Tests nach einem Hardware-Upgrade: `python tools/test_agent_capability.py`.
 
 ---
 
