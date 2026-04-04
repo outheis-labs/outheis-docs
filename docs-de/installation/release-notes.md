@@ -32,7 +32,7 @@ title: Versionshinweise
 
 **hiro ist vorhanden, aber leer.** Der Agent startet und leitet weiter, aber keine externen Integrationen existieren — keine E-Mail, kein Kalender, keine Shell-Ausführung. ihn in config.json zu aktivieren hat noch keine praktische Auswirkung.
 
-**alan erfordert manuelle Aktivierung.** Der Code-Agent bietet Introspektion in die outheis-Codebasis — nützlich für jeden, der erkunden möchte, wie es funktioniert, oder sich den Code erklären lassen möchte. In `config.json` aktivieren unter `agents.code.enabled: true`.
+**alan erfordert manuelle Aktivierung.** Der Code-Agent bietet Introspektion in die outheis-Codebasis — nützlich für jeden, der erkunden möchte, wie es funktioniert. In `config.json` aktivieren unter `agents.code.enabled: true`.
 
 ## Bekannte Lücken
 

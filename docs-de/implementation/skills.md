@@ -134,7 +134,9 @@ System-Versionen zuerst, Benutzer-Versionen ergänzen oder überschreiben.
 Ein guter Skill ist:
 
 - **Konkret**: Spezifische Muster, keine vagen Prinzipien
+
 - **Handlungsorientiert**: Dem Agenten sagen, was zu tun ist
+
 - **Lernbar**: Kann durch Feedback verfeinert werden
 
 Guter Skill:

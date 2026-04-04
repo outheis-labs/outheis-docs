@@ -67,7 +67,7 @@ Datum-Tags (`#date-2026-03-24`) sind eine Kategorie, die outheis selbst erzeugen
 
 ### Interne Tags
 
-outheis verwendet den `#outheis-`-Namensraum für seinen eigenen internen Zustandsverfolgung. Diese Tags werden dem Benutzer in der WebUI nie angezeigt und dienen nur Agenten-Operationen — Markierung verarbeiteter Einträge, Archivierungskandidaten, Zustandsmarker.
+outheis verwendet den `#outheis-`-Namensraum für seine eigene interne Zustandsverfolgung. Diese Tags werden dem Benutzer in der WebUI nie angezeigt und dienen nur Agenten-Operationen — Markierung verarbeiteter Einträge, Archivierungskandidaten, Zustandsmarker.
 
 Beispiele: `#outheis-state-done`, `#outheis-state-pending`, `#outheis-archive`
 
@@ -113,7 +113,7 @@ Daily.md should use these sections: [your sections here]
 
 ## Inbox.md
 
-Schnellerfassung ohne Reibung. Schreibe alles — Sprache, getippt, diktiert. Der Agenda-Agent verarbeitet Inbox-Einträge bei der stündlichen Überprüfung: verschiebt sie nach Daily.md, erstellt Vault-Notizen oder fragt in Exchange.md nach, wenn etwas Klärung benötigt.
+Schnellerfassung ohne Reibung. Schreibe alles — getippt, diktiert, beliebiges Format. Der Agenda-Agent verarbeitet Inbox-Einträge bei der stündlichen Überprüfung: verschiebt sie nach Daily.md, erstellt Vault-Notizen oder fragt in Exchange.md nach, wenn etwas Klärung benötigt.
 
 Format ist frei. Eine Zeile pro Eintrag reicht.
 

@@ -96,6 +96,7 @@ Die Tags-Ansicht scannt den Vault nach allen `#Tags` und zeigt sie nach Namensra
 - Tags werden nach Namensraum-Präfix gruppiert (`#action-*`, `#date-*`, `#rank-*` usw.), standardmäßig alle zugeklappt
 - Jede Gruppe zeigt Tag-Anzahl und Gesamtaufkommen im Vault
 - Pro Tag: Aufkommensanzahl, Dateianzahl, Umbenennen-Eingabefeld, Löschen-Schaltfläche
+
 - `#outheis-*`-Tags sind ausgeblendet (nur interne Systemnutzung)
 
 ## Konfigurationseditor
@@ -105,6 +106,7 @@ Die Konfigurationsansicht bietet einen vollständigen Editor für `~/.outheis/hu
 ### General-Tab
 
 - **Benutzerprofil**: Name, E-Mail, Telefon, Sprache, Zeitzone
+
 - **Vaults**: Liste der Vault-Verzeichnisse (primär + sekundär)
 
 ### Providers-Tab
@@ -148,6 +150,7 @@ Signal-Transport-Konfiguration:
 - Aktiviert-Umschalter
 - Telefonnummer (bei signal-cli registriert)
 - CLI-Pfad (Standard: `/usr/local/bin/signal-cli`)
+
 - Whitelist (Telefonnummern zur Interaktion erlaubt)
 
 ## Scheduler
@@ -163,8 +166,11 @@ Geplante Aufgaben verwalten:
 ```
 
 - **+-Schaltfläche**: Weitere Zeit hinzufügen (erhöht automatisch um 1 Stunde)
+
 - **×-Schaltfläche**: Zeit entfernen (mindestens eine verbleibt)
+
 - **Checkbox**: Aufgabe aktivieren/deaktivieren
+
 - **History-Tab**: Vergangene Scheduler-Ereignisse aus messages.jsonl anzeigen
 
 ## Datei-Browser
@@ -184,7 +190,9 @@ Memory-, Skills-, Rules-, Patterns-, Agenda- und Codebase-Ansichten teilen sich 
 ```
 
 - **Rendered**: Markdown als HTML gerendert (via marked.js)
+
 - **Source**: Rohtext, bearbeitbar (contenteditable)
+
 - **Save**: Schreibt Änderungen zurück auf Disk
 
 ## Live-Updates
@@ -217,6 +225,7 @@ Der Server stellt REST-Endpunkte bereit:
 
 ### Files
 - `GET /api/{type}` — Dateien auflisten (type: memory, skills, rules, patterns, agenda, codebase)
+
 - `GET /api/{type}/{filename}` — Dateiinhalt lesen
 - `PUT /api/{type}/{filename}` — Dateiinhalt schreiben
 

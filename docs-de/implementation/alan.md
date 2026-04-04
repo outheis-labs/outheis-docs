@@ -159,5 +159,6 @@ vault/Codebase/
 ## Design-Anmerkungen
 
 - Das `vault/Codebase/Exchange.md`-Muster ist bewusst parallel zu `vault/Agenda/Exchange.md`. Das Interaktionsmodell ist dasselbe: outheis schlägt vor, du entscheidest.
+
 - Schreibzugriff auf `vault/Codebase/` wird auf Tool-Ebene erzwungen, nicht nur durch Prompt-Anweisung.
 - alan ist absichtlich aus der Produktion ausgeschlossen. Code-Introspektion und Vorschlags-Workflows sind Entwicklungsbelange.

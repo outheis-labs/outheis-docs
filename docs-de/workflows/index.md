@@ -10,7 +10,7 @@ title: Workflows
 
 Dieser Abschnitt ist geplant, aber noch nicht geschrieben.
 
-Die Absicht: aufgabenorientierte Anleitungen, die reale Nutzungsmuster beschreiben — nicht wie outheis aufgebaut ist, sondern was man tatsächlich damit macht. Jeder Workflow wird ein konkretes Szenario von Anfang bis Ende durchgehen.
+Die Absicht: aufgabenorientierte Anleitungen, die reale Nutzungsmuster beschreiben — nicht wie outheis aufgebaut ist, sondern was man tatsächlich damit macht. Jeder Workflow geht ein konkretes Szenario von Anfang bis Ende durch.
 
 Geplante Inhalte:
 

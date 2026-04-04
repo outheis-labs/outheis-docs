@@ -82,6 +82,6 @@ Die zeitliche Dimension dieses Musters — wie zeitverankerte Tags mit wiederkeh
 
 ## Verbesserungen und Vorschläge
 
-Mit der Zeit kann der Data-Agent Dinge bemerken: eine Kategorie mit nur einem Wert, zwei Tags die immer gemeinsam auftrauchen, eine Inkonsistenz die eine kleine Konventionsänderung lösen würde. Wenn das passiert, bringt er es direkt im Gespräch auf — nicht still, nicht automatisch.
+Mit der Zeit kann der Data-Agent Dinge bemerken: eine Kategorie mit nur einem Wert, zwei Tags die immer gemeinsam auftauchen, eine Inkonsistenz die eine kleine Konventionsänderung lösen würde. Wenn das passiert, bringt er es direkt im Gespräch auf — nicht still, nicht automatisch.
 
 Du entscheidest, ob du den Vorschlag übernimmst. Wenn ja, hilft outheis dir, ihn umzusetzen. Das Tag-System bleibt deins.

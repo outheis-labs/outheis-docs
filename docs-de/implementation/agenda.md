@@ -217,6 +217,7 @@ Wenn du die Agenda abrufst ("Agenda", "was steht heute an", "gib mir die Agenda"
 **Pattern-Agent (rumi)** beobachtet deine Planungsmuster und kann:
 
 - Rules erstellen wie "Benutzer bevorzugt keine Meetings vor 10:00"
+
 - Wiederkehrende Aufgaben bemerken und Automatisierung vorschlagen
 - In Exchange.md schreiben, wenn Seed-Dateien Genehmigung benötigen
 
