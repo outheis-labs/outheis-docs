@@ -31,7 +31,7 @@ pip install -e .
 
 Der `outheis`-Befehl ist nur verfügbar, solange die venv aktiv ist. Füge `source /path/to/outheis-minimal/.venv/bin/activate` zu deinem Shell-Profil hinzu, wenn du ihn immer verfügbar haben möchtest.
 
-Für Sprachtranskription über Signal, installiere die optionale Abhängigkeit:
+Für Sprachtranskription über Signal:
 
 ```bash
 pip install -e ".[signal]"
@@ -43,7 +43,7 @@ pip install -e ".[signal]"
 outheis init
 ```
 
-Dies erstellt `~/.outheis/human/config.json` mit Standardwerten. Bearbeite sie:
+Das erstellt `~/.outheis/human/config.json` mit Standardwerten. Bearbeite sie:
 
 ```bash
 $EDITOR ~/.outheis/human/config.json
@@ -146,19 +146,6 @@ Um Nachrichten über Signal zu empfangen und zu senden:
 
 Setze `allowed` auf ein leeres Array, um alle Kontakte zu erlauben, oder liste spezifische Nummern auf: `["+49..."]`.
 
-Bearbeite `~/.outheis/human/config.json` für die vollständige Konfiguration:
-
-```json
-{
-  "user": {
-    "name": "your-name",
-    "language": "en",
-    "timezone": "Europe/Berlin",
-    "vault": ["~/Documents/Vault"]
-  }
-}
-```
-
 ## CLI-Befehle
 
 ### Daemon-Steuerung
@@ -240,24 +227,6 @@ vault/
 ├── projects/
 ├── notes/
 └── references/
-```
-
-## Konfiguration
-
-`~/.outheis/human/config.json`:
-
-```json
-{
-  "user": {
-    "name": "string",
-    "language": "en|de|...",
-    "timezone": "Region/City",
-    "vault": ["~/path/to/vault"]
-  },
-  "llm": {
-    "provider": "anthropic"
-  }
-}
 ```
 
 ## Fehlerbehebung

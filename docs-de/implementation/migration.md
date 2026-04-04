@@ -9,6 +9,7 @@ title: Migration
 ## Überblick
 
 outheis lernt durch:
+
 1. **Direkte Interaktion** — Gespräche mit dir
 2. **Muster-Extraktion** — Pattern-Agent beobachtet und fördert Rules
 3. **Manuelle Migration** — Bestehendes Wissen über den Vault importieren
@@ -253,8 +254,7 @@ Du: was weißt du über mich?
 | Flüchtigkeit | Kann sich ändern, Kontext zerfällt | Stabil einmal gesetzt |
 | Beispiel | "User ist 35" | "Antworte auf Deutsch" |
 
-Memory = "was ich über dich weiß"
-Rules = "wie ich mich verhalten soll"
+Memory = "was ich über dich weiß". Rules = "wie ich mich verhalten soll".
 
 Beide werden durch Migration oder laufende Gespräche befüllt.
 

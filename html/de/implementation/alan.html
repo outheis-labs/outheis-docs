@@ -270,7 +270,7 @@
 <p>alan ist outheis' Code-Agent. Er liest lokal verfügbaren Quellcode, beantwortet Fragen zur Implementierung und schlägt Verbesserungen über einen strukturierten Review-Workflow vor.</p>
 <p><strong>alan ist ein reiner Entwicklungs-Agent. Er ist in Produktionsumgebungen niemals aktiv.</strong></p>
 <h2 id="der-codebase-workflow">Der Codebase-Workflow</h2>
-<p>alan stellt alle Vorschläge in <code>vault/Codebase/</code> bereit, in Anlehnung an das von catos <code>vault/Agenda/</code> etablierte Muster:</p>
+<p>alan stellt alle Vorschläge in <code>vault/Codebase/</code> bereit — in Anlehnung an das von catos <code>vault/Agenda/</code> etablierte Muster:</p>
 <pre><code>vault/Codebase/
 ├── Exchange.md          # proposals for review
 └── &lt;staged files&gt;       # modified files or diffs for context
@@ -413,15 +413,11 @@ Verweis auf staged file oder inline diff.
 <h2 id="integration-mit-anderen-agenten">Integration mit anderen Agenten</h2>
 <p><strong>Relay (ou)</strong> erkennt Code-Fragen und delegiert an alan. Leitet das <code>@alan</code>-Präfix direkt weiter.</p>
 <p><strong>Data-Agent (zeno)</strong> behandelt Vault und persönliche Daten. alan behandelt Quellcode. Die Domänen überschneiden sich nicht.</p>
-<p><strong>Pattern-Agent (rumi)</strong> kann alans Vorschlagshistorie beobachten und Muster extrahieren — z. B. können wiederkehrende Refactoring-Vorschläge auf ein tieferes strukturelles Problem hinweisen, das erwähnenswert ist.</p>
+<p><strong>Pattern-Agent (rumi)</strong> kann alans Vorschlagshistorie beobachten und Muster extrahieren — wiederkehrende Refactoring-Vorschläge können auf ein tieferes strukturelles Problem hinweisen.</p>
 <h2 id="design-anmerkungen">Design-Anmerkungen</h2>
 <ul>
-<li>
-<p>Das <code>vault/Codebase/Exchange.md</code>-Muster ist bewusst parallel zu <code>vault/Agenda/Exchange.md</code>. Das Interaktionsmodell ist dasselbe: outheis schlägt vor, du entscheidest.</p>
-</li>
-<li>
-<p>Schreibzugriff auf <code>vault/Codebase/</code> wird auf Tool-Ebene erzwungen, nicht nur durch Prompt-Anweisung.</p>
-</li>
+<li>Das <code>vault/Codebase/Exchange.md</code>-Muster ist bewusst parallel zu <code>vault/Agenda/Exchange.md</code>. Das Interaktionsmodell ist dasselbe: outheis schlägt vor, du entscheidest.</li>
+<li>Schreibzugriff auf <code>vault/Codebase/</code> wird auf Tool-Ebene erzwungen, nicht nur durch Prompt-Anweisung.</li>
 <li>alan ist absichtlich aus der Produktion ausgeschlossen. Code-Introspektion und Vorschlags-Workflows sind Entwicklungsbelange.</li>
 </ul>
     <hr>

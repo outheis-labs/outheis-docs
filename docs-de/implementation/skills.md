@@ -8,7 +8,7 @@ title: Skills
 
 ## Überblick
 
-Skills sind die internen Fähigkeiten eines Agenten — Strategien, Methoden, Heuristiken zur Erledigung von Aufgaben. Anders als Rules (externe Anweisungen) repräsentieren Skills das eigene Wissen des Agenten darüber, *wie* Dinge zu tun sind.
+Skills sind die internen Fähigkeiten eines Agenten — Strategien, Methoden, Heuristiken zur Erledigung von Aufgaben. Nicht externe Anweisungen (das sind Rules), sondern das eigene Wissen des Agenten darüber, *wie* Dinge zu tun sind.
 
 ## Die drei Speicher
 
@@ -117,8 +117,7 @@ Beispiel-Evolution:
 | Bereich | Interne Fähigkeit | Externe Beschränkung |
 | Beispiel | "I recognize dates like..." | "Always respond in German" |
 
-Rules beschränken Verhalten von außen.
-Skills ermöglichen Verhalten von innen.
+Rules beschränken Verhalten von außen. Skills ermöglichen Verhalten von innen.
 
 ## Ladereihenfolge
 
@@ -128,16 +127,14 @@ Im System-Prompt:
 2. **Rules** (common + agentenspezifisch)
 3. **Memory-Kontext** (user + feedback + context)
 
-System-Versionen zuerst, Benutzer-Versionen ergänzen/überschreiben.
+System-Versionen zuerst, Benutzer-Versionen ergänzen oder überschreiben.
 
 ## Skills schreiben
 
-Skills sollten sein:
+Ein guter Skill ist:
 
 - **Konkret**: Spezifische Muster, keine vagen Prinzipien
-
 - **Handlungsorientiert**: Dem Agenten sagen, was zu tun ist
-
 - **Lernbar**: Kann durch Feedback verfeinert werden
 
 Guter Skill:
@@ -157,12 +154,12 @@ Schwacher Skill:
 
 ## Skill-Verfeinerung
 
-Wenn ein Benutzer einen Agenten korrigiert:
+Wenn du einen Agenten korrigierst:
 
 1. Agent speichert Korrektur in Memory (feedback)
 2. Pattern-Agent beobachtet wiederholte Korrekturen
 3. Wenn stabil: wird zu User-Skill gefördert
-4. Skill beeinflusst jetzt alle zukünftigen Aktionen
+4. Skill beeinflusst alle zukünftigen Aktionen
 
 Das erzeugt eine Lernschleife, bei der Korrekturen zu dauerhaften Verbesserungen werden.
 
@@ -184,4 +181,4 @@ Ein guter Skill:
 - **Verallgemeinert** — gilt über die spezifische Instanz hinaus, die ihn ausgelöst hat
 - **Ersetzt** — macht einen oder mehrere Memory-Einträge unnötig
 
-Wenn ein Skill nichts ersetzt, könnte er zu spezifisch sein. Wenn er keine Aufmerksamkeit lenkt, könnte er eine verkleidete Rule sein.
+Wenn ein Skill nichts ersetzt, ist er vielleicht zu spezifisch. Wenn er keine Aufmerksamkeit lenkt, ist er vielleicht eine verkleidete Rule.

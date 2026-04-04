@@ -285,13 +285,13 @@ source .venv/bin/activate   # Windows: .venv\Scripts\activate
 pip install -e .
 </code></pre>
 <p>Der <code>outheis</code>-Befehl ist nur verfügbar, solange die venv aktiv ist. Füge <code>source /path/to/outheis-minimal/.venv/bin/activate</code> zu deinem Shell-Profil hinzu, wenn du ihn immer verfügbar haben möchtest.</p>
-<p>Für Sprachtranskription über Signal, installiere die optionale Abhängigkeit:</p>
+<p>Für Sprachtranskription über Signal:</p>
 <pre><code class="language-bash">pip install -e &quot;.[signal]&quot;
 </code></pre>
 <h2 id="einrichtung">Einrichtung</h2>
 <pre><code class="language-bash">outheis init
 </code></pre>
-<p>Dies erstellt <code>~/.outheis/human/config.json</code> mit Standardwerten. Bearbeite sie:</p>
+<p>Das erstellt <code>~/.outheis/human/config.json</code> mit Standardwerten. Bearbeite sie:</p>
 <pre><code class="language-bash">$EDITOR ~/.outheis/human/config.json
 </code></pre>
 <p>Minimale erforderliche Konfiguration:</p>
@@ -365,16 +365,6 @@ outheis stop         # Stop daemon
 }
 </code></pre>
 <p>Setze <code>allowed</code> auf ein leeres Array, um alle Kontakte zu erlauben, oder liste spezifische Nummern auf: <code>["+49..."]</code>.</p>
-<p>Bearbeite <code>~/.outheis/human/config.json</code> für die vollständige Konfiguration:</p>
-<pre><code class="language-json">{
-  &quot;user&quot;: {
-    &quot;name&quot;: &quot;your-name&quot;,
-    &quot;language&quot;: &quot;en&quot;,
-    &quot;timezone&quot;: &quot;Europe/Berlin&quot;,
-    &quot;vault&quot;: [&quot;~/Documents/Vault&quot;]
-  }
-}
-</code></pre>
 <h2 id="cli-befehle">CLI-Befehle</h2>
 <h3 id="daemon-steuerung">Daemon-Steuerung</h3>
 <pre><code class="language-bash">outheis start       # Start dispatcher (background)
@@ -472,20 +462,6 @@ Status update...
 ├── projects/
 ├── notes/
 └── references/
-</code></pre>
-<h2 id="konfiguration">Konfiguration</h2>
-<p><code>~/.outheis/human/config.json</code>:</p>
-<pre><code class="language-json">{
-  &quot;user&quot;: {
-    &quot;name&quot;: &quot;string&quot;,
-    &quot;language&quot;: &quot;en|de|...&quot;,
-    &quot;timezone&quot;: &quot;Region/City&quot;,
-    &quot;vault&quot;: [&quot;~/path/to/vault&quot;]
-  },
-  &quot;llm&quot;: {
-    &quot;provider&quot;: &quot;anthropic&quot;
-  }
-}
 </code></pre>
 <h2 id="fehlerbehebung">Fehlerbehebung</h2>
 <h3 id="dispatcher-not-running">"Dispatcher not running"</h3>

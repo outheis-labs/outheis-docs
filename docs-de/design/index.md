@@ -2,7 +2,7 @@
 
 *Technische Grundlagen — die konzeptionelle Architektur vor dem Code.*
 
-Diese Dokumente erfassen die Design-Rationale, nicht die Implementierung. Sie erklären *warum* outheis so funktioniert, wie es das tut — und beziehen sich dabei auf Betriebssystemforschung und Theorie verteilter Systeme.
+Diese Dokumente erfassen die Design-Prinzipien, nicht die Implementierung. Sie erklären warum outheis so funktioniert, wie es das tut — und beziehen sich dabei auf die Forschung zu Betriebssystemen und der Theorie verteilter Systeme.
 
 ## Dokumente
 

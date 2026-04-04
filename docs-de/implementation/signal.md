@@ -14,7 +14,7 @@ Zugrundeliegender Mechanismus: signal-cli im `--json-rpc`-Modus, kommuniziert ü
 
 ## Architektur
 
-Das zentrale Design ist ein **dedizierter Leser-Thread**, der den gesamten stdout von signal-cli besitzt. Dies löst eine Race Condition, die entsteht, wenn Senden und Empfangen beide versuchen, vom selben Subprozess-stdout zu lesen.
+Das zentrale Design ist ein **dedizierter Leser-Thread**, der den gesamten stdout von signal-cli besitzt. Das löst eine Race Condition, die entsteht, wenn Senden und Empfangen beide versuchen, vom selben Subprozess-stdout zu lesen.
 
 ```
 signal-cli (jsonRpc)
@@ -31,7 +31,6 @@ Send path:  _send_request() → stdin write → Event.wait()
 ### Klassen
 
 - `SignalRPC` — `transport/signal_rpc.py`: verwaltet den signal-cli-Subprozess, Leser-Thread, Sende-/Empfangs-Primitiven
-
 - `SignalTransport` — `transport/signal.py`: Nachrichten-Schleife, Autorisierung, Watcher-Thread, Markdown-Entfernung
 
 ### Nebenläufigkeitsmodell
@@ -72,7 +71,6 @@ Der Ersatz für horizontale Linien erscheint in Signals UI als solide Trennlinie
 ## Autorisierung
 
 - `signal.allowed` in `config.json`: Whitelist von Telefonnummern, die Nachrichten senden dürfen
-
 - `human.phone` ist unabhängig von der Whitelist immer erlaubt
 - UUIDs werden beim ersten Kontakt gelernt und in `~/.outheis/human/signal.json` gespeichert
 - Ersteinrichtung erfordert Vertrauen des Identitätsschlüssels über `signal-cli trust` (siehe Installationsanleitung)

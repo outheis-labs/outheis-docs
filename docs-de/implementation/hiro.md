@@ -10,7 +10,7 @@ title: Hiro
 
 hiro ist der Action-Agent von outheis. Während zeno den Vault durchsucht und cato die Zeit verwaltet, handelt hiro in der Außenwelt: E-Mails versenden, Kalender aktualisieren, externe Dienste auslösen.
 
-**hiro ist in der aktuellen Version vorhanden, hat aber keine Fähigkeiten.** Der Agent startet, routet Nachrichten und antwortet — aber es existiert noch keine externe Integration. Das Aktivieren in `config.json` hat derzeit keine praktische Wirkung.
+**hiro ist in der aktuellen Version vorhanden, hat aber keine Fähigkeiten.** Der Agent startet, routet Nachrichten und antwortet — aber keine externe Integration existiert. ihn in `config.json` zu aktivieren hat derzeit keine praktische Wirkung.
 
 ## Geplante Architektur
 
@@ -33,13 +33,13 @@ Zwei Modi sind geplant:
 | Modus | Verhalten |
 |-------|-----------|
 | Persistent | Server läuft kontinuierlich neben dem Dispatcher |
-| On-demand | Server wird gestartet, wenn hiro ihn benötigt, und nach einem konfigurierbaren Idle-Timeout gestoppt |
+| On-demand | Server wird gestartet wenn hiro ihn benötigt, nach einem konfigurierbaren Idle-Timeout gestoppt |
 
 ### Kuratierte Server-Liste
 
 hiro akzeptiert keine beliebigen MCP-Server-Konfigurationen. Unterstützte Server werden in einer kuratierten Liste geführt, die festhält, welcher Server getestet wurde, gegen welche Version und wann. Ein Server erscheint auf der Liste erst, nachdem er verifiziert wurde.
 
-Das ist eine bewusste Einschränkung. Das MCP-Ökosystem ist groß und uneinheitlich — die Qualität variiert erheblich. Ein Whitelist-Ansatz bedeutet, dass bekannt ist, was hiro kann, und dass es funktioniert.
+Das ist eine bewusste Einschränkung. Das MCP-Ökosystem ist groß und uneinheitlich — die Qualität variiert erheblich. Ein Whitelist-Ansatz bedeutet: bekannt ist, was hiro kann, und dass es funktioniert.
 
 Die Liste wird im outheis-Repository gepflegt und aktualisiert, wenn Server getestet werden.
 

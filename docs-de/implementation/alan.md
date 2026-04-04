@@ -14,7 +14,7 @@ alan ist outheis' Code-Agent. Er liest lokal verfügbaren Quellcode, beantwortet
 
 ## Der Codebase-Workflow
 
-alan stellt alle Vorschläge in `vault/Codebase/` bereit, in Anlehnung an das von catos `vault/Agenda/` etablierte Muster:
+alan stellt alle Vorschläge in `vault/Codebase/` bereit — in Anlehnung an das von catos `vault/Agenda/` etablierte Muster:
 
 ```
 vault/Codebase/
@@ -154,11 +154,10 @@ vault/Codebase/
 
 **Data-Agent (zeno)** behandelt Vault und persönliche Daten. alan behandelt Quellcode. Die Domänen überschneiden sich nicht.
 
-**Pattern-Agent (rumi)** kann alans Vorschlagshistorie beobachten und Muster extrahieren — z. B. können wiederkehrende Refactoring-Vorschläge auf ein tieferes strukturelles Problem hinweisen, das erwähnenswert ist.
+**Pattern-Agent (rumi)** kann alans Vorschlagshistorie beobachten und Muster extrahieren — wiederkehrende Refactoring-Vorschläge können auf ein tieferes strukturelles Problem hinweisen.
 
 ## Design-Anmerkungen
 
 - Das `vault/Codebase/Exchange.md`-Muster ist bewusst parallel zu `vault/Agenda/Exchange.md`. Das Interaktionsmodell ist dasselbe: outheis schlägt vor, du entscheidest.
-
 - Schreibzugriff auf `vault/Codebase/` wird auf Tool-Ebene erzwungen, nicht nur durch Prompt-Anweisung.
 - alan ist absichtlich aus der Produktion ausgeschlossen. Code-Introspektion und Vorschlags-Workflows sind Entwicklungsbelange.

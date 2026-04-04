@@ -42,7 +42,7 @@ Dein Tag auf einen Blick. Die Standardvorlage:
 
 Die Struktur ist benutzerkonfigurierbar. Sobald du dein bevorzugtes Layout etabliert hast, bewahrt outheis es bei jeder Aktualisierung genau — nur der Inhalt ändert sich, nie die Struktur.
 
-outheis liest diese Datei, versteht deine Verpflichtungen und kann Fragen beantworten wie "bin ich heute nachmittag frei?" oder "was steht morgen an?"
+outheis liest diese Datei, versteht deine Verpflichtungen und beantwortet Fragen wie "bin ich heute nachmittag frei?" oder "was steht morgen an?".
 
 ### Inbox.md
 
@@ -101,11 +101,11 @@ Zahnarzt ist wichtiger, Team-Meeting verschieben.
 ---
 ```
 
-**Wichtig:** Exchange.md ist für Fragen von outheis an dich. Schreibe deine Antworten unter "Your response:" und outheis nimmt sie bei der nächsten stündlichen Überprüfung auf.
+**Wichtig:** Exchange.md ist für Fragen von outheis an dich. Schreibe deine Antworten unter "Your response:". outheis nimmt sie bei der nächsten stündlichen Überprüfung auf.
 
 ## Stündliche Überprüfung
 
-Um 55 Minuten nach jeder vollen Stunde (konfigurierbar) läuft der Agenda-Agent:
+Um 55 Minuten nach jeder vollen Stunde (konfigurierbar) läuft der Agenda-Agent.
 
 ### Bedingte Ausführung
 
@@ -150,7 +150,7 @@ Die `>`-Zeile selbst wird nach der Verarbeitung immer entfernt.
 
 ### Zeitfenster
 
-Standardmäßig laufen stündliche Überprüfungen nur zwischen 04:55 und 23:55. Keine Überprüfungen in der Nacht (00:55–03:55). In `config.json` konfigurierbar:
+Stündliche Überprüfungen laufen standardmäßig nur zwischen 04:55 und 23:55. Keine Überprüfungen nachts (00:55–03:55). In `config.json` konfigurierbar:
 
 ```json
 {
@@ -173,7 +173,7 @@ Du kannst eine sofortige Agenda-Aktualisierung auslösen:
 - "update daily"
 - "refresh agenda"
 
-Dies umgeht die Hash-Prüfung und führt sofort eine vollständige Überprüfung durch. Nützlich nach vielen Änderungen oder vor Terminabfragen.
+Das umgeht die Hash-Prüfung und führt sofort eine vollständige Überprüfung durch. Nützlich nach vielen Änderungen oder vor Terminabfragen.
 
 ## Struktur erstellen
 
@@ -204,11 +204,11 @@ outheis liest deine Agenda-Dateien und antwortet natürlich.
 
 ### Leseabfragen
 
-Wenn gebeten, die Agenda anzuzeigen ("Agenda", "was steht heute an", "gib mir die Agenda"), gibt cato den Inhalt von Daily.md wörtlich zurück — keine Neuformatierung, keine Zusammenfassung. Der Dateiinhalt ist die Antwort. Relay leitet ihn direkt weiter ohne zweiten LLM-Aufruf.
+Wenn du die Agenda abrufst ("Agenda", "was steht heute an", "gib mir die Agenda"), gibt cato den Inhalt von Daily.md wörtlich zurück — keine Neuformatierung, keine Zusammenfassung. Der Dateiinhalt ist die Antwort. Relay leitet ihn direkt weiter ohne zweiten LLM-Aufruf.
 
 ## Integration mit anderen Agenten
 
-**Relay (ou)** leitet Terminabfragen an Agenda weiter. Leseabfragen ("Agenda", "was steht heute") werden direkt an cato weitergeleitet, der Daily.md wörtlich zurückgibt. Schreib-/Aktualisierungsabfragen durchlaufen die vollständige Tool-Schleife.
+**Relay (ou)** leitet Terminabfragen an Agenda weiter. Leseabfragen ("Agenda", "was steht heute") werden direkt an cato weitergeleitet, der Daily.md wörtlich zurückgibt. Schreib- und Aktualisierungsabfragen durchlaufen die vollständige Tool-Schleife.
 
 **Data-Agent (zeno)** kann deinen Vault durchsuchen, schreibt aber nicht in Agenda-Dateien.
 
@@ -217,7 +217,6 @@ Wenn gebeten, die Agenda anzuzeigen ("Agenda", "was steht heute an", "gib mir di
 **Pattern-Agent (rumi)** beobachtet deine Planungsmuster und kann:
 
 - Rules erstellen wie "Benutzer bevorzugt keine Meetings vor 10:00"
-
 - Wiederkehrende Aufgaben bemerken und Automatisierung vorschlagen
 - In Exchange.md schreiben, wenn Seed-Dateien Genehmigung benötigen
 
@@ -245,7 +244,7 @@ Ein Staging-Bereich für chronologische Einträge, die im Vault erkannt wurden.
 
 ### Zweck
 
-Dein Vault enthält Daten in vielen Dateien verstreut: Projektdeadlines, Geburtstage in Kontaktnotizen, wiederkehrende Ereignisse in Projektdokumenten. Shadow.md sammelt diese automatisch, damit Agenda sie zur richtigen Zeit anzeigen kann.
+Dein Vault enthält Daten in vielen Dateien: Projektdeadlines, Geburtstage in Kontaktnotizen, wiederkehrende Ereignisse in Projektdokumenten. Shadow.md sammelt diese automatisch, damit Agenda sie zur richtigen Zeit anzeigen kann.
 
 ### Funktionsweise
 
@@ -289,7 +288,7 @@ Der Data-Agent (zeno) führt um 03:30 (konfigurierbar) einen nächtlichen Scan d
 
 ### Integration mit Daily
 
-Der Agenda-Agent liest Shadow.md und kann relevante Einträge in Daily.md anzeigen. Wenn du fragst "was steht diese Woche an?", prüft outheis sowohl deinen expliziten Zeitplan als auch Shadows erkannte Daten.
+Der Agenda-Agent liest Shadow.md und zeigt relevante Einträge in Daily.md an. Wenn du fragst "was steht diese Woche an?", prüft outheis sowohl deinen expliziten Zeitplan als auch Shadows erkannte Daten.
 
 ### Konfiguration
 

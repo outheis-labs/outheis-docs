@@ -266,7 +266,7 @@
     <h1 id="web-ui">Web UI</h1>
 <p><em>Lokale Verwaltungsoberfläche für outheis.</em></p>
 <h2 id="uberblick">Überblick</h2>
-<p>Die Web-Oberfläche bietet eine browserbasierte Schnittstelle zur Konfiguration und Überwachung von outheis. Sie läuft auf <code>localhost:8080</code> und ist ausdrücklich <strong>nicht</strong> für Remote-Zugriff konzipiert — alle Benutzerdaten bleiben lokal.</p>
+<p>Die Web-Oberfläche bietet eine browserbasierte Schnittstelle zur Konfiguration und Überwachung von outheis. Sie läuft auf <code>localhost:8080</code>. Ausdrücklich <strong>nicht</strong> für Remote-Zugriff konzipiert — alle Benutzerdaten bleiben lokal.</p>
 <pre><code>┌─────────────────────────────────────────────────────────────┐
 │ outheis                              [Overview] [Save]       │
 ├─────────────┬───────────────────────────────────────────────┤
@@ -400,23 +400,15 @@ python server.py
 <li>Ergebnisse werden gecacht; Scan-Schaltfläche führt bei Bedarf erneut aus</li>
 <li>Tags werden nach Namensraum-Präfix gruppiert (<code>#action-*</code>, <code>#date-*</code>, <code>#rank-*</code> usw.), standardmäßig alle zugeklappt</li>
 <li>Jede Gruppe zeigt Tag-Anzahl und Gesamtaufkommen im Vault</li>
-<li>
-<p>Pro Tag: Aufkommensanzahl, Dateianzahl, Umbenennen-Eingabefeld, Löschen-Schaltfläche</p>
-</li>
-<li>
-<p><code>#outheis-*</code>-Tags sind ausgeblendet (nur interne Systemnutzung)</p>
-</li>
+<li>Pro Tag: Aufkommensanzahl, Dateianzahl, Umbenennen-Eingabefeld, Löschen-Schaltfläche</li>
+<li><code>#outheis-*</code>-Tags sind ausgeblendet (nur interne Systemnutzung)</li>
 </ul>
 <h2 id="konfigurationseditor">Konfigurationseditor</h2>
 <p>Die Konfigurationsansicht bietet einen vollständigen Editor für <code>~/.outheis/human/config.json</code>:</p>
 <h3 id="general-tab">General-Tab</h3>
 <ul>
-<li>
-<p><strong>Benutzerprofil</strong>: Name, E-Mail, Telefon, Sprache, Zeitzone</p>
-</li>
-<li>
-<p><strong>Vaults</strong>: Liste der Vault-Verzeichnisse (primär + sekundär)</p>
-</li>
+<li><strong>Benutzerprofil</strong>: Name, E-Mail, Telefon, Sprache, Zeitzone</li>
+<li><strong>Vaults</strong>: Liste der Vault-Verzeichnisse (primär + sekundär)</li>
 </ul>
 <h3 id="providers-tab">Providers-Tab</h3>
 <p>Drei Anbieter-Karten (Anthropic, OpenAI, Ollama):</p>
@@ -488,12 +480,8 @@ reasoning → claude-opus-4-5
 <ul>
 <li>Aktiviert-Umschalter</li>
 <li>Telefonnummer (bei signal-cli registriert)</li>
-<li>
-<p>CLI-Pfad (Standard: <code>/usr/local/bin/signal-cli</code>)</p>
-</li>
-<li>
-<p>Whitelist (Telefonnummern zur Interaktion erlaubt)</p>
-</li>
+<li>CLI-Pfad (Standard: <code>/usr/local/bin/signal-cli</code>)</li>
+<li>Whitelist (Telefonnummern zur Interaktion erlaubt)</li>
 </ul>
 <h2 id="scheduler">Scheduler</h2>
 <p>Geplante Aufgaben verwalten:</p>
@@ -504,18 +492,10 @@ reasoning → claude-opus-4-5
 └─────────────────────┴──────────────────────┴───────────┘
 </code></pre>
 <ul>
-<li>
-<p><strong>+-Schaltfläche</strong>: Weitere Zeit hinzufügen (erhöht automatisch um 1 Stunde)</p>
-</li>
-<li>
-<p><strong>×-Schaltfläche</strong>: Zeit entfernen (mindestens eine verbleibt)</p>
-</li>
-<li>
-<p><strong>Checkbox</strong>: Aufgabe aktivieren/deaktivieren</p>
-</li>
-<li>
-<p><strong>History-Tab</strong>: Vergangene Scheduler-Ereignisse aus messages.jsonl anzeigen</p>
-</li>
+<li><strong>+-Schaltfläche</strong>: Weitere Zeit hinzufügen (erhöht automatisch um 1 Stunde)</li>
+<li><strong>×-Schaltfläche</strong>: Zeit entfernen (mindestens eine verbleibt)</li>
+<li><strong>Checkbox</strong>: Aufgabe aktivieren/deaktivieren</li>
+<li><strong>History-Tab</strong>: Vergangene Scheduler-Ereignisse aus messages.jsonl anzeigen</li>
 </ul>
 <h2 id="datei-browser">Datei-Browser</h2>
 <p>Memory-, Skills-, Rules-, Patterns-, Agenda- und Codebase-Ansichten teilen sich einen Datei-Browser:</p>
@@ -530,15 +510,9 @@ reasoning → claude-opus-4-5
 └───────────────┴────────────────────────────────────────┘
 </code></pre>
 <ul>
-<li>
-<p><strong>Rendered</strong>: Markdown als HTML gerendert (via marked.js)</p>
-</li>
-<li>
-<p><strong>Source</strong>: Rohtext, bearbeitbar (contenteditable)</p>
-</li>
-<li>
-<p><strong>Save</strong>: Schreibt Änderungen zurück auf Disk</p>
-</li>
+<li><strong>Rendered</strong>: Markdown als HTML gerendert (via marked.js)</li>
+<li><strong>Source</strong>: Rohtext, bearbeitbar (contenteditable)</li>
+<li><strong>Save</strong>: Schreibt Änderungen zurück auf Disk</li>
 </ul>
 <h2 id="live-updates">Live-Updates</h2>
 <p>Die Messages-Ansicht verwendet WebSocket für Echtzeit-Updates:</p>
@@ -570,12 +544,8 @@ reasoning → claude-opus-4-5
 </ul>
 <h3 id="files">Files</h3>
 <ul>
-<li>
-<p><code>GET /api/{type}</code> — Dateien auflisten (type: memory, skills, rules, patterns, agenda, codebase)</p>
-</li>
-<li>
-<p><code>GET /api/{type}/{filename}</code> — Dateiinhalt lesen</p>
-</li>
+<li><code>GET /api/{type}</code> — Dateien auflisten (type: memory, skills, rules, patterns, agenda, codebase)</li>
+<li><code>GET /api/{type}/{filename}</code> — Dateiinhalt lesen</li>
 <li><code>PUT /api/{type}/{filename}</code> — Dateiinhalt schreiben</li>
 </ul>
 <h3 id="tags">Tags</h3>

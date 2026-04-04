@@ -267,7 +267,7 @@
     <h1 id="skills">Skills</h1>
 <p><em>Was Agenten darüber wissen, wie sie handeln sollen.</em></p>
 <h2 id="uberblick">Überblick</h2>
-<p>Skills sind die internen Fähigkeiten eines Agenten — Strategien, Methoden, Heuristiken zur Erledigung von Aufgaben. Anders als Rules (externe Anweisungen) repräsentieren Skills das eigene Wissen des Agenten darüber, <em>wie</em> Dinge zu tun sind.</p>
+<p>Skills sind die internen Fähigkeiten eines Agenten — Strategien, Methoden, Heuristiken zur Erledigung von Aufgaben. Nicht externe Anweisungen (das sind Rules), sondern das eigene Wissen des Agenten darüber, <em>wie</em> Dinge zu tun sind.</p>
 <h2 id="die-drei-speicher">Die drei Speicher</h2>
 <table>
 <thead>
@@ -408,8 +408,7 @@ src/outheis/agents/skills/
 </tr>
 </tbody>
 </table>
-<p>Rules beschränken Verhalten von außen.
-Skills ermöglichen Verhalten von innen.</p>
+<p>Rules beschränken Verhalten von außen. Skills ermöglichen Verhalten von innen.</p>
 <h2 id="ladereihenfolge">Ladereihenfolge</h2>
 <p>Im System-Prompt:</p>
 <ol>
@@ -417,19 +416,13 @@ Skills ermöglichen Verhalten von innen.</p>
 <li><strong>Rules</strong> (common + agentenspezifisch)</li>
 <li><strong>Memory-Kontext</strong> (user + feedback + context)</li>
 </ol>
-<p>System-Versionen zuerst, Benutzer-Versionen ergänzen/überschreiben.</p>
+<p>System-Versionen zuerst, Benutzer-Versionen ergänzen oder überschreiben.</p>
 <h2 id="skills-schreiben">Skills schreiben</h2>
-<p>Skills sollten sein:</p>
+<p>Ein guter Skill ist:</p>
 <ul>
-<li>
-<p><strong>Konkret</strong>: Spezifische Muster, keine vagen Prinzipien</p>
-</li>
-<li>
-<p><strong>Handlungsorientiert</strong>: Dem Agenten sagen, was zu tun ist</p>
-</li>
-<li>
-<p><strong>Lernbar</strong>: Kann durch Feedback verfeinert werden</p>
-</li>
+<li><strong>Konkret</strong>: Spezifische Muster, keine vagen Prinzipien</li>
+<li><strong>Handlungsorientiert</strong>: Dem Agenten sagen, was zu tun ist</li>
+<li><strong>Lernbar</strong>: Kann durch Feedback verfeinert werden</li>
 </ul>
 <p>Guter Skill:</p>
 <pre><code class="language-markdown">## Date Recognition
@@ -443,12 +436,12 @@ Skills ermöglichen Verhalten von innen.</p>
 - Be smart about date parsing
 </code></pre>
 <h2 id="skill-verfeinerung">Skill-Verfeinerung</h2>
-<p>Wenn ein Benutzer einen Agenten korrigiert:</p>
+<p>Wenn du einen Agenten korrigierst:</p>
 <ol>
 <li>Agent speichert Korrektur in Memory (feedback)</li>
 <li>Pattern-Agent beobachtet wiederholte Korrekturen</li>
 <li>Wenn stabil: wird zu User-Skill gefördert</li>
-<li>Skill beeinflusst jetzt alle zukünftigen Aktionen</li>
+<li>Skill beeinflusst alle zukünftigen Aktionen</li>
 </ol>
 <p>Das erzeugt eine Lernschleife, bei der Korrekturen zu dauerhaften Verbesserungen werden.</p>
 <h3 id="destillations-ausloser">Destillations-Auslöser</h3>
@@ -466,7 +459,7 @@ Skills ermöglichen Verhalten von innen.</p>
 <li><strong>Verallgemeinert</strong> — gilt über die spezifische Instanz hinaus, die ihn ausgelöst hat</li>
 <li><strong>Ersetzt</strong> — macht einen oder mehrere Memory-Einträge unnötig</li>
 </ul>
-<p>Wenn ein Skill nichts ersetzt, könnte er zu spezifisch sein. Wenn er keine Aufmerksamkeit lenkt, könnte er eine verkleidete Rule sein.</p>
+<p>Wenn ein Skill nichts ersetzt, ist er vielleicht zu spezifisch. Wenn er keine Aufmerksamkeit lenkt, ist er vielleicht eine verkleidete Rule.</p>
     <hr>
     <p class="footer">Open source under AGPL-3.0 · <a href="https://github.com/outheis-labs/outheis-minimal">Code on GitHub</a></p>
   </main>

@@ -268,7 +268,7 @@
 <p><em>Action-Agent — noch nicht implementiert.</em></p>
 <h2 id="was-hiro-tut">Was hiro tut</h2>
 <p>hiro ist der Action-Agent von outheis. Während zeno den Vault durchsucht und cato die Zeit verwaltet, handelt hiro in der Außenwelt: E-Mails versenden, Kalender aktualisieren, externe Dienste auslösen.</p>
-<p><strong>hiro ist in der aktuellen Version vorhanden, hat aber keine Fähigkeiten.</strong> Der Agent startet, routet Nachrichten und antwortet — aber es existiert noch keine externe Integration. Das Aktivieren in <code>config.json</code> hat derzeit keine praktische Wirkung.</p>
+<p><strong>hiro ist in der aktuellen Version vorhanden, hat aber keine Fähigkeiten.</strong> Der Agent startet, routet Nachrichten und antwortet — aber keine externe Integration existiert. ihn in <code>config.json</code> zu aktivieren hat derzeit keine praktische Wirkung.</p>
 <h2 id="geplante-architektur">Geplante Architektur</h2>
 <p>hiro wird als <strong>MCP-Client</strong> gebaut. Statt Integrationen direkt in outheis zu implementieren, verbindet sich hiro mit externen MCP-Servern — einen pro Dienst — und stellt deren Tools über die Standard-Agenten-Schnittstelle bereit.</p>
 <h3 id="warum-mcp">Warum MCP</h3>
@@ -295,13 +295,13 @@
 </tr>
 <tr>
 <td>On-demand</td>
-<td>Server wird gestartet, wenn hiro ihn benötigt, und nach einem konfigurierbaren Idle-Timeout gestoppt</td>
+<td>Server wird gestartet wenn hiro ihn benötigt, nach einem konfigurierbaren Idle-Timeout gestoppt</td>
 </tr>
 </tbody>
 </table>
 <h3 id="kuratierte-server-liste">Kuratierte Server-Liste</h3>
 <p>hiro akzeptiert keine beliebigen MCP-Server-Konfigurationen. Unterstützte Server werden in einer kuratierten Liste geführt, die festhält, welcher Server getestet wurde, gegen welche Version und wann. Ein Server erscheint auf der Liste erst, nachdem er verifiziert wurde.</p>
-<p>Das ist eine bewusste Einschränkung. Das MCP-Ökosystem ist groß und uneinheitlich — die Qualität variiert erheblich. Ein Whitelist-Ansatz bedeutet, dass bekannt ist, was hiro kann, und dass es funktioniert.</p>
+<p>Das ist eine bewusste Einschränkung. Das MCP-Ökosystem ist groß und uneinheitlich — die Qualität variiert erheblich. Ein Whitelist-Ansatz bedeutet: bekannt ist, was hiro kann, und dass es funktioniert.</p>
 <p>Die Liste wird im outheis-Repository gepflegt und aktualisiert, wenn Server getestet werden.</p>
 <h3 id="konfiguration">Konfiguration</h3>
 <p>Wenn implementiert, werden hiros Server in <code>config.json</code> konfiguriert:</p>

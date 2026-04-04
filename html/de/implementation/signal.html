@@ -270,7 +270,7 @@
 <p>Der Signal-Transport verbindet outheis mit Signal Messenger. Er läuft als eigenständiger Prozess (<code>outheis signal</code>), getrennt vom Haupt-Daemon. Er empfängt Nachrichten von Signal, leitet sie an relay weiter und sendet Antworten zurück.</p>
 <p>Zugrundeliegender Mechanismus: signal-cli im <code>--json-rpc</code>-Modus, kommuniziert über stdin/stdout.</p>
 <h2 id="architektur">Architektur</h2>
-<p>Das zentrale Design ist ein <strong>dedizierter Leser-Thread</strong>, der den gesamten stdout von signal-cli besitzt. Dies löst eine Race Condition, die entsteht, wenn Senden und Empfangen beide versuchen, vom selben Subprozess-stdout zu lesen.</p>
+<p>Das zentrale Design ist ein <strong>dedizierter Leser-Thread</strong>, der den gesamten stdout von signal-cli besitzt. Das löst eine Race Condition, die entsteht, wenn Senden und Empfangen beide versuchen, vom selben Subprozess-stdout zu lesen.</p>
 <pre><code>signal-cli (jsonRpc)
      │
      ▼
@@ -283,12 +283,8 @@ Send path:  _send_request() → stdin write → Event.wait()
 </code></pre>
 <h3 id="klassen">Klassen</h3>
 <ul>
-<li>
-<p><code>SignalRPC</code> — <code>transport/signal_rpc.py</code>: verwaltet den signal-cli-Subprozess, Leser-Thread, Sende-/Empfangs-Primitiven</p>
-</li>
-<li>
-<p><code>SignalTransport</code> — <code>transport/signal.py</code>: Nachrichten-Schleife, Autorisierung, Watcher-Thread, Markdown-Entfernung</p>
-</li>
+<li><code>SignalRPC</code> — <code>transport/signal_rpc.py</code>: verwaltet den signal-cli-Subprozess, Leser-Thread, Sende-/Empfangs-Primitiven</li>
+<li><code>SignalTransport</code> — <code>transport/signal.py</code>: Nachrichten-Schleife, Autorisierung, Watcher-Thread, Markdown-Entfernung</li>
 </ul>
 <h3 id="nebenlaufigkeitsmodell">Nebenläufigkeitsmodell</h3>
 <table>
@@ -366,12 +362,8 @@ Send path:  _send_request() → stdin write → Event.wait()
 <p>Der Ersatz für horizontale Linien erscheint in Signals UI als solide Trennlinie.</p>
 <h2 id="autorisierung">Autorisierung</h2>
 <ul>
-<li>
-<p><code>signal.allowed</code> in <code>config.json</code>: Whitelist von Telefonnummern, die Nachrichten senden dürfen</p>
-</li>
-<li>
-<p><code>human.phone</code> ist unabhängig von der Whitelist immer erlaubt</p>
-</li>
+<li><code>signal.allowed</code> in <code>config.json</code>: Whitelist von Telefonnummern, die Nachrichten senden dürfen</li>
+<li><code>human.phone</code> ist unabhängig von der Whitelist immer erlaubt</li>
 <li>UUIDs werden beim ersten Kontakt gelernt und in <code>~/.outheis/human/signal.json</code> gespeichert</li>
 <li>Ersteinrichtung erfordert Vertrauen des Identitätsschlüssels über <code>signal-cli trust</code> (siehe Installationsanleitung)</li>
 </ul>
