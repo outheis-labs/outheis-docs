@@ -71,19 +71,22 @@ Getestet mit `tools/test_agent_capability.py` — 9 Szenarien zu Relay-Routing, 
 | **voytas26/openclaw-oss-20b-deterministic** | 20B | 6/9 | 2 | 1 | Bestes Routing und Fehlerbehandlung |
 | **gpt-oss:20b** | 20B | 6/9 | 2 | 1 | Starke Fehlerbehandlung |
 | **glm-4.7-flash-32k** | 17B | 6/9 | 1 | 2 | Langsamster (~180s gesamt) |
+| **gemma4:e4b** | MoE/4B aktiv | 6/9 | 1 | 2 | Halluzinations-Flag; Leer-Antwort-Fehler; ~133s gesamt |
 | devstral-small-2:24b | 24B | 5/9 | 3 | 1 | Halluzinations-Flag beim Leer-Ergebnis-Test |
 | mistral-nemo:12b | 12B | 3/9 | 4 | 2 | Routing: keine Tool-Calls |
 | llama3.1:8b | 8B | 2/9 | 4 | 3 | — |
 
 **Die 20B-Klasse zeigt einen deutlichen Sprung.** Routing, mehrstufige Synthese und Fehlerbehandlung funktionieren zuverlässig. Konsistente Schwäche quer durch alle Modelle: Datumsberechnung bei Agenda-Operationen (Berechnung von "morgen" aus dem System-Prompt-Datum).
 
+`gemma4:e4b` ist ein Mixture-of-Experts-Modell: 9,6 GB auf Disk, ~4B aktive Parameter pro Token. Es erreicht 6/9 — gleichauf mit der 20B-Klasse — hat aber zwei Flags: Halluzination beim Leer-Ergebnis-Szenario (erfundene Dateinamen) und eine leere Antwort bei einer Anfrage ohne nötigen Tool-Call. Mit ~15s pro Szenario auf M4/24 GB ist es das effizienteste Modell auf diesem Score-Niveau. Größere gemma4-Varianten sind für M5-Hardware interessant.
+
 `devstral-small-2:24b` hat einen Halluzinations-Flag beim Leer-Ergebnis-Szenario — das Modell meldete einen Dateinamen, der nur in der "Keine Ergebnisse"-Erklärung des Tools vorkam, nicht als tatsächlichen Treffer.
 
-Kein Modell schneidet in allen Szenarien vollständig korrekt ab. Die 20B-Klasse ist die aktuelle untere Grenze für den praktischen Einsatz als generische Agenten.
+Kein Modell schneidet in allen Szenarien vollständig korrekt ab. Die 20B-Klasse (und gemma4:e4b) ist die aktuelle untere Grenze für den praktischen Einsatz als generische Agenten.
 
 **Datenschutz-Hinweis:** Wenn Datenschutz ein Thema ist, müssen alle Agenten, die persönliche Vault-Inhalte verarbeiten (relay, data, agenda), lokale Modelle nutzen — nicht nur der Code-Agent. Das erfordert derzeit einen Cloud-Anbieter oder ein Hardware-Upgrade, das 20B+-Inferenz in akzeptabler Geschwindigkeit ermöglicht.
 
-**Neu-Evaluierung auf M5:** Die 20B-Klasse wird auf M5-Hardware deutlich schneller laufen. Für Re-Tests nach dem Hardware-Upgrade: `python tools/test_agent_capability.py` — und Erweiterung auf 32B+-Modelle.
+**Neu-Evaluierung auf M5:** Die 20B-Klasse wird auf M5-Hardware deutlich schneller laufen. Für Re-Tests nach dem Hardware-Upgrade: `python tools/test_agent_capability.py` — und Erweiterung auf 32B+-Modelle sowie größere gemma4-Varianten.
 
 ---
 

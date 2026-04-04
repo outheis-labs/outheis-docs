@@ -71,19 +71,22 @@ Models tested using `tools/test_agent_capability.py` (9 scenarios: relay routing
 | **voytas26/openclaw-oss-20b-deterministic** | 20B | 6/9 | 2 | 1 | Best routing and error recovery |
 | **gpt-oss:20b** | 20B | 6/9 | 2 | 1 | Strong error recovery |
 | **glm-4.7-flash-32k** | 17B | 6/9 | 1 | 2 | Slowest (~180s total for all scenarios) |
+| **gemma4:e4b** | MoE/4B active | 6/9 | 1 | 2 | Hallucination flag; empty-response failure; ~133s total |
 | devstral-small-2:24b | 24B | 5/9 | 3 | 1 | Hallucination flag on empty-results test |
 | mistral-nemo:12b | 12B | 3/9 | 4 | 2 | Routing: no tool calls |
 | llama3.1:8b | 8B | 2/9 | 4 | 3 | — |
 
 **The 20B class shows a clear step up.** Routing, multi-step result synthesis, and error recovery work reliably. Consistent weakness across all models: date arithmetic in agenda operations (computing "tomorrow" from the system prompt date).
 
+`gemma4:e4b` is a Mixture-of-Experts model: 9.6 GB on disk, ~4B active parameters per token. It scores 6/9 — matching the 20B class — but carries two flags: a hallucination on the empty-results scenario (invented file names), and an empty response on a no-tool-needed query (model produced no text when no tool call was appropriate). At ~15s per scenario on M4/24 GB it is the most efficient model tested at this score level. The larger gemma4 variants are worth evaluating on M5 hardware.
+
 `devstral-small-2:24b` carries a hallucination flag on the empty-results scenario — the model reported a filename that appeared only in the "no results" explanation, not as an actual match.
 
-No model scores fully correct on all scenarios. The 20B class is the current lower bound for practical use as generic agents.
+No model scores fully correct on all scenarios. The 20B class (and gemma4:e4b) is the current lower bound for practical use as generic agents.
 
 **Privacy note:** If data privacy is a concern, all agents that process personal vault content (relay, data, agenda) must use local models — not just the code agent. This currently requires a cloud provider or a hardware upgrade that enables 20B+ inference at acceptable speed.
 
-**Re-evaluation on M5:** The 20B class will run significantly faster on M5 hardware. Use `python tools/test_agent_capability.py` to re-test after a hardware upgrade — and extend to 32B+ models.
+**Re-evaluation on M5:** The 20B class will run significantly faster on M5 hardware. Use `python tools/test_agent_capability.py` to re-test after a hardware upgrade — and extend to 32B+ models, and larger gemma4 variants.
 
 ---
 
