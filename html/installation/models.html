@@ -312,58 +312,95 @@
 <hr />
 <h2 id="ollama-local">Ollama (local)</h2>
 <p>Runs entirely on your hardware. No API costs, no data leaves the system. Requires <code>ollama</code> installed and <code>pip install openai</code>.</p>
-<p><strong>Important:</strong> Local models vary significantly in their ability to follow system prompts and use tools reliably. Tested models:</p>
+<p><strong>Tool-use reliability varies significantly by model.</strong> The table below reflects direct API tests — models are tested via the Ollama OpenAI-compatible endpoint with realistic outheis tool schemas, without personal user context in the system prompt (which degrades small model performance).</p>
 <table>
 <thead>
 <tr>
 <th>Model</th>
 <th>Size</th>
 <th>Tool-use</th>
-<th>Follows instructions</th>
+<th>Speed</th>
 <th>Verdict</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>qwen3:8b</td>
+<td><strong>llama3.2:3b</strong></td>
+<td>3B</td>
+<td>✓ Reliable</td>
+<td>~2s</td>
+<td>Good — fast, correct tool calls</td>
+</tr>
+<tr>
+<td><strong>llama3.1:8b</strong></td>
 <td>8B</td>
-<td>✗ None</td>
-<td>Partial</td>
-<td>Not suitable</td>
+<td>✓ Reliable</td>
+<td>~10s</td>
+<td>Good — solid tool-use</td>
 </tr>
 <tr>
-<td>mistral-nemo:12b</td>
+<td><strong>mistral-nemo:12b</strong></td>
 <td>12B</td>
-<td>✗ None</td>
-<td>Partial</td>
-<td>Not suitable</td>
+<td>✓ Reliable</td>
+<td>~13s</td>
+<td>Good — accurate answers</td>
 </tr>
 <tr>
-<td>mistral:7b</td>
-<td>7B</td>
-<td>✗ None</td>
-<td>Partial</td>
-<td>Not suitable</td>
+<td><strong>devstral-small-2:24b</strong></td>
+<td>24B</td>
+<td>✓ Reliable</td>
+<td>~28s</td>
+<td>Best quality, slowest</td>
 </tr>
 <tr>
-<td>gemma4:e4b</td>
-<td>4B</td>
-<td>✗ Unreliable</td>
-<td>Weak</td>
+<td>qwen3:14b</td>
+<td>14B</td>
+<td>✗ None</td>
+<td>~22s</td>
 <td>Not suitable</td>
 </tr>
 <tr>
 <td>qwen2.5-coder:14b</td>
 <td>14B</td>
 <td>✗ None</td>
-<td>Partial</td>
+<td>~12s</td>
+<td>Not suitable — outputs JSON as text</td>
+</tr>
+<tr>
+<td>mistral:7b</td>
+<td>7B</td>
+<td>✗ None</td>
+<td>~9s</td>
+<td>Not suitable</td>
+</tr>
+<tr>
+<td>deepseek-coder:6.7b</td>
+<td>6.7B</td>
+<td>Error</td>
+<td>—</td>
+<td>Tools API not supported</td>
+</tr>
+<tr>
+<td>qwen3:4b</td>
+<td>4B</td>
+<td>✗ None</td>
+<td>~7s</td>
+<td>Not suitable</td>
+</tr>
+<tr>
+<td>gemma4:e4b</td>
+<td>4B</td>
+<td>✗ Unreliable</td>
+<td>—</td>
 <td>Not suitable</td>
 </tr>
 </tbody>
 </table>
-<p><strong>Hardware requirements:</strong> 14B models require approximately 24 GB RAM. 8B models run on 8–12 GB.</p>
-<p><strong>Privacy note:</strong> If data privacy is a concern, all agents that process personal vault content (relay, data, agenda) must use local models — not just the code agent. A local model that handles tool-use reliably is required for this use case.</p>
-<p><strong>Recommendation:</strong> Start with Anthropic. Switch to local models only once you have confirmed tool-use reliability on your hardware.</p>
+<p><strong>Hardware requirements:</strong> 24B models require approximately 16 GB RAM. 8B models run on 8–10 GB. 3B models run on 2–4 GB.</p>
+<p><strong>GPU acceleration:</strong> On Apple Silicon (M-series), Ollama uses Metal automatically — no configuration needed. On Linux/Windows, Vulkan support is available for AMD and Intel GPUs via <code>OLLAMA_VULKAN=1</code> (experimental). See the <a href="https://ollama.com/docs">Ollama documentation</a> for platform-specific setup. Environment variables for the Ollama server can be stored in outheis config under <code>llm.providers.ollama.env_vars</code> and are shown in the Web UI as a reference.</p>
+<p><strong>Privacy note:</strong> If data privacy is a concern, all agents that process personal vault content (relay, data, agenda) must use local models — not just the code agent. A local model with reliable tool-use is required for this use case.</p>
+<p><strong>Recommendation:</strong> Start with Anthropic. For local inference, <code>llama3.1:8b</code> is the best balance of speed and reliability. <code>devstral-small-2:24b</code> gives the best quality if you have the RAM.</p>
+<p><strong>Test tool:</strong> To evaluate tool-use on your own hardware, run <code>python tools/test_ollama_tool_use.py</code> from the outheis-beta repository.</p>
 <hr />
 <h2 id="openai">OpenAI</h2>
 <p>Supported as a provider. Configuration is identical to Anthropic — set <code>"provider": "openai"</code> and provide an API key.</p>

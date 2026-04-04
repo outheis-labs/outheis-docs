@@ -33,21 +33,30 @@ Recommended starting point. No additional setup beyond an API key.
 
 Runs entirely on your hardware. No API costs, no data leaves the system. Requires `ollama` installed and `pip install openai`.
 
-**Important:** Local models vary significantly in their ability to follow system prompts and use tools reliably. Tested models:
+**Tool-use reliability varies significantly by model.** The table below reflects direct API tests — models are tested via the Ollama OpenAI-compatible endpoint with realistic outheis tool schemas, without personal user context in the system prompt (which degrades small model performance).
 
-| Model | Size | Tool-use | Follows instructions | Verdict |
-|-------|------|----------|----------------------|---------|
-| qwen3:8b | 8B | ✗ None | Partial | Not suitable |
-| mistral-nemo:12b | 12B | ✗ None | Partial | Not suitable |
-| mistral:7b | 7B | ✗ None | Partial | Not suitable |
-| gemma4:e4b | 4B | ✗ Unreliable | Weak | Not suitable |
-| qwen2.5-coder:14b | 14B | ✗ None | Partial | Not suitable |
+| Model | Size | Tool-use | Speed | Verdict |
+|-------|------|----------|-------|---------|
+| **llama3.2:3b** | 3B | ✓ Reliable | ~2s | Good — fast, correct tool calls |
+| **llama3.1:8b** | 8B | ✓ Reliable | ~10s | Good — solid tool-use |
+| **mistral-nemo:12b** | 12B | ✓ Reliable | ~13s | Good — accurate answers |
+| **devstral-small-2:24b** | 24B | ✓ Reliable | ~28s | Best quality, slowest |
+| qwen3:14b | 14B | ✗ None | ~22s | Not suitable |
+| qwen2.5-coder:14b | 14B | ✗ None | ~12s | Not suitable — outputs JSON as text |
+| mistral:7b | 7B | ✗ None | ~9s | Not suitable |
+| deepseek-coder:6.7b | 6.7B | Error | — | Tools API not supported |
+| qwen3:4b | 4B | ✗ None | ~7s | Not suitable |
+| gemma4:e4b | 4B | ✗ Unreliable | — | Not suitable |
 
-**Hardware requirements:** 14B models require approximately 24 GB RAM. 8B models run on 8–12 GB.
+**Hardware requirements:** 24B models require approximately 16 GB RAM. 8B models run on 8–10 GB. 3B models run on 2–4 GB.
 
-**Privacy note:** If data privacy is a concern, all agents that process personal vault content (relay, data, agenda) must use local models — not just the code agent. A local model that handles tool-use reliably is required for this use case.
+**GPU acceleration:** On Apple Silicon (M-series), Ollama uses Metal automatically — no configuration needed. On Linux/Windows, Vulkan support is available for AMD and Intel GPUs via `OLLAMA_VULKAN=1` (experimental). See the [Ollama documentation](https://ollama.com/docs) for platform-specific setup. Environment variables for the Ollama server can be stored in outheis config under `llm.providers.ollama.env_vars` and are shown in the Web UI as a reference.
 
-**Recommendation:** Start with Anthropic. Switch to local models only once you have confirmed tool-use reliability on your hardware.
+**Privacy note:** If data privacy is a concern, all agents that process personal vault content (relay, data, agenda) must use local models — not just the code agent. A local model with reliable tool-use is required for this use case.
+
+**Recommendation:** Start with Anthropic. For local inference, `llama3.1:8b` is the best balance of speed and reliability. `devstral-small-2:24b` gives the best quality if you have the RAM.
+
+**Test tool:** To evaluate tool-use on your own hardware, run `python tools/test_ollama_tool_use.py` from the outheis-beta repository.
 
 ---
 
