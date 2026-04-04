@@ -41,10 +41,9 @@ Läuft vollständig auf eigener Hardware. Keine API-Kosten, keine Daten verlasse
 | mistral-nemo:12b | 12B | ✗ Keiner | Teilweise | Nicht geeignet |
 | mistral:7b | 7B | ✗ Keiner | Teilweise | Nicht geeignet |
 | gemma4:e4b | 4B | ✗ Unzuverlässig | Schwach | Nicht geeignet |
-| qwen2.5-coder:14b | 14B | In Evaluation | — | In Test |
-| qwen2.5:14b | 14B | In Evaluation | — | In Test |
+| qwen2.5-coder:14b | 14B | ✗ Keiner | Teilweise | Nicht geeignet |
 
-**Hardware-Anforderungen:** 14B-Modelle benötigen ca. 16–20 GB RAM. 8B-Modelle laufen auf 8–12 GB.
+**Hardware-Anforderungen:** 14B-Modelle benötigen ca. 24 GB RAM. 8B-Modelle laufen auf 8–12 GB.
 
 **Datenschutz-Hinweis:** Wenn Datenschutz ein Thema ist, müssen alle Agenten, die persönliche Vault-Inhalte verarbeiten (relay, data, agenda), lokale Modelle nutzen — nicht nur der Code-Agent. Dafür ist ein lokales Modell mit zuverlässigem Tool-Use erforderlich.
 

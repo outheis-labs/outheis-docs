@@ -41,10 +41,9 @@ Runs entirely on your hardware. No API costs, no data leaves the system. Require
 | mistral-nemo:12b | 12B | ✗ None | Partial | Not suitable |
 | mistral:7b | 7B | ✗ None | Partial | Not suitable |
 | gemma4:e4b | 4B | ✗ Unreliable | Weak | Not suitable |
-| qwen2.5-coder:14b | 14B | Under evaluation | — | Testing |
-| qwen2.5:14b | 14B | Under evaluation | — | Testing |
+| qwen2.5-coder:14b | 14B | ✗ None | Partial | Not suitable |
 
-**Hardware requirements:** 14B models require approximately 16–20 GB RAM. 8B models run on 8–12 GB.
+**Hardware requirements:** 14B models require approximately 24 GB RAM. 8B models run on 8–12 GB.
 
 **Privacy note:** If data privacy is a concern, all agents that process personal vault content (relay, data, agenda) must use local models — not just the code agent. A local model that handles tool-use reliably is required for this use case.
 
