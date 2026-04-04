@@ -194,6 +194,7 @@ Within each priority class: FIFO.
 ```
 
 **Behavior:**
+
 - Lock granted immediately if queue empty
 - On release, next-in-queue is notified
 - Client disconnect → automatic release, cleanup
@@ -292,7 +293,9 @@ User (only what matters, when it matters)
 ```
 
 **What Agenda does**:
+
 - Learns user rules ("Monday mornings: no meetings")
+
 - Understands priorities ("family over work, except deadlines")
 - Filters noise ("this email can wait, that one cannot")
 - Presents relevance, not completeness
@@ -405,7 +408,9 @@ The message queue is an append-only JSONL file:
 ```
 
 - **Append-only**: Messages are never modified or deleted
+
 - **Single file**: Simplicity over performance
+
 - **File locking**: Simple `fcntl` locking for concurrent access
 
 ```python
@@ -422,8 +427,11 @@ def append_message(path: str, msg: dict) -> None:
 ### Benefits (Event Sourcing)
 
 - **Audit trail**: Complete history of all interactions
+
 - **Replay**: Reconstruct any past state
+
 - **Debugging**: See exactly what happened
+
 - **Recovery**: Resume from last processed message
 
 ---

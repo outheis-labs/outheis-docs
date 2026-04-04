@@ -400,21 +400,31 @@ python server.py
 <li>Results are cached; the scan button re-runs on demand</li>
 <li>Tags are grouped by namespace prefix (<code>#action-*</code>, <code>#date-*</code>, <code>#rank-*</code>, etc.), all collapsed by default</li>
 <li>Each group shows tag count and total occurrences across the vault</li>
-<li>Per-tag: occurrence count, file count, rename input field, Delete button</li>
-<li><code>#outheis-*</code> tags are hidden (internal system use only)</li>
+<li>
+<p>Per-tag: occurrence count, file count, rename input field, Delete button</p>
+</li>
+<li>
+<p><code>#outheis-*</code> tags are hidden (internal system use only)</p>
+</li>
 </ul>
 <h2 id="configuration-editor">Configuration Editor</h2>
 <p>The Configuration view provides a complete editor for <code>~/.outheis/human/config.json</code>:</p>
 <h3 id="general-tab">General Tab</h3>
 <ul>
-<li><strong>User profile</strong>: Name, email, phone, language, timezone</li>
-<li><strong>Vaults</strong>: List of vault directories (primary + secondary)</li>
+<li>
+<p><strong>User profile</strong>: Name, email, phone, language, timezone</p>
+</li>
+<li>
+<p><strong>Vaults</strong>: List of vault directories (primary + secondary)</p>
+</li>
 </ul>
 <h3 id="providers-tab">Providers Tab</h3>
-<p>Three provider cards (Anthropic, OpenAI, Ollama):
-- API key (password field, not stored in plain text in UI)
-- Base URL (for custom endpoints or proxies)
-- Status indicator (green dot when configured)</p>
+<p>Three provider cards (Anthropic, OpenAI, Ollama):</p>
+<ul>
+<li>API key (password field, not stored in plain text in UI)</li>
+<li>Base URL (for custom endpoints or proxies)</li>
+<li>Status indicator (green dot when configured)</li>
+</ul>
 <h3 id="models-tab">Models Tab</h3>
 <p>Model alias mapping:</p>
 <pre><code>fast      → claude-haiku-4-5
@@ -474,11 +484,17 @@ reasoning → claude-opus-4-5
 </table>
 <p>Each agent can use a different model alias (fast/capable/reasoning).</p>
 <h3 id="signal-tab">Signal Tab</h3>
-<p>Signal transport configuration:
-- Enabled toggle
-- Phone number (registered with signal-cli)
-- CLI path (default: <code>/usr/local/bin/signal-cli</code>)
-- Whitelist (phone numbers allowed to interact)</p>
+<p>Signal transport configuration:</p>
+<ul>
+<li>Enabled toggle</li>
+<li>Phone number (registered with signal-cli)</li>
+<li>
+<p>CLI path (default: <code>/usr/local/bin/signal-cli</code>)</p>
+</li>
+<li>
+<p>Whitelist (phone numbers allowed to interact)</p>
+</li>
+</ul>
 <h2 id="scheduler">Scheduler</h2>
 <p>Manage scheduled tasks:</p>
 <pre><code>┌─ Task Type ─────────┬─ Times ──────────────┬─ Enabled ─┐
@@ -488,10 +504,18 @@ reasoning → claude-opus-4-5
 └─────────────────────┴──────────────────────┴───────────┘
 </code></pre>
 <ul>
-<li><strong>+ button</strong>: Add another time (auto-increments by 1 hour)</li>
-<li><strong>× button</strong>: Remove a time (minimum one remains)</li>
-<li><strong>Checkbox</strong>: Enable/disable task</li>
-<li><strong>History tab</strong>: View past scheduler events from messages.jsonl</li>
+<li>
+<p><strong>+ button</strong>: Add another time (auto-increments by 1 hour)</p>
+</li>
+<li>
+<p><strong>× button</strong>: Remove a time (minimum one remains)</p>
+</li>
+<li>
+<p><strong>Checkbox</strong>: Enable/disable task</p>
+</li>
+<li>
+<p><strong>History tab</strong>: View past scheduler events from messages.jsonl</p>
+</li>
 </ul>
 <h2 id="file-browser">File Browser</h2>
 <p>Memory, Skills, Rules, Patterns, Agenda, and Codebase views share a file browser:</p>
@@ -506,9 +530,15 @@ reasoning → claude-opus-4-5
 └───────────────┴────────────────────────────────────────┘
 </code></pre>
 <ul>
-<li><strong>Rendered</strong>: Markdown rendered as HTML (via marked.js)</li>
-<li><strong>Source</strong>: Raw text, editable (contenteditable)</li>
-<li><strong>Save</strong>: Writes changes back to disk</li>
+<li>
+<p><strong>Rendered</strong>: Markdown rendered as HTML (via marked.js)</p>
+</li>
+<li>
+<p><strong>Source</strong>: Raw text, editable (contenteditable)</p>
+</li>
+<li>
+<p><strong>Save</strong>: Writes changes back to disk</p>
+</li>
 </ul>
 <h2 id="live-updates">Live Updates</h2>
 <p>The Messages view uses WebSocket for real-time updates:</p>
@@ -517,10 +547,12 @@ reasoning → claude-opus-4-5
 <li>New lines are parsed and pushed to connected clients</li>
 <li>Messages appear instantly in the UI</li>
 </ol>
-<p>Connection status shown in the status bar:
-- <code>Connected</code> — WebSocket active
-- <code>Disconnected</code> — Reconnecting in 3 seconds
-- <code>Error</code> — Connection failed</p>
+<p>Connection status shown in the status bar:</p>
+<ul>
+<li><code>Connected</code> — WebSocket active</li>
+<li><code>Disconnected</code> — Reconnecting in 3 seconds</li>
+<li><code>Error</code> — Connection failed</li>
+</ul>
 <h2 id="api-endpoints">API Endpoints</h2>
 <p>The server exposes REST endpoints:</p>
 <h3 id="config">Config</h3>
@@ -538,8 +570,12 @@ reasoning → claude-opus-4-5
 </ul>
 <h3 id="files">Files</h3>
 <ul>
-<li><code>GET /api/{type}</code> — List files (type: memory, skills, rules, patterns, agenda, codebase)</li>
-<li><code>GET /api/{type}/{filename}</code> — Read file content</li>
+<li>
+<p><code>GET /api/{type}</code> — List files (type: memory, skills, rules, patterns, agenda, codebase)</p>
+</li>
+<li>
+<p><code>GET /api/{type}/{filename}</code> — Read file content</p>
+</li>
 <li><code>PUT /api/{type}/{filename}</code> — Write file content</li>
 </ul>
 <h3 id="tags">Tags</h3>
@@ -582,9 +618,11 @@ reasoning → claude-opus-4-5
 </code></pre>
 <h2 id="design-decisions">Design Decisions</h2>
 <h3 id="typography">Typography</h3>
-<p>Single font family (Lexend Deca) in two weights:
-- <strong>400</strong> — Body text, labels, inputs
-- <strong>500</strong> — Titles, emphasis, agent names</p>
+<p>Single font family (Lexend Deca) in two weights:</p>
+<ul>
+<li><strong>400</strong> — Body text, labels, inputs</li>
+<li><strong>500</strong> — Titles, emphasis, agent names</li>
+</ul>
 <h3 id="color-modes">Color Modes</h3>
 <p>CSS variables support automatic light/dark mode via <code>prefers-color-scheme</code>. The logo inverts in dark mode.</p>
 <h3 id="no-authentication">No Authentication</h3>
@@ -592,12 +630,16 @@ reasoning → claude-opus-4-5
 <h3 id="no-chat">No Chat</h3>
 <p>This is an administration interface, not a chat UI. For chat, use the CLI (<code>nous chat</code>) or Signal transport.</p>
 <h2 id="dependencies">Dependencies</h2>
-<p>Server-side:
-- <code>fastapi</code> — Web framework
-- <code>uvicorn</code> — ASGI server</p>
-<p>Client-side:
-- <code>marked.js</code> — Markdown rendering (CDN)
-- Lexend Deca — Typography (Google Fonts)</p>
+<p>Server-side:</p>
+<ul>
+<li><code>fastapi</code> — Web framework</li>
+<li><code>uvicorn</code> — ASGI server</li>
+</ul>
+<p>Client-side:</p>
+<ul>
+<li><code>marked.js</code> — Markdown rendering (CDN)</li>
+<li>Lexend Deca — Typography (Google Fonts)</li>
+</ul>
 <p>No build step. No bundler. Plain files served directly.</p>
     <hr>
     <p class="footer">Open source under AGPL-3.0 · <a href="https://github.com/outheis-labs/outheis-minimal">Code on GitHub</a></p>

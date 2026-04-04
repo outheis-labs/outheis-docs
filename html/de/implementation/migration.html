@@ -335,10 +335,12 @@
   ]
 }
 </code></pre>
-<p><strong>Typen:</strong>
-- <code>user</code> — Fakten über dich (dauerhaft)
-- <code>feedback</code> — Wie du möchtest, dass outheis sich verhält (dauerhaft)
-- <code>context</code> — Aktueller Fokus (zerfällt nach 14 Tagen)</p>
+<p><strong>Typen:</strong></p>
+<ul>
+<li><code>user</code> — Fakten über dich (dauerhaft)</li>
+<li><code>feedback</code> — Wie du möchtest, dass outheis sich verhält (dauerhaft)</li>
+<li><code>context</code> — Aktueller Fokus (zerfällt nach 14 Tagen)</li>
+</ul>
 <p>Wenn <code>type</code> fehlt, erschließt outheis ihn aus dem Inhalt.</p>
 <h3 id="markdown-dateien">Markdown-Dateien</h3>
 <pre><code class="language-markdown"># Preferences
@@ -352,25 +354,31 @@
 - Bevorzuge kurze Antworten
 
 ## rule:agenda
+
 - MAX 10 Items in Daily.md
 - Keine Meetings vor 10 Uhr
 
 ## rule:data
+
 - Durchsuche auch PDF-Dateien
 </code></pre>
-<p>Abschnitte entsprechen Memory-Typen oder Rules:
-- <code>## user</code>, <code>## feedback</code>, <code>## context</code> → Memory
-- <code>## rule:agenda</code>, <code>## rule:data</code>, <code>## rule:relay</code> → Rules-Dateien</p>
+<p>Abschnitte entsprechen Memory-Typen oder Rules:</p>
+<ul>
+<li><code>## user</code>, <code>## feedback</code>, <code>## context</code> → Memory</li>
+<li><code>## rule:agenda</code>, <code>## rule:data</code>, <code>## rule:relay</code> → Rules-Dateien</li>
+</ul>
 <p>Jede Markdown- oder JSON-Struktur ist akzeptabel — outheis verwendet LLM-Parsing und erfordert kein bestimmtes Schema.</p>
 <h2 id="workflow">Workflow</h2>
 <h3 id="1-migrationsverzeichnis-erstellen">1. Migrationsverzeichnis erstellen</h3>
 <pre><code class="language-bash">mkdir ~/Documents/Vault/Migration
 </code></pre>
 <h3 id="2-deine-dateien-hinzufugen">2. Deine Dateien hinzufügen</h3>
-<p>Kopiere deine Daten:
-- Export von Claude.ai → <code>claude-export.json</code>
-- Deine Präferenzen → <code>preferences.md</code>
-- Agenten-spezifische Rules → <code>agenda.md</code>, <code>data.md</code></p>
+<p>Kopiere deine Daten:</p>
+<ul>
+<li>Export von Claude.ai → <code>claude-export.json</code></li>
+<li>Deine Präferenzen → <code>preferences.md</code></li>
+<li>Agenten-spezifische Rules → <code>agenda.md</code>, <code>data.md</code></li>
+</ul>
 <h3 id="3-memory-migrate-sagen">3. "memory migrate" sagen</h3>
 <p>outheis parst alle Dateien in <code>vault/Migration/</code>, dedupliziert Kandidaten gegen bestehendes Memory via LLM und schreibt konsolidierte Einträge als Block in <code>vault/Agenda/Exchange.md</code>:</p>
 <pre><code>&lt;!-- outheis:migration:start --&gt;
@@ -393,6 +401,7 @@
 <pre><code>- [x] Works as Director Innovation Lab [user]
 - [x] Prefers short, direct answers [feedback]
 - [-] Respond in German [rule:relay]
+
 - [ ] Lebt in München [user]
 </code></pre>
 <ul>
@@ -422,10 +431,12 @@ Ou: Migration verarbeitet:
 </code></pre>
 <p>Das verhindert erneutes Verarbeiten. Lösche die <code>x-</code>-Dateien selbst, wenn bereit, oder nutze die WebUI-Migrationsansicht.</p>
 <h2 id="webui-migrationsansicht">WebUI-Migrationsansicht</h2>
-<p>Die Migrationsansicht in der Web-Oberfläche bietet:
-- Vollständige Liste der Dateien in <code>vault/Migration/</code>
-- Jede Datei direkt ansehen und bearbeiten
-- Drop-Zone zum Hochladen neuer Migrationsdateien</p>
+<p>Die Migrationsansicht in der Web-Oberfläche bietet:</p>
+<ul>
+<li>Vollständige Liste der Dateien in <code>vault/Migration/</code></li>
+<li>Jede Datei direkt ansehen und bearbeiten</li>
+<li>Drop-Zone zum Hochladen neuer Migrationsdateien</li>
+</ul>
 <p>Verwende sie, um Dateien hinzuzufügen ohne den Browser zu verlassen, oder um zu prüfen, was bereits verarbeitet wurde.</p>
 <h2 id="direkte-rule-eingabe">Direkte Rule-Eingabe</h2>
 <p>Um eine Rule sofort ohne den Migrations-Workflow hinzuzufügen:</p>
@@ -494,11 +505,13 @@ Ou: Erkannte Eigenschaften:
 Rules = "wie ich mich verhalten soll"</p>
 <p>Beide werden durch Migration oder laufende Gespräche befüllt.</p>
 <h2 id="datenschutz">Datenschutz</h2>
-<p>Alle Daten bleiben lokal:
-- Migrationsdateien sind in deinem Vault
-- Memory ist in <code>~/.outheis/human/memory/</code>
-- Rules sind in <code>~/.outheis/human/rules/</code>
-- Nichts wird extern übertragen</p>
+<p>Alle Daten bleiben lokal:</p>
+<ul>
+<li>Migrationsdateien sind in deinem Vault</li>
+<li>Memory ist in <code>~/.outheis/human/memory/</code></li>
+<li>Rules sind in <code>~/.outheis/human/rules/</code></li>
+<li>Nichts wird extern übertragen</li>
+</ul>
 <p>Lösche jede Datei jederzeit — outheis passt sich dem an, was verbleibt.</p>
     <hr>
     <p class="footer">Open source under AGPL-3.0 · <a href="https://github.com/outheis-labs/outheis-minimal">Code on GitHub</a></p>

@@ -103,6 +103,7 @@ User identification and vault locations.
 | `vault` | string[] | ["~/Documents/Vault"] | Vault directories (first is primary) |
 
 **Environment overrides:**
+
 - `OUTHEIS_HUMAN_DIR` — override human data directory (~/.outheis/human)
 - `OUTHEIS_VAULT` — override primary vault path
 
@@ -152,6 +153,7 @@ Model aliases used by agents.
 | `run_mode` | string | "on-demand" | `on-demand` or `persistent` |
 
 **run_mode:**
+
 - `on-demand` — Start model per request (cloud APIs)
 - `persistent` — Keep model loaded (local Ollama)
 

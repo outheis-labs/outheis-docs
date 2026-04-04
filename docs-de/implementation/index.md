@@ -6,11 +6,11 @@
 
 ### [Architektur](architecture.md)
 
-Aktuelle Systemarchitektur: Dispatcher, Agenten, Wissensspeicher, Datei-Layout, geplante Aufgaben.
+Aktuelle Systemarchitektur: dispatcher, agents, Wissensspeicher, Datei-Layout, geplante Aufgaben.
 
 ### [Konfiguration](config.md)
 
-Vollständige `config.json`-Referenz: Anbieter, Modelle, Agenten, Zeitpläne.
+Vollständige `config.json`-Referenz: Anbieter, Modelle, agents, Zeitpläne.
 
 ### [Memory & Rules](memory.md)
 
@@ -18,7 +18,7 @@ Wie outheis sich erinnert: Memory-Typen, explizite Marker, Muster-Extraktion, Ru
 
 ### [Skills](skills.md)
 
-Wie Agenten wissen, was zu tun ist: System-Skills, gelernte Skills, der Unterschied zwischen Skills und Rules.
+Wie agents wissen, was zu tun ist: System-Skills, gelernte Skills, der Unterschied zwischen Skills und Rules.
 
 ### [Agenda](agenda.md)
 

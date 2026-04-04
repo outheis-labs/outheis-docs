@@ -289,7 +289,7 @@
 </tr>
 <tr>
 <td><strong>Aktualisiert von</strong></td>
-<td>Agenten während Interaktion, Pattern-Agent, explizite Marker</td>
+<td>Agents während Interaktion, Pattern-Agent, explizite Marker</td>
 <td>Von dir direkt</td>
 </tr>
 <tr>
@@ -304,25 +304,35 @@
 <h2 id="memory-typen">Memory-Typen</h2>
 <h3 id="user">user</h3>
 <p>Persönliche Fakten, die sich selten ändern.</p>
-<p>Beispiele:
-- "User is 35 years old"
-- "Children: Leo (8) and Emma (5)"
-- "Lives in Munich"
-- "Works as a software engineer"</p>
+<p>Beispiele:</p>
+<ul>
+<li>"User is 35 years old"</li>
+<li>
+<p>"Children: Leo (8) and Emma (5)"</p>
+</li>
+<li>
+<p>"Lives in Munich"</p>
+</li>
+<li>"Works as a software engineer"</li>
+</ul>
 <p><strong>Zerfall:</strong> Dauerhaft (bis korrigiert)</p>
 <h3 id="feedback">feedback</h3>
 <p>Wie du möchtest, dass outheis sich verhält.</p>
-<p>Beispiele:
-- "Prefers short, direct answers"
-- "Respond in German unless asked otherwise"
-- "Don't explain technical concepts — user is an expert"</p>
+<p>Beispiele:</p>
+<ul>
+<li>"Prefers short, direct answers"</li>
+<li>"Respond in German unless asked otherwise"</li>
+<li>"Don't explain technical concepts — user is an expert"</li>
+</ul>
 <p><strong>Zerfall:</strong> Dauerhaft (bis korrigiert)</p>
 <h3 id="context">context</h3>
 <p>Womit du dich gerade beschäftigst.</p>
-<p>Beispiele:
-- "Working on Project Alpha mobile app"
-- "Preparing for conference talk next week"
-- "Learning Japanese"</p>
+<p>Beispiele:</p>
+<ul>
+<li>"Working on Project Alpha mobile app"</li>
+<li>"Preparing for conference talk next week"</li>
+<li>"Learning Japanese"</li>
+</ul>
 <p><strong>Zerfall:</strong> Standardmäßig 14 Tage (verblasst, wenn nicht mehr relevant)</p>
 <h2 id="wie-memory-erstellt-wird">Wie Memory erstellt wird</h2>
 <p>Memory wird über drei Kanäle geschrieben:</p>
@@ -337,44 +347,54 @@
 ! I'm currently working on Project Alpha
 → Stored in context memory (14 day decay)
 </code></pre>
-<p>Die Klassifizierung erfolgt automatisch basierend auf dem Inhalt. Der <code>!</code>-Marker ist eine Abkürzung — er entspricht "merke dir das", ist aber kürzer. Der Agent speichert die Information UND verwendet sie sofort im aktuellen Gespräch.</p>
-<h3 id="2-agenten-wahrend-der-interaktion">2. Agenten während der Interaktion</h3>
-<p>Agenten können erkennen, wenn du etwas Merkenswürdiges mitteilst:</p>
+<p>Die Klassifizierung erfolgt automatisch basierend auf dem Inhalt. Der <code>!</code>-Marker ist eine Abkürzung — er entspricht "merke dir das", ist aber kürzer. Der agent speichert die Information UND verwendet sie sofort im aktuellen Gespräch.</p>
+<h3 id="2-agents-wahrend-der-interaktion">2. Agents während der Interaktion</h3>
+<p>Agents können erkennen, wenn du etwas Merkenswürdiges mitteilst:</p>
 <ul>
-<li>Du erwähnst deinen Geburtstag → Agent kann es speichern</li>
-<li>Du äußerst eine Präferenz → Agent kann sie speichern</li>
-<li>Du beschreibst ein aktuelles Projekt → Agent kann es als Kontext speichern</li>
+<li>Du erwähnst deinen Geburtstag → agent kann es speichern</li>
+<li>Du äußerst eine Präferenz → agent kann sie speichern</li>
+<li>Du beschreibst ein aktuelles Projekt → agent kann es als Kontext speichern</li>
 </ul>
-<p>Dies geschieht durch Urteilsvermögen, nicht durch starre Regeln. Agenten sind angewiesen, relevante Informationen zu bemerken, aber nicht zu viel zu extrahieren. Nicht jede Aussage wird Memory — nur was für zukünftige Interaktionen wirklich nützlich erscheint.</p>
+<p>Das geschieht durch Urteilsvermögen — nicht durch starre Regeln. Agents sind angewiesen, relevante Informationen zu bemerken, aber nicht zu viel zu extrahieren. Nicht jede Aussage wird Memory — nur was für zukünftige Interaktionen wirklich nützlich erscheint.</p>
 <h3 id="3-pattern-agent-extraktion">3. Pattern-Agent-Extraktion</h3>
-<p>Der Pattern-Agent (rumi) läuft nächtlich um 04:00 und:</p>
+<p>rumi läuft nächtlich um 04:00 und:</p>
 <ol>
-<li>Überprüft aktuelle Gespräche</li>
-<li>Extrahiert merkwürdige Informationen, die Agenten möglicherweise verpasst haben</li>
-<li>Konsolidiert Duplikate und löst Widersprüche auf</li>
-<li>Weist Konfidenzwerte zu</li>
-<li>Bereinigt abgelaufene Einträge</li>
-<li>Erwägt die Förderung stabiler Muster zu User Rules</li>
+<li>überprüft aktuelle Gespräche</li>
+<li>extrahiert merkwürdige Informationen, die agents möglicherweise verpasst haben</li>
+<li>konsolidiert Duplikate und löst Widersprüche auf</li>
+<li>weist Konfidenzwerte zu</li>
+<li>bereinigt abgelaufene Einträge</li>
+<li>erwägt die Förderung stabiler Muster zu User Rules</li>
 </ol>
-<p>Du kannst dies manuell auslösen: <code>outheis pattern</code></p>
+<p>Du kannst das manuell auslösen: <code>outheis pattern</code></p>
 <h2 id="memory-konsolidierung">Memory-Konsolidierung</h2>
-<p>Mit der Zeit kann Memory Duplikate oder widersprüchliche Einträge ansammeln. Der Pattern-Agent behandelt dies bei seinem geplanten Lauf:</p>
+<p>Mit der Zeit sammelt Memory Duplikate oder widersprüchliche Einträge an. rumi behandelt das bei seinem geplanten Lauf:</p>
 <ul>
-<li><strong>Duplikate</strong>: "Has pending tasks: X, Y" und "Current pending tasks: X, Y" → behält den neueren</li>
-<li><strong>Widersprüche</strong>: "User is 35" und "User is 36" → behält den neueren oder explizit markierten</li>
-<li><strong>Überholte Einträge</strong>: Kontext, der aktualisiert wurde → entfernt die ältere Version</li>
+<li>
+<p><strong>Duplikate</strong>: "Has pending tasks: X, Y" und "Current pending tasks: X, Y" → behält den neueren</p>
+</li>
+<li>
+<p><strong>Widersprüche</strong>: "User is 35" und "User is 36" → behält den neueren oder explizit markierten</p>
+</li>
+<li>
+<p><strong>Überholte Einträge</strong>: Kontext, der aktualisiert wurde → entfernt die ältere Version</p>
+</li>
 </ul>
-<p>Das ist kein mechanischer Prozess — der Pattern-Agent verwendet Urteilsvermögen, um zu entscheiden, was konsolidiert werden soll, mit einem Bias zum Behalten bei Unsicherheit.</p>
+<p>Das ist kein mechanischer Prozess — rumi verwendet Urteilsvermögen, um zu entscheiden, was konsolidiert werden soll, mit einem Bias zum Behalten bei Unsicherheit.</p>
 <h2 id="zeitliches-bewusstsein">Zeitliches Bewusstsein</h2>
 <p>Nicht alles sollte für immer gespeichert werden.</p>
-<p><strong>Als dauerhaftes Fakt gespeichert:</strong>
-- "User has two children"
-- "Prefers formal communication"</p>
-<p><strong>NICHT gespeichert (temporärer Zustand):</strong>
-- "User seems frustrated today"
-- "User is tired"
-- "User is stressed about deadline"</p>
-<p>Alle Agenten sind angewiesen, stabile Eigenschaften von vorübergehenden Stimmungen zu unterscheiden. Eine frustrierte Nachricht ist kein Persönlichkeitsmerkmal — es ist ein Moment.</p>
+<p><strong>Als dauerhaftes Fakt gespeichert:</strong></p>
+<ul>
+<li>"User has two children"</li>
+<li>"Prefers formal communication"</li>
+</ul>
+<p><strong>NICHT gespeichert (temporärer Zustand):</strong></p>
+<ul>
+<li>"User seems frustrated today"</li>
+<li>"User is tired"</li>
+<li>"User is stressed about deadline"</li>
+</ul>
+<p>Alle agents unterscheiden stabile Eigenschaften von vorübergehenden Stimmungen. Eine frustrierte Nachricht ist kein Persönlichkeitsmerkmal — es ist ein Moment.</p>
 <h2 id="memory-anzeigen-und-bearbeiten">Memory anzeigen und bearbeiten</h2>
 <h3 id="cli">CLI</h3>
 <pre><code class="language-bash"># View all memory
@@ -402,10 +422,12 @@ outheis memory --clear context
   1. Working on Project Alpha [↓12d]
   2. Preparing conference talk [↓5d]
 </code></pre>
-<p>Marker:
-- <code>[!]</code> — Explizit über <code>!</code>-Marker gespeichert
-- <code>[90%]</code> — Konfidenz unter 100 %
-- <code>[↓12d]</code> — Läuft in 12 Tagen ab</p>
+<p>Marker:</p>
+<ul>
+<li><code>[!]</code> — Explizit über <code>!</code>-Marker gespeichert</li>
+<li><code>[90%]</code> — Konfidenz unter 100 %</li>
+<li><code>[↓12d]</code> — Läuft in 12 Tagen ab</li>
+</ul>
 <h2 id="speicherung">Speicherung</h2>
 <pre><code>~/.outheis/human/memory/
 ├── user.json           # Personal facts
@@ -440,14 +462,14 @@ outheis memory --clear context
 4. Erneut "memory migrate" sagen, um anzuwenden
 5. <code>vault/Migration/</code> löschen, wenn fertig</p>
 <h2 id="pattern-agent-meta-memory">Pattern-Agent-Meta-Memory</h2>
-<p>Der Pattern-Agent hat sein eigenes Memory in <code>~/.outheis/human/memory/pattern/</code>. Hier speichert er:</p>
+<p>rumi hat sein eigenes Memory in <code>~/.outheis/human/memory/pattern/</code>. Hier speichert er:</p>
 <ul>
-<li>Welche Extraktionsstrategien für diesen Benutzer funktionieren</li>
+<li>Welche Extraktionsstrategien für dich funktionieren</li>
 <li>Muster im Kommunikationsstil</li>
 <li>Meta-Insights über seinen eigenen Prozess</li>
 </ul>
-<p>Dieses Memory zerfällt nicht — so wird der Pattern-Agent mit der Zeit besser darin, zu verstehen, was dir wichtig ist.</p>
-<h2 id="integration-mit-agenten">Integration mit Agenten</h2>
+<p>Dieses Memory zerfällt nicht — so wird rumi mit der Zeit besser darin, zu verstehen, was dir wichtig ist.</p>
+<h2 id="integration-mit-agents">Integration mit Agents</h2>
 <p>Memory wird automatisch in Agenten-System-Prompts injiziert:</p>
 <pre><code># Memory
 
@@ -461,7 +483,7 @@ outheis memory --clear context
 ## Current context
 - Working on Project Alpha
 </code></pre>
-<p>Agenten nutzen dies natürlich — sie kündigen nicht "Ich erinnere mich, dass..." an, sondern wissen es einfach.</p>
+<p>Agents nutzen das natürlich — sie kündigen nicht "Ich erinnere mich, dass..." an, sondern wissen es einfach.</p>
 <h2 id="korrektur">Korrektur</h2>
 <p>Wenn outheis falsche Informationen hat:</p>
 <ol>
@@ -469,7 +491,7 @@ outheis memory --clear context
 <li><strong>CLI-Bearbeitung:</strong> <code>outheis memory --clear user</code>, dann neu hinzufügen</li>
 <li><strong>Direkte Dateibearbeitung:</strong> JSON in <code>~/.outheis/human/memory/</code> modifizieren</li>
 </ol>
-<p>Explizite (<code>!</code>)-Einträge haben Vorrang — Agenten überschreiben sie nicht mit Extraktionen niedrigerer Konfidenz.</p>
+<p>Explizite (<code>!</code>)-Einträge haben Vorrang — agents überschreiben sie nicht mit Extraktionen niedrigerer Konfidenz.</p>
 <hr />
 <h2 id="rules">Rules</h2>
 <p>Rules sind die stabile Destillation von Memory — Verhaltensprinzipien, die bestimmen, wie outheis mit dir arbeitet.</p>
@@ -505,17 +527,17 @@ outheis memory --clear context
 </tr>
 </tbody>
 </table>
-<p><strong>System Rules</strong> definieren, was ein Agent <em>kann</em> — architektonische Beschränkungen.</p>
-<p><strong>User Rules</strong> definieren, wie ein Agent es <em>tun soll</em> — dein Arbeitsstil.</p>
+<p><strong>System Rules</strong> definieren, was ein agent <em>kann</em> — architektonische Beschränkungen.</p>
+<p><strong>User Rules</strong> definieren, wie ein agent es <em>tun soll</em> — dein Arbeitsstil.</p>
 <h3 id="wie-user-rules-entstehen">Wie User Rules entstehen</h3>
-<p>User Rules werden nicht direkt von dir geschrieben. Sie entstehen aus Memory durch den Pattern-Agenten.</p>
-<p>Der Pattern-Agent überprüft Memory bei seinem nächtlichen Lauf und sucht nach Mustern, die stabil genug geworden sind, um als Rules kodifiziert zu werden. Das ist kein mechanischer Prozess mit festen Schwellenwerten — der Agent verwendet Urteilsvermögen:</p>
+<p>User Rules schreibst du nicht direkt. Sie entstehen aus Memory durch den Pattern-Agenten.</p>
+<p>rumi überprüft Memory bei seinem nächtlichen Lauf und sucht nach Mustern, die stabil genug geworden sind, um als Rules kodifiziert zu werden. Das ist kein mechanischer Prozess mit festen Schwellenwerten — der agent verwendet Urteilsvermögen:</p>
 <ul>
 <li>Eine einmal klar geäußerte starke Präferenz könnte eine Rule werden</li>
 <li>Etwas oft beiläufig Erwähntes vielleicht nicht</li>
 <li>Explizite Korrekturen zählen immer mehr als Inferenzen</li>
 </ul>
-<p>Wenn der Pattern-Agent ein stabiles Muster identifiziert, schreibt er es in <code>~/.outheis/human/rules/{agent}.md</code>:</p>
+<p>Wenn rumi ein stabiles Muster identifiziert, schreibt er es in <code>~/.outheis/human/rules/{agent}.md</code>:</p>
 <pre><code class="language-markdown"># User Rules for Relay Agent
 
 - User prefers concise responses  &lt;!-- 2026-03-30 --&gt;
@@ -576,9 +598,9 @@ outheis rules --user
 outheis rules --system
 </code></pre>
 <h3 id="koharente-personlichkeit">Kohärente Persönlichkeit</h3>
-<p>Obwohl outheis aus fünf Agenten besteht, erlebst du einen Assistenten. Rules bewahren diese Kohärenz:</p>
+<p>outheis besteht aus fünf agents — du erlebst einen Assistenten. Rules bewahren diese Kohärenz:</p>
 <ul>
-<li><strong>Common rules</strong> sichern konsistentes Verhalten über alle Agenten</li>
+<li><strong>Common rules</strong> sichern konsistentes Verhalten über alle agents</li>
 <li><strong>Agenten-spezifische Rules</strong> ermöglichen angemessene Spezialisierung</li>
 <li><strong>User Rules</strong> passen das gesamte System an deinen Arbeitsstil an</li>
 </ul>

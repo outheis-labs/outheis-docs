@@ -63,6 +63,7 @@ outheis implements this principle as a three-layer stack:
 ```
 
 Each layer is:
+
 - **Written by the LLM** (no hardcoded extraction, no keyword matching)
 - **Read by the LLM** (injected into system prompts at runtime)
 - **Stored by code** (JSON files, Markdown files — deterministic I/O)

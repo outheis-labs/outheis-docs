@@ -290,11 +290,13 @@
 └─────────┘  └───────┘   └────────┘   └────────┘
 </code></pre>
 <h2 id="dispatcher">Dispatcher</h2>
-<p>The dispatcher is the microkernel. It:
-- <strong>Watches</strong> the message queue for changes
-- <strong>Manages locks</strong> for shared resources
-- <strong>Schedules</strong> periodic tasks (pattern analysis, index rebuild)
-- <strong>Recovers</strong> pending operations on startup</p>
+<p>The dispatcher is the microkernel. It:</p>
+<ul>
+<li><strong>Watches</strong> the message queue for changes</li>
+<li><strong>Manages locks</strong> for shared resources</li>
+<li><strong>Schedules</strong> periodic tasks (pattern analysis, index rebuild)</li>
+<li><strong>Recovers</strong> pending operations on startup</li>
+</ul>
 <p>The dispatcher contains no LLM calls. It's deterministic, testable, fast.</p>
 <h2 id="agents">Agents</h2>
 <p>Six agents, each with a name and role:</p>
@@ -354,10 +356,12 @@
 </tbody>
 </table>
 <h3 id="routing">Routing</h3>
-<p>Relay (ou) handles all user messages. It uses Haiku with tools:
-- <strong>search_vault</strong> → delegates to Data agent (zeno)
-- <strong>check_agenda</strong> → delegates to Agenda agent (cato)
-- <strong>refresh_agenda</strong> → triggers manual agenda update</p>
+<p>Relay (ou) handles all user messages. It uses Haiku with tools:</p>
+<ul>
+<li><strong>search_vault</strong> → delegates to Data agent (zeno)</li>
+<li><strong>check_agenda</strong> → delegates to Agenda agent (cato)</li>
+<li><strong>refresh_agenda</strong> → triggers manual agenda update</li>
+</ul>
 <p>No separate classification step. Relay decides intelligently based on the question and Memory.</p>
 <p>Explicit mentions (@zeno, @cato) still work for direct delegation.</p>
 <h3 id="data-agent-zeno">Data Agent (zeno)</h3>
@@ -422,14 +426,26 @@
 </tr>
 </tbody>
 </table>
-<p><strong>Commands:</strong>
-- "aktualisiere daily" / "update agenda" → triggers manual refresh
-- Processes Inbox items, checks Exchange responses, updates Daily</p>
-<p><strong>Hourly Review (conditional):</strong>
-- Runs at xx:55 (configurable)
-- Checks file hashes before processing — no changes = no LLM call
-- Unconditional at start (04:55) and end (23:55) of day
-- Only runs within configured hours (default 04:55-23:55)</p>
+<p><strong>Commands:</strong></p>
+<ul>
+<li>"aktualisiere daily" / "update agenda" → triggers manual refresh</li>
+<li>Processes Inbox items, checks Exchange responses, updates Daily</li>
+</ul>
+<p><strong>Hourly Review (conditional):</strong></p>
+<ul>
+<li>
+<p>Runs at xx:55 (configurable)</p>
+</li>
+<li>
+<p>Checks file hashes before processing — no changes = no LLM call</p>
+</li>
+<li>
+<p>Unconditional at start (04:55) and end (23:55) of day</p>
+</li>
+<li>
+<p>Only runs within configured hours (default 04:55-23:55)</p>
+</li>
+</ul>
 <h3 id="pattern-agent-rumi">Pattern Agent (rumi)</h3>
 <p>The Pattern agent runs nightly and:
 1. Extracts memories from recent conversations
@@ -475,18 +491,30 @@
 </tr>
 </tbody>
 </table>
-<p>Action is disabled by default (<code>enabled: false</code>). When enabled, it:
-- Receives tasks from other agents or scheduled jobs
-- Executes actions with explicit confirmation for destructive operations
-- Reports results back via message queue</p>
+<p>Action is disabled by default (<code>enabled: false</code>). When enabled, it:</p>
+<ul>
+<li>Receives tasks from other agents or scheduled jobs</li>
+<li>Executes actions with explicit confirmation for destructive operations</li>
+<li>Reports results back via message queue</li>
+</ul>
 <p><strong>Security model:</strong> Action has a whitelist of permitted operations. Unknown commands require explicit user approval in Exchange.md.</p>
 <h3 id="code-agent-alan">Code Agent (alan)</h3>
 <p>The Code agent provides development-time intelligence. See <a href="alan.md">Code Agent (alan)</a> for full documentation.</p>
-<p>Summary:
-- <strong>Introspection</strong>: Answer questions about outheis implementation
-- <strong>Proposals</strong>: Suggest improvements via <code>vault/Codebase/Exchange.md</code>
-- <strong>Search</strong>: Find patterns and implementations in source code
-- <strong>Isolation</strong>: Write access restricted to <code>vault/Codebase/</code> only</p>
+<p>Summary:</p>
+<ul>
+<li>
+<p><strong>Introspection</strong>: Answer questions about outheis implementation</p>
+</li>
+<li>
+<p><strong>Proposals</strong>: Suggest improvements via <code>vault/Codebase/Exchange.md</code></p>
+</li>
+<li>
+<p><strong>Search</strong>: Find patterns and implementations in source code</p>
+</li>
+<li>
+<p><strong>Isolation</strong>: Write access restricted to <code>vault/Codebase/</code> only</p>
+</li>
+</ul>
 <p><strong>alan is development-only.</strong> Disabled by default, never loaded in production.</p>
 <h2 id="knowledge-stores">Knowledge Stores</h2>
 <h3 id="memory">Memory</h3>
@@ -521,15 +549,23 @@
 <h3 id="rules">Rules</h3>
 <p>External instructions to agents — what to observe:</p>
 <ul>
-<li>User-defined: "Respond in German"</li>
-<li>Pattern-promoted: "User prefers short answers"</li>
+<li>
+<p>User-defined: "Respond in German"</p>
+</li>
+<li>
+<p>Pattern-promoted: "User prefers short answers"</p>
+</li>
 </ul>
 <p>Stored in <code>~/.outheis/human/rules/</code>. See <a href="memory.md">Memory</a> for details.</p>
 <h3 id="skills">Skills</h3>
 <p>Internal capabilities — how agents act:</p>
 <ul>
-<li>System skills: Base capabilities (in package)</li>
-<li>Learned skills: Refined through use and correction</li>
+<li>
+<p>System skills: Base capabilities (in package)</p>
+</li>
+<li>
+<p>Learned skills: Refined through use and correction</p>
+</li>
 </ul>
 <p>Stored in <code>src/outheis/agents/skills/</code> (system) and <code>~/.outheis/human/skills/</code> (learned). See <a href="skills.md">Skills</a> for details.</p>
 <h3 id="vault">Vault</h3>

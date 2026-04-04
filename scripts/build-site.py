@@ -95,7 +95,7 @@ NAV_SECTIONS_DE = [
         "items": [
             {"label": "Warum outheis",                  "url": "foundations/index.html",                       "match": "foundations/index"},
             {"label": "Information und Semantik",       "url": "foundations/02-semantic-foundations.html",      "match": "02-semantic"},
-            {"label": "Aufmerksamkeit als Architektur", "url": "foundations/03-attention-as-architecture.html", "match": "03-attention"},
+            {"label": "Aufmerksamkeit als Architekturprinzip", "url": "foundations/03-attention-as-architecture.html", "match": "03-attention"},
         ],
     },
     {

@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Attention als Architektur · outheis</title>
+  <title>Aufmerksamkeit als Architekturprinzip · outheis</title>
   <link rel="icon" type="image/png" href="../../favicon-96x96.png" sizes="96x96">
   <link rel="icon" type="image/svg+xml" href="../../favicon.svg">
   <link rel="shortcut icon" href="../../favicon.ico">
@@ -256,11 +256,11 @@
     <div class="subnav-inner">
       <a href="../foundations/index.html">Warum outheis</a>
       <a href="../foundations/02-semantic-foundations.html">Information und Semantik</a>
-      <a href="../foundations/03-attention-as-architecture.html" class="active">Aufmerksamkeit als Architektur</a>
+      <a href="../foundations/03-attention-as-architecture.html" class="active">Aufmerksamkeit als Architekturprinzip</a>
     </div>
   </div>
   <main class="content">
-    <h1 id="attention-als-architektur">Attention als Architektur</h1>
+    <h1 id="aufmerksamkeit-als-architekturprinzip">Aufmerksamkeit als Architekturprinzip</h1>
 <h2 id="die-strukturelle-analogie">Die strukturelle Analogie</h2>
 <p>Die zentrale Erkenntnis der Transformer-Architektur — dass erlernte Attention-Mechanismen komplexe sequentielle Verarbeitung ersetzen können — gilt direkt für die Struktur von outheis. Das ist keine Metapher. Es ist dasselbe Prinzip auf einer anderen Abstraktionsebene.</p>
 <table>
@@ -293,14 +293,18 @@
 </tr>
 </tbody>
 </table>
-<p>In einem Transformer:
-- <strong>Gewichte</strong> sind erlernte Muster, die die Aufmerksamkeit auf relevante Teile der Eingabe lenken
-- <strong>Kontext</strong> ist die aktuell verarbeitete Eingabe
-- <strong>Training</strong> verfeinert Gewichte, sodass weniger Kontext für gute Ausgaben benötigt wird</p>
-<p>In outheis:
-- <strong>Skills</strong> sind erlernte Prinzipien, die die agent-Aufmerksamkeit auf das Wesentliche lenken
-- <strong>Memory</strong> sind angesammelte Beobachtungen, die auf Destillation warten
-- <strong>Pattern-agent</strong> verfeinert Skills, sodass agents weniger in ihrem Kontext benötigen</p>
+<p>In einem Transformer:</p>
+<ul>
+<li><strong>Gewichte</strong> sind erlernte Muster, die die Aufmerksamkeit auf relevante Teile der Eingabe lenken</li>
+<li><strong>Kontext</strong> ist die aktuell verarbeitete Eingabe</li>
+<li><strong>Training</strong> verfeinert Gewichte, sodass weniger Kontext für gute Ausgaben benötigt wird</li>
+</ul>
+<p>In outheis:</p>
+<ul>
+<li><strong>Skills</strong> sind erlernte Prinzipien, die die agent-Aufmerksamkeit auf das Wesentliche lenken</li>
+<li><strong>Memory</strong> sind angesammelte Beobachtungen, die auf Destillation warten</li>
+<li><strong>Pattern-agent</strong> verfeinert Skills, sodass agents weniger in ihrem Kontext benötigen</li>
+</ul>
 <p>Das Ziel in beiden Fällen: progressiv weniger explizite Eingabe für gute Ausgaben benötigen, weil erlernte Repräsentationen bereits das Wesentliche erfassen.</p>
 <hr />
 <h2 id="die-lernschleife">Die Lernschleife</h2>

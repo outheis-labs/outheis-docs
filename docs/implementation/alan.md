@@ -64,6 +64,7 @@ alan reads source files, traces call paths, and explains logic — without makin
 ### Improvement Proposals
 
 Respond to requests or proactively identify:
+
 - Refactoring opportunities
 - Bug fixes
 - Inconsistencies between documentation and implementation
@@ -94,6 +95,7 @@ alan has **read access** to any local path. **Write access is restricted to `vau
 ## Context at Startup
 
 alan receives at invocation:
+
 - A code index of the target repository (file tree + brief descriptions)
 - Current contents of `vault/Codebase/Exchange.md`
 - Skills from `agents/skills/code.md`
@@ -157,5 +159,6 @@ vault/Codebase/
 ## Design Notes
 
 - The `vault/Codebase/Exchange.md` pattern is intentionally parallel to `vault/Agenda/Exchange.md`. The interaction model is the same: outheis proposes, you decide.
+
 - Write access restricted to `vault/Codebase/` is enforced at the tool level, not by prompt instruction alone.
 - alan is deliberately absent from production. Code introspection and proposal workflows are development concerns only.

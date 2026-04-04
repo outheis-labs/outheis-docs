@@ -266,10 +266,10 @@
   </div>
   <main class="content">
     <h1 id="architektur">Architektur</h1>
-<p>Dieses Dokument beschreibt die outheis-Architektur, abgeleitet aus den in den vorherigen Dokumenten untersuchten Betriebssystemprinzipien.</p>
+<p>Die outheis-Architektur ist kein Zufallsprodukt — sie ist aus Betriebssystemprinzipien abgeleitet.</p>
 <hr />
 <h2 id="uberblick">Überblick</h2>
-<p>outheis ist ein Multi-Agenten-System, in dem spezialisierte Agenten über Nachrichtenaustausch kommunizieren. Ein Transport-Daemon verwaltet externe Schnittstellen, ein Dispatcher leitet Nachrichten weiter und verwaltet den Agenten-Lebenszyklus, und die Agenten verarbeiten Anfragen.</p>
+<p>outheis ist ein Multi-Agenten-System, in dem spezialisierte agents über Nachrichtenaustausch kommunizieren. Ein Transport-Daemon verwaltet externe Schnittstellen. Ein dispatcher leitet Nachrichten weiter und verwaltet den Agenten-Lebenszyklus. Die agents verarbeiten Anfragen.</p>
 <pre><code>┌─────────────────────────────────────────────────────────────┐
 │                      External World                          │
 │                  (Signal, CLI, API)                          │
@@ -340,7 +340,7 @@
 <hr />
 <h2 id="komponenten">Komponenten</h2>
 <h3 id="transport-daemon-kein-llm">Transport (Daemon, kein LLM)</h3>
-<p>Verwaltet externe Schnittstellen. Konvertiert zwischen Protokollen und dem internen Nachrichtenformat.</p>
+<p>Der Transport verwaltet externe Schnittstellen. Er konvertiert zwischen Protokollen und dem internen Nachrichtenformat.</p>
 <table>
 <thead>
 <tr>
@@ -363,12 +363,12 @@
 </tr>
 </tbody>
 </table>
-<p>Der Transport versteht Inhalte nicht. Er konvertiert und leitet nur weiter.</p>
+<p><strong>Nicht X, sondern Y:</strong> Der Transport versteht Inhalte nicht — er konvertiert und leitet weiter.</p>
 <pre><code>Signal message → JSON → messages.jsonl
 messages.jsonl → JSON → Signal message
 </code></pre>
 <h3 id="dispatcher-daemon-kein-llm">Dispatcher (Daemon, kein LLM)</h3>
-<p>Überwacht die Nachrichtenwarteschlange (per Dateiwatcher: <code>inotify</code>/<code>kqueue</code>), leitet Nachrichten weiter, startet und benachrichtigt Agenten.</p>
+<p>Der dispatcher überwacht die Nachrichtenwarteschlange (per Dateiwatcher: <code>inotify</code>/<code>kqueue</code>), leitet Nachrichten weiter, startet und benachrichtigt agents.</p>
 <h4 id="routing-logik">Routing-Logik</h4>
 <pre><code class="language-python">msg = read_next()
 
@@ -413,9 +413,9 @@ else:
 
     return None  # → Relay
 </code></pre>
-<p>Schlüsselwörter und Schwellenwert sind konfigurierbar. Können leer sein (alles geht an Relay).</p>
+<p>Schlüsselwörter und Schwellenwert sind konfigurierbar. Können leer sein — dann geht alles an Relay.</p>
 <h4 id="lock-manager">Lock-Manager</h4>
-<p>Der Dispatcher verwaltet den Zugriff auf die Warteschlange über einen Unix-Socket-Lock-Manager. Alle Schreiber müssen eine Sperre anfordern, bevor sie in <code>messages.jsonl</code> schreiben.</p>
+<p>Der dispatcher verwaltet den Zugriff auf die Warteschlange über einen Unix-Socket-Lock-Manager. Alle Schreiber müssen eine Sperre anfordern, bevor sie in <code>messages.jsonl</code> schreiben.</p>
 <p><strong>Socket:</strong> <code>~/.outheis/.dispatcher.sock</code></p>
 <p><strong>Prioritätsverwaltung:</strong></p>
 <table>
@@ -459,11 +459,13 @@ else:
 → {&quot;cmd&quot;: &quot;status&quot;}
 ← {&quot;holder&quot;: &quot;client_123&quot;, &quot;queue_length&quot;: 2, &quot;queue&quot;: [...]}
 </code></pre>
-<p><strong>Verhalten:</strong>
-- Sperre wird sofort gewährt, wenn die Warteschlange leer ist
-- Bei Freigabe wird der Nächste in der Warteschlange benachrichtigt
-- Client-Trennung → automatische Freigabe, Bereinigung
-- Prioritäten sind architektonisch, nicht konfigurierbar</p>
+<p><strong>Verhalten:</strong></p>
+<ul>
+<li>Sperre wird sofort gewährt, wenn die Warteschlange leer ist</li>
+<li>Bei Freigabe wird der Nächste in der Warteschlange benachrichtigt</li>
+<li>Client-Trennung → automatische Freigabe, Bereinigung</li>
+<li>Prioritäten sind architektonisch, nicht konfigurierbar</li>
+</ul>
 <h4 id="dateisperrung">Dateisperrung</h4>
 <p>Für andere Dateien als <code>messages.jsonl</code> wird einfaches <code>flock</code> verwendet:</p>
 <table>
@@ -512,7 +514,7 @@ else:
 2. Auf Duplikate prüfen (letzte 100 IDs in der Warteschlange)
 3. Fehlende Nachrichten anhängen, Duplikate überspringen
 4. Wiederhergestellte Pending-Dateien löschen</p>
-<p>Wenn ein Prozess beim Warten auf die Sperre abstürzt, überlebt die Nachricht in <code>.pending/</code> und wird beim (Neu-)Start des Dispatchers wiederhergestellt.</p>
+<p>Wenn ein Prozess beim Warten auf die Sperre abstürzt, überlebt die Nachricht in <code>.pending/</code> und wird beim (Neu-)Start des dispatchers wiederhergestellt.</p>
 <h3 id="web-ui-nur-localhost">Web UI (nur localhost)</h3>
 <p>Einfache Weboberfläche zur Konfiguration. Keine Chat-Funktionalität.</p>
 <table>
@@ -590,17 +592,10 @@ else:
 </tbody>
 </table>
 <h3 id="relay-agent">Relay Agent</h3>
-<p>Leitet unklare Anfragen weiter, verfasst Antworten, fragt bei Bedarf nach Klärung.</p>
-<ul>
-<li>Empfängt Nachrichten, die der Dispatcher nicht weiterleiten kann</li>
-<li>Klassifiziert die Absicht</li>
-<li>Leitet an den passenden Agenten weiter</li>
-<li>Fasst Agentenausgaben zur finalen Antwort zusammen</li>
-<li>Formatiert die Ausgabe für jeden Kanal (Signal, CLI, API)</li>
-</ul>
+<p>Relay empfängt Nachrichten, die der dispatcher nicht weiterleiten kann. Er klassifiziert die Absicht, leitet an den passenden agent weiter, fasst Agentenausgaben zur finalen Antwort zusammen und formatiert die Ausgabe für jeden Kanal (Signal, CLI, API).</p>
 <h3 id="agenda-agent-personlicher-modus">Agenda Agent (Persönlicher Modus)</h3>
-<p>Fungiert als persönlicher Sekretär. Der Name spiegelt beide Bedeutungen wider: die Agenda verwalten (Zeitplan, Prioritäten) und die Handlungsfähigkeit ermöglichen.</p>
-<p><strong>Problem, das er löst</strong>: 47 Kalendereinträge, 23 E-Mails, 14 Aufgaben — roh präsentiert erzeugt das kognitiven Mehraufwand. Der Agenda-Agent reduziert mentale Reibung durch Filtern und Priorisieren auf Basis erlernter Präferenzen.</p>
+<p>cato ist der persönliche Sekretär. Der Name spiegelt beide Bedeutungen wider: die Agenda verwalten (Zeitplan, Prioritäten) und die Handlungsfähigkeit ermöglichen.</p>
+<p><strong>Das Problem:</strong> 47 Kalendereinträge, 23 E-Mails, 14 Aufgaben — roh präsentiert erzeugt das kognitiven Mehraufwand. cato reduziert mentale Reibung durch Filtern und Priorisieren auf Basis erlernter Präferenzen.</p>
 <pre><code>Raw data (overwhelming)
   │
   ▼
@@ -612,17 +607,23 @@ Agenda Agent (filtered, prioritized, personal)
   ▼
 User (only what matters, when it matters)
 </code></pre>
-<p><strong>Was Agenda tut</strong>:
-- Erlernt Benutzerregeln ("Montag morgens: keine Meetings")
-- Versteht Prioritäten ("Familie vor Arbeit, außer bei Deadlines")
-- Filtert Rauschen ("diese E-Mail kann warten, jene nicht")
-- Präsentiert Relevanz, nicht Vollständigkeit</p>
-<p><strong>Wo Regeln gespeichert sind</strong>: Verzeichnis <code>human/rules/</code> — nur Agenda liest sie.</p>
+<p><strong>Was Agenda tut:</strong></p>
+<ul>
+<li>
+<p>erlernt Benutzerregeln ("Montag morgens: keine Meetings")</p>
+</li>
+<li>
+<p>versteht Prioritäten ("Familie vor Arbeit, außer bei Deadlines")</p>
+</li>
+<li>filtert Rauschen ("diese E-Mail kann warten, jene nicht")</li>
+<li>präsentiert Relevanz — nicht Vollständigkeit</li>
+</ul>
+<p><strong>Wo Regeln gespeichert sind:</strong> Verzeichnis <code>human/rules/</code> — nur Agenda liest sie.</p>
 <p>Im Domain-Expert-Modus ist Agenda deaktiviert. Data liefert direkt an Relay.</p>
 <h3 id="data-agent">Data Agent</h3>
 <p>Zentraler Wissensmanager:</p>
 <ol>
-<li><strong>Vault-Zugriff</strong>: Lesen und Schreiben im Vault</li>
+<li><strong>Vault-Zugriff</strong>: Lesen und Schreiben im vault</li>
 <li><strong>Aggregation</strong>: Kombiniert Informationen aus mehreren Quellen</li>
 <li><strong>Synthese</strong>: Beantwortet komplexe Anfragen, die Schlussfolgerungen erfordern</li>
 <li><strong>Koordination</strong>: Fordert bei Bedarf externe Daten von Action an</li>
@@ -645,7 +646,7 @@ User (only what matters, when it matters)
                           Response
 </code></pre>
 <h3 id="eigentumsmodell">Eigentumsmodell</h3>
-<p>Jeder Agent besitzt seine Domäne exklusiv. Andere fordern Zugriff über Nachrichten an.</p>
+<p>Jeder agent besitzt seine Domain exklusiv. Andere fordern Zugriff über Nachrichten an.</p>
 <table>
 <thead>
 <tr>
@@ -664,7 +665,7 @@ User (only what matters, when it matters)
 </tr>
 <tr>
 <td>Data</td>
-<td>Vault, Wissenssynthese, Index</td>
+<td>vault, Wissenssynthese, Index</td>
 </tr>
 <tr>
 <td>Action</td>
@@ -726,9 +727,15 @@ User (only what matters, when it matters)
 <pre><code>~/.outheis/human/messages.jsonl
 </code></pre>
 <ul>
-<li><strong>Append-only</strong>: Nachrichten werden nie verändert oder gelöscht</li>
-<li><strong>Einzelne Datei</strong>: Einfachheit vor Leistung</li>
-<li><strong>Dateisperrung</strong>: Einfaches <code>fcntl</code>-Locking für gleichzeitigen Zugriff</li>
+<li>
+<p><strong>Append-only</strong>: Nachrichten werden nie verändert oder gelöscht</p>
+</li>
+<li>
+<p><strong>Einzelne Datei</strong>: Einfachheit vor Leistung</p>
+</li>
+<li>
+<p><strong>Dateisperrung</strong>: Einfaches <code>fcntl</code>-Locking für gleichzeitigen Zugriff</p>
+</li>
 </ul>
 <pre><code class="language-python">import fcntl
 import json
@@ -741,10 +748,18 @@ def append_message(path: str, msg: dict) -&gt; None:
 </code></pre>
 <h3 id="vorteile-event-sourcing">Vorteile (Event Sourcing)</h3>
 <ul>
-<li><strong>Prüfprotokoll</strong>: Vollständige Geschichte aller Interaktionen</li>
-<li><strong>Replay</strong>: Beliebigen vergangenen Zustand rekonstruieren</li>
-<li><strong>Debugging</strong>: Genau nachvollziehen, was passiert ist</li>
-<li><strong>Wiederherstellung</strong>: Beim letzten verarbeiteten Eintrag fortsetzen</li>
+<li>
+<p><strong>Prüfprotokoll</strong>: Vollständige Geschichte aller Interaktionen</p>
+</li>
+<li>
+<p><strong>Replay</strong>: Beliebigen vergangenen Zustand rekonstruieren</p>
+</li>
+<li>
+<p><strong>Debugging</strong>: Genau nachvollziehen, was passiert ist</p>
+</li>
+<li>
+<p><strong>Wiederherstellung</strong>: Beim letzten verarbeiteten Eintrag fortsetzen</p>
+</li>
 </ul>
 <hr />
 <h2 id="deployment-spektrum">Deployment-Spektrum</h2>
@@ -806,7 +821,7 @@ def append_message(path: str, msg: dict) -&gt; None:
 <hr />
 <h2 id="zugangskontrolle">Zugangskontrolle</h2>
 <h3 id="dynamische-einschrankung-openbsd-inspiriert">Dynamische Einschränkung (OpenBSD-inspiriert)</h3>
-<p>Agenten deklarieren Fähigkeiten beim Start und schränken sich progressiv ein:</p>
+<p>Agents deklarieren Fähigkeiten beim Start und schränken sich progressiv ein:</p>
 <pre><code class="language-python">class DataAgent:
     def __init__(self):
         self.pledge([&quot;vault:read&quot;, &quot;vault:write&quot;])
@@ -868,10 +883,10 @@ def append_message(path: str, msg: dict) -&gt; None:
 </tr>
 </tbody>
 </table>
-<p>Hinweis: Agenten fordern Dienste von anderen Agenten über Nachrichten an. Data kann Action bitten, externe Daten abzurufen; Agenda fragt Data nach aggregierten Informationen.</p>
+<p>Agents fordern Dienste von anderen agents über Nachrichten an. Data kann Action bitten, externe Daten abzurufen; Agenda fragt Data nach aggregierten Informationen.</p>
 <hr />
 <h2 id="fehlerbehandlung">Fehlerbehandlung</h2>
-<p>Wenn ein Agent ausfällt:</p>
+<p>Wenn ein agent ausfällt:</p>
 <pre><code>1. Log error (always)
 2. Inform user via Relay
 3. Retry with clarification if applicable
@@ -916,14 +931,14 @@ Dispatcher catches
 </table>
 <hr />
 <h2 id="gesprachslebenszyklus">Gesprächslebenszyklus</h2>
-<p>Gespräche enden nicht explizit. Sie laufen aus.</p>
+<p>Gespräche enden nicht explizit — sie laufen aus.</p>
 <h3 id="rotation">Rotation</h3>
 <p>Wenn <code>messages.jsonl</code> einen Schwellenwert überschreitet (konfigurierbar, Standard 10 MB):</p>
 <pre><code>messages.jsonl          → messages.jsonl (current)
                         → archive/messages-2025-03.jsonl (cold)
 </code></pre>
 <h3 id="kaltspeicherung">Kaltspeicherung</h3>
-<p>Alte Gespräche werden nach <code>human/archive/</code> verschoben:</p>
+<p>Alte Gespräche wandern nach <code>human/archive/</code>:</p>
 <pre><code>~/.outheis/human/
 ├── messages.jsonl           # Hot: current, fast access
 └── archive/
@@ -983,10 +998,10 @@ Dispatcher catches
 </code></pre>
 <p>Mehrere Zeiten möglich: <code>["04:00", "16:00"]</code></p>
 <h3 id="manueller-ausloser">Manueller Auslöser</h3>
-<p>Benutzer kann anfordern: "@rumi reflect on this week" → Dispatcher leitet an Pattern weiter.</p>
+<p>Benutzer kann anfordern: "@rumi reflect on this week" → dispatcher leitet an Pattern weiter.</p>
 <hr />
 <h2 id="prioritatsverwaltung-gcd-inspiriert">Prioritätsverwaltung (GCD-inspiriert)</h2>
-<p>Agenten haben implizite Prioritätsstufen:</p>
+<p>Agents haben implizite Prioritätsstufen:</p>
 <table>
 <thead>
 <tr>
@@ -1013,7 +1028,7 @@ Dispatcher catches
 </tr>
 </tbody>
 </table>
-<p>Der Dispatcher kann Hintergrundarbeit zurückstellen, wenn Nachrichten mit hoher Priorität ausstehen.</p>
+<p>Der dispatcher kann Hintergrundarbeit zurückstellen, wenn Nachrichten mit hoher Priorität ausstehen.</p>
 <hr />
 <h2 id="kanalspezifische-formatierung">Kanalspezifische Formatierung</h2>
 <p>Der Relay-Agent formatiert die Ausgabe für jeden Kanal:</p>
@@ -1116,7 +1131,7 @@ Tasks
 </tr>
 </tbody>
 </table>
-<p>Konflikte und dringende Punkte müssen in <code>Daily.md</code> auftauchen, nicht versteckt in Exchange.</p>
+<p>Konflikte und dringende Punkte erscheinen in <code>Daily.md</code>, nicht versteckt in Exchange.</p>
 <hr />
 <h2 id="betriebsmodi">Betriebsmodi</h2>
 <h3 id="personlicher-assistent-standard">Persönlicher Assistent (Standard)</h3>
@@ -1136,7 +1151,7 @@ Tasks
 </ul>
 <hr />
 <h2 id="bedeutung-von-aufmerksamkeit">Bedeutung von Aufmerksamkeit</h2>
-<p>Die zentrale Erkenntnis der Transformer-Architektur aus "Attention Is All You Need" (Vaswani et al., 2017) — dass Aufmerksamkeitsmechanismen die Verarbeitung auf das Wesentliche lenken — gilt direkt für outheis. Das ist keine Metapher; es ist dasselbe Prinzip auf einer anderen Ebene.</p>
+<p>Die zentrale Erkenntnis der Transformer-Architektur — dass Aufmerksamkeitsmechanismen die Verarbeitung auf das Wesentliche lenken — gilt direkt für outheis. Das ist keine Metapher. Dasselbe Prinzip auf einer anderen Ebene.</p>
 <h3 id="die-lernarchitektur">Die Lernarchitektur</h3>
 <pre><code>Skills (highest density)
    │  condensed principles
@@ -1199,9 +1214,9 @@ Next agent invocation: Skill directs attention
         ↓
 Agent behaves differently (learned)
 </code></pre>
-<p>Das ist Gradientenabstieg auf Systemebene. Jede Korrektur passt die "Gewichte" (Skills) an. Mit der Zeit benötigt das System weniger expliziten Kontext, weil Skills die Aufmerksamkeit effizient lenken.</p>
+<p>Das ist Gradientenabstieg auf Systemebene. Jede Korrektur passt die „Gewichte" (Skills) an. Mit der Zeit benötigt das System weniger expliziten Kontext — Skills lenken die Aufmerksamkeit bereits effizient.</p>
 <h3 id="warum-nicht-mehr-code">Warum nicht mehr Code?</h3>
-<p>Das Anti-Muster besteht darin, Lernen mit fest kodierter Logik zu lösen:</p>
+<p>Das Anti-Muster: Lernen mit fest kodierter Logik lösen.</p>
 <p><strong>Falsch:</strong></p>
 <pre><code class="language-python">def format_date(date):
     if user_prefers_iso:
@@ -1212,15 +1227,15 @@ Agent behaves differently (learned)
 <p><strong>Richtig:</strong></p>
 <pre><code>Skill: &quot;Dates: Always ISO format (YYYY-MM-DD)&quot;
 </code></pre>
-<p>Das LLM liest den Skill und wendet ihn an. Kein Code muss geändert werden, wenn sich Präferenzen ändern. Das System lernt durch Verfeinern von Skills, nicht durch Hinzufügen von Verzweigungen.</p>
+<p>Das LLM liest den Skill und wendet ihn an. Kein Code muss geändert werden, wenn sich Präferenzen ändern. Das System lernt durch Verfeinern von Skills — nicht durch Hinzufügen von Verzweigungen.</p>
 <h3 id="skalierung-durch-semantische-kompression">Skalierung durch semantische Kompression</h3>
-<p>Mit wachsendem Kontext scheitern naive Ansätze:</p>
+<p>Mit wachsendem Kontext scheitern naive Ansätze.</p>
 <p><strong>Falsch:</strong> Mehr Tools hinzufügen, um mehr Daten abzurufen</p>
 <p><strong>Richtig:</strong> Semantische Kompression — der Pattern Agent destilliert viele spezifische Beobachtungen zu wenigen allgemeinen Prinzipien</p>
 <pre><code>3x &quot;User corrected date format&quot;  →  &quot;Dates: Always ISO format&quot;
 5x &quot;User prefers short answers&quot;  →  &quot;Brevity: be concise&quot;
 </code></pre>
-<p>Die Bedeutung bleibt erhalten, die Redundanz verschwindet. Ein Skill ersetzt zehn Memory-Einträge und lenkt die Aufmerksamkeit auf das Wesentliche.</p>
+<p>Die Bedeutung bleibt erhalten, die Redundanz verschwindet. Ein Skill ersetzt zehn Memory-Einträge.</p>
 <h3 id="pattern-agent-als-optimierer">Pattern Agent als Optimierer</h3>
 <p>Der Pattern Agent ist der Optimierer dieses Systems:</p>
 <ol>
@@ -1229,7 +1244,7 @@ Agent behaves differently (learned)
 <li><strong>Führt Batch-Update durch</strong> — nächtliche Destillation</li>
 <li><strong>Bereinigt Redundanz</strong> — löscht veraltete Memory-Einträge</li>
 </ol>
-<p>Ziel: Ein System, das sich verbessert, nicht durch das Hinzufügen von Code, sondern durch das Verfeinern von Aufmerksamkeit. Je länger es läuft, desto weniger Kontext benötigt es.</p>
+<p>Ziel: Ein System, das sich verbessert — nicht durch Hinzufügen von Code, sondern durch Verfeinern von Aufmerksamkeit. Je länger es läuft, desto weniger Kontext benötigt es.</p>
 <hr />
 <h2 id="zusammenfassung-der-designprinzipien">Zusammenfassung der Designprinzipien</h2>
 <table>
@@ -1246,15 +1261,15 @@ Agent behaves differently (learned)
 </tr>
 <tr>
 <td>Ownership</td>
-<td>Jeder Agent besitzt seine Domäne</td>
+<td>Jeder agent besitzt seine Domain</td>
 </tr>
 <tr>
 <td>Supervision</td>
-<td>Dispatcher überwacht und startet neu</td>
+<td>dispatcher überwacht und startet neu</td>
 </tr>
 <tr>
 <td>Dynamic Restriction</td>
-<td>Agenten pledge/unveil beim Start</td>
+<td>agents pledge/unveil beim Start</td>
 </tr>
 <tr>
 <td>Priority Scheduling</td>
@@ -1266,7 +1281,7 @@ Agent behaves differently (learned)
 </tr>
 <tr>
 <td>Specialization</td>
-<td>Ein Agent, eine Rolle</td>
+<td>Ein agent, eine Rolle</td>
 </tr>
 <tr>
 <td>Secure by Default</td>

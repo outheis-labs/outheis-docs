@@ -96,6 +96,7 @@ The Tags view scans the vault for all `#tags` and presents them grouped by names
 - Tags are grouped by namespace prefix (`#action-*`, `#date-*`, `#rank-*`, etc.), all collapsed by default
 - Each group shows tag count and total occurrences across the vault
 - Per-tag: occurrence count, file count, rename input field, Delete button
+
 - `#outheis-*` tags are hidden (internal system use only)
 
 ## Configuration Editor
@@ -105,11 +106,13 @@ The Configuration view provides a complete editor for `~/.outheis/human/config.j
 ### General Tab
 
 - **User profile**: Name, email, phone, language, timezone
+
 - **Vaults**: List of vault directories (primary + secondary)
 
 ### Providers Tab
 
 Three provider cards (Anthropic, OpenAI, Ollama):
+
 - API key (password field, not stored in plain text in UI)
 - Base URL (for custom endpoints or proxies)
 - Status indicator (green dot when configured)
@@ -143,9 +146,11 @@ Each agent can use a different model alias (fast/capable/reasoning).
 ### Signal Tab
 
 Signal transport configuration:
+
 - Enabled toggle
 - Phone number (registered with signal-cli)
 - CLI path (default: `/usr/local/bin/signal-cli`)
+
 - Whitelist (phone numbers allowed to interact)
 
 ## Scheduler
@@ -161,8 +166,11 @@ Manage scheduled tasks:
 ```
 
 - **+ button**: Add another time (auto-increments by 1 hour)
+
 - **× button**: Remove a time (minimum one remains)
+
 - **Checkbox**: Enable/disable task
+
 - **History tab**: View past scheduler events from messages.jsonl
 
 ## File Browser
@@ -182,7 +190,9 @@ Memory, Skills, Rules, Patterns, Agenda, and Codebase views share a file browser
 ```
 
 - **Rendered**: Markdown rendered as HTML (via marked.js)
+
 - **Source**: Raw text, editable (contenteditable)
+
 - **Save**: Writes changes back to disk
 
 ## Live Updates
@@ -194,6 +204,7 @@ The Messages view uses WebSocket for real-time updates:
 3. Messages appear instantly in the UI
 
 Connection status shown in the status bar:
+
 - `Connected` — WebSocket active
 - `Disconnected` — Reconnecting in 3 seconds
 - `Error` — Connection failed
@@ -214,6 +225,7 @@ The server exposes REST endpoints:
 
 ### Files
 - `GET /api/{type}` — List files (type: memory, skills, rules, patterns, agenda, codebase)
+
 - `GET /api/{type}/{filename}` — Read file content
 - `PUT /api/{type}/{filename}` — Write file content
 
@@ -258,6 +270,7 @@ outheis-minimal/
 
 ### Typography
 Single font family (Lexend Deca) in two weights:
+
 - **400** — Body text, labels, inputs
 - **500** — Titles, emphasis, agent names
 
@@ -273,10 +286,12 @@ This is an administration interface, not a chat UI. For chat, use the CLI (`nous
 ## Dependencies
 
 Server-side:
+
 - `fastapi` — Web framework
 - `uvicorn` — ASGI server
 
 Client-side:
+
 - `marked.js` — Markdown rendering (CDN)
 - Lexend Deca — Typography (Google Fonts)
 

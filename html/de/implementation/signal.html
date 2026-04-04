@@ -283,8 +283,12 @@ Send path:  _send_request() → stdin write → Event.wait()
 </code></pre>
 <h3 id="klassen">Klassen</h3>
 <ul>
-<li><code>SignalRPC</code> — <code>transport/signal_rpc.py</code>: verwaltet den signal-cli-Subprozess, Leser-Thread, Sende-/Empfangs-Primitiven</li>
-<li><code>SignalTransport</code> — <code>transport/signal.py</code>: Nachrichten-Schleife, Autorisierung, Watcher-Thread, Markdown-Entfernung</li>
+<li>
+<p><code>SignalRPC</code> — <code>transport/signal_rpc.py</code>: verwaltet den signal-cli-Subprozess, Leser-Thread, Sende-/Empfangs-Primitiven</p>
+</li>
+<li>
+<p><code>SignalTransport</code> — <code>transport/signal.py</code>: Nachrichten-Schleife, Autorisierung, Watcher-Thread, Markdown-Entfernung</p>
+</li>
 </ul>
 <h3 id="nebenlaufigkeitsmodell">Nebenläufigkeitsmodell</h3>
 <table>
@@ -362,8 +366,12 @@ Send path:  _send_request() → stdin write → Event.wait()
 <p>Der Ersatz für horizontale Linien erscheint in Signals UI als solide Trennlinie.</p>
 <h2 id="autorisierung">Autorisierung</h2>
 <ul>
-<li><code>signal.allowed</code> in <code>config.json</code>: Whitelist von Telefonnummern, die Nachrichten senden dürfen</li>
-<li><code>human.phone</code> ist unabhängig von der Whitelist immer erlaubt</li>
+<li>
+<p><code>signal.allowed</code> in <code>config.json</code>: Whitelist von Telefonnummern, die Nachrichten senden dürfen</p>
+</li>
+<li>
+<p><code>human.phone</code> ist unabhängig von der Whitelist immer erlaubt</p>
+</li>
 <li>UUIDs werden beim ersten Kontakt gelernt und in <code>~/.outheis/human/signal.json</code> gespeichert</li>
 <li>Ersteinrichtung erfordert Vertrauen des Identitätsschlüssels über <code>signal-cli trust</code> (siehe Installationsanleitung)</li>
 </ul>

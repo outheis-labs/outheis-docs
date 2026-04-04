@@ -266,7 +266,7 @@
   </div>
   <main class="content">
     <h1 id="systemuberblick-betriebssysteme-und-anwendbare-konzepte">Systemüberblick: Betriebssysteme und anwendbare Konzepte</h1>
-<p>Dieses Dokument gibt einen Überblick über Betriebssysteme und Architekturmuster, die für das Design von Multi-agent-KI-Systemen relevant sind.</p>
+<p>Betriebssysteme haben Probleme gelöst, die agent-Architekturen gerade erst entdecken. Dieser Überblick zeigt, welche Konzepte übertragbar sind — und warum.</p>
 <hr />
 <h2 id="dragonflybsd">DragonFlyBSD</h2>
 <p><strong>Ursprung</strong>: Abgespalten von FreeBSD 4.x im Jahr 2003 von Matthew Dillon
@@ -290,13 +290,15 @@
      └────────────────────┴────────────────────┘
               Nachrichten gehen direkt zum Ziel
 </code></pre>
-<p><strong>Keine zentrale Queue</strong>. Jede CPU hat ihre eigene. Produzenten schreiben in die Queue des Ziels; Konsumenten lesen nur aus ihrer eigenen.</p>
+<p><strong>Keine zentrale Queue.</strong> Jede CPU hat ihre eigene. Produzenten schreiben in die Queue des Ziels; Konsumenten lesen nur aus ihrer eigenen.</p>
 <h4 id="ownership-semantik">Ownership-Semantik</h4>
 <p>Daten „gehören" einer CPU. Nur der Eigentümer modifiziert sie. Andere senden Nachrichten und fordern Änderungen an.</p>
-<p>Das eliminiert:
-- Lock-Contention
-- Cache-Line-Bouncing
-- Deadlocks</p>
+<p>Das eliminiert:</p>
+<ul>
+<li>Lock-Contention</li>
+<li>Cache-Line-Bouncing</li>
+<li>Deadlocks</li>
+</ul>
 <h3 id="anwendbarkeit-auf-agent-systeme">Anwendbarkeit auf agent-Systeme</h3>
 <table>
 <thead>
@@ -334,10 +336,12 @@
 <strong>Fokus</strong>: Fehlertoleranz, Parallelität, Hot-Code-Reloading</p>
 <h3 id="relevante-konzepte_1">Relevante Konzepte</h3>
 <h4 id="actor-modell">Actor-Modell</h4>
-<p>Prozesse (Actors) sind:
-- Isoliert (kein gemeinsamer Speicher)
-- Durch PID identifiziert
-- Kommunizieren nur über asynchrone Nachrichten</p>
+<p>Prozesse (Actors) sind:</p>
+<ul>
+<li>Isoliert (kein gemeinsamer Speicher)</li>
+<li>Durch PID identifiziert</li>
+<li>Kommunizieren nur über asynchrone Nachrichten</li>
+</ul>
 <pre><code>┌─────────┐    Nachricht    ┌─────────┐
 │ Actor A │──────────────►  │ Actor B │
 └─────────┘                 └─────────┘
@@ -358,13 +362,21 @@
 │Worker │ │Worker │ │Worker │
 └───────┘ └───────┘ └───────┘
 </code></pre>
-<p>Supervisor-Strategien:
-- <strong>one_for_one</strong>: Nur das fehlgeschlagene Kind neustarten
-- <strong>one_for_all</strong>: Alle Kinder neustarten, wenn eines scheitert
-- <strong>rest_for_one</strong>: Fehlgeschlagenes Kind und danach gestartete neustarten</p>
+<p>Supervisor-Strategien:</p>
+<ul>
+<li>
+<p><strong>one_for_one</strong>: Nur das fehlgeschlagene Kind neustarten</p>
+</li>
+<li>
+<p><strong>one_for_all</strong>: Alle Kinder neustarten, wenn eines scheitert</p>
+</li>
+<li>
+<p><strong>rest_for_one</strong>: Fehlgeschlagenes Kind und danach gestartete neustarten</p>
+</li>
+</ul>
 <h4 id="let-it-crash">„Let It Crash"</h4>
 <p>Nicht defensiv programmieren. Prozesse scheitern lassen. Der Supervisor startet sie in einem bekannten guten Zustand neu.</p>
-<p>Das ist kontraintuitiv, aber leistungsstark: Fehlerbehandlung wird von der Geschäftslogik getrennt.</p>
+<p>Das ist kontraintuitiv — aber leistungsstark. Fehlerbehandlung trennt sich von der Geschäftslogik.</p>
 <h3 id="anwendbarkeit-auf-agent-systeme_1">Anwendbarkeit auf agent-Systeme</h3>
 <table>
 <thead>
@@ -415,14 +427,16 @@
 │  Holder: Process_7                  │
 └─────────────────────────────────────┘
 </code></pre>
-<p>Man kann nur zugreifen, wofür man Capabilities hat. Keine Ambient Authority.</p>
+<p>Man greift nur zu, wofür man Capabilities hat. Keine Ambient Authority.</p>
 <h4 id="minimaler-kernel">Minimaler Kernel</h4>
-<p>seL4s Kernel bietet nur:
-- Threads
-- Adressräume
-- IPC
-- Capability-Verwaltung</p>
-<p>Alles andere (Dateisysteme, Treiber, Netzwerke) läuft im User Space.</p>
+<p>seL4s Kernel bietet nur:</p>
+<ul>
+<li>Threads</li>
+<li>Adressräume</li>
+<li>IPC</li>
+<li>Capability-Verwaltung</li>
+</ul>
+<p>Alles andere — Dateisysteme, Treiber, Netzwerke — läuft im User Space.</p>
 <h3 id="anwendbarkeit-auf-agent-systeme_2">Anwendbarkeit auf agent-Systeme</h3>
 <table>
 <thead>
@@ -456,7 +470,7 @@
 <p><strong>Ursprung</strong>: Abgespalten von NetBSD im Jahr 1995 von Theo de Raadt
 <strong>Fokus</strong>: Sicherheit, Korrektheit, Einfachheit</p>
 <h3 id="relevante-konzepte_3">Relevante Konzepte</h3>
-<p>OpenBSD hat viele Sicherheitsinnovationen beigetragen. Für agent-Architekturen sind zwei besonders anwendbar:</p>
+<p>Für agent-Architekturen sind zwei Mechanismen besonders anwendbar:</p>
 <h4 id="pledge2">pledge(2)</h4>
 <p>Ein Prozess erklärt vorab, welche Syscall-Klassen er benötigt. Nach dem Pledge terminiert jeder andere Syscall den Prozess.</p>
 <pre><code class="language-c">pledge(&quot;stdio rpath&quot;, NULL);  // Only stdio and read-only file access
@@ -469,7 +483,7 @@
 unveil(&quot;/tmp&quot;, &quot;rwc&quot;);      // Read, write, create in /tmp
 unveil(NULL, NULL);         // Lock it down—no more unveil calls allowed
 </code></pre>
-<p>Nach dem letzten <code>unveil(NULL, NULL)</code> kann der Prozess seine Sicht nicht erweitern. Das Dateisystem ist effektiv auf die deklarierten Pfade geschrumpft.</p>
+<p>Nach dem letzten <code>unveil(NULL, NULL)</code> kann der Prozess seine Sicht nicht erweitern. Das Dateisystem schrumpft auf die deklarierten Pfade.</p>
 <h4 id="privilegtrennung">Privilegtrennung</h4>
 <p>OpenBSD-Daemons teilen sich in zwei Prozesse auf:</p>
 <pre><code>┌─────────────────┐
@@ -481,10 +495,10 @@ unveil(NULL, NULL);         // Lock it down—no more unveil calls allowed
 │ Child (nobody)  │  ← Parst Eingabe, erledigt Arbeit, unprivilegiert
 └─────────────────┘
 </code></pre>
-<p>Der Child-Prozess verarbeitet nicht vertrauenswürdige Eingabe. Wenn er kompromittiert wird, hat er keine Privilegien. Der Elternteil führt nur minimale, auditierte Operationen im Namen des Kindes durch.</p>
+<p>Der Child-Prozess verarbeitet nicht vertrauenswürdige Eingabe. Wenn er kompromittiert wird, hat er keine Privilegien. Der Elternteil führt nur minimale, auditierte Operationen durch.</p>
 <h4 id="historischer-kontext-jails-und-container">Historischer Kontext: Jails und Container</h4>
-<p>Prozessisolation hat sich durch mehrere Stufen entwickelt: chroot (1979), FreeBSD-Jails (1999), Solaris-Zones, Linux-Container, Docker. Diese bieten <strong>statische Isolation</strong> — du baust den Container, dann läufst du darin.</p>
-<p>pledge/unveil repräsentieren einen anderen Ansatz: <strong>dynamische Einschränkung</strong>. Ein Prozess startet mit vollen Capabilities und gibt sie schrittweise auf, während er sich initialisiert. Das ist oft praktischer für Anwendungen, die Ressourcen beim Start, aber nicht während des Betriebs benötigen.</p>
+<p>Prozessisolation hat sich durch mehrere Stufen entwickelt: chroot (1979), FreeBSD-Jails (1999), Solaris-Zones, Linux-Container, Docker. Das ist <strong>statische Isolation</strong> — du baust den Container, dann läufst du darin.</p>
+<p>pledge/unveil sind ein anderer Ansatz: <strong>dynamische Einschränkung</strong>. Ein Prozess startet mit vollen Capabilities und gibt sie schrittweise auf. Oft praktischer für Anwendungen, die Ressourcen beim Start, aber nicht während des Betriebs benötigen.</p>
 <h3 id="anwendbarkeit-auf-agent-systeme_3">Anwendbarkeit auf agent-Systeme</h3>
 <table>
 <thead>
@@ -535,12 +549,14 @@ unveil(NULL, NULL);         // Lock it down—no more unveil calls allowed
 │  Custom Queues   │ Seriell oder parallel│
 └──────────────────┴──────────────────────┘
 </code></pre>
-<p>Das System verwaltet Thread-Pools. Du sagst einfach „mach diese Arbeit" und „wie wichtig ist sie".</p>
+<p>Das System verwaltet Thread-Pools. Du sagst einfach „mach diese Arbeit" — und wie wichtig sie ist.</p>
 <h4 id="quality-of-service-qos">Quality of Service (QoS)</h4>
-<p>Arbeit wird mit ihrer Prioritätsstufe markiert. Das System kann:
-- Hintergrundarbeit drosseln, wenn der Nutzer aktiv ist
-- Priorität erhöhen, wenn Ergebnisse sofort benötigt werden
-- Energieverbrauch auf Laptops/Phones ausbalancieren</p>
+<p>Arbeit wird mit Prioritätsstufe markiert. Das System kann:</p>
+<ul>
+<li>Hintergrundarbeit drosseln, wenn der Nutzer aktiv ist</li>
+<li>Priorität erhöhen, wenn Ergebnisse sofort gebraucht werden</li>
+<li>Energieverbrauch auf Laptops und Phones ausbalancieren</li>
+</ul>
 <h3 id="anwendbarkeit-auf-agent-systeme_4">Anwendbarkeit auf agent-Systeme</h3>
 <table>
 <thead>
@@ -576,7 +592,7 @@ unveil(NULL, NULL);         // Lock it down—no more unveil calls allowed
 </tr>
 </tbody>
 </table>
-<p>Beispiel: Ein relay-agent, der Nutzereingaben verarbeitet, läuft mit hoher Priorität. Ein Pattern-agent, der Geschichte analysiert, läuft im Hintergrund. Der dispatcher verwaltet Queue-Prioritäten basierend auf Systemlast und Nutzeraktivität.</p>
+<p>Beispiel: Ein relay-agent verarbeitet Nutzereingaben mit hoher Priorität. Ein Pattern-agent analysiert Geschichte im Hintergrund. Der dispatcher verwaltet Queue-Prioritäten basierend auf Systemlast und Nutzeraktivität.</p>
 <hr />
 <h2 id="plan-9">Plan 9</h2>
 <p><strong>Ursprung</strong>: Bell Labs (1980er–2000er), Nachfolger von Unix
@@ -626,7 +642,7 @@ unveil(NULL, NULL);         // Lock it down—no more unveil calls allowed
 <strong>Fokus</strong>: Zustand als abgeleitet aus unveränderlichen Ereignissen</p>
 <h3 id="relevante-konzepte_6">Relevante Konzepte</h3>
 <h4 id="append-only-log">Append-Only-Log</h4>
-<p>Zustand wird nicht direkt gespeichert. Stattdessen werden Ereignisse an ein unveränderliches Log angehängt:</p>
+<p>Zustand wird nicht direkt gespeichert. Stattdessen hängen Ereignisse an ein unveränderliches Log an:</p>
 <pre><code>┌─────────────────────────────────────────────┐
 │ Event Log                                   │
 │                                             │
@@ -638,10 +654,18 @@ unveil(NULL, NULL);         // Lock it down—no more unveil calls allowed
 <p>Aktueller Zustand = Fold über alle Ereignisse.</p>
 <h4 id="vorteile">Vorteile</h4>
 <ul>
-<li><strong>Audit-Trail</strong>: Vollständige Geschichte</li>
-<li><strong>Replay</strong>: Jeden vergangenen Zustand rekonstruieren</li>
-<li><strong>Debugging</strong>: Genau sehen, was passiert ist</li>
-<li><strong>Temporale Abfragen</strong>: „Was war der Zustand zu Zeit T?"</li>
+<li>
+<p><strong>Audit-Trail</strong>: Vollständige Geschichte</p>
+</li>
+<li>
+<p><strong>Replay</strong>: Jeden vergangenen Zustand rekonstruieren</p>
+</li>
+<li>
+<p><strong>Debugging</strong>: Genau sehen, was passiert ist</p>
+</li>
+<li>
+<p><strong>Temporale Abfragen</strong>: „Was war der Zustand zu Zeit T?"</p>
+</li>
 </ul>
 <h3 id="anwendbarkeit-auf-agent-systeme_6">Anwendbarkeit auf agent-Systeme</h3>
 <table>
@@ -676,7 +700,7 @@ unveil(NULL, NULL);         // Lock it down—no more unveil calls allowed
 <strong>Fokus</strong>: Einzelzweck, minimale Angriffsfläche</p>
 <h3 id="relevante-konzepte_7">Relevante Konzepte</h3>
 <h4 id="library-operating-system">Library Operating System</h4>
-<p>Die Anwendung verlinkt direkt gegen OS-Bibliotheken. Kein separater Kernel. Das Ergebnis ist ein einzelnes bootfähiges Image.</p>
+<p>Die Anwendung verlinkt direkt gegen OS-Bibliotheken. Kein separater Kernel. Das Ergebnis: ein einzelnes bootfähiges Image.</p>
 <pre><code>Traditionell:
 ┌─────────────┐
 │ Anwendung   │
@@ -714,7 +738,7 @@ Unikernel:
 </tr>
 </tbody>
 </table>
-<p>Beispiel: Ein action-agent ist spezialisiert — er führt Aufgaben aus. Er analysiert keine Muster oder verfasst keine Nachrichten.</p>
+<p>Beispiel: Ein action-agent ist spezialisiert — er führt Aufgaben aus. Er analysiert keine Muster und verfasst keine Nachrichten.</p>
 <hr />
 <h2 id="vergleichsmatrix">Vergleichsmatrix</h2>
 <table>
@@ -770,7 +794,7 @@ Unikernel:
 </table>
 <hr />
 <h2 id="synthese-fur-agent-architekturen">Synthese für agent-Architekturen</h2>
-<p>Ein gut entworfenes Multi-agent-System kann kombinieren:</p>
+<p>Kein konkurrierender Ansatz — sie addressieren orthogonale Belange und kombinieren sich natürlich:</p>
 <ol>
 <li><strong>DragonFlyBSDs Message-Passing</strong> für agent-Kommunikation</li>
 <li><strong>Erlangs Supervision</strong> für Fehlertoleranz</li>
@@ -781,7 +805,6 @@ Unikernel:
 <li><strong>Event-Sourcings append-only-Log</strong> für Auditierbarkeit</li>
 <li><strong>Unikernels Spezialisierung</strong> für fokussierte agent-Rollen</li>
 </ol>
-<p>Das sind keine konkurrierenden Ansätze — sie addressieren orthogonale Belange und kombinieren sich natürlich.</p>
 <hr />
 <p>Weiter: <a href="03-architecture.md">03-architecture.md</a> — Die outheis-Architektur, abgeleitet aus diesen Prinzipien.</p>
     <hr>

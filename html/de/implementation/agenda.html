@@ -306,10 +306,12 @@ meeting mit X nächste woche, wichtig
 zahnarzt anrufen
 projekt alpha deadline verschoben auf april
 </code></pre>
-<p>outheis verarbeitet dies stündlich:
-- Erkennt Aufgaben → verschiebt in Daily.md
-- Unklare Einträge → fragt über Exchange.md
-- Notizen → behält oder archiviert</p>
+<p>outheis verarbeitet dies stündlich:</p>
+<ul>
+<li>Erkennt Aufgaben → verschiebt in Daily.md</li>
+<li>Unklare Einträge → fragt über Exchange.md</li>
+<li>Notizen → behält oder archiviert</li>
+</ul>
 <h3 id="exchangemd">Exchange.md</h3>
 <p>Asynchroner Dialog zwischen dir und outheis. Wird automatisch beim Start erstellt:</p>
 <pre><code class="language-markdown"># Exchange
@@ -437,10 +439,16 @@ touch ~/Documents/Vault/Agenda/{Daily,Inbox,Exchange}.md
 <p><strong>Relay (ou)</strong> leitet Terminabfragen an Agenda weiter. Leseabfragen ("Agenda", "was steht heute") werden direkt an cato weitergeleitet, der Daily.md wörtlich zurückgibt. Schreib-/Aktualisierungsabfragen durchlaufen die vollständige Tool-Schleife.</p>
 <p><strong>Data-Agent (zeno)</strong> kann deinen Vault durchsuchen, schreibt aber nicht in Agenda-Dateien.</p>
 <p><strong>Action-Agent (hiro)</strong> kann Aufgaben ausführen (E-Mails senden, Kalendereinträge erstellen), aber Agenda verwaltet, was geplant ist.</p>
-<p><strong>Pattern-Agent (rumi)</strong> beobachtet deine Planungsmuster und kann:
-- Rules erstellen wie "Benutzer bevorzugt keine Meetings vor 10:00"
-- Wiederkehrende Aufgaben bemerken und Automatisierung vorschlagen
-- In Exchange.md schreiben, wenn Seed-Dateien Genehmigung benötigen</p>
+<p><strong>Pattern-Agent (rumi)</strong> beobachtet deine Planungsmuster und kann:</p>
+<ul>
+<li>
+<p>Rules erstellen wie "Benutzer bevorzugt keine Meetings vor 10:00"</p>
+</li>
+<li>
+<p>Wiederkehrende Aufgaben bemerken und Automatisierung vorschlagen</p>
+</li>
+<li>In Exchange.md schreiben, wenn Seed-Dateien Genehmigung benötigen</li>
+</ul>
 <h2 id="speicherung">Speicherung</h2>
 <pre><code>vault/Agenda/
 ├── Daily.md              # Your working file

@@ -58,24 +58,28 @@ src/outheis/agents/skills/
 Base capabilities defined by the developer. Examples:
 
 **Agenda Agent:**
+
 - Date format recognition
 - Daily.md structure
 - Inbox processing strategy
 - Exchange.md usage
 
 **Data Agent:**
+
 - File search strategies
 - Tag interpretation
 - JSON structure parsing
 - Result ranking
 
 **Relay Agent:**
+
 - Request routing
 - Tool selection
 - Migration handling
 - Correction processing
 
 **Pattern Agent:**
+
 - Memory extraction
 - Rule promotion
 - Conflict detection
@@ -131,7 +135,9 @@ System versions first, user versions extend/override.
 Skills should be:
 
 - **Concrete**: Specific patterns, not vague principles
+
 - **Actionable**: Tell the agent what to do
+
 - **Learnable**: Can be refined through feedback
 
 Good skill:

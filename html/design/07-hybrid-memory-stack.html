@@ -314,11 +314,13 @@
 │   what must never happen                 │  persisted as Markdown (code)
 └──────────────────────────────────────────┘
 </code></pre>
-<p>Each layer is:
-- <strong>Written by the LLM</strong> (no hardcoded extraction, no keyword matching)
-- <strong>Read by the LLM</strong> (injected into system prompts at runtime)
-- <strong>Stored by code</strong> (JSON files, Markdown files — deterministic I/O)
-- <strong>Governed by code</strong> (when to load, how to validate, when to expire)</p>
+<p>Each layer is:</p>
+<ul>
+<li><strong>Written by the LLM</strong> (no hardcoded extraction, no keyword matching)</li>
+<li><strong>Read by the LLM</strong> (injected into system prompts at runtime)</li>
+<li><strong>Stored by code</strong> (JSON files, Markdown files — deterministic I/O)</li>
+<li><strong>Governed by code</strong> (when to load, how to validate, when to expire)</li>
+</ul>
 <p>The separation is strict. Code never decides what a memory entry means. The LLM never manages file handles or transaction safety.</p>
 <hr />
 <h2 id="consequence-for-agent-architecture">Consequence for Agent Architecture</h2>

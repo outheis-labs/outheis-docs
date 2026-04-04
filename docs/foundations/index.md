@@ -15,6 +15,7 @@ The term *captured cognition* describes this: your mental work, externalized thr
 outheis takes a different position: your cognitive infrastructure belongs to you.
 
 This means:
+
 - **Local first** — your data stays on your machine
 - **Transparent operation** — append-only logs, no hidden state
 - **Explicit capabilities** — agents declare what they can access
@@ -22,7 +23,7 @@ This means:
 
 ## οὐθείς
 
-The name comes from Homer. When Polyphemus asks who blinded him, Odysseus answers: οὐθείς — *nobody*. The Cyclops calls for help: "Nobody is hurting me!" No help comes.
+The name comes from Homer. When the Cyclops Polyphemus asks who blinded him, Odysseus answers: οὐθείς — *nobody*. The Cyclops calls for help: "Nobody has blinded me!" No help comes.
 
 It's a trick, but also a stance: by refusing to be named, captured, pinned down, Odysseus remains free to act.
 

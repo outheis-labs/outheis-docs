@@ -61,6 +61,7 @@ projekt alpha deadline verschoben auf april
 ```
 
 outheis verarbeitet dies stündlich:
+
 - Erkennt Aufgaben → verschiebt in Daily.md
 - Unklare Einträge → fragt über Exchange.md
 - Notizen → behält oder archiviert
@@ -214,7 +215,9 @@ Wenn gebeten, die Agenda anzuzeigen ("Agenda", "was steht heute an", "gib mir di
 **Action-Agent (hiro)** kann Aufgaben ausführen (E-Mails senden, Kalendereinträge erstellen), aber Agenda verwaltet, was geplant ist.
 
 **Pattern-Agent (rumi)** beobachtet deine Planungsmuster und kann:
+
 - Rules erstellen wie "Benutzer bevorzugt keine Meetings vor 10:00"
+
 - Wiederkehrende Aufgaben bemerken und Automatisierung vorschlagen
 - In Exchange.md schreiben, wenn Seed-Dateien Genehmigung benötigen
 

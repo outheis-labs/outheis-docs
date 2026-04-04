@@ -13,11 +13,13 @@ The transformer architecture's central insight — that learned attention mechan
 | Training loop | Pattern Agent (nightly) |
 
 In a transformer:
+
 - **Weights** are learned patterns that direct attention to relevant parts of input
 - **Context** is the current input being processed
 - **Training** refines weights so less context is needed for good outputs
 
 In outheis:
+
 - **Skills** are learned principles that direct agent attention to what matters
 - **Memory** is accumulated observations awaiting distillation
 - **Pattern Agent** refines skills so agents need less in their context

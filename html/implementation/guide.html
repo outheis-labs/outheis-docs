@@ -271,9 +271,11 @@
 <li>An Anthropic API key</li>
 <li>A vault directory — a folder of Markdown files (Obsidian works directly)</li>
 </ul>
-<p>Optional for messaging via Signal:
-- A registered Signal account for the bot phone number
-- <code>signal-cli</code> installed and configured</p>
+<p>Optional for messaging via Signal:</p>
+<ul>
+<li>A registered Signal account for the bot phone number</li>
+<li><code>signal-cli</code> installed and configured</li>
+</ul>
 <h2 id="installation">Installation</h2>
 <p>Modern pip enforces virtual environments. Create one first:</p>
 <pre><code class="language-bash">git clone https://github.com/outheis-labs/outheis-minimal.git
@@ -324,11 +326,13 @@ outheis stop         # Stop daemon
 <p>Once the dispatcher is running, the Web UI is available at:</p>
 <pre><code>http://127.0.0.1:8080
 </code></pre>
-<p>It provides:
-- Live message feed (conversations with agents)
-- Memory, Rules, and Skills viewer and editor
-- Scheduler status and manual task triggers
-- Vault file browser</p>
+<p>It provides:</p>
+<ul>
+<li>Live message feed (conversations with agents)</li>
+<li>Memory, Rules, and Skills viewer and editor</li>
+<li>Scheduler status and manual task triggers</li>
+<li>Vault file browser</li>
+</ul>
 <p>The Web UI port and host are configurable in <code>config.json</code> under <code>"webui": {"host": "127.0.0.1", "port": 8080}</code>.</p>
 <h3 id="remote-access-via-ssh">Remote access via SSH</h3>
 <p>The Web UI binds to localhost only. To access it from another machine, use SSH port forwarding:</p>

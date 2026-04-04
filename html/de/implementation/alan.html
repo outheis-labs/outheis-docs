@@ -305,10 +305,12 @@ Verweis auf staged file oder inline diff.
 </ul>
 <p>alan liest Quelldateien, verfolgt Aufrufpfade und erklärt die Logik — ohne Änderungen vorzunehmen.</p>
 <h3 id="verbesserungsvorschlage">Verbesserungsvorschläge</h3>
-<p>Auf Anfragen reagieren oder proaktiv identifizieren:
-- Refactoring-Möglichkeiten
-- Bug-Fixes
-- Inkonsistenzen zwischen Dokumentation und Implementierung</p>
+<p>Auf Anfragen reagieren oder proaktiv identifizieren:</p>
+<ul>
+<li>Refactoring-Möglichkeiten</li>
+<li>Bug-Fixes</li>
+<li>Inkonsistenzen zwischen Dokumentation und Implementierung</li>
+</ul>
 <p>Alle Vorschläge gehen durch Exchange.md. alan modifiziert <code>src/</code> nie direkt.</p>
 <h3 id="code-suche">Code-Suche</h3>
 <p>Implementierungen, Muster und Referenzen im lokalen Codebase finden:</p>
@@ -354,10 +356,12 @@ Verweis auf staged file oder inline diff.
 </table>
 <p>alan hat <strong>Lesezugriff</strong> auf jeden lokalen Pfad. <strong>Schreibzugriff ist auf <code>vault/Codebase/</code> beschränkt.</strong></p>
 <h2 id="kontext-beim-start">Kontext beim Start</h2>
-<p>alan erhält beim Aufruf:
-- Einen Code-Index des Ziel-Repositories (Dateibaum + kurze Beschreibungen)
-- Aktuellen Inhalt von <code>vault/Codebase/Exchange.md</code>
-- Skills aus <code>agents/skills/code.md</code></p>
+<p>alan erhält beim Aufruf:</p>
+<ul>
+<li>Einen Code-Index des Ziel-Repositories (Dateibaum + kurze Beschreibungen)</li>
+<li>Aktuellen Inhalt von <code>vault/Codebase/Exchange.md</code></li>
+<li>Skills aus <code>agents/skills/code.md</code></li>
+</ul>
 <p>Bei großen Repositories werden vollständige Dateiinhalte auf Anfrage über <code>read_file</code> abgerufen — der Index dient zur Orientierung.</p>
 <h2 id="alan-ansprechen">alan ansprechen</h2>
 <p>Direkt aufrufen:</p>
@@ -412,8 +416,12 @@ Verweis auf staged file oder inline diff.
 <p><strong>Pattern-Agent (rumi)</strong> kann alans Vorschlagshistorie beobachten und Muster extrahieren — z. B. können wiederkehrende Refactoring-Vorschläge auf ein tieferes strukturelles Problem hinweisen, das erwähnenswert ist.</p>
 <h2 id="design-anmerkungen">Design-Anmerkungen</h2>
 <ul>
-<li>Das <code>vault/Codebase/Exchange.md</code>-Muster ist bewusst parallel zu <code>vault/Agenda/Exchange.md</code>. Das Interaktionsmodell ist dasselbe: outheis schlägt vor, du entscheidest.</li>
-<li>Schreibzugriff auf <code>vault/Codebase/</code> wird auf Tool-Ebene erzwungen, nicht nur durch Prompt-Anweisung.</li>
+<li>
+<p>Das <code>vault/Codebase/Exchange.md</code>-Muster ist bewusst parallel zu <code>vault/Agenda/Exchange.md</code>. Das Interaktionsmodell ist dasselbe: outheis schlägt vor, du entscheidest.</p>
+</li>
+<li>
+<p>Schreibzugriff auf <code>vault/Codebase/</code> wird auf Tool-Ebene erzwungen, nicht nur durch Prompt-Anweisung.</p>
+</li>
 <li>alan ist absichtlich aus der Produktion ausgeschlossen. Code-Introspektion und Vorschlags-Workflows sind Entwicklungsbelange.</li>
 </ul>
     <hr>

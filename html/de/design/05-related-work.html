@@ -266,25 +266,24 @@
   </div>
   <main class="content">
     <h1 id="verwandte-arbeiten">Verwandte Arbeiten</h1>
-<p>Dieses Dokument gibt einen Überblick über bestehende Forschungsarbeiten zur Anwendung von Betriebssystemprinzipien auf KI-Agenten-Architekturen.</p>
 <hr />
 <h2 id="das-entstehende-forschungsfeld">Das entstehende Forschungsfeld</h2>
-<p>Die Anwendung von Betriebssystemkonzepten auf KI-Agenten-Systeme ist ein junges, aber wachsendes Forschungsgebiet. Neuere Arbeiten erkennen, dass Agenten-Architekturen mit Herausforderungen konfrontiert sind, die Betriebssysteme vor Jahrzehnten gelöst haben.</p>
-<p>Wie eine aktuelle Arbeit beobachtet: "Heutige Agenten-Architekturen ähneln der Vor-Betriebssystem-Ära des Rechnens — einem Chaos duplizierter Lösungen, dem grundlegende Abstraktionen für Ressourcenverwaltung, Isolation und Koordination fehlen."</p>
+<p>Die Anwendung von Betriebssystemkonzepten auf KI-agent-Systeme ist jung — aber wächst schnell. Neuere Arbeiten erkennen, dass agent-Architekturen vor Herausforderungen stehen, die Betriebssysteme vor Jahrzehnten gelöst haben.</p>
+<p>Wie eine aktuelle Arbeit beobachtet: "Heutige agent-Architekturen ähneln der Vor-Betriebssystem-Ära des Rechnens — einem Chaos duplizierter Lösungen, dem grundlegende Abstraktionen für Ressourcenverwaltung, Isolation und Koordination fehlen."</p>
 <hr />
 <h2 id="wichtige-publikationen">Wichtige Publikationen</h2>
 <h3 id="aios-llm-agent-operating-system">AIOS: LLM Agent Operating System</h3>
 <p><strong>Quelle</strong>: arXiv 2403.16971, COLM 2025</p>
-<p>Die direkteste verwandte Arbeit. AIOS schlägt einen OS-Kernel für LLM-basierte Agenten vor mit:</p>
+<p>Die direkteste verwandte Arbeit. AIOS schlägt einen OS-Kernel für LLM-basierte agents vor:</p>
 <ul>
-<li>Scheduler für die Verteilung von Agenten-Anfragen</li>
+<li>Scheduler für die Verteilung von Anfragen</li>
 <li>Kontextmanager mit Snapshot/Wiederherstellung (analog zum Prozess-Kontextwechsel)</li>
 <li>Memory-Manager für Laufzeitoperationen</li>
 <li>Storage-Manager für Persistenz</li>
-<li>Zugangskontrolle für Agenten-Berechtigungen</li>
+<li>Zugangskontrolle für Berechtigungen</li>
 </ul>
-<p>Kernidee: LLMs werden als Kerne behandelt, analog zu CPU-Kernen, mit einer einheitlichen Schnittstelle für verschiedene LLM-Endpunkte.</p>
-<p><strong>Unterschied zu outheis</strong>: AIOS fokussiert auf mandantenfähiges Agenten-Serving mit Performance-Optimierung. outheis fokussiert auf persönlichen Assistenten mit Datenschutzgarantien und Klartext-Datenarchitektur.</p>
+<p>Kernidee: LLMs werden als Kerne behandelt — analog zu CPU-Kernen — mit einer einheitlichen Schnittstelle für verschiedene LLM-Endpunkte.</p>
+<p><strong>Nicht X, sondern Y:</strong> AIOS optimiert für mandantenfähiges agent-Serving mit Performance. outheis optimiert für persönliche Assistenten mit Datenschutzgarantien und Klartext-Datenarchitektur.</p>
 <h3 id="agent-operating-systems-agent-os">Agent Operating Systems (Agent-OS)</h3>
 <p><strong>Quelle</strong>: Preprints.org, 2025</p>
 <p>Schlägt eine geschichtete Architektur vor:</p>
@@ -302,27 +301,33 @@
 <p>Rahmt Multi-Agenten-Memory als Computerarchitektur-Problem:</p>
 <ul>
 <li>Unterscheidet gemeinsame und verteilte Memory-Paradigmen</li>
-<li>Schlägt eine Drei-Schichten-Hierarchie vor: I/O, Cache, Memory</li>
-<li>Identifiziert Cache-Sharing und Memory-Konsistenz als kritische Lücken</li>
+<li>
+<p>Schlägt eine Drei-Schichten-Hierarchie vor: I/O, Cache, Memory</p>
+</li>
+<li>
+<p>Identifiziert Cache-Sharing und Memory-Konsistenz als kritische Lücken</p>
+</li>
 </ul>
 <p>Kernidee: "Agent-Performance ist ein End-to-End-Datenbewegungsproblem."</p>
-<p><strong>Relevanz für outheis</strong>: Validiert unsere indexbasierte Zugriffsstrategie und die Unterscheidung zwischen heißem (messages.jsonl) und kaltem (archive/) Speicher.</p>
+<p><strong>Relevanz für outheis</strong>: Validiert die indexbasierte Zugriffsstrategie und die Unterscheidung zwischen heißem (<code>messages.jsonl</code>) und kaltem (<code>archive/</code>) Speicher.</p>
 <h3 id="integrating-ai-into-operating-systems-a-survey">Integrating AI into Operating Systems: A Survey</h3>
 <p><strong>Quelle</strong>: arXiv 2407.14567, 2025</p>
-<p>Umfassende Übersicht, die zwei Richtungen abdeckt:</p>
+<p>Umfassende Übersicht in zwei Richtungen:</p>
 <ol>
 <li><strong>KI für BS</strong>: ML/LLM-Techniken zur Verbesserung von BS (Scheduling, Memory, Sicherheit)</li>
 <li><strong>BS für KI</strong>: Betriebssystem-Architektur-Innovationen zur Unterstützung von KI-Workloads</li>
 </ol>
-<p>Identifiziert drei Paradigmen:
-- KI-Integration auf Kernel-Ebene
-- Agenten-vermittelte Workflows
-- LLM-als-OS-Abstraktion</p>
-<p><strong>Relevanz für outheis</strong>: Bestätigt die Gültigkeit der Anwendung von BS-Prinzipien auf Agenten-Design; liefert Vokabular und Rahmen.</p>
+<p>Identifiziert drei Paradigmen:</p>
+<ul>
+<li>KI-Integration auf Kernel-Ebene</li>
+<li>agent-vermittelte Workflows</li>
+<li>LLM-als-OS-Abstraktion</li>
+</ul>
+<p><strong>Relevanz für outheis</strong>: Bestätigt die Gültigkeit von BS-Prinzipien für agent-Design; liefert Vokabular und Rahmen.</p>
 <h3 id="modeling-an-operating-system-based-on-agents">Modeling an Operating System Based on Agents</h3>
 <p><strong>Quelle</strong>: Springer HAIS 2012</p>
-<p>Frühe Arbeit, die BS-Modellierung mit Multi-Agenten-Paradigmen vorschlägt, unter Berücksichtigung interaktionsbasierter Berechnung und Cloud Computing.</p>
-<p><strong>Relevanz für outheis</strong>: Zeigt, dass dies keine völlig neue Idee ist, aber vor der LLM-Ära entstand.</p>
+<p>Frühe Arbeit, die BS-Modellierung mit Multi-Agenten-Paradigmen vorschlägt — unter Berücksichtigung interaktionsbasierter Berechnung und Cloud Computing.</p>
+<p><strong>Relevanz für outheis</strong>: Zeigt, dass das keine völlig neue Idee ist — aber vor der LLM-Ära entstand.</p>
 <h3 id="the-orchestration-of-multi-agent-systems">The Orchestration of Multi-Agent Systems</h3>
 <p><strong>Quelle</strong>: arXiv 2601.13671, 2026</p>
 <p>Technischer Entwurf für Enterprise-Multi-Agenten-Systeme:</p>
@@ -398,36 +403,48 @@
 <li>JSONL für strukturierte Daten (Nachrichten, Index, Importe)</li>
 <li>Menschenlesbare, werkzeugunabhängige Formate</li>
 </ul>
-<p>Dies lehnt sich an die Unix-Philosophie an, nicht an die Datenbanktradition.</p>
+<p>Das lehnt sich an die Unix-Philosophie an — nicht an die Datenbanktradition.</p>
 <h3 id="3-einfachheit-vor-leistung">3. Einfachheit vor Leistung</h3>
 <p>AIOS optimiert für Durchsatz (2,1× schnellere Ausführung). outheis optimiert für:</p>
 <ul>
-<li>Verständlichkeit (statischer Dispatcher, kein LLM im Routing)</li>
+<li>Verständlichkeit (statischer dispatcher, kein LLM im Routing)</li>
 <li>Nachvollziehbarkeit (append-only-Log)</li>
 <li>Deployment-Flexibilität (von Cloud-minimal bis lokal-maximal)</li>
 </ul>
 <h3 id="4-personliche-handlungsfahigkeit">4. Persönliche Handlungsfähigkeit</h3>
-<p>Das Agenda-Agenten-Konzept — Benutzerhandlungsfähigkeit durch intelligentes Filtern ermöglichen — findet sich nicht in enterprise-fokussierten verwandten Arbeiten.</p>
+<p>Das Agenda-Agenten-Konzept — Benutzerhandlungsfähigkeit durch intelligentes Filtern ermöglichen — findet sich in keiner enterprise-fokussierten verwandten Arbeit.</p>
 <hr />
 <h2 id="theoretische-grundlagen">Theoretische Grundlagen</h2>
 <p>Die verwandten Arbeiten stützen sich hauptsächlich auf:</p>
 <ul>
-<li><strong>Verteilte Systeme</strong>: Message Passing, Konsens, Fehlertoleranz</li>
-<li><strong>Betriebssysteme</strong>: Scheduling, Memory-Hierarchie, Zugangskontrolle</li>
-<li><strong>Software-Architektur</strong>: Microservices, Event Sourcing</li>
+<li>
+<p><strong>Verteilte Systeme</strong>: Message Passing, Konsens, Fehlertoleranz</p>
+</li>
+<li>
+<p><strong>Betriebssysteme</strong>: Scheduling, Memory-Hierarchie, Zugangskontrolle</p>
+</li>
+<li>
+<p><strong>Software-Architektur</strong>: Microservices, Event Sourcing</p>
+</li>
 </ul>
 <p>outheis zieht zusätzlich aus:</p>
 <ul>
-<li><strong>Informationswissenschaft</strong>: Prospektive vs. retrospektive Architektur</li>
-<li><strong>Unix-Philosophie</strong>: Klartext, kleine Werkzeuge, Kombinierbarkeit</li>
-<li><strong>Erlang/OTP</strong>: Actor-Modell, Supervision, Let-it-crash</li>
+<li>
+<p><strong>Informationswissenschaft</strong>: Prospektive vs. retrospektive Architektur</p>
+</li>
+<li>
+<p><strong>Unix-Philosophie</strong>: Klartext, kleine Werkzeuge, Kombinierbarkeit</p>
+</li>
+<li>
+<p><strong>Erlang/OTP</strong>: Actor-Modell, Supervision, Let-it-crash</p>
+</li>
 </ul>
 <hr />
 <h2 id="offene-forschungsfragen">Offene Forschungsfragen</h2>
 <p>Die Literatur identifiziert mehrere offene Probleme, die für outheis relevant sind:</p>
 <ol>
 <li><strong>Memory-Konsistenz</strong> in Multi-Agenten-Systemen</li>
-<li><strong>Cache-Sharing</strong>-Protokolle zwischen Agenten</li>
+<li><strong>Cache-Sharing</strong>-Protokolle zwischen agents</li>
 <li><strong>Kontextmanagement</strong> für lang laufende Gespräche</li>
 <li><strong>Tag-Harmonisierung</strong> über LLM (in unserer theoretischen Arbeit behandelt)</li>
 </ol>
@@ -458,8 +475,8 @@
 </ol>
 <hr />
 <h2 id="fazit">Fazit</h2>
-<p>Die Anwendung von Betriebssystemprinzipien auf KI-Agenten-Architekturen ist ein aktives Forschungsgebiet. Bestehende Arbeiten konzentrieren sich primär auf Performance-Optimierung für Enterprise-Multi-Agenten-Systeme. outheis trägt eine komplementäre Perspektive bei: Privacy-First-Architektur für persönliche Assistenten mit Klartext-Datenphilosophie und Betonung von Benutzerhandlungsfähigkeit.</p>
-<p>Die theoretische Grundlage, die prospektive Informationsarchitektur mit Agenten-Design verknüpft (siehe: <a href="https://github.com/outheis-labs/research-base/blob/main/temporalization-of-order/temporalization-of-order.md">Temporalization of Order</a>), scheint neuartig und wird in der aktuellen Literatur nicht behandelt.</p>
+<p>Das Feld ist aktiv. Bestehende Arbeiten konzentrieren sich primär auf Performance-Optimierung für Enterprise-Multi-Agenten-Systeme. outheis trägt eine komplementäre Perspektive bei: Privacy-First-Architektur für persönliche Assistenten, Klartext-Datenphilosophie, Betonung von Benutzerhandlungsfähigkeit.</p>
+<p>Die theoretische Grundlage — prospektive Informationsarchitektur verknüpft mit agent-Design (siehe: <a href="https://github.com/outheis-labs/research-base/blob/main/temporalization-of-order/temporalization-of-order.md">Temporalization of Order</a>) — scheint neuartig und wird in der aktuellen Literatur nicht behandelt.</p>
     <hr>
     <p class="footer">Open source under AGPL-3.0 · <a href="https://github.com/outheis-labs/outheis-minimal">Code on GitHub</a></p>
   </main>

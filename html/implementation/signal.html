@@ -283,8 +283,12 @@ Send path:  _send_request() → stdin write → Event.wait()
 </code></pre>
 <h3 id="classes">Classes</h3>
 <ul>
-<li><code>SignalRPC</code> — <code>transport/signal_rpc.py</code>: manages the signal-cli subprocess, reader thread, send/receive primitives</li>
-<li><code>SignalTransport</code> — <code>transport/signal.py</code>: message loop, authorization, watcher thread, markdown stripping</li>
+<li>
+<p><code>SignalRPC</code> — <code>transport/signal_rpc.py</code>: manages the signal-cli subprocess, reader thread, send/receive primitives</p>
+</li>
+<li>
+<p><code>SignalTransport</code> — <code>transport/signal.py</code>: message loop, authorization, watcher thread, markdown stripping</p>
+</li>
 </ul>
 <h3 id="concurrency-model">Concurrency model</h3>
 <table>
@@ -362,8 +366,12 @@ Send path:  _send_request() → stdin write → Event.wait()
 <p>The horizontal rule replacement renders as a solid dividing line in Signal's UI.</p>
 <h2 id="authorization">Authorization</h2>
 <ul>
-<li><code>signal.allowed</code> in <code>config.json</code>: whitelist of phone numbers permitted to send messages</li>
-<li><code>human.phone</code> is always allowed regardless of the whitelist</li>
+<li>
+<p><code>signal.allowed</code> in <code>config.json</code>: whitelist of phone numbers permitted to send messages</p>
+</li>
+<li>
+<p><code>human.phone</code> is always allowed regardless of the whitelist</p>
+</li>
 <li>UUIDs are learned on first contact and saved to <code>~/.outheis/human/signal.json</code></li>
 <li>First-time setup requires trusting the identity key via <code>signal-cli trust</code> (see installation guide)</li>
 </ul>

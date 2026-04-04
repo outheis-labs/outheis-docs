@@ -1,4 +1,4 @@
-# Attention als Architektur
+# Aufmerksamkeit als Architekturprinzip
 
 ## Die strukturelle Analogie
 
@@ -13,11 +13,13 @@ Die zentrale Erkenntnis der Transformer-Architektur — dass erlernte Attention-
 | Trainingsschleife | Pattern-agent (nächtlich) |
 
 In einem Transformer:
+
 - **Gewichte** sind erlernte Muster, die die Aufmerksamkeit auf relevante Teile der Eingabe lenken
 - **Kontext** ist die aktuell verarbeitete Eingabe
 - **Training** verfeinert Gewichte, sodass weniger Kontext für gute Ausgaben benötigt wird
 
 In outheis:
+
 - **Skills** sind erlernte Prinzipien, die die agent-Aufmerksamkeit auf das Wesentliche lenken
 - **Memory** sind angesammelte Beobachtungen, die auf Destillation warten
 - **Pattern-agent** verfeinert Skills, sodass agents weniger in ihrem Kontext benötigen

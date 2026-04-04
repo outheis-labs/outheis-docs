@@ -337,49 +337,87 @@
 <h2 id="what-we-can-learn-from">What We Can Learn From</h2>
 <h3 id="dragonflybsd">DragonFlyBSD</h3>
 <ul>
-<li><strong>LWKT (Light Weight Kernel Threads)</strong>: Per-CPU scheduling without global locks</li>
-<li><strong>Message Passing</strong>: Serialization through ownership, not locks</li>
-<li><strong>IPI Queues</strong>: Each CPU has its own queue—no central bottleneck</li>
+<li>
+<p><strong>LWKT (Light Weight Kernel Threads)</strong>: Per-CPU scheduling without global locks</p>
+</li>
+<li>
+<p><strong>Message Passing</strong>: Serialization through ownership, not locks</p>
+</li>
+<li>
+<p><strong>IPI Queues</strong>: Each CPU has its own queue—no central bottleneck</p>
+</li>
 </ul>
 <p>Translation: Each agent can have its own message queue. No central dispatcher bottleneck. Ownership determines who can modify what.</p>
 <h3 id="erlangotp">Erlang/OTP</h3>
 <ul>
-<li><strong>Actor Model</strong>: Isolated processes communicating via messages</li>
-<li><strong>Supervision Trees</strong>: Parent processes monitor and restart children</li>
-<li><strong>"Let it crash"</strong>: Design for failure, recover gracefully</li>
+<li>
+<p><strong>Actor Model</strong>: Isolated processes communicating via messages</p>
+</li>
+<li>
+<p><strong>Supervision Trees</strong>: Parent processes monitor and restart children</p>
+</li>
+<li>
+<p><strong>"Let it crash"</strong>: Design for failure, recover gracefully</p>
+</li>
 </ul>
 <p>Translation: Agents are actors. A dispatcher supervises agents. Failed agents can be restarted without losing system state.</p>
 <h3 id="sel4-capability-systems">seL4 / Capability Systems</h3>
 <ul>
-<li><strong>Capabilities</strong>: Unforgeable tokens that grant specific permissions</li>
-<li><strong>Minimal Kernel</strong>: Only the essential primitives</li>
+<li>
+<p><strong>Capabilities</strong>: Unforgeable tokens that grant specific permissions</p>
+</li>
+<li>
+<p><strong>Minimal Kernel</strong>: Only the essential primitives</p>
+</li>
 </ul>
 <p>Translation: Agents have explicit capabilities. A pattern agent can write insights; others can only read. The dispatcher is minimal—just routing.</p>
 <h3 id="openbsd">OpenBSD</h3>
 <ul>
-<li><strong>pledge(2)</strong>: Process declares upfront which syscalls it needs; everything else forbidden</li>
-<li><strong>unveil(2)</strong>: Process declares which paths it can see; the rest of the filesystem disappears</li>
-<li><strong>Privilege Separation</strong>: Split into privileged parent (holds resources) and unprivileged child (does the work)</li>
-<li><strong>Secure by Default</strong>: Everything off until explicitly enabled</li>
+<li>
+<p><strong>pledge(2)</strong>: Process declares upfront which syscalls it needs; everything else forbidden</p>
+</li>
+<li>
+<p><strong>unveil(2)</strong>: Process declares which paths it can see; the rest of the filesystem disappears</p>
+</li>
+<li>
+<p><strong>Privilege Separation</strong>: Split into privileged parent (holds resources) and unprivileged child (does the work)</p>
+</li>
+<li>
+<p><strong>Secure by Default</strong>: Everything off until explicitly enabled</p>
+</li>
 </ul>
 <p>Translation: Agents declare their capabilities at startup—no implicit permissions. Each agent sees only its relevant paths (vault, insights). The dispatcher holds access to the queue; agents run with minimal access.</p>
 <h3 id="macos-grand-central-dispatch">macOS / Grand Central Dispatch</h3>
 <ul>
-<li><strong>Dispatch Queues</strong>: Submit work to queues instead of managing threads</li>
-<li><strong>Quality of Service</strong>: Tag work with priority levels (user interactive, background, etc.)</li>
-<li><strong>System-managed concurrency</strong>: The OS decides how many threads to use</li>
+<li>
+<p><strong>Dispatch Queues</strong>: Submit work to queues instead of managing threads</p>
+</li>
+<li>
+<p><strong>Quality of Service</strong>: Tag work with priority levels (user interactive, background, etc.)</p>
+</li>
+<li>
+<p><strong>System-managed concurrency</strong>: The OS decides how many threads to use</p>
+</li>
 </ul>
 <p>Translation: A dispatcher with priority-aware queues. User-facing agents run at high priority; background analysis runs when resources permit. The system balances load automatically.</p>
 <h3 id="plan-9">Plan 9</h3>
 <ul>
-<li><strong>"Everything is a file"</strong>: Uniform interface to all resources</li>
-<li><strong>9P Protocol</strong>: Network-transparent file access</li>
+<li>
+<p><strong>"Everything is a file"</strong>: Uniform interface to all resources</p>
+</li>
+<li>
+<p><strong>9P Protocol</strong>: Network-transparent file access</p>
+</li>
 </ul>
 <p>Translation: Knowledge bases as filesystem interface. Agents interact with data through a uniform abstraction.</p>
 <h3 id="event-sourcing">Event Sourcing</h3>
 <ul>
-<li><strong>Append-only log</strong>: State derived from immutable event history</li>
-<li><strong>Replay</strong>: Reconstruct any past state</li>
+<li>
+<p><strong>Append-only log</strong>: State derived from immutable event history</p>
+</li>
+<li>
+<p><strong>Replay</strong>: Reconstruct any past state</p>
+</li>
 </ul>
 <p>Translation: Message queue as append-only log. Full conversation history. Debugging through replay.</p>
 <h2 id="design-principles-for-outheis">Design Principles for outheis</h2>

@@ -67,6 +67,7 @@ No CLI commands needed. Just talk to outheis.
 ```
 
 **Types:**
+
 - `user` — Facts about you (permanent)
 - `feedback` — How you want outheis to behave (permanent)
 - `context` — Current focus (decays after 14 days)
@@ -87,14 +88,17 @@ If `type` is omitted, outheis infers from content.
 - Bevorzuge kurze Antworten
 
 ## rule:agenda
+
 - MAX 10 Items in Daily.md
 - Keine Meetings vor 10 Uhr
 
 ## rule:data
+
 - Durchsuche auch PDF-Dateien
 ```
 
 Sections map to memory types or rules:
+
 - `## user`, `## feedback`, `## context` → Memory
 - `## rule:agenda`, `## rule:data`, `## rule:relay` → Rules files
 
@@ -111,6 +115,7 @@ mkdir ~/Documents/Vault/Migration
 ### 2. Add Your Files
 
 Copy your data:
+
 - Export from Claude.ai → `claude-export.json`
 - Your preferences → `preferences.md`
 - Agent-specific rules → `agenda.md`, `data.md`
@@ -146,6 +151,7 @@ Mark each item:
 - [x] Works as Director Innovation Lab [user]
 - [x] Prefers short, direct answers [feedback]
 - [-] Respond in German [rule:relay]
+
 - [ ] Lebt in München [user]
 ```
 
@@ -185,6 +191,7 @@ This prevents re-processing. Delete the `x-` files yourself when ready, or use t
 ## WebUI Migration View
 
 The Migration view in the Web UI provides:
+
 - Full list of files in `vault/Migration/`
 - View and edit each file directly
 - Drop zone for uploading new migration files
@@ -254,6 +261,7 @@ Both are populated through Migration or through ongoing conversation.
 ## Privacy
 
 All data stays local:
+
 - Migration files are in your vault
 - Memory is in `~/.outheis/human/memory/`
 - Rules are in `~/.outheis/human/rules/`

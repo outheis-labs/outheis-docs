@@ -15,6 +15,7 @@ Der Begriff *vereinnahmte Kognition* beschreibt genau das: deine geistige Arbeit
 outheis nimmt eine andere Haltung ein: deine kognitive Infrastruktur gehört dir.
 
 Das bedeutet:
+
 - **Local first** — deine Daten bleiben auf deinem Gerät
 - **Transparenter Betrieb** — append-only Logs, kein versteckter Zustand
 - **Explizite Fähigkeiten** — agents erklären, auf was sie zugreifen können
@@ -22,7 +23,7 @@ Das bedeutet:
 
 ## οὐθείς
 
-Der Name kommt von Homer. Als Polyphem fragt, wer ihn geblendet hat, antwortet Odysseus: οὐθείς — *niemand*. Der Zyklop ruft um Hilfe: „Niemand verletzt mich!" Es kommt keine Hilfe.
+Der Name kommt von Homer. Als der Zyklop Polyphem fragt, wer ihn geblendet hat, antwortet Odysseus: οὐθείς — *niemand*. Der Zyklop ruft um Hilfe: „Niemand hat mich geblendet!" Es kommt keine Hilfe.
 
 Es ist ein Trick, aber auch eine Haltung: indem er sich weigert, benannt, erfasst, festgemacht zu werden, bleibt Odysseus frei zu handeln.
 

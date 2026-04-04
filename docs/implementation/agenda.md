@@ -61,6 +61,7 @@ projekt alpha deadline verschoben auf april
 ```
 
 outheis processes this hourly:
+
 - Recognizes tasks → moves to Daily.md
 - Unclear items → asks via Exchange.md
 - Notes → keeps or archives
@@ -214,7 +215,9 @@ When asked to show the agenda ("Agenda", "was steht heute an", "gib mir die Agen
 **Action Agent (hiro)** can execute tasks (send emails, create calendar events) but Agenda manages what's scheduled.
 
 **Pattern Agent (rumi)** observes your scheduling patterns and may:
+
 - Create rules like "User prefers no meetings before 10:00"
+
 - Notice recurring tasks and suggest automation
 - Write to Exchange.md when seed files need approval
 

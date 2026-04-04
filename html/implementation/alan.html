@@ -305,10 +305,12 @@ Verweis auf staged file oder inline diff.
 </ul>
 <p>alan reads source files, traces call paths, and explains logic — without making any changes.</p>
 <h3 id="improvement-proposals">Improvement Proposals</h3>
-<p>Respond to requests or proactively identify:
-- Refactoring opportunities
-- Bug fixes
-- Inconsistencies between documentation and implementation</p>
+<p>Respond to requests or proactively identify:</p>
+<ul>
+<li>Refactoring opportunities</li>
+<li>Bug fixes</li>
+<li>Inconsistencies between documentation and implementation</li>
+</ul>
 <p>All proposals go through Exchange.md. alan never modifies <code>src/</code> directly.</p>
 <h3 id="code-search">Code Search</h3>
 <p>Find implementations, patterns, and references across the local codebase:</p>
@@ -354,10 +356,12 @@ Verweis auf staged file oder inline diff.
 </table>
 <p>alan has <strong>read access</strong> to any local path. <strong>Write access is restricted to <code>vault/Codebase/</code>.</strong></p>
 <h2 id="context-at-startup">Context at Startup</h2>
-<p>alan receives at invocation:
-- A code index of the target repository (file tree + brief descriptions)
-- Current contents of <code>vault/Codebase/Exchange.md</code>
-- Skills from <code>agents/skills/code.md</code></p>
+<p>alan receives at invocation:</p>
+<ul>
+<li>A code index of the target repository (file tree + brief descriptions)</li>
+<li>Current contents of <code>vault/Codebase/Exchange.md</code></li>
+<li>Skills from <code>agents/skills/code.md</code></li>
+</ul>
 <p>For large repositories, full file contents are fetched on demand via <code>read_file</code> — the index provides orientation.</p>
 <h2 id="asking-alan">Asking alan</h2>
 <p>Invoke directly:</p>
@@ -412,8 +416,12 @@ Verweis auf staged file oder inline diff.
 <p><strong>Pattern Agent (rumi)</strong> can observe alan's proposal history and extract patterns — e.g., recurring refactoring suggestions may indicate a deeper structural issue worth noting.</p>
 <h2 id="design-notes">Design Notes</h2>
 <ul>
-<li>The <code>vault/Codebase/Exchange.md</code> pattern is intentionally parallel to <code>vault/Agenda/Exchange.md</code>. The interaction model is the same: outheis proposes, you decide.</li>
-<li>Write access restricted to <code>vault/Codebase/</code> is enforced at the tool level, not by prompt instruction alone.</li>
+<li>
+<p>The <code>vault/Codebase/Exchange.md</code> pattern is intentionally parallel to <code>vault/Agenda/Exchange.md</code>. The interaction model is the same: outheis proposes, you decide.</p>
+</li>
+<li>
+<p>Write access restricted to <code>vault/Codebase/</code> is enforced at the tool level, not by prompt instruction alone.</p>
+</li>
 <li>alan is deliberately absent from production. Code introspection and proposal workflows are development concerns only.</li>
 </ul>
     <hr>

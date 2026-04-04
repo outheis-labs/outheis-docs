@@ -35,6 +35,7 @@ title: Architecture
 ## Dispatcher
 
 The dispatcher is the microkernel. It:
+
 - **Watches** the message queue for changes
 - **Manages locks** for shared resources
 - **Schedules** periodic tasks (pattern analysis, index rebuild)
@@ -58,6 +59,7 @@ Six agents, each with a name and role:
 ### Routing
 
 Relay (ou) handles all user messages. It uses Haiku with tools:
+
 - **search_vault** → delegates to Data agent (zeno)
 - **check_agenda** → delegates to Agenda agent (cato)
 - **refresh_agenda** → triggers manual agenda update
@@ -90,13 +92,17 @@ The Agenda agent manages three files in `vault/Agenda/`:
 | Exchange.md | System ↔ User | Async questions, no pressure to respond |
 
 **Commands:**
+
 - "aktualisiere daily" / "update agenda" → triggers manual refresh
 - Processes Inbox items, checks Exchange responses, updates Daily
 
 **Hourly Review (conditional):**
+
 - Runs at xx:55 (configurable)
+
 - Checks file hashes before processing — no changes = no LLM call
 - Unconditional at start (04:55) and end (23:55) of day
+
 - Only runs within configured hours (default 04:55-23:55)
 
 ### Pattern Agent (rumi)
@@ -122,6 +128,7 @@ The Action agent executes tasks and background jobs. Currently in development wi
 | External commands | Planned | Run whitelisted shell commands |
 
 Action is disabled by default (`enabled: false`). When enabled, it:
+
 - Receives tasks from other agents or scheduled jobs
 - Executes actions with explicit confirmation for destructive operations
 - Reports results back via message queue
@@ -133,9 +140,13 @@ Action is disabled by default (`enabled: false`). When enabled, it:
 The Code agent provides development-time intelligence. See [Code Agent (alan)](alan.md) for full documentation.
 
 Summary:
+
 - **Introspection**: Answer questions about outheis implementation
+
 - **Proposals**: Suggest improvements via `vault/Codebase/Exchange.md`
+
 - **Search**: Find patterns and implementations in source code
+
 - **Isolation**: Write access restricted to `vault/Codebase/` only
 
 **alan is development-only.** Disabled by default, never loaded in production.
@@ -159,6 +170,7 @@ Stored in `~/.outheis/human/memory/`. See [Memory](memory.md) for details.
 External instructions to agents — what to observe:
 
 - User-defined: "Respond in German"
+
 - Pattern-promoted: "User prefers short answers"
 
 Stored in `~/.outheis/human/rules/`. See [Memory](memory.md) for details.
@@ -168,6 +180,7 @@ Stored in `~/.outheis/human/rules/`. See [Memory](memory.md) for details.
 Internal capabilities — how agents act:
 
 - System skills: Base capabilities (in package)
+
 - Learned skills: Refined through use and correction
 
 Stored in `src/outheis/agents/skills/` (system) and `~/.outheis/human/skills/` (learned). See [Skills](skills.md) for details.

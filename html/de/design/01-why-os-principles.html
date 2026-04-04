@@ -275,16 +275,16 @@
 <li>Fehlertoleranz und Wiederherstellung</li>
 <li>Scheduling und Priorisierung</li>
 </ul>
-<p>Die meisten aktuellen agent-Frameworks erfinden diese Lösungen mangelhaft nach und führen zu fragilen Architekturen, die unter Komplexität scheitern.</p>
+<p>Die meisten agent-Frameworks erfinden diese Lösungen mangelhaft nach. Das Ergebnis: fragile Architekturen, die unter Komplexität scheitern.</p>
 <h2 id="die-erkenntnis">Die Erkenntnis</h2>
-<p>Ein Betriebssystem ist im Grunde ein System zur Koordination unabhängiger Prozesse, die:</p>
+<p>Ein Betriebssystem koordiniert unabhängige Prozesse, die:</p>
 <ol>
-<li>Kommunizieren müssen, ohne gemeinsamen Zustand zu korrumpieren</li>
-<li>Auf Ressourcen zugreifen müssen, ohne Konflikte zu erzeugen</li>
-<li>Graceful scheitern müssen, ohne das gesamte System zum Absturz zu bringen</li>
-<li>Von einfachen zu komplexen Workloads skalieren müssen</li>
+<li>kommunizieren müssen, ohne gemeinsamen Zustand zu korrumpieren</li>
+<li>auf Ressourcen zugreifen müssen, ohne Konflikte zu erzeugen</li>
+<li>graceful scheitern müssen, ohne das gesamte System zu Fall zu bringen</li>
+<li>von einfachen zu komplexen Workloads skalieren müssen</li>
 </ol>
-<p>Ein Multi-agent-KI-System hat dieselben Anforderungen. Der Unterschied besteht darin, dass statt Prozessen, die Speicher und Dateien manipulieren, agents Kontext manipulieren und Antworten generieren.</p>
+<p>Ein Multi-agent-KI-System hat dieselben Anforderungen. Der Unterschied: statt Prozessen, die Speicher und Dateien manipulieren, manipulieren agents Kontext und generieren Antworten.</p>
 <h2 id="schlusselmappings">Schlüsselmappings</h2>
 <table>
 <thead>
@@ -326,60 +326,98 @@
 </table>
 <h2 id="warum-das-wichtig-ist">Warum das wichtig ist</h2>
 <h3 id="1-parallelitat-ohne-korrumpierung">1. Parallelität ohne Korrumpierung</h3>
-<p>Wenn mehrere agents auf gemeinsamen Daten operieren, führen naive Implementierungen zu Race-Conditions — nicht im traditionellen Sinne von Speicherkorrumpierung, sondern im Sinne von konfligierenden Aktionen, doppelter Arbeit oder verlorenem Kontext.</p>
+<p>Wenn mehrere agents auf gemeinsamen Daten operieren, entstehen bei naiver Implementierung Race-Conditions — nicht im Sinne von Speicherkorrumpierung, sondern im Sinne von konfligierenden Aktionen, doppelter Arbeit oder verlorenem Kontext.</p>
 <p>OS-Lösungen: Message-Passing, Ownership-Semantik, Locks.</p>
 <h3 id="2-klare-grenzen">2. Klare Grenzen</h3>
-<p>Prozesse haben isolierte Adressräume. Agents sollten isolierte Domains haben. Wenn ein Daten-agent alle Datenoperationen besitzt, können andere agents diese Domain nicht korrumpieren — sie müssen durch eine definierte Schnittstelle anfragen.</p>
+<p>Prozesse haben isolierte Adressräume. Agents sollten isolierte Domains haben. Ein Daten-agent besitzt alle Datenoperationen — andere können diese Domain nicht korrumpieren. Sie müssen durch eine definierte Schnittstelle anfragen.</p>
 <h3 id="3-fehler-isolation">3. Fehler-Isolation</h3>
-<p>Ein abstürzender Prozess sollte das System nicht zum Absturz bringen. Ebenso sollte ein halluzinierter oder fehlschlagender agent nicht das gesamte Gespräch oder die Wissensbasis korrumpieren.</p>
+<p>Ein abstürzender Prozess bringt das System nicht zum Absturz. Ebenso sollte ein halluzinierter oder fehlschlagender agent nicht das gesamte Gespräch oder die Wissensbasis korrumpieren.</p>
 <h3 id="4-kompositionsfahigkeit">4. Kompositionsfähigkeit</h3>
-<p>Unix-Philosophie: kleine Werkzeuge, die eine Sache gut machen, durch Pipes kombiniert. agent-Philosophie: spezialisierte agents mit klaren Verantwortlichkeiten, durch Message-Passing kombiniert.</p>
+<p>Unix-Philosophie: kleine Werkzeuge, eine Sache gut, durch Pipes kombiniert. Agent-Philosophie: spezialisierte agents mit klaren Verantwortlichkeiten, durch Message-Passing kombiniert.</p>
 <h2 id="was-wir-davon-lernen-konnen">Was wir davon lernen können</h2>
 <h3 id="dragonflybsd">DragonFlyBSD</h3>
 <ul>
-<li><strong>LWKT (Light Weight Kernel Threads)</strong>: Per-CPU-Scheduling ohne globale Locks</li>
-<li><strong>Message-Passing</strong>: Serialisierung durch Ownership, nicht durch Locks</li>
-<li><strong>IPI-Queues</strong>: Jede CPU hat ihre eigene Queue — kein zentraler Engpass</li>
+<li>
+<p><strong>LWKT (Light Weight Kernel Threads)</strong>: Per-CPU-Scheduling ohne globale Locks</p>
+</li>
+<li>
+<p><strong>Message-Passing</strong>: Serialisierung durch Ownership — nicht durch Locks</p>
+</li>
+<li>
+<p><strong>IPI-Queues</strong>: Jede CPU hat ihre eigene Queue, kein zentraler Engpass</p>
+</li>
 </ul>
-<p>Übersetzung: Jeder agent kann seine eigene Message-Queue haben. Kein zentraler dispatcher-Engpass. Ownership bestimmt, wer was modifizieren kann.</p>
+<p>Übersetzung: Jeder agent hat seine eigene Message-Queue. Kein zentraler dispatcher-Engpass. Ownership bestimmt, wer was modifizieren kann.</p>
 <h3 id="erlangotp">Erlang/OTP</h3>
 <ul>
-<li><strong>Actor-Modell</strong>: Isolierte Prozesse, die über Nachrichten kommunizieren</li>
-<li><strong>Supervision-Trees</strong>: Elternprozesse überwachen und starten Kinder neu</li>
-<li><strong>„Let it crash"</strong>: Für Fehler entwerfen, graceful wiederherstellen</li>
+<li>
+<p><strong>Actor-Modell</strong>: Isolierte Prozesse, die über Nachrichten kommunizieren</p>
+</li>
+<li>
+<p><strong>Supervision-Trees</strong>: Elternprozesse überwachen und starten Kinder neu</p>
+</li>
+<li>
+<p><strong>„Let it crash"</strong>: Für Fehler entwerfen, graceful wiederherstellen</p>
+</li>
 </ul>
-<p>Übersetzung: Agents sind Actors. Ein dispatcher überwacht agents. Fehlgeschlagene agents können neugestartet werden, ohne den Systemzustand zu verlieren.</p>
+<p>Übersetzung: Agents sind Actors. Ein dispatcher überwacht agents. Fehlgeschlagene agents können neugestartet werden — ohne den Systemzustand zu verlieren.</p>
 <h3 id="sel4-capability-systeme">seL4 / Capability-Systeme</h3>
 <ul>
-<li><strong>Capabilities</strong>: Unfälschbare Token, die spezifische Berechtigungen gewähren</li>
-<li><strong>Minimaler Kernel</strong>: Nur die wesentlichen Primitive</li>
+<li>
+<p><strong>Capabilities</strong>: Unfälschbare Token, die spezifische Berechtigungen gewähren</p>
+</li>
+<li>
+<p><strong>Minimaler Kernel</strong>: Nur die wesentlichen Primitive</p>
+</li>
 </ul>
-<p>Übersetzung: Agents haben explizite Capabilities. Ein Pattern-agent kann Insights schreiben; andere können nur lesen. Der dispatcher ist minimal — nur Routing.</p>
+<p>Übersetzung: Agents haben explizite Capabilities. Ein Pattern-agent schreibt Insights; andere lesen nur. Der dispatcher ist minimal — nur Routing.</p>
 <h3 id="openbsd">OpenBSD</h3>
 <ul>
-<li><strong>pledge(2)</strong>: Prozess erklärt vorab, welche Syscalls er benötigt; alles andere ist verboten</li>
-<li><strong>unveil(2)</strong>: Prozess erklärt, welche Pfade er sehen kann; der Rest des Dateisystems verschwindet</li>
-<li><strong>Privilegtrennung</strong>: Aufgeteilt in privilegierten Elternteil (hält Ressourcen) und unprivilegierten Kindprozess (erledigt die Arbeit)</li>
-<li><strong>Sicher per Standard</strong>: Alles aus, bis explizit aktiviert</li>
+<li>
+<p><strong>pledge(2)</strong>: Prozess erklärt vorab, welche Syscalls er benötigt; alles andere ist verboten</p>
+</li>
+<li>
+<p><strong>unveil(2)</strong>: Prozess erklärt, welche Pfade er sehen kann; der Rest des Dateisystems verschwindet</p>
+</li>
+<li>
+<p><strong>Privilegtrennung</strong>: Privilegierter Elternteil hält Ressourcen, unprivilegierter Kindprozess erledigt die Arbeit</p>
+</li>
+<li>
+<p><strong>Sicher per Standard</strong>: Alles aus, bis explizit aktiviert</p>
+</li>
 </ul>
-<p>Übersetzung: Agents erklären ihre Capabilities beim Start — keine impliziten Berechtigungen. Jeder agent sieht nur seine relevanten Pfade (vault, insights). Der dispatcher hält Zugang zur Queue; agents laufen mit minimalem Zugang.</p>
+<p>Übersetzung: Agents deklarieren ihre Capabilities beim Start — keine impliziten Berechtigungen. Jeder agent sieht nur seine relevanten Pfade. Der dispatcher hält den Queue-Zugang; agents laufen mit minimalem Zugang.</p>
 <h3 id="macos-grand-central-dispatch">macOS / Grand Central Dispatch</h3>
 <ul>
-<li><strong>Dispatch-Queues</strong>: Arbeit in Queues einreichen statt Threads zu verwalten</li>
-<li><strong>Quality of Service</strong>: Arbeit mit Prioritätsstufen markieren (user interactive, background usw.)</li>
-<li><strong>Systemverwaltete Parallelität</strong>: Das OS entscheidet, wie viele Threads verwendet werden</li>
+<li>
+<p><strong>Dispatch-Queues</strong>: Arbeit in Queues einreichen statt Threads direkt verwalten</p>
+</li>
+<li>
+<p><strong>Quality of Service</strong>: Arbeit mit Prioritätsstufen markieren (user interactive, background usw.)</p>
+</li>
+<li>
+<p><strong>Systemverwaltete Parallelität</strong>: Das OS entscheidet, wie viele Threads verwendet werden</p>
+</li>
 </ul>
 <p>Übersetzung: Ein dispatcher mit prioritätsbewussten Queues. Nutzerseitige agents laufen mit hoher Priorität; Hintergrundanalyse läuft, wenn Ressourcen vorhanden sind. Das System balanciert Last automatisch.</p>
 <h3 id="plan-9">Plan 9</h3>
 <ul>
-<li><strong>„Everything is a file"</strong>: Einheitliche Schnittstelle zu allen Ressourcen</li>
-<li><strong>9P-Protokoll</strong>: Netzwerktransparenter Dateizugriff</li>
+<li>
+<p><strong>„Everything is a file"</strong>: Einheitliche Schnittstelle zu allen Ressourcen</p>
+</li>
+<li>
+<p><strong>9P-Protokoll</strong>: Netzwerktransparenter Dateizugriff</p>
+</li>
 </ul>
 <p>Übersetzung: Wissensdatenbanken als Dateisystemschnittstelle. Agents interagieren mit Daten durch eine einheitliche Abstraktion.</p>
 <h3 id="event-sourcing">Event Sourcing</h3>
 <ul>
-<li><strong>Append-only-Log</strong>: Zustand aus unveränderlicher Ereignisgeschichte abgeleitet</li>
-<li><strong>Replay</strong>: Jeden vergangenen Zustand rekonstruieren</li>
+<li>
+<p><strong>Append-only-Log</strong>: Zustand aus unveränderlicher Ereignisgeschichte abgeleitet</p>
+</li>
+<li>
+<p><strong>Replay</strong>: Jeden vergangenen Zustand rekonstruieren</p>
+</li>
 </ul>
 <p>Übersetzung: Message-Queue als append-only-Log. Vollständige Gesprächshistorie. Debugging durch Replay.</p>
 <h2 id="design-prinzipien-fur-outheis">Design-Prinzipien für outheis</h2>
@@ -387,7 +425,7 @@
 <ol>
 <li>
 <p><strong>Message-Passing statt Shared State</strong>
-   Agents kommunizieren über Nachrichten, nicht durch Mutation gemeinsamer Variablen.</p>
+   Agents kommunizieren über Nachrichten — nicht durch Mutation gemeinsamer Variablen.</p>
 </li>
 <li>
 <p><strong>Ownership-Semantik</strong>
@@ -403,7 +441,7 @@
 </li>
 <li>
 <p><strong>Capability-basierter Zugang</strong>
-   Agents haben explizite Berechtigungen. Ein relay-agent kann auf externe Schnittstellen zugreifen; ein action-agent nicht.</p>
+   Agents haben explizite Berechtigungen. Ein relay-agent greift auf externe Schnittstellen zu; ein action-agent nicht.</p>
 </li>
 <li>
 <p><strong>Minimaler Dispatcher</strong>

@@ -290,14 +290,16 @@
 └─────────┘  └───────┘   └────────┘   └────────┘
 </code></pre>
 <h2 id="dispatcher">Dispatcher</h2>
-<p>Der Dispatcher ist der Microkernel. Er:
-- <strong>Überwacht</strong> die Nachrichtenwarteschlange auf Änderungen
-- <strong>Verwaltet Sperren</strong> für gemeinsam genutzte Ressourcen
-- <strong>Plant</strong> periodische Aufgaben (Pattern-Analyse, Index-Neuerstellung)
-- <strong>Stellt wieder her</strong> ausstehende Operationen beim Start</p>
-<p>Der Dispatcher enthält keine LLM-Aufrufe. Er ist deterministisch, testbar, schnell.</p>
+<p>Der dispatcher ist der Microkernel. Er:</p>
+<ul>
+<li><strong>überwacht</strong> die Nachrichtenwarteschlange auf Änderungen</li>
+<li><strong>verwaltet Sperren</strong> für gemeinsam genutzte Ressourcen</li>
+<li><strong>plant</strong> periodische Aufgaben (Pattern-Analyse, Index-Neuerstellung)</li>
+<li><strong>stellt wieder her</strong> ausstehende Operationen beim Start</li>
+</ul>
+<p>Der dispatcher enthält keine LLM-Aufrufe. Er ist deterministisch, testbar, schnell.</p>
 <h2 id="agenten">Agenten</h2>
-<p>Sechs Agenten, jeder mit einem Namen und einer Rolle:</p>
+<p>Sechs agents, jeder mit einem Namen und einer Rolle:</p>
 <table>
 <thead>
 <tr>
@@ -319,8 +321,8 @@
 <tr>
 <td>data</td>
 <td>zeno</td>
-<td>Vault-Suche (per Tool)</td>
-<td>Vault, Memory</td>
+<td>vault-Suche (per Tool)</td>
+<td>vault, Memory</td>
 <td>—</td>
 </tr>
 <tr>
@@ -354,14 +356,16 @@
 </tbody>
 </table>
 <h3 id="routing">Routing</h3>
-<p>Relay (ou) behandelt alle Benutzernachrichten. Er verwendet Haiku mit Tools:
-- <strong>search_vault</strong> → delegiert an Data-Agent (zeno)
-- <strong>check_agenda</strong> → delegiert an Agenda-Agent (cato)
-- <strong>refresh_agenda</strong> → löst manuelle Agenda-Aktualisierung aus</p>
+<p>Relay (ou) behandelt alle Benutzernachrichten. Er verwendet Haiku mit Tools:</p>
+<ul>
+<li><strong>search_vault</strong> → delegiert an Data-Agent (zeno)</li>
+<li><strong>check_agenda</strong> → delegiert an Agenda-Agent (cato)</li>
+<li><strong>refresh_agenda</strong> → löst manuelle Agenda-Aktualisierung aus</li>
+</ul>
 <p>Kein separater Klassifizierungsschritt. Relay entscheidet intelligent basierend auf der Frage und Memory.</p>
 <p>Explizite Erwähnungen (@zeno, @cato) funktionieren weiterhin für direkte Delegation.</p>
 <h3 id="data-agent-zeno">Data-Agent (zeno)</h3>
-<p>Der Data-Agent behandelt Vault-Abfragen. Bei einfachen Fragen antwortet er direkt ohne LLM-Aufrufe:</p>
+<p>Der Data-Agent behandelt vault-Abfragen. Bei einfachen Fragen antwortet er direkt — ohne LLM-Aufrufe:</p>
 <table>
 <thead>
 <tr>
@@ -379,7 +383,7 @@
 <tr>
 <td>Statistik</td>
 <td>"Wie viele PDFs?"</td>
-<td><code>Du hast 12 PDF-Dateien im Vault.</code></td>
+<td><code>Du hast 12 PDF-Dateien im vault.</code></td>
 </tr>
 <tr>
 <td>Liste</td>
@@ -395,7 +399,7 @@
 </table>
 <p>Komplexe Abfragen verwenden weiterhin LLM für intelligente Suche und Synthese.</p>
 <h3 id="agenda-agent-cato">Agenda-Agent (cato)</h3>
-<p>Der Agenda-Agent verwaltet drei Dateien in <code>vault/Agenda/</code>:</p>
+<p>cato verwaltet drei Dateien in <code>vault/Agenda/</code>:</p>
 <table>
 <thead>
 <tr>
@@ -422,23 +426,35 @@
 </tr>
 </tbody>
 </table>
-<p><strong>Befehle:</strong>
-- "aktualisiere daily" / "update agenda" → löst manuelle Aktualisierung aus
-- Verarbeitet Inbox-Einträge, prüft Exchange-Antworten, aktualisiert Daily</p>
-<p><strong>Stündliche Überprüfung (bedingt):</strong>
-- Läuft um xx:55 (konfigurierbar)
-- Prüft Datei-Hashes vor der Verarbeitung — keine Änderungen = kein LLM-Aufruf
-- Unbedingt am Start (04:55) und Ende (23:55) des Tages
-- Läuft nur innerhalb konfigurierter Stunden (Standard 04:55-23:55)</p>
+<p><strong>Befehle:</strong></p>
+<ul>
+<li>"aktualisiere daily" / "update agenda" → löst manuelle Aktualisierung aus</li>
+<li>Verarbeitet Inbox-Einträge, prüft Exchange-Antworten, aktualisiert Daily</li>
+</ul>
+<p><strong>Stündliche Überprüfung (bedingt):</strong></p>
+<ul>
+<li>
+<p>Läuft um xx:55 (konfigurierbar)</p>
+</li>
+<li>
+<p>Prüft Datei-Hashes vor der Verarbeitung — keine Änderungen = kein LLM-Aufruf</p>
+</li>
+<li>
+<p>Unbedingt am Start (04:55) und Ende (23:55) des Tages</p>
+</li>
+<li>
+<p>Läuft nur innerhalb konfigurierter Stunden (Standard 04:55-23:55)</p>
+</li>
+</ul>
 <h3 id="pattern-agent-rumi">Pattern-Agent (rumi)</h3>
-<p>Der Pattern-Agent läuft nächtlich und:
+<p>rumi läuft nächtlich und:
 1. Extrahiert Memory aus aktuellen Gesprächen
 2. Konsolidiert Duplikate, löst Widersprüche auf
 3. Fördert stabile Muster zu User Rules
 4. Validiert eigene Extraktionsstrategien (lernt zu lernen)</p>
 <p><strong>Memory-Migration</strong> wird über Chat-Befehle ("memory migrate") durch Relay behandelt, nicht vom Pattern-Agenten. Siehe <a href="migration.md">Migration</a>.</p>
 <h3 id="action-agent-hiro">Action-Agent (hiro)</h3>
-<p>Der Action-Agent führt Aufgaben und Hintergrundjobs aus. Derzeit in der Entwicklung mit diesen geplanten Fähigkeiten:</p>
+<p>hiro führt Aufgaben und Hintergrundjobs aus. Derzeit in der Entwicklung:</p>
 <table>
 <thead>
 <tr>
@@ -475,18 +491,30 @@
 </tr>
 </tbody>
 </table>
-<p>Action ist standardmäßig deaktiviert (<code>enabled: false</code>). Wenn aktiviert:
-- Empfängt Aufgaben von anderen Agenten oder geplanten Jobs
-- Führt Aktionen mit expliziter Bestätigung für destruktive Operationen aus
-- Meldet Ergebnisse über Nachrichtenwarteschlange zurück</p>
-<p><strong>Sicherheitsmodell:</strong> Action hat eine Whitelist erlaubter Operationen. Unbekannte Befehle erfordern explizite Benutzergenehmigung in Exchange.md.</p>
+<p>Action ist standardmäßig deaktiviert (<code>enabled: false</code>). Wenn aktiviert:</p>
+<ul>
+<li>Empfängt Aufgaben von anderen agents oder geplanten Jobs</li>
+<li>Führt Aktionen mit expliziter Bestätigung für destruktive Operationen aus</li>
+<li>Meldet Ergebnisse über Nachrichtenwarteschlange zurück</li>
+</ul>
+<p><strong>Sicherheitsmodell:</strong> hiro hat eine Whitelist erlaubter Operationen. Unbekannte Befehle erfordern explizite Benutzergenehmigung in Exchange.md.</p>
 <h3 id="code-agent-alan">Code-Agent (alan)</h3>
-<p>Der Code-Agent bietet entwicklungszeitliche Intelligenz. Siehe <a href="alan.md">Code-Agent (alan)</a> für vollständige Dokumentation.</p>
-<p>Zusammenfassung:
-- <strong>Introspektion</strong>: Fragen zur outheis-Implementierung beantworten
-- <strong>Vorschläge</strong>: Verbesserungen über <code>vault/Codebase/Exchange.md</code> vorschlagen
-- <strong>Suche</strong>: Muster und Implementierungen im Quellcode finden
-- <strong>Isolation</strong>: Schreibzugriff auf <code>vault/Codebase/</code> beschränkt</p>
+<p>alan bietet entwicklungszeitliche Intelligenz. Siehe <a href="alan.md">Code-Agent (alan)</a> für vollständige Dokumentation.</p>
+<p>Zusammenfassung:</p>
+<ul>
+<li>
+<p><strong>Introspektion</strong>: Fragen zur outheis-Implementierung beantworten</p>
+</li>
+<li>
+<p><strong>Vorschläge</strong>: Verbesserungen über <code>vault/Codebase/Exchange.md</code> vorschlagen</p>
+</li>
+<li>
+<p><strong>Suche</strong>: Muster und Implementierungen im Quellcode finden</p>
+</li>
+<li>
+<p><strong>Isolation</strong>: Schreibzugriff auf <code>vault/Codebase/</code> beschränkt</p>
+</li>
+</ul>
 <p><strong>alan ist nur für Entwicklung.</strong> Standardmäßig deaktiviert, wird nie in Produktion geladen.</p>
 <h2 id="wissensspeicher">Wissensspeicher</h2>
 <h3 id="memory">Memory</h3>
@@ -519,21 +547,29 @@
 </table>
 <p>Gespeichert in <code>~/.outheis/human/memory/</code>. Siehe <a href="memory.md">Memory</a> für Details.</p>
 <h3 id="rules">Rules</h3>
-<p>Externe Anweisungen an Agenten — was zu beachten ist:</p>
+<p>Externe Anweisungen an agents — was zu beachten ist:</p>
 <ul>
-<li>Benutzerdefiniert: "Auf Deutsch antworten"</li>
-<li>Durch Pattern gefördert: "Benutzer bevorzugt kurze Antworten"</li>
+<li>
+<p>Benutzerdefiniert: "Auf Deutsch antworten"</p>
+</li>
+<li>
+<p>Durch Pattern gefördert: "Benutzer bevorzugt kurze Antworten"</p>
+</li>
 </ul>
 <p>Gespeichert in <code>~/.outheis/human/rules/</code>. Siehe <a href="memory.md">Memory</a> für Details.</p>
 <h3 id="skills">Skills</h3>
-<p>Interne Fähigkeiten — wie Agenten handeln:</p>
+<p>Interne Fähigkeiten — wie agents handeln:</p>
 <ul>
-<li>System-Skills: Basisfähigkeiten (im Paket)</li>
-<li>Gelernte Skills: Durch Nutzung und Korrektur verfeinert</li>
+<li>
+<p>System-Skills: Basisfähigkeiten (im Paket)</p>
+</li>
+<li>
+<p>Gelernte Skills: Durch Nutzung und Korrektur verfeinert</p>
+</li>
 </ul>
 <p>Gespeichert in <code>src/outheis/agents/skills/</code> (System) und <code>~/.outheis/human/skills/</code> (gelernt). Siehe <a href="skills.md">Skills</a> für Details.</p>
 <h3 id="vault">Vault</h3>
-<p>Der Vault ist ein Verzeichnis mit Markdown-Dateien und YAML-Frontmatter:</p>
+<p>Der vault ist ein Verzeichnis mit Markdown-Dateien und YAML-Frontmatter:</p>
 <pre><code>vault/
 ├── Agenda/
 │   ├── Daily.md      # Today's schedule
@@ -608,7 +644,7 @@
 </tr>
 <tr>
 <td><code>rules/</code></td>
-<td>Anweisungen an Agenten</td>
+<td>Anweisungen an agents</td>
 <td>Benutzer, Pattern</td>
 <td>Präferenzen gehen verloren</td>
 </tr>
@@ -634,7 +670,7 @@
 </table>
 <p>Das Cache-Verzeichnis ist explizit neu erstellbar. Jederzeit löschen — outheis baut nach Bedarf neu auf.</p>
 <h2 id="geplante-aufgaben">Geplante Aufgaben</h2>
-<p>Der Dispatcher führt periodische Aufgaben über den integrierten Scheduler aus. Alle Zeiten in <code>config.json</code> konfigurierbar:</p>
+<p>Der dispatcher führt periodische Aufgaben über den integrierten Scheduler aus. Alle Zeiten in <code>config.json</code> konfigurierbar:</p>
 <table>
 <thead>
 <tr>
@@ -652,7 +688,7 @@
 <tr>
 <td><code>index_rebuild</code></td>
 <td>04:30</td>
-<td>Vault-Suchindizes neu erstellen</td>
+<td>vault-Suchindizes neu erstellen</td>
 </tr>
 <tr>
 <td><code>archive_rotation</code></td>
@@ -662,7 +698,7 @@
 <tr>
 <td><code>shadow_scan</code></td>
 <td>03:30</td>
-<td>Vault nach chronologischen Einträgen scannen → Shadow.md</td>
+<td>vault nach chronologischen Einträgen scannen → Shadow.md</td>
 </tr>
 <tr>
 <td><code>agenda_review</code></td>
@@ -682,7 +718,7 @@
 <tr>
 <td><code>tag_scan</code></td>
 <td>auf Anfrage</td>
-<td>Vault nach #Tags scannen, Cache aktualisieren — aus WebUI ausgelöst</td>
+<td>vault nach #Tags scannen, Cache aktualisieren — aus WebUI ausgelöst</td>
 </tr>
 </tbody>
 </table>
@@ -707,15 +743,15 @@
 </code></pre>
 <p>Jede Aufgabe kann unabhängig deaktiviert werden. Aufgaben laufen in Daemon-Threads — eine laufende Aufgabe blockiert einen zweiten Start derselben Aufgabe, aber nicht andere.</p>
 <h2 id="das-skalierungsproblem">Das Skalierungsproblem</h2>
-<p>Wenn ein Vault wächst, können Agenten nicht alles im Kontext halten. Dies wird durch Abstraktion adressiert, nicht durch mehr Lese-Tools.</p>
+<p>Wenn ein vault wächst, können agents nicht alles im Kontext halten. Das wird durch Abstraktion adressiert — nicht durch mehr Lese-Tools.</p>
 <p><strong>Falsch:</strong> Mehr Tools</p>
 <pre><code>read_file_1(), read_file_2(), ... read_file_n()
 </code></pre>
-<p><strong>Richtig:</strong> Bessere Abstraktionen — ein Index, den der Agent abfragen kann, mit Details auf Abruf.</p>
-<p>Vier in Nutzung oder geplante Strategien:</p>
-<p><strong>1. Index mit Aktualitätsgewichtung</strong> — Der Data-Agent pflegt einen Suchindex. Agenten sehen einen kompakten Index, nicht rohe Dateien. Der Index enthält Zugriffshäufigkeit und Aktualitätssignale.</p>
-<p><strong>2. Shadow.md als chronologischer Vorfilter</strong> — Der Data-Agent führt einen nächtlichen Vault-Scan durch und schreibt alle zeitrelevanten Einträge in eine einzelne strukturierte Datei (<code>Agenda/Shadow.md</code>). Der Agenda-Agent lädt diese statt bei jeder stündlichen Überprüfung den gesamten Vault zu scannen.</p>
-<p><strong>3. Progressives Laden</strong> — Überblick zuerst, Details auf Anfrage. Der <code>load_skill(topic)</code>-Mechanismus funktioniert wie kontrolliertes Demand Paging: Der Agent hat eine Zusammenfassung im Kontext und fordert Details nur bei Bedarf an.</p>
+<p><strong>Richtig:</strong> Bessere Abstraktionen — ein Index, den der agent abfragen kann, mit Details auf Abruf.</p>
+<p>Vier Strategien in Nutzung oder geplant:</p>
+<p><strong>1. Index mit Aktualitätsgewichtung</strong> — Der Data-Agent pflegt einen Suchindex. Agents sehen einen kompakten Index, nicht rohe Dateien. Der Index enthält Zugriffshäufigkeit und Aktualitätssignale.</p>
+<p><strong>2. Shadow.md als chronologischer Vorfilter</strong> — Der Data-Agent führt einen nächtlichen vault-Scan durch und schreibt alle zeitrelevanten Einträge in eine einzelne strukturierte Datei (<code>Agenda/Shadow.md</code>). cato lädt diese statt bei jeder stündlichen Überprüfung den gesamten vault zu scannen.</p>
+<p><strong>3. Progressives Laden</strong> — Überblick zuerst, Details auf Anfrage. Der <code>load_skill(topic)</code>-Mechanismus funktioniert wie kontrolliertes Demand Paging: Der agent hat eine Zusammenfassung im Kontext und fordert Details nur bei Bedarf an.</p>
 <p><strong>4. Skill-basierte Kompression</strong> — Skills ersetzen ausführliche Anweisungen. "ISO-Datumsformat verwenden" statt zehn Beispiele. Bessere Skills bedeuten kleinere Prompts und mehr Platz für Benutzerinhalte.</p>
 <hr />
 <h2 id="weiterfuhrende-lekture">Weiterführende Lektüre</h2>

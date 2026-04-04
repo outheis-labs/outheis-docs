@@ -60,7 +60,9 @@ Unix philosophy: small tools that do one thing well, composed via pipes. Agent p
 ### DragonFlyBSD
 
 - **LWKT (Light Weight Kernel Threads)**: Per-CPU scheduling without global locks
+
 - **Message Passing**: Serialization through ownership, not locks
+
 - **IPI Queues**: Each CPU has its own queue—no central bottleneck
 
 Translation: Each agent can have its own message queue. No central dispatcher bottleneck. Ownership determines who can modify what.
@@ -68,7 +70,9 @@ Translation: Each agent can have its own message queue. No central dispatcher bo
 ### Erlang/OTP
 
 - **Actor Model**: Isolated processes communicating via messages
+
 - **Supervision Trees**: Parent processes monitor and restart children
+
 - **"Let it crash"**: Design for failure, recover gracefully
 
 Translation: Agents are actors. A dispatcher supervises agents. Failed agents can be restarted without losing system state.
@@ -76,6 +80,7 @@ Translation: Agents are actors. A dispatcher supervises agents. Failed agents ca
 ### seL4 / Capability Systems
 
 - **Capabilities**: Unforgeable tokens that grant specific permissions
+
 - **Minimal Kernel**: Only the essential primitives
 
 Translation: Agents have explicit capabilities. A pattern agent can write insights; others can only read. The dispatcher is minimal—just routing.
@@ -83,8 +88,11 @@ Translation: Agents have explicit capabilities. A pattern agent can write insigh
 ### OpenBSD
 
 - **pledge(2)**: Process declares upfront which syscalls it needs; everything else forbidden
+
 - **unveil(2)**: Process declares which paths it can see; the rest of the filesystem disappears
+
 - **Privilege Separation**: Split into privileged parent (holds resources) and unprivileged child (does the work)
+
 - **Secure by Default**: Everything off until explicitly enabled
 
 Translation: Agents declare their capabilities at startup—no implicit permissions. Each agent sees only its relevant paths (vault, insights). The dispatcher holds access to the queue; agents run with minimal access.
@@ -92,7 +100,9 @@ Translation: Agents declare their capabilities at startup—no implicit permissi
 ### macOS / Grand Central Dispatch
 
 - **Dispatch Queues**: Submit work to queues instead of managing threads
+
 - **Quality of Service**: Tag work with priority levels (user interactive, background, etc.)
+
 - **System-managed concurrency**: The OS decides how many threads to use
 
 Translation: A dispatcher with priority-aware queues. User-facing agents run at high priority; background analysis runs when resources permit. The system balances load automatically.
@@ -100,6 +110,7 @@ Translation: A dispatcher with priority-aware queues. User-facing agents run at 
 ### Plan 9
 
 - **"Everything is a file"**: Uniform interface to all resources
+
 - **9P Protocol**: Network-transparent file access
 
 Translation: Knowledge bases as filesystem interface. Agents interact with data through a uniform abstraction.
@@ -107,6 +118,7 @@ Translation: Knowledge bases as filesystem interface. Agents interact with data 
 ### Event Sourcing
 
 - **Append-only log**: State derived from immutable event history
+
 - **Replay**: Reconstruct any past state
 
 Translation: Message queue as append-only log. Full conversation history. Debugging through replay.

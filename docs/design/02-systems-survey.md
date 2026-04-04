@@ -42,6 +42,7 @@ CPU 0                CPU 1                CPU 2
 Data "belongs" to a CPU. Only the owner modifies it. Others send messages requesting changes.
 
 This eliminates:
+
 - Lock contention
 - Cache line bouncing
 - Deadlocks
@@ -68,6 +69,7 @@ This eliminates:
 #### Actor Model
 
 Processes (actors) are:
+
 - Isolated (no shared memory)
 - Identified by PID
 - Communicate only via async messages
@@ -98,8 +100,11 @@ Processes are organized hierarchically. Parents supervise children:
 ```
 
 Supervisor strategies:
+
 - **one_for_one**: Restart only the failed child
+
 - **one_for_all**: Restart all children if one fails
+
 - **rest_for_one**: Restart failed child and those started after it
 
 #### "Let It Crash"
@@ -147,6 +152,7 @@ You can only access what you hold capabilities for. No ambient authority.
 #### Minimal Kernel
 
 seL4's kernel provides only:
+
 - Threads
 - Address spaces
 - IPC
@@ -268,6 +274,7 @@ The system manages thread pools. You just say "do this work" and "how important 
 #### Quality of Service (QoS)
 
 Work is tagged with its priority level. The system can:
+
 - Throttle background work when the user is active
 - Boost priority when results are needed immediately
 - Balance energy usage on laptops/phones
@@ -351,8 +358,11 @@ Current state = fold over all events.
 #### Benefits
 
 - **Audit trail**: Complete history
+
 - **Replay**: Reconstruct any past state
+
 - **Debugging**: See exactly what happened
+
 - **Temporal queries**: "What was the state at time T?"
 
 ### Applicability to Agent Systems

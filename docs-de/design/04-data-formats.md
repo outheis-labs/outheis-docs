@@ -1,6 +1,6 @@
 # Datenformate und Konventionen
 
-Dieses Dokument legt die Struktur und das Format der Daten in outheis fest und ermöglicht es Agenten, verlässliche Annahmen über Inhalte zu treffen.
+Klare Formate ermöglichen verlässliche Annahmen. Agents wissen, was sie vorfinden — ohne raten zu müssen.
 
 ---
 
@@ -108,9 +108,12 @@ Der erste Vault in der Liste ist der **primäre Vault** — enthält `Agenda/`.
 
 Gemäß dem Prinzip der *prospektiven Informationsarchitektur*:
 
-- **Selbstbeschreibung**: Dateien tragen ihre Bedeutung über Tags, nicht über Position
+- **Selbstbeschreibung**: Dateien tragen ihre Bedeutung über Tags — nicht über Position
+
 - **Position als Hinweis**: Verzeichnisstruktur liefert Kontext, nicht Identität
+
 - **Mehrere Zugriffspfade**: Tags ermöglichen Abruf aus beliebiger Perspektive
+
 - **Struktur zur Abfragezeit**: Hierarchien werden berechnet, nicht gespeichert
 
 ---
@@ -135,8 +138,6 @@ Dateien, die häufig neben Markdown auftauchen oder darin verlinkt sind:
 | Daten | `.csv`, `.tsv`, `.jsonl` | Als strukturierte Daten indexieren |
 
 ### Beziehungsmuster
-
-Dateien stehen auf verschiedene Weisen zueinander in Beziehung:
 
 | Muster | Beschreibung |
 |--------|--------------|
@@ -173,14 +174,17 @@ Content here...
 | `modified` | date | Letzte Änderung (ISO 8601) |
 | `tags` | array | Semantische Tags |
 
-Wenn kein Frontmatter vorhanden ist, leiten Agenten Metadaten ab aus:
+Wenn kein Frontmatter vorhanden ist, leiten agents Metadaten ab aus:
+
 - Titel: Erste `# Überschrift` oder Dateiname
+
 - Erstellt/Geändert: Dateisystem-Zeitstempel
+
 - Tags: Inline-Tags im Inhalt
 
 ### Tags
 
-Tags können aus **zwei Quellen** stammen (beide funktionieren, werden automatisch zusammengeführt):
+Tags kommen aus **zwei Quellen** — beide funktionieren, werden automatisch zusammengeführt:
 
 1. **YAML-Frontmatter** (optional):
 ```yaml
@@ -221,6 +225,7 @@ Zur Indizierung und Suche werden Tags normalisiert:
 ```
 
 Regeln:
+
 - Kleinbuchstaben für die Suche
 - Bindestriche und Schrägstriche beibehalten
 - Führendes `#` entfernen
@@ -238,6 +243,7 @@ Im Chat fragen: "welche tags habe ich?" oder "tag-analyse"
 ### Tag-Philosophie
 
 **outheis erfindet keine Tags.** Es verwendet deine Tags, erlernt dein Format und kann:
+
 - Bereinigung für einzelne Tags vorschlagen
 - Auf inkonsistente Formate hinweisen
 - Ähnliche vorhandene Tags vorschlagen, wenn neue erstellt werden
@@ -263,7 +269,7 @@ Based on [this paper](https://example.com/paper.pdf).
 
 ## Importierte Daten
 
-Externe Daten (Kalender, E-Mail usw.) werden vom Action-Agenten in `~/.outheis/human/imports/` importiert. Diese Daten sind kanonisch — strukturierte Repräsentationen externer Quellen.
+Externe Daten (Kalender, E-Mail usw.) importiert der Action-Agent in `~/.outheis/human/imports/`. Diese Daten sind kanonisch — strukturierte Repräsentationen externer Quellen.
 
 ### Verzeichnisstruktur
 
@@ -403,8 +409,6 @@ Der Index umfasst alle konfigurierten Vaults. Jeder Eintrag enthält das `vault`
 
 ### config.json
 
-Benutzerkonfiguration:
-
 ```json
 {
   "name": "Markus",
@@ -426,7 +430,7 @@ Benutzerkonfiguration:
 
 ### insights.jsonl
 
-Pattern-Agent schreibt Beobachtungen:
+Der Pattern-Agent schreibt Beobachtungen:
 
 ```json
 {
@@ -452,7 +456,7 @@ Pattern-Agent schreibt Beobachtungen:
 
 ### session_notes.jsonl
 
-Temporäre Lernnotizen, die vom Pattern-Agenten bei geplanten Läufen geprüft werden:
+Temporäre Lernnotizen, die der Pattern-Agent bei geplanten Läufen prüft:
 
 ```json
 {
@@ -472,9 +476,11 @@ Temporäre Lernnotizen, die vom Pattern-Agenten bei geplanten Läufen geprüft w
 ```
 
 Sitzungsnotizen werden:
-- Von jedem Agenten geschrieben, wenn der Benutzer bei der Problemlösung hilft
-- Vom Pattern-Agenten beim nächtlichen Lauf gelesen
+
+- Von jedem agent geschrieben, wenn der Benutzer bei der Problemlösung hilft
+- Vom Pattern-Agent beim nächtlichen Lauf gelesen
 - Nach der Verarbeitung als `reviewed: true` markiert
+
 - Regelmäßig bereinigt (geprüfte Notizen älter als 30 Tage)
 
 Der Pattern-Agent entscheidet: auf Insight verallgemeinern oder als spezifische Instanz im Archiv belassen.
@@ -493,10 +499,12 @@ Markdown-Dateien in `human/rules/` definieren Benutzerpräferenzen:
 
 ## Time Blocks
 - Monday mornings: no meetings before 10:00
+
 - Friday afternoons: no meetings after 15:00
 
 ## Notifications
 - Deadline < 3 days: always remind
+
 - Emails from boss: always show immediately
 ```
 
@@ -504,7 +512,7 @@ Markdown-Dateien in `human/rules/` definieren Benutzerpräferenzen:
 
 ## Textextraktion
 
-Für Nicht-Markdown-Dateien extrahieren Agenten Text wo möglich:
+Für Nicht-Markdown-Dateien extrahieren agents Text wo möglich:
 
 | Typ | Extraktionsmethode |
 |-----|-------------------|
@@ -548,7 +556,7 @@ Alle Zeitstempel verwenden ISO 8601-Format in UTC:
 2025-03-27T10:00:00Z
 ```
 
-Agenten konvertieren zur Anzeige in die lokale Zeitzone basierend auf der Zeitzoneneinstellung in `human/config.json`.
+Agents konvertieren zur Anzeige in die lokale Zeitzone basierend auf der Zeitzoneneinstellung in `human/config.json`.
 
 ---
 
@@ -565,7 +573,9 @@ Agenten konvertieren zur Anzeige in die lokale Zeitzone basierend auf der Zeitzo
 ### Verbotene Zeichen
 
 Dateinamen dürfen nicht enthalten:
+
 - `/` `\` `:` `*` `?` `"` `<` `>` `|`
+
 - Führende/abschließende Leerzeichen
 - Führenden `.` in Benutzerdateien (für System reserviert)
 
@@ -598,7 +608,7 @@ Alle Textdateien verwenden UTF-8-Kodierung ohne BOM.
 
 ### Das Problem
 
-Datenstrukturen entwickeln sich weiter. Nachrichten, Insights und andere Formate werden sich im Laufe der Zeit ändern. Ohne Versionierung:
+Datenstrukturen entwickeln sich weiter. Ohne Versionierung:
 
 - Alte Daten werden nach Upgrades unlesbar
 - Gemischte Versionen in derselben Datei verursachen Parsing-Fehler
@@ -618,7 +628,7 @@ Jeder Datensatz in outheis-verwalteten JSONL-Dateien trägt eine Version:
 |------|-----|-----------|
 | `v` | integer | Schema-Version dieses Datensatzes |
 
-Kurzer Feldname (`v` statt `version`), weil JSONL kompakt sein sollte.
+Kurzer Feldname (`v` statt `version`) — JSONL sollte kompakt sein.
 
 ### Versionsautorität
 
@@ -636,7 +646,7 @@ def write_message(msg):
     return json.dumps(msg)
 ```
 
-Alle Agenten importieren dieses Modul. Kein Agent schreibt JSON direkt.
+Alle agents importieren dieses Modul. Kein agent schreibt JSON direkt.
 
 ### Lesen mit Versionsüberprüfung
 
@@ -742,11 +752,14 @@ Optional: Migration im nächtlichen Batch mit Pattern-Agent ausführen.
 
 ## Theoretischer Hintergrund
 
-Die Vault-Architektur implementiert Prinzipien der *prospektiven Informationsarchitektur*:
+Die vault-Architektur implementiert Prinzipien der *prospektiven Informationsarchitektur*:
 
-- **Selbstbeschreibende Objekte**: Dateien tragen Bedeutung über Tags, nicht Position
+- **Selbstbeschreibende Objekte**: Dateien tragen Bedeutung über Tags — nicht über Position
+
 - **Multiple Relationierung**: Tags und Links ermöglichen mehrere Zugriffspfade
+
 - **Struktur zur Abfragezeit**: Hierarchien werden berechnet, nicht gespeichert
+
 - **Klartext als Fundament**: Universelle Lesbarkeit, langfristige Stabilität
 
 Siehe: [Temporalization of Order](https://github.com/outheis-labs/research-base/blob/main/temporalization-of-order/temporalization-of-order.md) für theoretische Grundlagen.
@@ -762,7 +775,7 @@ Siehe: [Temporalization of Order](https://github.com/outheis-labs/research-base/
 | Symlink innerhalb des Vault | Folgen, Ziel indexieren |
 | Symlink außerhalb des Vault | **Nicht folgen**, als Fehler protokollieren |
 
-Begründung: Symlinks außerhalb des Vault könnten Daten leaken oder die Zugriffskontrolle umgehen.
+Symlinks außerhalb des vault könnten Daten leaken oder die Zugangskontrolle umgehen.
 
 ### Versteckte Dateien
 
@@ -773,7 +786,7 @@ Dateien und Verzeichnisse, die mit `.` beginnen, werden ignoriert, außer:
 | `.git/` | Als Repository-Metadaten erkannt |
 | Alle anderen `.*` | Ignoriert (nicht indexiert, nicht verarbeitet) |
 
-Dies umfasst `.obsidian/`, `.DS_Store`, `.gitignore` usw.
+Das umfasst `.obsidian/`, `.DS_Store`, `.gitignore` usw.
 
 ### Große Dateien
 
@@ -811,10 +824,10 @@ Im Domain-Expert-Modus dient das `human/`-Verzeichnis einem anderen Zweck:
 
 Die Administratorrolle im Domain-Expert-Modus:
 
-- Konfiguriert Agenten, Modelle, Routing
-- Definiert domänenspezifische Regeln
-- Überwacht Systemzustand
-- Empfängt **kein** persönliches Filtern (kein Agenda)
+- konfiguriert agents, Modelle, Routing
+- definiert domänenspezifische Regeln
+- überwacht Systemzustand
+- empfängt **kein** persönliches Filtern (kein Agenda)
 
 Mehrere Endbenutzer interagieren über Transport, aber nur der Administrator konfiguriert `human/`.
 
@@ -822,7 +835,7 @@ Mehrere Endbenutzer interagieren über Transport, aber nur der Administrator kon
 
 ## Agenda-Verzeichnis
 
-Der primäre Vault enthält ein spezielles `Agenda/`-Verzeichnis, das als strukturierte Schnittstelle zwischen Benutzer und System dient.
+Der primäre vault enthält ein spezielles `Agenda/`-Verzeichnis — strukturierte Schnittstelle zwischen Benutzer und System.
 
 ### Struktur
 
@@ -852,6 +865,7 @@ Der aktuelle Tag. Agenda-Agent pflegt die Struktur, Benutzer fügt Inhalte hinzu
 
 ## Appointments
 - 09:00 Standup
+
 - 14:00 Workshop
 
 ## Focus
@@ -874,7 +888,7 @@ remember to call Y about the contract
 #idea redesign the onboarding flow
 ```
 
-Agenda-Agent liest, klassifiziert und leitet an passende Agenten weiter.
+Der Agenda-Agent liest, klassifiziert und leitet an passende agents weiter.
 
 ### Exchange.md
 
@@ -907,8 +921,6 @@ Learned: #in-progress → #wip
 
 ### Besondere Behandlung
 
-Das `Agenda/`-Verzeichnis erhält besondere Behandlung:
-
 | Aspekt | Behandlung |
 |--------|------------|
 | Änderungserkennung | Prüfsumme + Diff (vorherige Version gecacht) |
@@ -916,7 +928,7 @@ Das `Agenda/`-Verzeichnis erhält besondere Behandlung:
 | Indizierung | Höhere Priorität, immer aktuell |
 | Diff-Analyse | Kommentare, Hinzufügungen, Löschungen werden verfolgt |
 
-Dies ermöglicht dem Agenda-Agenten zu verstehen, *was* sich geändert hat, nicht nur *dass* sich etwas geändert hat.
+Das ermöglicht dem Agenda-Agenten zu verstehen, *was* sich geändert hat — nicht nur *dass* sich etwas geändert hat.
 
 ### Cache-Ort
 
@@ -937,7 +949,7 @@ Ohne Datenbank erfordert schneller Zugriff clevere Strategien auf Basis von Klar
 
 ### Index als primärer Nachschlageort
 
-Der Index (`~/.outheis/human/index.jsonl`) dient als erster Zugangspunkt. Dateiinhalte werden nur bei Bedarf geladen.
+Der Index (`~/.outheis/human/index.jsonl`) ist der erste Zugangspunkt. Dateiinhalte werden nur bei Bedarf geladen.
 
 ```
 Query
@@ -966,7 +978,7 @@ Kandidaten aus dem Index werden nach mehreren Signalen gerankt:
 
 ### Tag-Lernen
 
-Pattern-Agent analysiert Tag-Nutzung und erlernt Gewichte:
+Der Pattern-Agent analysiert Tag-Nutzung und erlernt Gewichte:
 
 ```json
 {
@@ -981,6 +993,7 @@ Pattern-Agent analysiert Tag-Nutzung und erlernt Gewichte:
 Gespeichert in `~/.outheis/human/tag-weights.jsonl`.
 
 Gewichte werden aktualisiert basierend auf:
+
 - Zugriffshäufigkeit (Tag erscheint in aufgerufenen Dateien)
 - Gemeinsames Auftreten mit erfolgreichen Suchen
 - Implizitem Feedback (wurde Ergebnis verwendet?)
@@ -995,13 +1008,13 @@ Für Inhalte, die nicht im Index erfasst sind:
 | Invertierter Index | Häufige Volltextabfragen |
 | Embedding-Suche | Semantische Ähnlichkeit (optional, lokal) |
 
-Implementierungswahl hängt von Vault-Größe und Hardware ab.
+Implementierungswahl hängt von vault-Größe und Hardware ab.
 
 ### Index-Aktualisierungen
 
 | Auslöser | Aktion |
 |----------|--------|
-| Dateiwatcher auf Vault | Änderungen erkennen |
+| Dateiwatcher auf vault | Änderungen erkennen |
 | Prüfsummen-Mismatch | Datei neu indexieren |
 | Periodischer Scan | Verpasste Änderungen erfassen |
 

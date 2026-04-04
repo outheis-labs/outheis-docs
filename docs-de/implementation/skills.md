@@ -58,24 +58,28 @@ src/outheis/agents/skills/
 Vom Entwickler definierte Basisfähigkeiten. Beispiele:
 
 **Agenda-Agent:**
+
 - Datumsformate erkennen
 - Daily.md-Struktur
 - Inbox-Verarbeitungsstrategie
 - Exchange.md-Nutzung
 
 **Data-Agent:**
+
 - Datei-Suchstrategien
 - Tag-Interpretation
 - JSON-Struktur-Parsing
 - Ergebnis-Ranking
 
 **Relay-Agent:**
+
 - Anfragen-Routing
 - Tool-Auswahl
 - Migrations-Behandlung
 - Korrektur-Verarbeitung
 
 **Pattern-Agent:**
+
 - Memory-Extraktion
 - Rule-Förderung
 - Konflikt-Erkennung
@@ -131,7 +135,9 @@ System-Versionen zuerst, Benutzer-Versionen ergänzen/überschreiben.
 Skills sollten sein:
 
 - **Konkret**: Spezifische Muster, keine vagen Prinzipien
+
 - **Handlungsorientiert**: Dem Agenten sagen, was zu tun ist
+
 - **Lernbar**: Kann durch Feedback verfeinert werden
 
 Guter Skill:

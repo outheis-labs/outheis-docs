@@ -109,8 +109,11 @@ First vault in list is the **primary vault** — contains `Agenda/`.
 Following the principle of *prospective information architecture*:
 
 - **Self-description**: Files carry their meaning via tags, not via position
+
 - **Position as hint**: Directory structure provides context, not identity
+
 - **Multiple access paths**: Tags enable retrieval from any perspective
+
 - **Structure at query time**: Hierarchies are computed, not stored
 
 ---
@@ -174,8 +177,11 @@ Content here...
 | `tags` | array | Semantic tags |
 
 If frontmatter is absent, agents derive metadata from:
+
 - Title: First `# heading` or filename
+
 - Created/Modified: Filesystem timestamps
+
 - Tags: Inline tags in content
 
 ### Tags
@@ -221,6 +227,7 @@ For indexing and search, tags are normalized:
 ```
 
 Rules:
+
 - Lowercase for matching
 - Preserve hyphens and slashes
 - Strip leading `#`
@@ -238,6 +245,7 @@ Ask in chat: "welche tags habe ich?" or "tag-analyse"
 ### Tag Philosophy
 
 **outheis does not invent tags.** It uses your tags, learns your format, and may:
+
 - Suggest cleanup for singular tags
 - Warn about inconsistent formats
 - Propose similar existing tags when you create new ones
@@ -472,9 +480,11 @@ Temporary learning notes, reviewed by Pattern agent during scheduled runs:
 ```
 
 Session notes are:
+
 - Written by any agent when user helps solve a problem
 - Read by Pattern agent during nightly run
 - Marked `reviewed: true` after processing
+
 - Periodically cleaned (reviewed notes older than 30 days)
 
 Pattern agent decides: generalize to insight, or leave as specific instance in archive.
@@ -493,10 +503,12 @@ Markdown files in `human/rules/` define user preferences:
 
 ## Time Blocks
 - Monday mornings: no meetings before 10:00
+
 - Friday afternoons: no meetings after 15:00
 
 ## Notifications
 - Deadline < 3 days: always remind
+
 - Emails from boss: always show immediately
 ```
 
@@ -565,7 +577,9 @@ Agents convert to local timezone for display based on `human/config.json` timezo
 ### Forbidden Characters
 
 Filenames must not contain:
+
 - `/` `\` `:` `*` `?` `"` `<` `>` `|`
+
 - Leading/trailing spaces
 - Leading `.` in user files (reserved for system)
 
@@ -745,8 +759,11 @@ Optional: run migration in nightly batch with Pattern agent.
 The vault architecture implements principles of *prospective information architecture*:
 
 - **Self-describing objects**: Files carry meaning via tags, not position
+
 - **Multiple relationierung**: Tags and links enable multiple access paths
+
 - **Structure at query time**: Hierarchies are computed, not stored
+
 - **Plaintext as foundation**: Universal readability, long-term stability
 
 See: [Temporalization of Order](https://github.com/outheis-labs/research-base/blob/main/temporalization-of-order/temporalization-of-order.md) for theoretical foundations.
@@ -852,6 +869,7 @@ The current day. Agenda agent maintains structure, user adds content.
 
 ## Appointments
 - 09:00 Standup
+
 - 14:00 Workshop
 
 ## Focus
@@ -981,6 +999,7 @@ Pattern agent analyzes tag usage and learns weights:
 Stored in `~/.outheis/human/tag-weights.jsonl`.
 
 Weights are updated based on:
+
 - Access frequency (tag appears in accessed files)
 - Co-occurrence with successful searches
 - Implicit feedback (was result used?)

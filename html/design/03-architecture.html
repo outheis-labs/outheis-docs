@@ -459,11 +459,13 @@ else:
 → {&quot;cmd&quot;: &quot;status&quot;}
 ← {&quot;holder&quot;: &quot;client_123&quot;, &quot;queue_length&quot;: 2, &quot;queue&quot;: [...]}
 </code></pre>
-<p><strong>Behavior:</strong>
-- Lock granted immediately if queue empty
-- On release, next-in-queue is notified
-- Client disconnect → automatic release, cleanup
-- Priorities are architectural, not configurable</p>
+<p><strong>Behavior:</strong></p>
+<ul>
+<li>Lock granted immediately if queue empty</li>
+<li>On release, next-in-queue is notified</li>
+<li>Client disconnect → automatic release, cleanup</li>
+<li>Priorities are architectural, not configurable</li>
+</ul>
 <h4 id="file-locking">File Locking</h4>
 <p>For files other than <code>messages.jsonl</code>, simple <code>flock</code> is used:</p>
 <table>
@@ -612,11 +614,17 @@ Agenda Agent (filtered, prioritized, personal)
   ▼
 User (only what matters, when it matters)
 </code></pre>
-<p><strong>What Agenda does</strong>:
-- Learns user rules ("Monday mornings: no meetings")
-- Understands priorities ("family over work, except deadlines")
-- Filters noise ("this email can wait, that one cannot")
-- Presents relevance, not completeness</p>
+<p><strong>What Agenda does</strong>:</p>
+<ul>
+<li>
+<p>Learns user rules ("Monday mornings: no meetings")</p>
+</li>
+<li>
+<p>Understands priorities ("family over work, except deadlines")</p>
+</li>
+<li>Filters noise ("this email can wait, that one cannot")</li>
+<li>Presents relevance, not completeness</li>
+</ul>
 <p><strong>Where rules live</strong>: <code>human/rules/</code> directory—only Agenda reads them.</p>
 <p>In Domain Expert Mode, Agenda is disabled. Data delivers directly to Relay.</p>
 <h3 id="data-agent">Data Agent</h3>
@@ -726,9 +734,15 @@ User (only what matters, when it matters)
 <pre><code>~/.outheis/human/messages.jsonl
 </code></pre>
 <ul>
-<li><strong>Append-only</strong>: Messages are never modified or deleted</li>
-<li><strong>Single file</strong>: Simplicity over performance</li>
-<li><strong>File locking</strong>: Simple <code>fcntl</code> locking for concurrent access</li>
+<li>
+<p><strong>Append-only</strong>: Messages are never modified or deleted</p>
+</li>
+<li>
+<p><strong>Single file</strong>: Simplicity over performance</p>
+</li>
+<li>
+<p><strong>File locking</strong>: Simple <code>fcntl</code> locking for concurrent access</p>
+</li>
 </ul>
 <pre><code class="language-python">import fcntl
 import json
@@ -741,10 +755,18 @@ def append_message(path: str, msg: dict) -&gt; None:
 </code></pre>
 <h3 id="benefits-event-sourcing">Benefits (Event Sourcing)</h3>
 <ul>
-<li><strong>Audit trail</strong>: Complete history of all interactions</li>
-<li><strong>Replay</strong>: Reconstruct any past state</li>
-<li><strong>Debugging</strong>: See exactly what happened</li>
-<li><strong>Recovery</strong>: Resume from last processed message</li>
+<li>
+<p><strong>Audit trail</strong>: Complete history of all interactions</p>
+</li>
+<li>
+<p><strong>Replay</strong>: Reconstruct any past state</p>
+</li>
+<li>
+<p><strong>Debugging</strong>: See exactly what happened</p>
+</li>
+<li>
+<p><strong>Recovery</strong>: Resume from last processed message</p>
+</li>
 </ul>
 <hr />
 <h2 id="deployment-spectrum">Deployment Spectrum</h2>

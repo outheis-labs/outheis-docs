@@ -13,6 +13,7 @@ title: Guide
 - A vault directory — a folder of Markdown files (Obsidian works directly)
 
 Optional for messaging via Signal:
+
 - A registered Signal account for the bot phone number
 - `signal-cli` installed and configured
 
@@ -92,6 +93,7 @@ http://127.0.0.1:8080
 ```
 
 It provides:
+
 - Live message feed (conversations with agents)
 - Memory, Rules, and Skills viewer and editor
 - Scheduler status and manual task triggers

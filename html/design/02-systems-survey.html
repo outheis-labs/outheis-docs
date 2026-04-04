@@ -293,10 +293,12 @@
 <p><strong>Not a central queue</strong>. Each CPU has its own. Producers write to the target's queue; consumers read only from their own.</p>
 <h4 id="ownership-semantics">Ownership Semantics</h4>
 <p>Data "belongs" to a CPU. Only the owner modifies it. Others send messages requesting changes.</p>
-<p>This eliminates:
-- Lock contention
-- Cache line bouncing
-- Deadlocks</p>
+<p>This eliminates:</p>
+<ul>
+<li>Lock contention</li>
+<li>Cache line bouncing</li>
+<li>Deadlocks</li>
+</ul>
 <h3 id="applicability-to-agent-systems">Applicability to Agent Systems</h3>
 <table>
 <thead>
@@ -334,10 +336,12 @@
 <strong>Focus</strong>: Fault tolerance, concurrency, hot code reloading</p>
 <h3 id="relevant-concepts_1">Relevant Concepts</h3>
 <h4 id="actor-model">Actor Model</h4>
-<p>Processes (actors) are:
-- Isolated (no shared memory)
-- Identified by PID
-- Communicate only via async messages</p>
+<p>Processes (actors) are:</p>
+<ul>
+<li>Isolated (no shared memory)</li>
+<li>Identified by PID</li>
+<li>Communicate only via async messages</li>
+</ul>
 <pre><code>┌─────────┐    message    ┌─────────┐
 │ Actor A │──────────────►│ Actor B │
 └─────────┘               └─────────┘
@@ -357,10 +361,18 @@
 │Worker │ │Worker │ │Worker │
 └───────┘ └───────┘ └───────┘
 </code></pre>
-<p>Supervisor strategies:
-- <strong>one_for_one</strong>: Restart only the failed child
-- <strong>one_for_all</strong>: Restart all children if one fails
-- <strong>rest_for_one</strong>: Restart failed child and those started after it</p>
+<p>Supervisor strategies:</p>
+<ul>
+<li>
+<p><strong>one_for_one</strong>: Restart only the failed child</p>
+</li>
+<li>
+<p><strong>one_for_all</strong>: Restart all children if one fails</p>
+</li>
+<li>
+<p><strong>rest_for_one</strong>: Restart failed child and those started after it</p>
+</li>
+</ul>
 <h4 id="let-it-crash">"Let It Crash"</h4>
 <p>Don't program defensively. Let processes fail. The supervisor restarts them in a known good state.</p>
 <p>This is counterintuitive but powerful: failure handling is separated from business logic.</p>
@@ -416,11 +428,13 @@
 </code></pre>
 <p>You can only access what you hold capabilities for. No ambient authority.</p>
 <h4 id="minimal-kernel">Minimal Kernel</h4>
-<p>seL4's kernel provides only:
-- Threads
-- Address spaces
-- IPC
-- Capability management</p>
+<p>seL4's kernel provides only:</p>
+<ul>
+<li>Threads</li>
+<li>Address spaces</li>
+<li>IPC</li>
+<li>Capability management</li>
+</ul>
 <p>Everything else (filesystems, drivers, networking) runs in user space.</p>
 <h3 id="applicability-to-agent-systems_2">Applicability to Agent Systems</h3>
 <table>
@@ -536,10 +550,12 @@ unveil(NULL, NULL);         // Lock it down—no more unveil calls allowed
 </code></pre>
 <p>The system manages thread pools. You just say "do this work" and "how important is it."</p>
 <h4 id="quality-of-service-qos">Quality of Service (QoS)</h4>
-<p>Work is tagged with its priority level. The system can:
-- Throttle background work when the user is active
-- Boost priority when results are needed immediately
-- Balance energy usage on laptops/phones</p>
+<p>Work is tagged with its priority level. The system can:</p>
+<ul>
+<li>Throttle background work when the user is active</li>
+<li>Boost priority when results are needed immediately</li>
+<li>Balance energy usage on laptops/phones</li>
+</ul>
 <h3 id="applicability-to-agent-systems_4">Applicability to Agent Systems</h3>
 <table>
 <thead>
@@ -637,10 +653,18 @@ unveil(NULL, NULL);         // Lock it down—no more unveil calls allowed
 <p>Current state = fold over all events.</p>
 <h4 id="benefits">Benefits</h4>
 <ul>
-<li><strong>Audit trail</strong>: Complete history</li>
-<li><strong>Replay</strong>: Reconstruct any past state</li>
-<li><strong>Debugging</strong>: See exactly what happened</li>
-<li><strong>Temporal queries</strong>: "What was the state at time T?"</li>
+<li>
+<p><strong>Audit trail</strong>: Complete history</p>
+</li>
+<li>
+<p><strong>Replay</strong>: Reconstruct any past state</p>
+</li>
+<li>
+<p><strong>Debugging</strong>: See exactly what happened</p>
+</li>
+<li>
+<p><strong>Temporal queries</strong>: "What was the state at time T?"</p>
+</li>
 </ul>
 <h3 id="applicability-to-agent-systems_6">Applicability to Agent Systems</h3>
 <table>

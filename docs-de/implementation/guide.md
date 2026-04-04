@@ -13,6 +13,7 @@ title: Anleitung
 - Ein Vault-Verzeichnis — ein Ordner mit Markdown-Dateien (Obsidian funktioniert direkt)
 
 Optional für Messaging über Signal:
+
 - Ein registriertes Signal-Konto für die Bot-Telefonnummer
 - `signal-cli` installiert und konfiguriert
 
@@ -92,6 +93,7 @@ http://127.0.0.1:8080
 ```
 
 Sie bietet:
+
 - Live-Nachrichtenfeed (Gespräche mit Agenten)
 - Memory-, Rules- und Skills-Viewer und -Editor
 - Scheduler-Status und manuelle Aufgaben-Auslöser

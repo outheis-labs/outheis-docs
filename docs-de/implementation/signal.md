@@ -31,6 +31,7 @@ Send path:  _send_request() → stdin write → Event.wait()
 ### Klassen
 
 - `SignalRPC` — `transport/signal_rpc.py`: verwaltet den signal-cli-Subprozess, Leser-Thread, Sende-/Empfangs-Primitiven
+
 - `SignalTransport` — `transport/signal.py`: Nachrichten-Schleife, Autorisierung, Watcher-Thread, Markdown-Entfernung
 
 ### Nebenläufigkeitsmodell
@@ -71,6 +72,7 @@ Der Ersatz für horizontale Linien erscheint in Signals UI als solide Trennlinie
 ## Autorisierung
 
 - `signal.allowed` in `config.json`: Whitelist von Telefonnummern, die Nachrichten senden dürfen
+
 - `human.phone` ist unabhängig von der Whitelist immer erlaubt
 - UUIDs werden beim ersten Kontakt gelernt und in `~/.outheis/human/signal.json` gespeichert
 - Ersteinrichtung erfordert Vertrauen des Identitätsschlüssels über `signal-cli trust` (siehe Installationsanleitung)

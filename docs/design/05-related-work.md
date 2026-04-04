@@ -54,6 +54,7 @@ Frames multi-agent memory as a computer architecture problem:
 
 - Distinguishes shared vs. distributed memory paradigms
 - Proposes three-layer hierarchy: I/O, cache, memory
+
 - Identifies cache sharing and memory consistency as critical gaps
 
 Key insight: "Agent performance is an end-to-end data movement problem."
@@ -70,6 +71,7 @@ Comprehensive survey covering two directions:
 2. **OS for AI**: OS architecture innovations to support AI workloads
 
 Identifies three paradigms:
+
 - Kernel-level AI integration
 - Agent-mediated workflows
 - LLM-as-OS abstraction
@@ -150,13 +152,17 @@ The Agenda agent concept—enabling user agency through intelligent filtering—
 The related work draws primarily from:
 
 - **Distributed systems**: Message passing, consensus, fault tolerance
+
 - **Operating systems**: Scheduling, memory hierarchy, access control
+
 - **Software architecture**: Microservices, event sourcing
 
 outheis additionally draws from:
 
 - **Information science**: Prospective vs. retrospective architecture
+
 - **Unix philosophy**: Plaintext, small tools, composability
+
 - **Erlang/OTP**: Actor model, supervision, let-it-crash
 
 ---

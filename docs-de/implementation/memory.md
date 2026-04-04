@@ -14,7 +14,7 @@ outheis pflegt zwei separate Wissensspeicher:
 |---|--------|-------|
 | **Zweck** | Meta-Wissen über dich | Deine Arbeitsinhalte |
 | **Enthält** | Fakten, Präferenzen, Kontext | Dokumente, Notizen, Projekte |
-| **Aktualisiert von** | Agenten während Interaktion, Pattern-Agent, explizite Marker | Von dir direkt |
+| **Aktualisiert von** | Agents während Interaktion, Pattern-Agent, explizite Marker | Von dir direkt |
 | **Format** | Strukturiertes JSON | Markdown-Dateien |
 
 **Memory** beantwortet: *Wer ist diese Person? Wie soll ich arbeiten?*
@@ -28,8 +28,10 @@ outheis pflegt zwei separate Wissensspeicher:
 Persönliche Fakten, die sich selten ändern.
 
 Beispiele:
+
 - "User is 35 years old"
 - "Children: Leo (8) and Emma (5)"
+
 - "Lives in Munich"
 - "Works as a software engineer"
 
@@ -40,6 +42,7 @@ Beispiele:
 Wie du möchtest, dass outheis sich verhält.
 
 Beispiele:
+
 - "Prefers short, direct answers"
 - "Respond in German unless asked otherwise"
 - "Don't explain technical concepts — user is an expert"
@@ -51,6 +54,7 @@ Beispiele:
 Womit du dich gerade beschäftigst.
 
 Beispiele:
+
 - "Working on Project Alpha mobile app"
 - "Preparing for conference talk next week"
 - "Learning Japanese"
@@ -76,55 +80,59 @@ Stelle jeder Nachricht `!` voran, um sie sofort zu speichern:
 → Stored in context memory (14 day decay)
 ```
 
-Die Klassifizierung erfolgt automatisch basierend auf dem Inhalt. Der `!`-Marker ist eine Abkürzung — er entspricht "merke dir das", ist aber kürzer. Der Agent speichert die Information UND verwendet sie sofort im aktuellen Gespräch.
+Die Klassifizierung erfolgt automatisch basierend auf dem Inhalt. Der `!`-Marker ist eine Abkürzung — er entspricht "merke dir das", ist aber kürzer. Der agent speichert die Information UND verwendet sie sofort im aktuellen Gespräch.
 
-### 2. Agenten während der Interaktion
+### 2. Agents während der Interaktion
 
-Agenten können erkennen, wenn du etwas Merkenswürdiges mitteilst:
+Agents können erkennen, wenn du etwas Merkenswürdiges mitteilst:
 
-- Du erwähnst deinen Geburtstag → Agent kann es speichern
-- Du äußerst eine Präferenz → Agent kann sie speichern
-- Du beschreibst ein aktuelles Projekt → Agent kann es als Kontext speichern
+- Du erwähnst deinen Geburtstag → agent kann es speichern
+- Du äußerst eine Präferenz → agent kann sie speichern
+- Du beschreibst ein aktuelles Projekt → agent kann es als Kontext speichern
 
-Dies geschieht durch Urteilsvermögen, nicht durch starre Regeln. Agenten sind angewiesen, relevante Informationen zu bemerken, aber nicht zu viel zu extrahieren. Nicht jede Aussage wird Memory — nur was für zukünftige Interaktionen wirklich nützlich erscheint.
+Das geschieht durch Urteilsvermögen — nicht durch starre Regeln. Agents sind angewiesen, relevante Informationen zu bemerken, aber nicht zu viel zu extrahieren. Nicht jede Aussage wird Memory — nur was für zukünftige Interaktionen wirklich nützlich erscheint.
 
 ### 3. Pattern-Agent-Extraktion
 
-Der Pattern-Agent (rumi) läuft nächtlich um 04:00 und:
+rumi läuft nächtlich um 04:00 und:
 
-1. Überprüft aktuelle Gespräche
-2. Extrahiert merkwürdige Informationen, die Agenten möglicherweise verpasst haben
-3. Konsolidiert Duplikate und löst Widersprüche auf
-4. Weist Konfidenzwerte zu
-5. Bereinigt abgelaufene Einträge
-6. Erwägt die Förderung stabiler Muster zu User Rules
+1. überprüft aktuelle Gespräche
+2. extrahiert merkwürdige Informationen, die agents möglicherweise verpasst haben
+3. konsolidiert Duplikate und löst Widersprüche auf
+4. weist Konfidenzwerte zu
+5. bereinigt abgelaufene Einträge
+6. erwägt die Förderung stabiler Muster zu User Rules
 
-Du kannst dies manuell auslösen: `outheis pattern`
+Du kannst das manuell auslösen: `outheis pattern`
 
 ## Memory-Konsolidierung
 
-Mit der Zeit kann Memory Duplikate oder widersprüchliche Einträge ansammeln. Der Pattern-Agent behandelt dies bei seinem geplanten Lauf:
+Mit der Zeit sammelt Memory Duplikate oder widersprüchliche Einträge an. rumi behandelt das bei seinem geplanten Lauf:
 
 - **Duplikate**: "Has pending tasks: X, Y" und "Current pending tasks: X, Y" → behält den neueren
+
 - **Widersprüche**: "User is 35" und "User is 36" → behält den neueren oder explizit markierten
+
 - **Überholte Einträge**: Kontext, der aktualisiert wurde → entfernt die ältere Version
 
-Das ist kein mechanischer Prozess — der Pattern-Agent verwendet Urteilsvermögen, um zu entscheiden, was konsolidiert werden soll, mit einem Bias zum Behalten bei Unsicherheit.
+Das ist kein mechanischer Prozess — rumi verwendet Urteilsvermögen, um zu entscheiden, was konsolidiert werden soll, mit einem Bias zum Behalten bei Unsicherheit.
 
 ## Zeitliches Bewusstsein
 
 Nicht alles sollte für immer gespeichert werden.
 
 **Als dauerhaftes Fakt gespeichert:**
+
 - "User has two children"
 - "Prefers formal communication"
 
 **NICHT gespeichert (temporärer Zustand):**
+
 - "User seems frustrated today"
 - "User is tired"
 - "User is stressed about deadline"
 
-Alle Agenten sind angewiesen, stabile Eigenschaften von vorübergehenden Stimmungen zu unterscheiden. Eine frustrierte Nachricht ist kein Persönlichkeitsmerkmal — es ist ein Moment.
+Alle agents unterscheiden stabile Eigenschaften von vorübergehenden Stimmungen. Eine frustrierte Nachricht ist kein Persönlichkeitsmerkmal — es ist ein Moment.
 
 ## Memory anzeigen und bearbeiten
 
@@ -161,6 +169,7 @@ Memory
 ```
 
 Marker:
+
 - `[!]` — Explizit über `!`-Marker gespeichert
 - `[90%]` — Konfidenz unter 100 %
 - `[↓12d]` — Läuft in 12 Tagen ab
@@ -209,15 +218,15 @@ Kurzübersicht:
 
 ## Pattern-Agent-Meta-Memory
 
-Der Pattern-Agent hat sein eigenes Memory in `~/.outheis/human/memory/pattern/`. Hier speichert er:
+rumi hat sein eigenes Memory in `~/.outheis/human/memory/pattern/`. Hier speichert er:
 
-- Welche Extraktionsstrategien für diesen Benutzer funktionieren
+- Welche Extraktionsstrategien für dich funktionieren
 - Muster im Kommunikationsstil
 - Meta-Insights über seinen eigenen Prozess
 
-Dieses Memory zerfällt nicht — so wird der Pattern-Agent mit der Zeit besser darin, zu verstehen, was dir wichtig ist.
+Dieses Memory zerfällt nicht — so wird rumi mit der Zeit besser darin, zu verstehen, was dir wichtig ist.
 
-## Integration mit Agenten
+## Integration mit Agents
 
 Memory wird automatisch in Agenten-System-Prompts injiziert:
 
@@ -235,7 +244,7 @@ Memory wird automatisch in Agenten-System-Prompts injiziert:
 - Working on Project Alpha
 ```
 
-Agenten nutzen dies natürlich — sie kündigen nicht "Ich erinnere mich, dass..." an, sondern wissen es einfach.
+Agents nutzen das natürlich — sie kündigen nicht "Ich erinnere mich, dass..." an, sondern wissen es einfach.
 
 ## Korrektur
 
@@ -245,7 +254,7 @@ Wenn outheis falsche Informationen hat:
 2. **CLI-Bearbeitung:** `outheis memory --clear user`, dann neu hinzufügen
 3. **Direkte Dateibearbeitung:** JSON in `~/.outheis/human/memory/` modifizieren
 
-Explizite (`!`)-Einträge haben Vorrang — Agenten überschreiben sie nicht mit Extraktionen niedrigerer Konfidenz.
+Explizite (`!`)-Einträge haben Vorrang — agents überschreiben sie nicht mit Extraktionen niedrigerer Konfidenz.
 
 ---
 
@@ -262,21 +271,21 @@ Rules sind die stabile Destillation von Memory — Verhaltensprinzipien, die bes
 | **Ort** | `src/outheis/agents/rules/` | `~/.outheis/human/rules/` |
 | **Veränderlichkeit** | Ändert sich mit Code-Updates | Wächst mit der Zeit |
 
-**System Rules** definieren, was ein Agent *kann* — architektonische Beschränkungen.
+**System Rules** definieren, was ein agent *kann* — architektonische Beschränkungen.
 
-**User Rules** definieren, wie ein Agent es *tun soll* — dein Arbeitsstil.
+**User Rules** definieren, wie ein agent es *tun soll* — dein Arbeitsstil.
 
 ### Wie User Rules entstehen
 
-User Rules werden nicht direkt von dir geschrieben. Sie entstehen aus Memory durch den Pattern-Agenten.
+User Rules schreibst du nicht direkt. Sie entstehen aus Memory durch den Pattern-Agenten.
 
-Der Pattern-Agent überprüft Memory bei seinem nächtlichen Lauf und sucht nach Mustern, die stabil genug geworden sind, um als Rules kodifiziert zu werden. Das ist kein mechanischer Prozess mit festen Schwellenwerten — der Agent verwendet Urteilsvermögen:
+rumi überprüft Memory bei seinem nächtlichen Lauf und sucht nach Mustern, die stabil genug geworden sind, um als Rules kodifiziert zu werden. Das ist kein mechanischer Prozess mit festen Schwellenwerten — der agent verwendet Urteilsvermögen:
 
 - Eine einmal klar geäußerte starke Präferenz könnte eine Rule werden
 - Etwas oft beiläufig Erwähntes vielleicht nicht
 - Explizite Korrekturen zählen immer mehr als Inferenzen
 
-Wenn der Pattern-Agent ein stabiles Muster identifiziert, schreibt er es in `~/.outheis/human/rules/{agent}.md`:
+Wenn rumi ein stabiles Muster identifiziert, schreibt er es in `~/.outheis/human/rules/{agent}.md`:
 
 ```markdown
 # User Rules for Relay Agent
@@ -325,9 +334,9 @@ outheis rules --system
 
 ### Kohärente Persönlichkeit
 
-Obwohl outheis aus fünf Agenten besteht, erlebst du einen Assistenten. Rules bewahren diese Kohärenz:
+outheis besteht aus fünf agents — du erlebst einen Assistenten. Rules bewahren diese Kohärenz:
 
-- **Common rules** sichern konsistentes Verhalten über alle Agenten
+- **Common rules** sichern konsistentes Verhalten über alle agents
 - **Agenten-spezifische Rules** ermöglichen angemessene Spezialisierung
 - **User Rules** passen das gesamte System an deinen Arbeitsstil an
 

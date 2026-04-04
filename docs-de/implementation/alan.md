@@ -64,6 +64,7 @@ alan liest Quelldateien, verfolgt Aufrufpfade und erklärt die Logik — ohne Ä
 ### Verbesserungsvorschläge
 
 Auf Anfragen reagieren oder proaktiv identifizieren:
+
 - Refactoring-Möglichkeiten
 - Bug-Fixes
 - Inkonsistenzen zwischen Dokumentation und Implementierung
@@ -94,6 +95,7 @@ alan hat **Lesezugriff** auf jeden lokalen Pfad. **Schreibzugriff ist auf `vault
 ## Kontext beim Start
 
 alan erhält beim Aufruf:
+
 - Einen Code-Index des Ziel-Repositories (Dateibaum + kurze Beschreibungen)
 - Aktuellen Inhalt von `vault/Codebase/Exchange.md`
 - Skills aus `agents/skills/code.md`
@@ -157,5 +159,6 @@ vault/Codebase/
 ## Design-Anmerkungen
 
 - Das `vault/Codebase/Exchange.md`-Muster ist bewusst parallel zu `vault/Agenda/Exchange.md`. Das Interaktionsmodell ist dasselbe: outheis schlägt vor, du entscheidest.
+
 - Schreibzugriff auf `vault/Codebase/` wird auf Tool-Ebene erzwungen, nicht nur durch Prompt-Anweisung.
 - alan ist absichtlich aus der Produktion ausgeschlossen. Code-Introspektion und Vorschlags-Workflows sind Entwicklungsbelange.

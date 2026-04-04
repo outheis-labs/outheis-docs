@@ -306,10 +306,12 @@ meeting mit X nächste woche, wichtig
 zahnarzt anrufen
 projekt alpha deadline verschoben auf april
 </code></pre>
-<p>outheis processes this hourly:
-- Recognizes tasks → moves to Daily.md
-- Unclear items → asks via Exchange.md
-- Notes → keeps or archives</p>
+<p>outheis processes this hourly:</p>
+<ul>
+<li>Recognizes tasks → moves to Daily.md</li>
+<li>Unclear items → asks via Exchange.md</li>
+<li>Notes → keeps or archives</li>
+</ul>
 <h3 id="exchangemd">Exchange.md</h3>
 <p>Asynchronous dialogue between you and outheis. Created automatically on startup:</p>
 <pre><code class="language-markdown"># Exchange
@@ -437,10 +439,16 @@ touch ~/Documents/Vault/Agenda/{Daily,Inbox,Exchange}.md
 <p><strong>Relay (ou)</strong> routes schedule questions to Agenda. Read queries ("Agenda", "was steht heute") are routed directly to cato, which returns Daily.md verbatim. Write/update queries go through the full tool loop.</p>
 <p><strong>Data Agent (zeno)</strong> can search your vault but doesn't write to Agenda files.</p>
 <p><strong>Action Agent (hiro)</strong> can execute tasks (send emails, create calendar events) but Agenda manages what's scheduled.</p>
-<p><strong>Pattern Agent (rumi)</strong> observes your scheduling patterns and may:
-- Create rules like "User prefers no meetings before 10:00"
-- Notice recurring tasks and suggest automation
-- Write to Exchange.md when seed files need approval</p>
+<p><strong>Pattern Agent (rumi)</strong> observes your scheduling patterns and may:</p>
+<ul>
+<li>
+<p>Create rules like "User prefers no meetings before 10:00"</p>
+</li>
+<li>
+<p>Notice recurring tasks and suggest automation</p>
+</li>
+<li>Write to Exchange.md when seed files need approval</li>
+</ul>
 <h2 id="storage">Storage</h2>
 <pre><code>vault/Agenda/
 ├── Daily.md              # Your working file

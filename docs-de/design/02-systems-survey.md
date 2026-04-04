@@ -1,6 +1,6 @@
 # Systemüberblick: Betriebssysteme und anwendbare Konzepte
 
-Dieses Dokument gibt einen Überblick über Betriebssysteme und Architekturmuster, die für das Design von Multi-agent-KI-Systemen relevant sind.
+Betriebssysteme haben Probleme gelöst, die agent-Architekturen gerade erst entdecken. Dieser Überblick zeigt, welche Konzepte übertragbar sind — und warum.
 
 ---
 
@@ -35,13 +35,14 @@ CPU 0                CPU 1                CPU 2
               Nachrichten gehen direkt zum Ziel
 ```
 
-**Keine zentrale Queue**. Jede CPU hat ihre eigene. Produzenten schreiben in die Queue des Ziels; Konsumenten lesen nur aus ihrer eigenen.
+**Keine zentrale Queue.** Jede CPU hat ihre eigene. Produzenten schreiben in die Queue des Ziels; Konsumenten lesen nur aus ihrer eigenen.
 
 #### Ownership-Semantik
 
 Daten „gehören" einer CPU. Nur der Eigentümer modifiziert sie. Andere senden Nachrichten und fordern Änderungen an.
 
 Das eliminiert:
+
 - Lock-Contention
 - Cache-Line-Bouncing
 - Deadlocks
@@ -68,6 +69,7 @@ Das eliminiert:
 #### Actor-Modell
 
 Prozesse (Actors) sind:
+
 - Isoliert (kein gemeinsamer Speicher)
 - Durch PID identifiziert
 - Kommunizieren nur über asynchrone Nachrichten
@@ -99,15 +101,18 @@ Prozesse sind hierarchisch organisiert. Eltern überwachen Kinder:
 ```
 
 Supervisor-Strategien:
+
 - **one_for_one**: Nur das fehlgeschlagene Kind neustarten
+
 - **one_for_all**: Alle Kinder neustarten, wenn eines scheitert
+
 - **rest_for_one**: Fehlgeschlagenes Kind und danach gestartete neustarten
 
 #### „Let It Crash"
 
 Nicht defensiv programmieren. Prozesse scheitern lassen. Der Supervisor startet sie in einem bekannten guten Zustand neu.
 
-Das ist kontraintuitiv, aber leistungsstark: Fehlerbehandlung wird von der Geschäftslogik getrennt.
+Das ist kontraintuitiv — aber leistungsstark. Fehlerbehandlung trennt sich von der Geschäftslogik.
 
 ### Anwendbarkeit auf agent-Systeme
 
@@ -143,17 +148,18 @@ Eine Capability ist ein unfälschbares Token, das spezifische Rechte für ein sp
 └─────────────────────────────────────┘
 ```
 
-Man kann nur zugreifen, wofür man Capabilities hat. Keine Ambient Authority.
+Man greift nur zu, wofür man Capabilities hat. Keine Ambient Authority.
 
 #### Minimaler Kernel
 
 seL4s Kernel bietet nur:
+
 - Threads
 - Adressräume
 - IPC
 - Capability-Verwaltung
 
-Alles andere (Dateisysteme, Treiber, Netzwerke) läuft im User Space.
+Alles andere — Dateisysteme, Treiber, Netzwerke — läuft im User Space.
 
 ### Anwendbarkeit auf agent-Systeme
 
@@ -175,7 +181,7 @@ Beispiel: Ein Pattern-agent hat Schreib-Capability für insights; andere haben n
 
 ### Relevante Konzepte
 
-OpenBSD hat viele Sicherheitsinnovationen beigetragen. Für agent-Architekturen sind zwei besonders anwendbar:
+Für agent-Architekturen sind zwei Mechanismen besonders anwendbar:
 
 #### pledge(2)
 
@@ -198,7 +204,7 @@ unveil("/tmp", "rwc");      // Read, write, create in /tmp
 unveil(NULL, NULL);         // Lock it down—no more unveil calls allowed
 ```
 
-Nach dem letzten `unveil(NULL, NULL)` kann der Prozess seine Sicht nicht erweitern. Das Dateisystem ist effektiv auf die deklarierten Pfade geschrumpft.
+Nach dem letzten `unveil(NULL, NULL)` kann der Prozess seine Sicht nicht erweitern. Das Dateisystem schrumpft auf die deklarierten Pfade.
 
 #### Privilegtrennung
 
@@ -215,13 +221,13 @@ OpenBSD-Daemons teilen sich in zwei Prozesse auf:
 └─────────────────┘
 ```
 
-Der Child-Prozess verarbeitet nicht vertrauenswürdige Eingabe. Wenn er kompromittiert wird, hat er keine Privilegien. Der Elternteil führt nur minimale, auditierte Operationen im Namen des Kindes durch.
+Der Child-Prozess verarbeitet nicht vertrauenswürdige Eingabe. Wenn er kompromittiert wird, hat er keine Privilegien. Der Elternteil führt nur minimale, auditierte Operationen durch.
 
 #### Historischer Kontext: Jails und Container
 
-Prozessisolation hat sich durch mehrere Stufen entwickelt: chroot (1979), FreeBSD-Jails (1999), Solaris-Zones, Linux-Container, Docker. Diese bieten **statische Isolation** — du baust den Container, dann läufst du darin.
+Prozessisolation hat sich durch mehrere Stufen entwickelt: chroot (1979), FreeBSD-Jails (1999), Solaris-Zones, Linux-Container, Docker. Das ist **statische Isolation** — du baust den Container, dann läufst du darin.
 
-pledge/unveil repräsentieren einen anderen Ansatz: **dynamische Einschränkung**. Ein Prozess startet mit vollen Capabilities und gibt sie schrittweise auf, während er sich initialisiert. Das ist oft praktischer für Anwendungen, die Ressourcen beim Start, aber nicht während des Betriebs benötigen.
+pledge/unveil sind ein anderer Ansatz: **dynamische Einschränkung**. Ein Prozess startet mit vollen Capabilities und gibt sie schrittweise auf. Oft praktischer für Anwendungen, die Ressourcen beim Start, aber nicht während des Betriebs benötigen.
 
 ### Anwendbarkeit auf agent-Systeme
 
@@ -264,14 +270,15 @@ Ein systemweites Framework für parallele Ausführung. Statt Threads direkt zu v
 └──────────────────┴──────────────────────┘
 ```
 
-Das System verwaltet Thread-Pools. Du sagst einfach „mach diese Arbeit" und „wie wichtig ist sie".
+Das System verwaltet Thread-Pools. Du sagst einfach „mach diese Arbeit" — und wie wichtig sie ist.
 
 #### Quality of Service (QoS)
 
-Arbeit wird mit ihrer Prioritätsstufe markiert. Das System kann:
+Arbeit wird mit Prioritätsstufe markiert. Das System kann:
+
 - Hintergrundarbeit drosseln, wenn der Nutzer aktiv ist
-- Priorität erhöhen, wenn Ergebnisse sofort benötigt werden
-- Energieverbrauch auf Laptops/Phones ausbalancieren
+- Priorität erhöhen, wenn Ergebnisse sofort gebraucht werden
+- Energieverbrauch auf Laptops und Phones ausbalancieren
 
 ### Anwendbarkeit auf agent-Systeme
 
@@ -284,7 +291,7 @@ Arbeit wird mit ihrer Prioritätsstufe markiert. Das System kann:
 | Serielle Queue | Sequentielle Operationen (Schreibvorgänge) |
 | Parallele Queue | Parallele Operationen (Lesevorgänge) |
 
-Beispiel: Ein relay-agent, der Nutzereingaben verarbeitet, läuft mit hoher Priorität. Ein Pattern-agent, der Geschichte analysiert, läuft im Hintergrund. Der dispatcher verwaltet Queue-Prioritäten basierend auf Systemlast und Nutzeraktivität.
+Beispiel: Ein relay-agent verarbeitet Nutzereingaben mit hoher Priorität. Ein Pattern-agent analysiert Geschichte im Hintergrund. Der dispatcher verwaltet Queue-Prioritäten basierend auf Systemlast und Nutzeraktivität.
 
 ---
 
@@ -335,7 +342,7 @@ Beispiel: Ein vault wird in den Namespace eines agents eingehängt. Der agent in
 
 #### Append-Only-Log
 
-Zustand wird nicht direkt gespeichert. Stattdessen werden Ereignisse an ein unveränderliches Log angehängt:
+Zustand wird nicht direkt gespeichert. Stattdessen hängen Ereignisse an ein unveränderliches Log an:
 
 ```
 ┌─────────────────────────────────────────────┐
@@ -352,8 +359,11 @@ Aktueller Zustand = Fold über alle Ereignisse.
 #### Vorteile
 
 - **Audit-Trail**: Vollständige Geschichte
+
 - **Replay**: Jeden vergangenen Zustand rekonstruieren
+
 - **Debugging**: Genau sehen, was passiert ist
+
 - **Temporale Abfragen**: „Was war der Zustand zu Zeit T?"
 
 ### Anwendbarkeit auf agent-Systeme
@@ -376,7 +386,7 @@ Aktueller Zustand = Fold über alle Ereignisse.
 
 #### Library Operating System
 
-Die Anwendung verlinkt direkt gegen OS-Bibliotheken. Kein separater Kernel. Das Ergebnis ist ein einzelnes bootfähiges Image.
+Die Anwendung verlinkt direkt gegen OS-Bibliotheken. Kein separater Kernel. Das Ergebnis: ein einzelnes bootfähiges Image.
 
 ```
 Traditionell:
@@ -404,7 +414,7 @@ Jeder Unikernel macht eine Sache. Keine Shell, keine Benutzer, keine unnötigen 
 | Keine Shell | Keine allgemeinen Capabilities |
 | Minimale Oberfläche | Minimaler Prompt, fokussierte Rolle |
 
-Beispiel: Ein action-agent ist spezialisiert — er führt Aufgaben aus. Er analysiert keine Muster oder verfasst keine Nachrichten.
+Beispiel: Ein action-agent ist spezialisiert — er führt Aufgaben aus. Er analysiert keine Muster und verfasst keine Nachrichten.
 
 ---
 
@@ -425,7 +435,7 @@ Beispiel: Ein action-agent ist spezialisiert — er führt Aufgaben aus. Er anal
 
 ## Synthese für agent-Architekturen
 
-Ein gut entworfenes Multi-agent-System kann kombinieren:
+Kein konkurrierender Ansatz — sie addressieren orthogonale Belange und kombinieren sich natürlich:
 
 1. **DragonFlyBSDs Message-Passing** für agent-Kommunikation
 2. **Erlangs Supervision** für Fehlertoleranz
@@ -435,8 +445,6 @@ Ein gut entworfenes Multi-agent-System kann kombinieren:
 6. **Plan 9s einheitliche Schnittstelle** für Ressourcenzugang
 7. **Event-Sourcings append-only-Log** für Auditierbarkeit
 8. **Unikernels Spezialisierung** für fokussierte agent-Rollen
-
-Das sind keine konkurrierenden Ansätze — sie addressieren orthogonale Belange und kombinieren sich natürlich.
 
 ---
 

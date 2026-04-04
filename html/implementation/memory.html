@@ -304,25 +304,35 @@
 <h2 id="memory-types">Memory Types</h2>
 <h3 id="user">user</h3>
 <p>Personal facts that don't change often.</p>
-<p>Examples:
-- "User is 35 years old"
-- "Children: Leo (8) and Emma (5)"
-- "Lives in Munich"
-- "Works as a software engineer"</p>
+<p>Examples:</p>
+<ul>
+<li>"User is 35 years old"</li>
+<li>
+<p>"Children: Leo (8) and Emma (5)"</p>
+</li>
+<li>
+<p>"Lives in Munich"</p>
+</li>
+<li>"Works as a software engineer"</li>
+</ul>
 <p><strong>Decay:</strong> Permanent (until corrected)</p>
 <h3 id="feedback">feedback</h3>
 <p>How you want outheis to behave.</p>
-<p>Examples:
-- "Prefers short, direct answers"
-- "Respond in German unless asked otherwise"
-- "Don't explain technical concepts — user is an expert"</p>
+<p>Examples:</p>
+<ul>
+<li>"Prefers short, direct answers"</li>
+<li>"Respond in German unless asked otherwise"</li>
+<li>"Don't explain technical concepts — user is an expert"</li>
+</ul>
 <p><strong>Decay:</strong> Permanent (until corrected)</p>
 <h3 id="context">context</h3>
 <p>What you're currently focused on.</p>
-<p>Examples:
-- "Working on Project Alpha mobile app"
-- "Preparing for conference talk next week"
-- "Learning Japanese"</p>
+<p>Examples:</p>
+<ul>
+<li>"Working on Project Alpha mobile app"</li>
+<li>"Preparing for conference talk next week"</li>
+<li>"Learning Japanese"</li>
+</ul>
 <p><strong>Decay:</strong> 14 days by default (fades when no longer relevant)</p>
 <h2 id="how-memory-is-created">How Memory is Created</h2>
 <p>Memory is written through three channels:</p>
@@ -360,20 +370,30 @@
 <h2 id="memory-consolidation">Memory Consolidation</h2>
 <p>Over time, memory can accumulate duplicates or contradictory entries. The Pattern agent handles this during its scheduled run:</p>
 <ul>
-<li><strong>Duplicates</strong>: "Has pending tasks: X, Y" and "Current pending tasks: X, Y" → keeps the newer one</li>
-<li><strong>Contradictions</strong>: "User is 35" and "User is 36" → keeps the more recent or explicitly-marked one</li>
-<li><strong>Superseded entries</strong>: Context that's been updated → removes the older version</li>
+<li>
+<p><strong>Duplicates</strong>: "Has pending tasks: X, Y" and "Current pending tasks: X, Y" → keeps the newer one</p>
+</li>
+<li>
+<p><strong>Contradictions</strong>: "User is 35" and "User is 36" → keeps the more recent or explicitly-marked one</p>
+</li>
+<li>
+<p><strong>Superseded entries</strong>: Context that's been updated → removes the older version</p>
+</li>
 </ul>
 <p>This is not a mechanical process — the Pattern agent uses judgment to decide what to consolidate, erring on the side of keeping information when uncertain.</p>
 <h2 id="temporal-awareness">Temporal Awareness</h2>
 <p>Not everything should be remembered forever.</p>
-<p><strong>Stored as permanent fact:</strong>
-- "User has two children"
-- "Prefers formal communication"</p>
-<p><strong>NOT stored (temporary state):</strong>
-- "User seems frustrated today"
-- "User is tired"
-- "User is stressed about deadline"</p>
+<p><strong>Stored as permanent fact:</strong></p>
+<ul>
+<li>"User has two children"</li>
+<li>"Prefers formal communication"</li>
+</ul>
+<p><strong>NOT stored (temporary state):</strong></p>
+<ul>
+<li>"User seems frustrated today"</li>
+<li>"User is tired"</li>
+<li>"User is stressed about deadline"</li>
+</ul>
 <p>All agents are instructed to distinguish stable traits from temporary moods. A frustrated message isn't a personality trait — it's a moment.</p>
 <h2 id="viewing-and-editing-memory">Viewing and Editing Memory</h2>
 <h3 id="cli">CLI</h3>
@@ -402,10 +422,12 @@ outheis memory --clear context
   1. Working on Project Alpha [↓12d]
   2. Preparing conference talk [↓5d]
 </code></pre>
-<p>Markers:
-- <code>[!]</code> — Explicitly stored via <code>!</code> marker
-- <code>[90%]</code> — Confidence below 100%
-- <code>[↓12d]</code> — Expires in 12 days</p>
+<p>Markers:</p>
+<ul>
+<li><code>[!]</code> — Explicitly stored via <code>!</code> marker</li>
+<li><code>[90%]</code> — Confidence below 100%</li>
+<li><code>[↓12d]</code> — Expires in 12 days</li>
+</ul>
 <h2 id="storage">Storage</h2>
 <pre><code>~/.outheis/human/memory/
 ├── user.json           # Personal facts

@@ -267,32 +267,32 @@
   <main class="content">
     <h1 id="der-hybride-memory-stack-wo-code-endet-und-das-llm-beginnt">Der hybride Memory-Stack: Wo Code endet und das LLM beginnt</h1>
 <h2 id="das-problem-mit-reinen-ansatzen">Das Problem mit reinen Ansätzen</h2>
-<p>Zwei Versagensmuster definieren den Designraum für adaptive KI-Systeme.</p>
-<p><strong>Reiner Code</strong> kann nicht lernen. Schlüsselwortlisten, Regex-Muster, fest kodierte Klassifikatoren, Icon-Mappings, Format-Detektoren — diese kodieren das heutige Verständnis und sperren es gleichzeitig ein. Wenn der Benutzer etwas anders formuliert, in einer anderen Sprache schreibt oder ein unerwartetes Format verwendet, schlägt die Heuristik still fehl oder liefert falsche Ergebnisse. Weitere Verzweigungen hinzuzufügen, um Randfälle zu behandeln, ist kein Lernen; es ist das Ansammeln technischer Schulden, die schneller wachsen, als das System sich verbessert.</p>
-<p><strong>Reines LLM</strong> skaliert nicht. Jede Entscheidung an ein Sprachmodell zu delegieren — einschließlich Entscheidungen, die deterministisch getroffen werden könnten — ist teuer, langsam, unvorhersehbar und undurchsichtig. Es bedeutet auch keine stabilen Garantien: Dieselbe Datei könnte bei zwei aufeinanderfolgenden Läufen unterschiedlich klassifiziert werden.</p>
-<p>Die richtige Position liegt zwischen diesen Polen, und die Grenze ist scharf.</p>
+<p>Zwei Versagensmuster definieren den Designraum.</p>
+<p><strong>Reiner Code</strong> kann nicht lernen. Schlüsselwortlisten, Regex-Muster, fest kodierte Klassifikatoren, Icon-Mappings, Format-Detektoren — sie kodieren das heutige Verständnis und sperren es gleichzeitig ein. Wenn du etwas anders formulierst, in einer anderen Sprache schreibst oder ein unerwartetes Format verwendest, schlägt die Heuristik still fehl. Weitere Verzweigungen hinzuzufügen, um Randfälle zu behandeln, ist kein Lernen — es ist das Ansammeln technischer Schulden, die schneller wachsen, als das System sich verbessert.</p>
+<p><strong>Reines LLM</strong> skaliert nicht. Jede Entscheidung an ein Sprachmodell zu delegieren — einschließlich Entscheidungen, die deterministisch getroffen werden könnten — ist teuer, langsam, unvorhersehbar und undurchsichtig. Keine stabilen Garantien: Dieselbe Datei könnte bei zwei aufeinanderfolgenden Läufen unterschiedlich klassifiziert werden.</p>
+<p>Die richtige Position liegt zwischen diesen Polen. Und die Grenze ist scharf.</p>
 <hr />
 <h2 id="die-grenze">Die Grenze</h2>
 <p><strong>Code behandelt Struktur</strong> — Dinge, die eindeutig, deterministisch und inhaltsunabhängig sind:</p>
 <ul>
 <li>Dateisystemoperationen (lesen, schreiben, umbenennen, atomares Schreiben über temp+rename)</li>
-<li>Nachrichtenaustausch zwischen Agenten (Warteschlange, Dispatcher, Routing)</li>
+<li>Nachrichtenaustausch zwischen agents (Warteschlange, dispatcher, Routing)</li>
 <li>Planung (wann Aufgaben laufen, Zeitstempel, Deadlines)</li>
 <li>Persistenz (Memory-Store, Suchindex, Cache)</li>
 <li>Schema-Validierung (korrektes JSON-Format, Pflichtfelder, gültige Typen)</li>
 <li>Tool-Implementierungen (was <code>read_file</code> tut — nicht was es bedeutet)</li>
 </ul>
-<p>Diese Dinge ändern sich nicht, weil der Benutzer etwas anders formuliert hat. Ihre Korrektheit ist durch Tests überprüfbar, unabhängig von Sprache, Kontext oder Präferenz.</p>
+<p>Diese Dinge ändern sich nicht, weil du etwas anders formuliert hast. Ihre Korrektheit ist durch Tests überprüfbar — unabhängig von Sprache, Kontext oder Präferenz.</p>
 <p><strong>Das LLM behandelt Bedeutung</strong> — Dinge, die von Kontext, Sprache, Präferenz und implizitem Wissen abhängen:</p>
 <ul>
 <li>Klassifizierung (welcher Typ ist dieser Eintrag — user, feedback, context?)</li>
 <li>Muster- und Widerspruchserkennung über Beobachtungen hinweg</li>
 <li>Entscheidung, welche Aktion angesichts der aktuellen Situation angemessen ist</li>
-<li>Formatierung gemäß den beobachteten Präferenzen des Benutzers</li>
+<li>Formatierung gemäß beobachteten Präferenzen</li>
 <li>Strukturiertes Wissen aus Freitext extrahieren (Dateien, Nachrichten, Notizen)</li>
 <li>Konflikte, Prioritäten und Relevanz beurteilen</li>
 </ul>
-<p>Kein statischer Algorithmus kann subtile Muster in natürlicher Sprache über Sitzungen und Sprachen hinweg erkennen. Ein Sprachmodell kann es — und es wird besser darin, je mehr Skills und Memory das System destilliert hat.</p>
+<p>Kein statischer Algorithmus erkennt subtile Muster in natürlicher Sprache über Sitzungen und Sprachen hinweg. Ein Sprachmodell kann es — und wird besser darin, je mehr Skills und Memory das System destilliert hat.</p>
 <hr />
 <h2 id="die-memory-hierarchie-als-hybrider-stack">Die Memory-Hierarchie als hybrider Stack</h2>
 <p>outheis implementiert dieses Prinzip als Drei-Schichten-Stack:</p>
@@ -314,15 +314,17 @@
 │   what must never happen                 │  persisted as Markdown (code)
 └──────────────────────────────────────────┘
 </code></pre>
-<p>Jede Schicht wird:
-- <strong>Vom LLM geschrieben</strong> (keine fest kodierte Extraktion, kein Schlüsselwort-Matching)
-- <strong>Vom LLM gelesen</strong> (zur Laufzeit in System-Prompts injiziert)
-- <strong>Vom Code gespeichert</strong> (JSON-Dateien, Markdown-Dateien — deterministisches I/O)
-- <strong>Vom Code verwaltet</strong> (wann laden, wie validieren, wann ablaufen lassen)</p>
+<p>Jede Schicht wird:</p>
+<ul>
+<li><strong>Vom LLM geschrieben</strong> (keine fest kodierte Extraktion, kein Schlüsselwort-Matching)</li>
+<li><strong>Vom LLM gelesen</strong> (zur Laufzeit in System-Prompts injiziert)</li>
+<li><strong>Vom Code gespeichert</strong> (JSON-Dateien, Markdown-Dateien — deterministisches I/O)</li>
+<li><strong>Vom Code verwaltet</strong> (wann laden, wie validieren, wann ablaufen lassen)</li>
+</ul>
 <p>Die Trennung ist strikt. Code entscheidet nie, was ein Memory-Eintrag bedeutet. Das LLM verwaltet nie Datei-Handles oder Transaktionssicherheit.</p>
 <hr />
 <h2 id="konsequenz-fur-die-agenten-architektur">Konsequenz für die Agenten-Architektur</h2>
-<p>Jeder Agent in outheis besteht aus genau zwei Schichten:</p>
+<p>Jeder agent in outheis besteht aus genau zwei Schichten:</p>
 <pre><code>┌────────────────────────────────────────┐
 │            LLM  (decides)              │
 │  What to do? How to format? Why?       │
@@ -334,7 +336,7 @@
 └────────────────────────────────────────┘
 </code></pre>
 <p>Das LLM ruft Tools auf — nicht umgekehrt. Python orchestriert nicht, was das LLM tun soll. Python stellt bereit, was das LLM zum Handeln braucht.</p>
-<p>Die Agentenschleife ist strukturell einheitlich über alle Agenten:</p>
+<p>Die Agentenschleife ist strukturell einheitlich über alle agents:</p>
 <pre><code class="language-python">while True:
     response = call_llm(system=context, messages=history, tools=tools)
     if no tool calls: return response.text
@@ -342,7 +344,7 @@
     history += [response, results]
 </code></pre>
 <p>Kontext wird vorab bereitgestellt (Memory, Skills, Rules, relevante Dateien). Tools sind reines I/O. Das LLM entscheidet Reihenfolge, Strategie und was mit Ergebnissen zu tun ist.</p>
-<p>Das bedeutet: Eine feste Fünf-Schritte-Pipeline — extrahieren, konsolidieren, destillieren, promoten, validieren — ist eine Heuristik. Sie kodiert die heutige Annahme darüber, welche Schritte in welcher Reihenfolge benötigt werden. Ein tool-nutzendes Agenten mit Zugang zu Lese-/Schreib-Primitiven kann dies selbst entscheiden und wird mit wachsendem Memory und Skills bessere Entscheidungen treffen.</p>
+<p>Das bedeutet: Eine feste Fünf-Schritte-Pipeline — extrahieren, konsolidieren, destillieren, promoten, validieren — ist eine Heuristik. Sie kodiert die heutige Annahme darüber, welche Schritte in welcher Reihenfolge benötigt werden. Ein tool-nutzender agent mit Zugang zu Lese-/Schreib-Primitiven kann das selbst entscheiden — und trifft mit wachsendem Memory und Skills bessere Entscheidungen.</p>
 <hr />
 <h2 id="konkrete-grenzfalle">Konkrete Grenzfälle</h2>
 <table>
@@ -390,7 +392,7 @@
 <h2 id="wann-wird-eine-heuristik-zu-code">Wann wird eine Heuristik zu Code?</h2>
 <p>Das LLM selbst erkennt, was über viele Aufrufe hinweg stabil bleibt. Erst wenn ein Muster klar und konsistent stabil ist, sollte es kodiert werden — nicht vorher.</p>
 <p>Der Pattern-Agent beobachtet, welche Entscheidungen konsistent sind, und kann diese als Skills formulieren (die zukünftige Aufmerksamkeit lenken) oder sie dem Entwickler als Implementierungskandidaten melden. Das ist der organische Wachstumspfad:</p>
-<p><strong>Code wächst von unten nach oben aus beobachteter Stabilität, nicht von oben nach unten aus antizipierten Anforderungen.</strong></p>
+<p><strong>Code wächst von unten nach oben aus beobachteter Stabilität — nicht von oben nach unten aus antizipierten Anforderungen.</strong></p>
 <p>Das verhindert vorzeitige Optimierung und hält das System flexibel. Eine outheis-Instanz, die ein Jahr lang läuft, hat mehr Code als eine frische Installation — aber jedes Code-Stück entstand aus Daten, nicht aus Spekulation.</p>
 <hr />
 <h2 id="der-destillationsgradient">Der Destillationsgradient</h2>
@@ -408,7 +410,7 @@ Rules (LLM promotes stable constraints)
 Code (developer promotes stable behavior)
 </code></pre>
 <p>Jeder Übergang ist ein Kompressionsschritt. Rohe Beobachtungen werden zu strukturiertem Memory. Memory wird zu kondensierten Skills. Skills werden zu harten Rules. Wiederholte Rules werden zu Code. Auf jeder Ebene führt das LLM die Klassifizierung durch; Code übernimmt die Persistenz.</p>
-<p>Das Ziel ist ein System, das mit der Zeit progressiv weniger Kontext benötigt — weil Skills bereits erfasst haben, was gewusst werden muss, und Code das behandelt, was sich nie ändern wird.</p>
+<p>Das Ziel: Ein System, das mit der Zeit progressiv weniger Kontext benötigt — weil Skills bereits erfasst haben, was gewusst werden muss, und Code das behandelt, was sich nie ändern wird.</p>
     <hr>
     <p class="footer">Open source under AGPL-3.0 · <a href="https://github.com/outheis-labs/outheis-minimal">Code on GitHub</a></p>
   </main>

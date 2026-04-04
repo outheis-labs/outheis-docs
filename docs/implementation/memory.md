@@ -28,8 +28,10 @@ outheis maintains two separate knowledge stores:
 Personal facts that don't change often.
 
 Examples:
+
 - "User is 35 years old"
 - "Children: Leo (8) and Emma (5)"
+
 - "Lives in Munich"
 - "Works as a software engineer"
 
@@ -40,6 +42,7 @@ Examples:
 How you want outheis to behave.
 
 Examples:
+
 - "Prefers short, direct answers"
 - "Respond in German unless asked otherwise"
 - "Don't explain technical concepts — user is an expert"
@@ -51,6 +54,7 @@ Examples:
 What you're currently focused on.
 
 Examples:
+
 - "Working on Project Alpha mobile app"
 - "Preparing for conference talk next week"
 - "Learning Japanese"
@@ -106,7 +110,9 @@ You can trigger this manually: `outheis pattern`
 Over time, memory can accumulate duplicates or contradictory entries. The Pattern agent handles this during its scheduled run:
 
 - **Duplicates**: "Has pending tasks: X, Y" and "Current pending tasks: X, Y" → keeps the newer one
+
 - **Contradictions**: "User is 35" and "User is 36" → keeps the more recent or explicitly-marked one
+
 - **Superseded entries**: Context that's been updated → removes the older version
 
 This is not a mechanical process — the Pattern agent uses judgment to decide what to consolidate, erring on the side of keeping information when uncertain.
@@ -116,10 +122,12 @@ This is not a mechanical process — the Pattern agent uses judgment to decide w
 Not everything should be remembered forever.
 
 **Stored as permanent fact:**
+
 - "User has two children"
 - "Prefers formal communication"
 
 **NOT stored (temporary state):**
+
 - "User seems frustrated today"
 - "User is tired"
 - "User is stressed about deadline"
@@ -161,6 +169,7 @@ Memory
 ```
 
 Markers:
+
 - `[!]` — Explicitly stored via `!` marker
 - `[90%]` — Confidence below 100%
 - `[↓12d]` — Expires in 12 days

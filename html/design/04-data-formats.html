@@ -390,10 +390,18 @@
 <h3 id="philosophy">Philosophy</h3>
 <p>Following the principle of <em>prospective information architecture</em>:</p>
 <ul>
-<li><strong>Self-description</strong>: Files carry their meaning via tags, not via position</li>
-<li><strong>Position as hint</strong>: Directory structure provides context, not identity</li>
-<li><strong>Multiple access paths</strong>: Tags enable retrieval from any perspective</li>
-<li><strong>Structure at query time</strong>: Hierarchies are computed, not stored</li>
+<li>
+<p><strong>Self-description</strong>: Files carry their meaning via tags, not via position</p>
+</li>
+<li>
+<p><strong>Position as hint</strong>: Directory structure provides context, not identity</p>
+</li>
+<li>
+<p><strong>Multiple access paths</strong>: Tags enable retrieval from any perspective</p>
+</li>
+<li>
+<p><strong>Structure at query time</strong>: Hierarchies are computed, not stored</p>
+</li>
 </ul>
 <hr />
 <h2 id="file-types">File Types</h2>
@@ -516,10 +524,18 @@ Content here...
 </tr>
 </tbody>
 </table>
-<p>If frontmatter is absent, agents derive metadata from:
-- Title: First <code># heading</code> or filename
-- Created/Modified: Filesystem timestamps
-- Tags: Inline tags in content</p>
+<p>If frontmatter is absent, agents derive metadata from:</p>
+<ul>
+<li>
+<p>Title: First <code># heading</code> or filename</p>
+</li>
+<li>
+<p>Created/Modified: Filesystem timestamps</p>
+</li>
+<li>
+<p>Tags: Inline tags in content</p>
+</li>
+</ul>
 <h3 id="tags">Tags</h3>
 <p>Tags can come from <strong>two sources</strong> (both work, combined automatically):</p>
 <ol>
@@ -581,10 +597,12 @@ Meeting scheduled for tomorrow #deadline #priority-high.
 #Priority-High → priority-high
 #Project/Alpha → project/alpha
 </code></pre>
-<p>Rules:
-- Lowercase for matching
-- Preserve hyphens and slashes
-- Strip leading <code>#</code></p>
+<p>Rules:</p>
+<ul>
+<li>Lowercase for matching</li>
+<li>Preserve hyphens and slashes</li>
+<li>Strip leading <code>#</code></li>
+</ul>
 <h3 id="tag-analysis">Tag Analysis</h3>
 <p>outheis tracks tag usage and can report:</p>
 <ul>
@@ -594,10 +612,12 @@ Meeting scheduled for tomorrow #deadline #priority-high.
 </ul>
 <p>Ask in chat: "welche tags habe ich?" or "tag-analyse"</p>
 <h3 id="tag-philosophy">Tag Philosophy</h3>
-<p><strong>outheis does not invent tags.</strong> It uses your tags, learns your format, and may:
-- Suggest cleanup for singular tags
-- Warn about inconsistent formats
-- Propose similar existing tags when you create new ones</p>
+<p><strong>outheis does not invent tags.</strong> It uses your tags, learns your format, and may:</p>
+<ul>
+<li>Suggest cleanup for singular tags</li>
+<li>Warn about inconsistent formats</li>
+<li>Propose similar existing tags when you create new ones</li>
+</ul>
 <p>You control the vocabulary.</p>
 <h3 id="links">Links</h3>
 <p>Wiki-style links for internal references:</p>
@@ -851,11 +871,17 @@ Related: [[projects/alpha/README]]
   &quot;reviewed&quot;: false
 }
 </code></pre>
-<p>Session notes are:
-- Written by any agent when user helps solve a problem
-- Read by Pattern agent during nightly run
-- Marked <code>reviewed: true</code> after processing
-- Periodically cleaned (reviewed notes older than 30 days)</p>
+<p>Session notes are:</p>
+<ul>
+<li>Written by any agent when user helps solve a problem</li>
+<li>Read by Pattern agent during nightly run</li>
+<li>
+<p>Marked <code>reviewed: true</code> after processing</p>
+</li>
+<li>
+<p>Periodically cleaned (reviewed notes older than 30 days)</p>
+</li>
+</ul>
 <p>Pattern agent decides: generalize to insight, or leave as specific instance in archive.</p>
 <h3 id="agenda-rules">Agenda Rules</h3>
 <p>Markdown files in <code>human/rules/</code> define user preferences:</p>
@@ -868,10 +894,12 @@ Related: [[projects/alpha/README]]
 
 ## Time Blocks
 - Monday mornings: no meetings before 10:00
+
 - Friday afternoons: no meetings after 15:00
 
 ## Notifications
 - Deadline &lt; 3 days: always remind
+
 - Emails from boss: always show immediately
 </code></pre>
 <hr />
@@ -962,10 +990,16 @@ Related: [[projects/alpha/README]]
 </tbody>
 </table>
 <h3 id="forbidden-characters">Forbidden Characters</h3>
-<p>Filenames must not contain:
-- <code>/</code> <code>\</code> <code>:</code> <code>*</code> <code>?</code> <code>"</code> <code>&lt;</code> <code>&gt;</code> <code>|</code>
-- Leading/trailing spaces
-- Leading <code>.</code> in user files (reserved for system)</p>
+<p>Filenames must not contain:</p>
+<ul>
+<li>
+<p><code>/</code> <code>\</code> <code>:</code> <code>*</code> <code>?</code> <code>"</code> <code>&lt;</code> <code>&gt;</code> <code>|</code></p>
+</li>
+<li>
+<p>Leading/trailing spaces</p>
+</li>
+<li>Leading <code>.</code> in user files (reserved for system)</li>
+</ul>
 <hr />
 <h2 id="encoding">Encoding</h2>
 <p>All text files use UTF-8 encoding without BOM.</p>
@@ -1222,10 +1256,18 @@ outheis migrate --apply --quiet
 <h2 id="theoretical-background">Theoretical Background</h2>
 <p>The vault architecture implements principles of <em>prospective information architecture</em>:</p>
 <ul>
-<li><strong>Self-describing objects</strong>: Files carry meaning via tags, not position</li>
-<li><strong>Multiple relationierung</strong>: Tags and links enable multiple access paths</li>
-<li><strong>Structure at query time</strong>: Hierarchies are computed, not stored</li>
-<li><strong>Plaintext as foundation</strong>: Universal readability, long-term stability</li>
+<li>
+<p><strong>Self-describing objects</strong>: Files carry meaning via tags, not position</p>
+</li>
+<li>
+<p><strong>Multiple relationierung</strong>: Tags and links enable multiple access paths</p>
+</li>
+<li>
+<p><strong>Structure at query time</strong>: Hierarchies are computed, not stored</p>
+</li>
+<li>
+<p><strong>Plaintext as foundation</strong>: Universal readability, long-term stability</p>
+</li>
 </ul>
 <p>See: <a href="https://github.com/outheis-labs/research-base/blob/main/temporalization-of-order/temporalization-of-order.md">Temporalization of Order</a> for theoretical foundations.</p>
 <hr />
@@ -1393,6 +1435,7 @@ outheis migrate --apply --quiet
 
 ## Appointments
 - 09:00 Standup
+
 - 14:00 Workshop
 
 ## Focus
@@ -1537,10 +1580,12 @@ Top-N file access (lazy load)
 }
 </code></pre>
 <p>Stored in <code>~/.outheis/human/tag-weights.jsonl</code>.</p>
-<p>Weights are updated based on:
-- Access frequency (tag appears in accessed files)
-- Co-occurrence with successful searches
-- Implicit feedback (was result used?)</p>
+<p>Weights are updated based on:</p>
+<ul>
+<li>Access frequency (tag appears in accessed files)</li>
+<li>Co-occurrence with successful searches</li>
+<li>Implicit feedback (was result used?)</li>
+</ul>
 <h3 id="full-text-search">Full-Text Search</h3>
 <p>For content not captured in index:</p>
 <table>

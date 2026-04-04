@@ -1,12 +1,12 @@
 # Architektur
 
-Dieses Dokument beschreibt die outheis-Architektur, abgeleitet aus den in den vorherigen Dokumenten untersuchten Betriebssystemprinzipien.
+Die outheis-Architektur ist kein Zufallsprodukt — sie ist aus Betriebssystemprinzipien abgeleitet.
 
 ---
 
 ## Überblick
 
-outheis ist ein Multi-Agenten-System, in dem spezialisierte Agenten über Nachrichtenaustausch kommunizieren. Ein Transport-Daemon verwaltet externe Schnittstellen, ein Dispatcher leitet Nachrichten weiter und verwaltet den Agenten-Lebenszyklus, und die Agenten verarbeiten Anfragen.
+outheis ist ein Multi-Agenten-System, in dem spezialisierte agents über Nachrichtenaustausch kommunizieren. Ein Transport-Daemon verwaltet externe Schnittstellen. Ein dispatcher leitet Nachrichten weiter und verwaltet den Agenten-Lebenszyklus. Die agents verarbeiten Anfragen.
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
@@ -89,7 +89,7 @@ Das Entfernen von `human/` löscht ALLE benutzerspezifischen Daten: Konfiguratio
 
 ### Transport (Daemon, kein LLM)
 
-Verwaltet externe Schnittstellen. Konvertiert zwischen Protokollen und dem internen Nachrichtenformat.
+Der Transport verwaltet externe Schnittstellen. Er konvertiert zwischen Protokollen und dem internen Nachrichtenformat.
 
 | Schnittstelle | Funktion |
 |---------------|----------|
@@ -97,7 +97,7 @@ Verwaltet externe Schnittstellen. Konvertiert zwischen Protokollen und dem inter
 | CLI | Lokale Interaktion |
 | API | Programmatischer Zugriff (zukünftig) |
 
-Der Transport versteht Inhalte nicht. Er konvertiert und leitet nur weiter.
+**Nicht X, sondern Y:** Der Transport versteht Inhalte nicht — er konvertiert und leitet weiter.
 
 ```
 Signal message → JSON → messages.jsonl
@@ -106,7 +106,7 @@ messages.jsonl → JSON → Signal message
 
 ### Dispatcher (Daemon, kein LLM)
 
-Überwacht die Nachrichtenwarteschlange (per Dateiwatcher: `inotify`/`kqueue`), leitet Nachrichten weiter, startet und benachrichtigt Agenten.
+Der dispatcher überwacht die Nachrichtenwarteschlange (per Dateiwatcher: `inotify`/`kqueue`), leitet Nachrichten weiter, startet und benachrichtigt agents.
 
 #### Routing-Logik
 
@@ -158,11 +158,11 @@ def route(msg) -> AgentId | None:
     return None  # → Relay
 ```
 
-Schlüsselwörter und Schwellenwert sind konfigurierbar. Können leer sein (alles geht an Relay).
+Schlüsselwörter und Schwellenwert sind konfigurierbar. Können leer sein — dann geht alles an Relay.
 
 #### Lock-Manager
 
-Der Dispatcher verwaltet den Zugriff auf die Warteschlange über einen Unix-Socket-Lock-Manager. Alle Schreiber müssen eine Sperre anfordern, bevor sie in `messages.jsonl` schreiben.
+Der dispatcher verwaltet den Zugriff auf die Warteschlange über einen Unix-Socket-Lock-Manager. Alle Schreiber müssen eine Sperre anfordern, bevor sie in `messages.jsonl` schreiben.
 
 **Socket:** `~/.outheis/.dispatcher.sock`
 
@@ -194,6 +194,7 @@ Innerhalb jeder Prioritätsklasse: FIFO.
 ```
 
 **Verhalten:**
+
 - Sperre wird sofort gewährt, wenn die Warteschlange leer ist
 - Bei Freigabe wird der Nächste in der Warteschlange benachrichtigt
 - Client-Trennung → automatische Freigabe, Bereinigung
@@ -231,7 +232,7 @@ Alle Warteschlangenschreibvorgänge verwenden Write-Ahead für Absturzsicherheit
 3. Fehlende Nachrichten anhängen, Duplikate überspringen
 4. Wiederhergestellte Pending-Dateien löschen
 
-Wenn ein Prozess beim Warten auf die Sperre abstürzt, überlebt die Nachricht in `.pending/` und wird beim (Neu-)Start des Dispatchers wiederhergestellt.
+Wenn ein Prozess beim Warten auf die Sperre abstürzt, überlebt die Nachricht in `.pending/` und wird beim (Neu-)Start des dispatchers wiederhergestellt.
 
 ### Web UI (nur localhost)
 
@@ -264,19 +265,13 @@ Zugriff: nur `http://localhost:<port>`. Keine externe Exposition.
 
 ### Relay Agent
 
-Leitet unklare Anfragen weiter, verfasst Antworten, fragt bei Bedarf nach Klärung.
-
-- Empfängt Nachrichten, die der Dispatcher nicht weiterleiten kann
-- Klassifiziert die Absicht
-- Leitet an den passenden Agenten weiter
-- Fasst Agentenausgaben zur finalen Antwort zusammen
-- Formatiert die Ausgabe für jeden Kanal (Signal, CLI, API)
+Relay empfängt Nachrichten, die der dispatcher nicht weiterleiten kann. Er klassifiziert die Absicht, leitet an den passenden agent weiter, fasst Agentenausgaben zur finalen Antwort zusammen und formatiert die Ausgabe für jeden Kanal (Signal, CLI, API).
 
 ### Agenda Agent (Persönlicher Modus)
 
-Fungiert als persönlicher Sekretär. Der Name spiegelt beide Bedeutungen wider: die Agenda verwalten (Zeitplan, Prioritäten) und die Handlungsfähigkeit ermöglichen.
+cato ist der persönliche Sekretär. Der Name spiegelt beide Bedeutungen wider: die Agenda verwalten (Zeitplan, Prioritäten) und die Handlungsfähigkeit ermöglichen.
 
-**Problem, das er löst**: 47 Kalendereinträge, 23 E-Mails, 14 Aufgaben — roh präsentiert erzeugt das kognitiven Mehraufwand. Der Agenda-Agent reduziert mentale Reibung durch Filtern und Priorisieren auf Basis erlernter Präferenzen.
+**Das Problem:** 47 Kalendereinträge, 23 E-Mails, 14 Aufgaben — roh präsentiert erzeugt das kognitiven Mehraufwand. cato reduziert mentale Reibung durch Filtern und Priorisieren auf Basis erlernter Präferenzen.
 
 ```
 Raw data (overwhelming)
@@ -291,13 +286,15 @@ Agenda Agent (filtered, prioritized, personal)
 User (only what matters, when it matters)
 ```
 
-**Was Agenda tut**:
-- Erlernt Benutzerregeln ("Montag morgens: keine Meetings")
-- Versteht Prioritäten ("Familie vor Arbeit, außer bei Deadlines")
-- Filtert Rauschen ("diese E-Mail kann warten, jene nicht")
-- Präsentiert Relevanz, nicht Vollständigkeit
+**Was Agenda tut:**
 
-**Wo Regeln gespeichert sind**: Verzeichnis `human/rules/` — nur Agenda liest sie.
+- erlernt Benutzerregeln ("Montag morgens: keine Meetings")
+
+- versteht Prioritäten ("Familie vor Arbeit, außer bei Deadlines")
+- filtert Rauschen ("diese E-Mail kann warten, jene nicht")
+- präsentiert Relevanz — nicht Vollständigkeit
+
+**Wo Regeln gespeichert sind:** Verzeichnis `human/rules/` — nur Agenda liest sie.
 
 Im Domain-Expert-Modus ist Agenda deaktiviert. Data liefert direkt an Relay.
 
@@ -305,7 +302,7 @@ Im Domain-Expert-Modus ist Agenda deaktiviert. Data liefert direkt an Relay.
 
 Zentraler Wissensmanager:
 
-1. **Vault-Zugriff**: Lesen und Schreiben im Vault
+1. **Vault-Zugriff**: Lesen und Schreiben im vault
 2. **Aggregation**: Kombiniert Informationen aus mehreren Quellen
 3. **Synthese**: Beantwortet komplexe Anfragen, die Schlussfolgerungen erfordern
 4. **Koordination**: Fordert bei Bedarf externe Daten von Action an
@@ -331,13 +328,13 @@ User question: "How does X compare to current developments?"
 
 ### Eigentumsmodell
 
-Jeder Agent besitzt seine Domäne exklusiv. Andere fordern Zugriff über Nachrichten an.
+Jeder agent besitzt seine Domain exklusiv. Andere fordern Zugriff über Nachrichten an.
 
 | Agent | Besitzt |
 |-------|---------|
 | Relay | Routing-Entscheidungen, Antwortzusammenstellung, Kanalformatierung |
 | Agenda | Benutzerpräferenzen, Regeln, Daily/Inbox/Exchange |
-| Data | Vault, Wissenssynthese, Index |
+| Data | vault, Wissenssynthese, Index |
 | Action | Aufgabenausführung, externe Importe |
 | Pattern | Insight-Generierung, Tag-Lernen |
 
@@ -405,7 +402,9 @@ Die Nachrichtenwarteschlange ist eine append-only-JSONL-Datei:
 ```
 
 - **Append-only**: Nachrichten werden nie verändert oder gelöscht
+
 - **Einzelne Datei**: Einfachheit vor Leistung
+
 - **Dateisperrung**: Einfaches `fcntl`-Locking für gleichzeitigen Zugriff
 
 ```python
@@ -422,8 +421,11 @@ def append_message(path: str, msg: dict) -> None:
 ### Vorteile (Event Sourcing)
 
 - **Prüfprotokoll**: Vollständige Geschichte aller Interaktionen
+
 - **Replay**: Beliebigen vergangenen Zustand rekonstruieren
+
 - **Debugging**: Genau nachvollziehen, was passiert ist
+
 - **Wiederherstellung**: Beim letzten verarbeiteten Eintrag fortsetzen
 
 ---
@@ -502,7 +504,7 @@ Mischung aus lokalen und entfernten Modellen. Schnelle/günstige Modelle lokal, 
 
 ### Dynamische Einschränkung (OpenBSD-inspiriert)
 
-Agenten deklarieren Fähigkeiten beim Start und schränken sich progressiv ein:
+Agents deklarieren Fähigkeiten beim Start und schränken sich progressiv ein:
 
 ```python
 class DataAgent:
@@ -522,13 +524,13 @@ class DataAgent:
 | Action | write (import) | read | - | ✓ | ✓ |
 | Pattern | read | read, write | - | - | - |
 
-Hinweis: Agenten fordern Dienste von anderen Agenten über Nachrichten an. Data kann Action bitten, externe Daten abzurufen; Agenda fragt Data nach aggregierten Informationen.
+Agents fordern Dienste von anderen agents über Nachrichten an. Data kann Action bitten, externe Daten abzurufen; Agenda fragt Data nach aggregierten Informationen.
 
 ---
 
 ## Fehlerbehandlung
 
-Wenn ein Agent ausfällt:
+Wenn ein agent ausfällt:
 
 ```
 1. Log error (always)
@@ -566,7 +568,7 @@ Dispatcher catches
 
 ## Gesprächslebenszyklus
 
-Gespräche enden nicht explizit. Sie laufen aus.
+Gespräche enden nicht explizit — sie laufen aus.
 
 ### Rotation
 
@@ -579,7 +581,7 @@ messages.jsonl          → messages.jsonl (current)
 
 ### Kaltspeicherung
 
-Alte Gespräche werden nach `human/archive/` verschoben:
+Alte Gespräche wandern nach `human/archive/`:
 
 ```
 ~/.outheis/human/
@@ -635,13 +637,13 @@ Mehrere Zeiten möglich: `["04:00", "16:00"]`
 
 ### Manueller Auslöser
 
-Benutzer kann anfordern: "@rumi reflect on this week" → Dispatcher leitet an Pattern weiter.
+Benutzer kann anfordern: "@rumi reflect on this week" → dispatcher leitet an Pattern weiter.
 
 ---
 
 ## Prioritätsverwaltung (GCD-inspiriert)
 
-Agenten haben implizite Prioritätsstufen:
+Agents haben implizite Prioritätsstufen:
 
 | Priorität | Agent | Begründung |
 |-----------|-------|------------|
@@ -649,7 +651,7 @@ Agenten haben implizite Prioritätsstufen:
 | Standard | Action, Data, Agenda | Normalbetrieb |
 | Hintergrund | Pattern | Reflexion kann warten |
 
-Der Dispatcher kann Hintergrundarbeit zurückstellen, wenn Nachrichten mit hoher Priorität ausstehen.
+Der dispatcher kann Hintergrundarbeit zurückstellen, wenn Nachrichten mit hoher Priorität ausstehen.
 
 ---
 
@@ -720,7 +722,7 @@ Strukturiertes JSON für programmatischen Zugriff.
 | `Inbox.md` | Aus Benutzersicht nur Schreiben |
 | `Exchange.md` | Gelegentlich — wenn Daily darauf verweist |
 
-Konflikte und dringende Punkte müssen in `Daily.md` auftauchen, nicht versteckt in Exchange.
+Konflikte und dringende Punkte erscheinen in `Daily.md`, nicht versteckt in Exchange.
 
 ---
 
@@ -745,7 +747,7 @@ Konflikte und dringende Punkte müssen in `Daily.md` auftauchen, nicht versteckt
 
 ## Bedeutung von Aufmerksamkeit
 
-Die zentrale Erkenntnis der Transformer-Architektur aus "Attention Is All You Need" (Vaswani et al., 2017) — dass Aufmerksamkeitsmechanismen die Verarbeitung auf das Wesentliche lenken — gilt direkt für outheis. Das ist keine Metapher; es ist dasselbe Prinzip auf einer anderen Ebene.
+Die zentrale Erkenntnis der Transformer-Architektur — dass Aufmerksamkeitsmechanismen die Verarbeitung auf das Wesentliche lenken — gilt direkt für outheis. Das ist keine Metapher. Dasselbe Prinzip auf einer anderen Ebene.
 
 ### Die Lernarchitektur
 
@@ -797,11 +799,11 @@ Next agent invocation: Skill directs attention
 Agent behaves differently (learned)
 ```
 
-Das ist Gradientenabstieg auf Systemebene. Jede Korrektur passt die "Gewichte" (Skills) an. Mit der Zeit benötigt das System weniger expliziten Kontext, weil Skills die Aufmerksamkeit effizient lenken.
+Das ist Gradientenabstieg auf Systemebene. Jede Korrektur passt die „Gewichte" (Skills) an. Mit der Zeit benötigt das System weniger expliziten Kontext — Skills lenken die Aufmerksamkeit bereits effizient.
 
 ### Warum nicht mehr Code?
 
-Das Anti-Muster besteht darin, Lernen mit fest kodierter Logik zu lösen:
+Das Anti-Muster: Lernen mit fest kodierter Logik lösen.
 
 **Falsch:**
 ```python
@@ -817,11 +819,11 @@ def format_date(date):
 Skill: "Dates: Always ISO format (YYYY-MM-DD)"
 ```
 
-Das LLM liest den Skill und wendet ihn an. Kein Code muss geändert werden, wenn sich Präferenzen ändern. Das System lernt durch Verfeinern von Skills, nicht durch Hinzufügen von Verzweigungen.
+Das LLM liest den Skill und wendet ihn an. Kein Code muss geändert werden, wenn sich Präferenzen ändern. Das System lernt durch Verfeinern von Skills — nicht durch Hinzufügen von Verzweigungen.
 
 ### Skalierung durch semantische Kompression
 
-Mit wachsendem Kontext scheitern naive Ansätze:
+Mit wachsendem Kontext scheitern naive Ansätze.
 
 **Falsch:** Mehr Tools hinzufügen, um mehr Daten abzurufen
 
@@ -832,7 +834,7 @@ Mit wachsendem Kontext scheitern naive Ansätze:
 5x "User prefers short answers"  →  "Brevity: be concise"
 ```
 
-Die Bedeutung bleibt erhalten, die Redundanz verschwindet. Ein Skill ersetzt zehn Memory-Einträge und lenkt die Aufmerksamkeit auf das Wesentliche.
+Die Bedeutung bleibt erhalten, die Redundanz verschwindet. Ein Skill ersetzt zehn Memory-Einträge.
 
 ### Pattern Agent als Optimierer
 
@@ -843,7 +845,7 @@ Der Pattern Agent ist der Optimierer dieses Systems:
 3. **Führt Batch-Update durch** — nächtliche Destillation
 4. **Bereinigt Redundanz** — löscht veraltete Memory-Einträge
 
-Ziel: Ein System, das sich verbessert, nicht durch das Hinzufügen von Code, sondern durch das Verfeinern von Aufmerksamkeit. Je länger es läuft, desto weniger Kontext benötigt es.
+Ziel: Ein System, das sich verbessert — nicht durch Hinzufügen von Code, sondern durch Verfeinern von Aufmerksamkeit. Je länger es läuft, desto weniger Kontext benötigt es.
 
 ---
 
@@ -852,12 +854,12 @@ Ziel: Ein System, das sich verbessert, nicht durch das Hinzufügen von Code, son
 | Prinzip | Implementierung |
 |---------|----------------|
 | Message Passing | Append-only-Warteschlange, kein gemeinsamer Zustand |
-| Ownership | Jeder Agent besitzt seine Domäne |
-| Supervision | Dispatcher überwacht und startet neu |
-| Dynamic Restriction | Agenten pledge/unveil beim Start |
+| Ownership | Jeder agent besitzt seine Domain |
+| Supervision | dispatcher überwacht und startet neu |
+| Dynamic Restriction | agents pledge/unveil beim Start |
 | Priority Scheduling | Benutzerseitige Arbeit zuerst |
 | Append-Only Log | Warteschlange als Quelle der Wahrheit |
-| Specialization | Ein Agent, eine Rolle |
+| Specialization | Ein agent, eine Rolle |
 | Secure by Default | Keine impliziten Fähigkeiten |
 
 ---

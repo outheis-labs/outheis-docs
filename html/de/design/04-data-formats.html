@@ -266,7 +266,7 @@
   </div>
   <main class="content">
     <h1 id="datenformate-und-konventionen">Datenformate und Konventionen</h1>
-<p>Dieses Dokument legt die Struktur und das Format der Daten in outheis fest und ermöglicht es Agenten, verlässliche Annahmen über Inhalte zu treffen.</p>
+<p>Klare Formate ermöglichen verlässliche Annahmen. Agents wissen, was sie vorfinden — ohne raten zu müssen.</p>
 <hr />
 <h2 id="kernprinzip-datenlokalitat">Kernprinzip: Datenlokalität</h2>
 <p><strong>Benutzerdaten existieren nur an zwei Orten:</strong></p>
@@ -390,10 +390,18 @@
 <h3 id="philosophie">Philosophie</h3>
 <p>Gemäß dem Prinzip der <em>prospektiven Informationsarchitektur</em>:</p>
 <ul>
-<li><strong>Selbstbeschreibung</strong>: Dateien tragen ihre Bedeutung über Tags, nicht über Position</li>
-<li><strong>Position als Hinweis</strong>: Verzeichnisstruktur liefert Kontext, nicht Identität</li>
-<li><strong>Mehrere Zugriffspfade</strong>: Tags ermöglichen Abruf aus beliebiger Perspektive</li>
-<li><strong>Struktur zur Abfragezeit</strong>: Hierarchien werden berechnet, nicht gespeichert</li>
+<li>
+<p><strong>Selbstbeschreibung</strong>: Dateien tragen ihre Bedeutung über Tags — nicht über Position</p>
+</li>
+<li>
+<p><strong>Position als Hinweis</strong>: Verzeichnisstruktur liefert Kontext, nicht Identität</p>
+</li>
+<li>
+<p><strong>Mehrere Zugriffspfade</strong>: Tags ermöglichen Abruf aus beliebiger Perspektive</p>
+</li>
+<li>
+<p><strong>Struktur zur Abfragezeit</strong>: Hierarchien werden berechnet, nicht gespeichert</p>
+</li>
 </ul>
 <hr />
 <h2 id="dateitypen">Dateitypen</h2>
@@ -443,7 +451,6 @@
 </tbody>
 </table>
 <h3 id="beziehungsmuster">Beziehungsmuster</h3>
-<p>Dateien stehen auf verschiedene Weisen zueinander in Beziehung:</p>
 <table>
 <thead>
 <tr>
@@ -516,12 +523,20 @@ Content here...
 </tr>
 </tbody>
 </table>
-<p>Wenn kein Frontmatter vorhanden ist, leiten Agenten Metadaten ab aus:
-- Titel: Erste <code># Überschrift</code> oder Dateiname
-- Erstellt/Geändert: Dateisystem-Zeitstempel
-- Tags: Inline-Tags im Inhalt</p>
+<p>Wenn kein Frontmatter vorhanden ist, leiten agents Metadaten ab aus:</p>
+<ul>
+<li>
+<p>Titel: Erste <code># Überschrift</code> oder Dateiname</p>
+</li>
+<li>
+<p>Erstellt/Geändert: Dateisystem-Zeitstempel</p>
+</li>
+<li>
+<p>Tags: Inline-Tags im Inhalt</p>
+</li>
+</ul>
 <h3 id="tags">Tags</h3>
-<p>Tags können aus <strong>zwei Quellen</strong> stammen (beide funktionieren, werden automatisch zusammengeführt):</p>
+<p>Tags kommen aus <strong>zwei Quellen</strong> — beide funktionieren, werden automatisch zusammengeführt:</p>
 <ol>
 <li><strong>YAML-Frontmatter</strong> (optional):</li>
 </ol>
@@ -581,10 +596,12 @@ Meeting scheduled for tomorrow #deadline #priority-high.
 #Priority-High → priority-high
 #Project/Alpha → project/alpha
 </code></pre>
-<p>Regeln:
-- Kleinbuchstaben für die Suche
-- Bindestriche und Schrägstriche beibehalten
-- Führendes <code>#</code> entfernen</p>
+<p>Regeln:</p>
+<ul>
+<li>Kleinbuchstaben für die Suche</li>
+<li>Bindestriche und Schrägstriche beibehalten</li>
+<li>Führendes <code>#</code> entfernen</li>
+</ul>
 <h3 id="tag-analyse">Tag-Analyse</h3>
 <p>outheis verfolgt die Tag-Nutzung und kann berichten:</p>
 <ul>
@@ -594,10 +611,12 @@ Meeting scheduled for tomorrow #deadline #priority-high.
 </ul>
 <p>Im Chat fragen: "welche tags habe ich?" oder "tag-analyse"</p>
 <h3 id="tag-philosophie">Tag-Philosophie</h3>
-<p><strong>outheis erfindet keine Tags.</strong> Es verwendet deine Tags, erlernt dein Format und kann:
-- Bereinigung für einzelne Tags vorschlagen
-- Auf inkonsistente Formate hinweisen
-- Ähnliche vorhandene Tags vorschlagen, wenn neue erstellt werden</p>
+<p><strong>outheis erfindet keine Tags.</strong> Es verwendet deine Tags, erlernt dein Format und kann:</p>
+<ul>
+<li>Bereinigung für einzelne Tags vorschlagen</li>
+<li>Auf inkonsistente Formate hinweisen</li>
+<li>Ähnliche vorhandene Tags vorschlagen, wenn neue erstellt werden</li>
+</ul>
 <p>Du bestimmst das Vokabular.</p>
 <h3 id="links">Links</h3>
 <p>Wiki-Style-Links für interne Referenzen:</p>
@@ -609,7 +628,7 @@ Related: [[projects/alpha/README]]
 </code></pre>
 <hr />
 <h2 id="importierte-daten">Importierte Daten</h2>
-<p>Externe Daten (Kalender, E-Mail usw.) werden vom Action-Agenten in <code>~/.outheis/human/imports/</code> importiert. Diese Daten sind kanonisch — strukturierte Repräsentationen externer Quellen.</p>
+<p>Externe Daten (Kalender, E-Mail usw.) importiert der Action-Agent in <code>~/.outheis/human/imports/</code>. Diese Daten sind kanonisch — strukturierte Repräsentationen externer Quellen.</p>
 <h3 id="verzeichnisstruktur_1">Verzeichnisstruktur</h3>
 <pre><code>~/.outheis/human/imports/
 ├── calendar/
@@ -742,7 +761,6 @@ Related: [[projects/alpha/README]]
 </tbody>
 </table>
 <h3 id="configjson">config.json</h3>
-<p>Benutzerkonfiguration:</p>
 <pre><code class="language-json">{
   &quot;name&quot;: &quot;Markus&quot;,
   &quot;language&quot;: &quot;en&quot;,
@@ -785,7 +803,7 @@ Related: [[projects/alpha/README]]
 </tbody>
 </table>
 <h3 id="insightsjsonl">insights.jsonl</h3>
-<p>Pattern-Agent schreibt Beobachtungen:</p>
+<p>Der Pattern-Agent schreibt Beobachtungen:</p>
 <pre><code class="language-json">{
   &quot;v&quot;: 1,
   &quot;id&quot;: &quot;ins_20251115_001&quot;,
@@ -835,7 +853,7 @@ Related: [[projects/alpha/README]]
 </tbody>
 </table>
 <h3 id="session_notesjsonl">session_notes.jsonl</h3>
-<p>Temporäre Lernnotizen, die vom Pattern-Agenten bei geplanten Läufen geprüft werden:</p>
+<p>Temporäre Lernnotizen, die der Pattern-Agent bei geplanten Läufen prüft:</p>
 <pre><code class="language-json">{
   &quot;v&quot;: 1,
   &quot;id&quot;: &quot;note_20251115_001&quot;,
@@ -851,11 +869,17 @@ Related: [[projects/alpha/README]]
   &quot;reviewed&quot;: false
 }
 </code></pre>
-<p>Sitzungsnotizen werden:
-- Von jedem Agenten geschrieben, wenn der Benutzer bei der Problemlösung hilft
-- Vom Pattern-Agenten beim nächtlichen Lauf gelesen
-- Nach der Verarbeitung als <code>reviewed: true</code> markiert
-- Regelmäßig bereinigt (geprüfte Notizen älter als 30 Tage)</p>
+<p>Sitzungsnotizen werden:</p>
+<ul>
+<li>Von jedem agent geschrieben, wenn der Benutzer bei der Problemlösung hilft</li>
+<li>Vom Pattern-Agent beim nächtlichen Lauf gelesen</li>
+<li>
+<p>Nach der Verarbeitung als <code>reviewed: true</code> markiert</p>
+</li>
+<li>
+<p>Regelmäßig bereinigt (geprüfte Notizen älter als 30 Tage)</p>
+</li>
+</ul>
 <p>Der Pattern-Agent entscheidet: auf Insight verallgemeinern oder als spezifische Instanz im Archiv belassen.</p>
 <h3 id="agenda-regeln">Agenda-Regeln</h3>
 <p>Markdown-Dateien in <code>human/rules/</code> definieren Benutzerpräferenzen:</p>
@@ -868,15 +892,17 @@ Related: [[projects/alpha/README]]
 
 ## Time Blocks
 - Monday mornings: no meetings before 10:00
+
 - Friday afternoons: no meetings after 15:00
 
 ## Notifications
 - Deadline &lt; 3 days: always remind
+
 - Emails from boss: always show immediately
 </code></pre>
 <hr />
 <h2 id="textextraktion">Textextraktion</h2>
-<p>Für Nicht-Markdown-Dateien extrahieren Agenten Text wo möglich:</p>
+<p>Für Nicht-Markdown-Dateien extrahieren agents Text wo möglich:</p>
 <table>
 <thead>
 <tr>
@@ -931,7 +957,7 @@ Related: [[projects/alpha/README]]
 <p>Alle Zeitstempel verwenden ISO 8601-Format in UTC:</p>
 <pre><code>2025-03-27T10:00:00Z
 </code></pre>
-<p>Agenten konvertieren zur Anzeige in die lokale Zeitzone basierend auf der Zeitzoneneinstellung in <code>human/config.json</code>.</p>
+<p>Agents konvertieren zur Anzeige in die lokale Zeitzone basierend auf der Zeitzoneneinstellung in <code>human/config.json</code>.</p>
 <hr />
 <h2 id="dateinamen">Dateinamen</h2>
 <h3 id="konventionen_1">Konventionen</h3>
@@ -962,10 +988,16 @@ Related: [[projects/alpha/README]]
 </tbody>
 </table>
 <h3 id="verbotene-zeichen">Verbotene Zeichen</h3>
-<p>Dateinamen dürfen nicht enthalten:
-- <code>/</code> <code>\</code> <code>:</code> <code>*</code> <code>?</code> <code>"</code> <code>&lt;</code> <code>&gt;</code> <code>|</code>
-- Führende/abschließende Leerzeichen
-- Führenden <code>.</code> in Benutzerdateien (für System reserviert)</p>
+<p>Dateinamen dürfen nicht enthalten:</p>
+<ul>
+<li>
+<p><code>/</code> <code>\</code> <code>:</code> <code>*</code> <code>?</code> <code>"</code> <code>&lt;</code> <code>&gt;</code> <code>|</code></p>
+</li>
+<li>
+<p>Führende/abschließende Leerzeichen</p>
+</li>
+<li>Führenden <code>.</code> in Benutzerdateien (für System reserviert)</li>
+</ul>
 <hr />
 <h2 id="kodierung">Kodierung</h2>
 <p>Alle Textdateien verwenden UTF-8-Kodierung ohne BOM.</p>
@@ -1046,7 +1078,7 @@ Related: [[projects/alpha/README]]
 <hr />
 <h2 id="schema-versionierung">Schema-Versionierung</h2>
 <h3 id="das-problem">Das Problem</h3>
-<p>Datenstrukturen entwickeln sich weiter. Nachrichten, Insights und andere Formate werden sich im Laufe der Zeit ändern. Ohne Versionierung:</p>
+<p>Datenstrukturen entwickeln sich weiter. Ohne Versionierung:</p>
 <ul>
 <li>Alte Daten werden nach Upgrades unlesbar</li>
 <li>Gemischte Versionen in derselben Datei verursachen Parsing-Fehler</li>
@@ -1074,7 +1106,7 @@ Related: [[projects/alpha/README]]
 </tr>
 </tbody>
 </table>
-<p>Kurzer Feldname (<code>v</code> statt <code>version</code>), weil JSONL kompakt sein sollte.</p>
+<p>Kurzer Feldname (<code>v</code> statt <code>version</code>) — JSONL sollte kompakt sein.</p>
 <h3 id="versionsautoritat">Versionsautorität</h3>
 <p>Die Schema-Version ist in <code>core/schema.py</code> definiert:</p>
 <pre><code class="language-python"># core/schema.py — single source of truth
@@ -1087,7 +1119,7 @@ def write_message(msg):
     msg[&quot;v&quot;] = MESSAGES_VERSION
     return json.dumps(msg)
 </code></pre>
-<p>Alle Agenten importieren dieses Modul. Kein Agent schreibt JSON direkt.</p>
+<p>Alle agents importieren dieses Modul. Kein agent schreibt JSON direkt.</p>
 <h3 id="lesen-mit-versionsuberprufung">Lesen mit Versionsüberprüfung</h3>
 <pre><code class="language-python">def read_message(line):
     msg = json.loads(line)
@@ -1220,12 +1252,20 @@ outheis migrate --apply --quiet
 <p><em>Wird mit jeder Schema-Änderung aktualisiert.</em></p>
 <hr />
 <h2 id="theoretischer-hintergrund">Theoretischer Hintergrund</h2>
-<p>Die Vault-Architektur implementiert Prinzipien der <em>prospektiven Informationsarchitektur</em>:</p>
+<p>Die vault-Architektur implementiert Prinzipien der <em>prospektiven Informationsarchitektur</em>:</p>
 <ul>
-<li><strong>Selbstbeschreibende Objekte</strong>: Dateien tragen Bedeutung über Tags, nicht Position</li>
-<li><strong>Multiple Relationierung</strong>: Tags und Links ermöglichen mehrere Zugriffspfade</li>
-<li><strong>Struktur zur Abfragezeit</strong>: Hierarchien werden berechnet, nicht gespeichert</li>
-<li><strong>Klartext als Fundament</strong>: Universelle Lesbarkeit, langfristige Stabilität</li>
+<li>
+<p><strong>Selbstbeschreibende Objekte</strong>: Dateien tragen Bedeutung über Tags — nicht über Position</p>
+</li>
+<li>
+<p><strong>Multiple Relationierung</strong>: Tags und Links ermöglichen mehrere Zugriffspfade</p>
+</li>
+<li>
+<p><strong>Struktur zur Abfragezeit</strong>: Hierarchien werden berechnet, nicht gespeichert</p>
+</li>
+<li>
+<p><strong>Klartext als Fundament</strong>: Universelle Lesbarkeit, langfristige Stabilität</p>
+</li>
 </ul>
 <p>Siehe: <a href="https://github.com/outheis-labs/research-base/blob/main/temporalization-of-order/temporalization-of-order.md">Temporalization of Order</a> für theoretische Grundlagen.</p>
 <hr />
@@ -1249,7 +1289,7 @@ outheis migrate --apply --quiet
 </tr>
 </tbody>
 </table>
-<p>Begründung: Symlinks außerhalb des Vault könnten Daten leaken oder die Zugriffskontrolle umgehen.</p>
+<p>Symlinks außerhalb des vault könnten Daten leaken oder die Zugangskontrolle umgehen.</p>
 <h3 id="versteckte-dateien">Versteckte Dateien</h3>
 <p>Dateien und Verzeichnisse, die mit <code>.</code> beginnen, werden ignoriert, außer:</p>
 <table>
@@ -1270,7 +1310,7 @@ outheis migrate --apply --quiet
 </tr>
 </tbody>
 </table>
-<p>Dies umfasst <code>.obsidian/</code>, <code>.DS_Store</code>, <code>.gitignore</code> usw.</p>
+<p>Das umfasst <code>.obsidian/</code>, <code>.DS_Store</code>, <code>.gitignore</code> usw.</p>
 <h3 id="groe-dateien">Große Dateien</h3>
 <table>
 <thead>
@@ -1344,15 +1384,15 @@ outheis migrate --apply --quiet
 </table>
 <p>Die Administratorrolle im Domain-Expert-Modus:</p>
 <ul>
-<li>Konfiguriert Agenten, Modelle, Routing</li>
-<li>Definiert domänenspezifische Regeln</li>
-<li>Überwacht Systemzustand</li>
-<li>Empfängt <strong>kein</strong> persönliches Filtern (kein Agenda)</li>
+<li>konfiguriert agents, Modelle, Routing</li>
+<li>definiert domänenspezifische Regeln</li>
+<li>überwacht Systemzustand</li>
+<li>empfängt <strong>kein</strong> persönliches Filtern (kein Agenda)</li>
 </ul>
 <p>Mehrere Endbenutzer interagieren über Transport, aber nur der Administrator konfiguriert <code>human/</code>.</p>
 <hr />
 <h2 id="agenda-verzeichnis">Agenda-Verzeichnis</h2>
-<p>Der primäre Vault enthält ein spezielles <code>Agenda/</code>-Verzeichnis, das als strukturierte Schnittstelle zwischen Benutzer und System dient.</p>
+<p>Der primäre vault enthält ein spezielles <code>Agenda/</code>-Verzeichnis — strukturierte Schnittstelle zwischen Benutzer und System.</p>
 <h3 id="struktur_1">Struktur</h3>
 <pre><code>vault/Agenda/
 ├── Daily.md
@@ -1393,6 +1433,7 @@ outheis migrate --apply --quiet
 
 ## Appointments
 - 09:00 Standup
+
 - 14:00 Workshop
 
 ## Focus
@@ -1410,7 +1451,7 @@ remember to call Y about the contract
 
 #idea redesign the onboarding flow
 </code></pre>
-<p>Agenda-Agent liest, klassifiziert und leitet an passende Agenten weiter.</p>
+<p>Der Agenda-Agent liest, klassifiziert und leitet an passende agents weiter.</p>
 <h3 id="exchangemd">Exchange.md</h3>
 <p>Asynchroner Dialog. System fragt, Benutzer antwortet wenn es passt. Kein Druck.</p>
 <pre><code class="language-markdown"># Open
@@ -1437,7 +1478,6 @@ Your answer: Yes, merge to #wip
 Learned: #in-progress → #wip
 </code></pre>
 <h3 id="besondere-behandlung">Besondere Behandlung</h3>
-<p>Das <code>Agenda/</code>-Verzeichnis erhält besondere Behandlung:</p>
 <table>
 <thead>
 <tr>
@@ -1464,7 +1504,7 @@ Learned: #in-progress → #wip
 </tr>
 </tbody>
 </table>
-<p>Dies ermöglicht dem Agenda-Agenten zu verstehen, <em>was</em> sich geändert hat, nicht nur <em>dass</em> sich etwas geändert hat.</p>
+<p>Das ermöglicht dem Agenda-Agenten zu verstehen, <em>was</em> sich geändert hat — nicht nur <em>dass</em> sich etwas geändert hat.</p>
 <h3 id="cache-ort">Cache-Ort</h3>
 <pre><code>~/.outheis/human/cache/agenda/
 ├── Daily.md.prev
@@ -1476,7 +1516,7 @@ Learned: #in-progress → #wip
 <h2 id="zugriffsstrategien">Zugriffsstrategien</h2>
 <p>Ohne Datenbank erfordert schneller Zugriff clevere Strategien auf Basis von Klartext.</p>
 <h3 id="index-als-primarer-nachschlageort">Index als primärer Nachschlageort</h3>
-<p>Der Index (<code>~/.outheis/human/index.jsonl</code>) dient als erster Zugangspunkt. Dateiinhalte werden nur bei Bedarf geladen.</p>
+<p>Der Index (<code>~/.outheis/human/index.jsonl</code>) ist der erste Zugangspunkt. Dateiinhalte werden nur bei Bedarf geladen.</p>
 <pre><code>Query
   │
   ▼
@@ -1527,7 +1567,7 @@ Top-N file access (lazy load)
 </tbody>
 </table>
 <h3 id="tag-lernen">Tag-Lernen</h3>
-<p>Pattern-Agent analysiert Tag-Nutzung und erlernt Gewichte:</p>
+<p>Der Pattern-Agent analysiert Tag-Nutzung und erlernt Gewichte:</p>
 <pre><code class="language-json">{
   &quot;tag&quot;: &quot;project/alpha&quot;,
   &quot;weight&quot;: 0.85,
@@ -1537,10 +1577,12 @@ Top-N file access (lazy load)
 }
 </code></pre>
 <p>Gespeichert in <code>~/.outheis/human/tag-weights.jsonl</code>.</p>
-<p>Gewichte werden aktualisiert basierend auf:
-- Zugriffshäufigkeit (Tag erscheint in aufgerufenen Dateien)
-- Gemeinsames Auftreten mit erfolgreichen Suchen
-- Implizitem Feedback (wurde Ergebnis verwendet?)</p>
+<p>Gewichte werden aktualisiert basierend auf:</p>
+<ul>
+<li>Zugriffshäufigkeit (Tag erscheint in aufgerufenen Dateien)</li>
+<li>Gemeinsames Auftreten mit erfolgreichen Suchen</li>
+<li>Implizitem Feedback (wurde Ergebnis verwendet?)</li>
+</ul>
 <h3 id="volltextsuche">Volltextsuche</h3>
 <p>Für Inhalte, die nicht im Index erfasst sind:</p>
 <table>
@@ -1565,7 +1607,7 @@ Top-N file access (lazy load)
 </tr>
 </tbody>
 </table>
-<p>Implementierungswahl hängt von Vault-Größe und Hardware ab.</p>
+<p>Implementierungswahl hängt von vault-Größe und Hardware ab.</p>
 <h3 id="index-aktualisierungen">Index-Aktualisierungen</h3>
 <table>
 <thead>
@@ -1576,7 +1618,7 @@ Top-N file access (lazy load)
 </thead>
 <tbody>
 <tr>
-<td>Dateiwatcher auf Vault</td>
+<td>Dateiwatcher auf vault</td>
 <td>Änderungen erkennen</td>
 </tr>
 <tr>
