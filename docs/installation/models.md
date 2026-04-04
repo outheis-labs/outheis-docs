@@ -87,6 +87,41 @@ No model scores fully correct on all scenarios. The 20B class is the current low
 
 ---
 
+## Local Fallback
+
+outheis can automatically switch to a local Ollama model when a cloud provider becomes unavailable due to exhausted credits or an invalid API key.
+
+**How it works:**
+
+1. At startup, outheis probes the configured cloud provider with a minimal call. If billing fails, fallback mode activates immediately.
+2. During operation, any `BillingError` (HTTP 402/401, or error messages matching credit/quota patterns) triggers the same switch mid-conversation.
+3. On activation: relay, data, agenda, pattern, and code agents are switched to the fallback model. The user is notified in the current chat and via Signal (if configured). The Web UI status dot turns yellow and the overview shows the active fallback model and reason.
+
+**Configuration:**
+
+```json
+"llm": {
+  "local_fallback": "llama3.1:8b",
+  "providers": { ... },
+  "models": { ... }
+}
+```
+
+`local_fallback` is a model alias — it must be defined in `llm.models` and point to an Ollama model. Example:
+
+```json
+"models": {
+  "llama3.1:8b": { "provider": "ollama", "name": "llama3.1:8b" },
+  ...
+}
+```
+
+If `local_fallback` is not set, outheis logs the billing error but does not switch — requests will continue to fail until credits are restored.
+
+**Limitations:** Fallback mode is not automatically cleared when credits are restored. Restart the daemon to return to cloud models.
+
+---
+
 ## OpenAI
 
 Supported as a provider. Configuration is identical to Anthropic — set `"provider": "openai"` and provide an API key.

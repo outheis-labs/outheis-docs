@@ -475,6 +475,30 @@
 <p><strong>Datenschutz-Hinweis:</strong> Wenn Datenschutz ein Thema ist, müssen alle Agenten, die persönliche Vault-Inhalte verarbeiten (relay, data, agenda), lokale Modelle nutzen — nicht nur der Code-Agent. Das erfordert derzeit einen Cloud-Anbieter oder ein Hardware-Upgrade, das 20B+-Inferenz in akzeptabler Geschwindigkeit ermöglicht.</p>
 <p><strong>Neu-Evaluierung auf M5:</strong> Die 20B-Klasse wird auf M5-Hardware deutlich schneller laufen. Für Re-Tests nach dem Hardware-Upgrade: <code>python tools/test_agent_capability.py</code> — und Erweiterung auf 32B+-Modelle.</p>
 <hr />
+<h2 id="lokaler-fallback">Lokaler Fallback</h2>
+<p>outheis kann automatisch auf ein lokales Ollama-Modell umschalten, wenn ein Cloud-Anbieter wegen aufgebrauchtem Guthaben oder ungültigem API-Schlüssel nicht mehr verfügbar ist.</p>
+<p><strong>Funktionsweise:</strong></p>
+<ol>
+<li>Beim Start überprüft outheis den konfigurierten Cloud-Anbieter mit einem minimalen Aufruf. Schlägt dieser wegen Billing fehl, wird der Fallback-Modus sofort aktiviert.</li>
+<li>Im laufenden Betrieb löst jeder <code>BillingError</code> (HTTP 402/401 oder Fehlermeldungen mit Credit-/Quota-Inhalten) denselben Wechsel aus — mitten in einer Konversation.</li>
+<li>Bei Aktivierung: relay, data, agenda, pattern und code werden auf das Fallback-Modell umgestellt. Der User wird im laufenden Chat und über Signal (falls konfiguriert) benachrichtigt. Der Status-Punkt der Web-UI wird gelb, die Übersicht zeigt das aktive Fallback-Modell und den Grund an.</li>
+</ol>
+<p><strong>Konfiguration:</strong></p>
+<pre><code class="language-json">&quot;llm&quot;: {
+  &quot;local_fallback&quot;: &quot;llama3.1:8b&quot;,
+  &quot;providers&quot;: { ... },
+  &quot;models&quot;: { ... }
+}
+</code></pre>
+<p><code>local_fallback</code> ist ein Modell-Alias — er muss in <code>llm.models</code> definiert sein und auf ein Ollama-Modell zeigen. Beispiel:</p>
+<pre><code class="language-json">&quot;models&quot;: {
+  &quot;llama3.1:8b&quot;: { &quot;provider&quot;: &quot;ollama&quot;, &quot;name&quot;: &quot;llama3.1:8b&quot; },
+  ...
+}
+</code></pre>
+<p>Ist <code>local_fallback</code> nicht gesetzt, protokolliert outheis den Billing-Fehler, schaltet aber nicht um — Anfragen schlagen weiterhin fehl, bis das Guthaben aufgefüllt wird.</p>
+<p><strong>Einschränkung:</strong> Der Fallback-Modus wird nicht automatisch aufgehoben, wenn das Guthaben wieder vorhanden ist. Ein Neustart des Daemons stellt den Cloud-Betrieb wieder her.</p>
+<hr />
 <h2 id="openai">OpenAI</h2>
 <p>Als Anbieter unterstützt. Konfiguration identisch zu Anthropic — <code>"provider": "openai"</code> setzen und API-Schlüssel angeben.</p>
 <table>

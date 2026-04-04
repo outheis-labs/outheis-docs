@@ -475,6 +475,30 @@
 <p><strong>Privacy note:</strong> If data privacy is a concern, all agents that process personal vault content (relay, data, agenda) must use local models — not just the code agent. This currently requires a cloud provider or a hardware upgrade that enables 20B+ inference at acceptable speed.</p>
 <p><strong>Re-evaluation on M5:</strong> The 20B class will run significantly faster on M5 hardware. Use <code>python tools/test_agent_capability.py</code> to re-test after a hardware upgrade — and extend to 32B+ models.</p>
 <hr />
+<h2 id="local-fallback">Local Fallback</h2>
+<p>outheis can automatically switch to a local Ollama model when a cloud provider becomes unavailable due to exhausted credits or an invalid API key.</p>
+<p><strong>How it works:</strong></p>
+<ol>
+<li>At startup, outheis probes the configured cloud provider with a minimal call. If billing fails, fallback mode activates immediately.</li>
+<li>During operation, any <code>BillingError</code> (HTTP 402/401, or error messages matching credit/quota patterns) triggers the same switch mid-conversation.</li>
+<li>On activation: relay, data, agenda, pattern, and code agents are switched to the fallback model. The user is notified in the current chat and via Signal (if configured). The Web UI status dot turns yellow and the overview shows the active fallback model and reason.</li>
+</ol>
+<p><strong>Configuration:</strong></p>
+<pre><code class="language-json">&quot;llm&quot;: {
+  &quot;local_fallback&quot;: &quot;llama3.1:8b&quot;,
+  &quot;providers&quot;: { ... },
+  &quot;models&quot;: { ... }
+}
+</code></pre>
+<p><code>local_fallback</code> is a model alias — it must be defined in <code>llm.models</code> and point to an Ollama model. Example:</p>
+<pre><code class="language-json">&quot;models&quot;: {
+  &quot;llama3.1:8b&quot;: { &quot;provider&quot;: &quot;ollama&quot;, &quot;name&quot;: &quot;llama3.1:8b&quot; },
+  ...
+}
+</code></pre>
+<p>If <code>local_fallback</code> is not set, outheis logs the billing error but does not switch — requests will continue to fail until credits are restored.</p>
+<p><strong>Limitations:</strong> Fallback mode is not automatically cleared when credits are restored. Restart the daemon to return to cloud models.</p>
+<hr />
 <h2 id="openai">OpenAI</h2>
 <p>Supported as a provider. Configuration is identical to Anthropic — set <code>"provider": "openai"</code> and provide an API key.</p>
 <table>

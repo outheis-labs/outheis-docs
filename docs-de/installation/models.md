@@ -87,6 +87,41 @@ Kein Modell schneidet in allen Szenarien vollständig korrekt ab. Die 20B-Klasse
 
 ---
 
+## Lokaler Fallback
+
+outheis kann automatisch auf ein lokales Ollama-Modell umschalten, wenn ein Cloud-Anbieter wegen aufgebrauchtem Guthaben oder ungültigem API-Schlüssel nicht mehr verfügbar ist.
+
+**Funktionsweise:**
+
+1. Beim Start überprüft outheis den konfigurierten Cloud-Anbieter mit einem minimalen Aufruf. Schlägt dieser wegen Billing fehl, wird der Fallback-Modus sofort aktiviert.
+2. Im laufenden Betrieb löst jeder `BillingError` (HTTP 402/401 oder Fehlermeldungen mit Credit-/Quota-Inhalten) denselben Wechsel aus — mitten in einer Konversation.
+3. Bei Aktivierung: relay, data, agenda, pattern und code werden auf das Fallback-Modell umgestellt. Der User wird im laufenden Chat und über Signal (falls konfiguriert) benachrichtigt. Der Status-Punkt der Web-UI wird gelb, die Übersicht zeigt das aktive Fallback-Modell und den Grund an.
+
+**Konfiguration:**
+
+```json
+"llm": {
+  "local_fallback": "llama3.1:8b",
+  "providers": { ... },
+  "models": { ... }
+}
+```
+
+`local_fallback` ist ein Modell-Alias — er muss in `llm.models` definiert sein und auf ein Ollama-Modell zeigen. Beispiel:
+
+```json
+"models": {
+  "llama3.1:8b": { "provider": "ollama", "name": "llama3.1:8b" },
+  ...
+}
+```
+
+Ist `local_fallback` nicht gesetzt, protokolliert outheis den Billing-Fehler, schaltet aber nicht um — Anfragen schlagen weiterhin fehl, bis das Guthaben aufgefüllt wird.
+
+**Einschränkung:** Der Fallback-Modus wird nicht automatisch aufgehoben, wenn das Guthaben wieder vorhanden ist. Ein Neustart des Daemons stellt den Cloud-Betrieb wieder her.
+
+---
+
 ## OpenAI
 
 Als Anbieter unterstützt. Konfiguration identisch zu Anthropic — `"provider": "openai"` setzen und API-Schlüssel angeben.
