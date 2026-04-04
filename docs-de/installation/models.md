@@ -71,16 +71,16 @@ Getestet mit `tools/test_agent_capability.py` — 9 Szenarien zu Relay-Routing, 
 | **voytas26/openclaw-oss-20b-deterministic** | 20B | 6/9 | 2 | 1 | Bestes Routing und Fehlerbehandlung |
 | **gpt-oss:20b** | 20B | 6/9 | 2 | 1 | Starke Fehlerbehandlung |
 | **glm-4.7-flash-32k** | 17B | 6/9 | 1 | 2 | Langsamster (~180s gesamt) |
-| **gemma4:e4b** | MoE/4B aktiv | 6/9 | 1 | 2 | Halluzinations-Flag; Leer-Antwort-Fehler; ~133s gesamt |
-| devstral-small-2:24b | 24B | 5/9 | 3 | 1 | Halluzinations-Flag beim Leer-Ergebnis-Test |
+| **gemma4:e4b** | MoE/4B aktiv | 6/9 | 1 | 2 | halluziniert bei leerem Input; leere Antwort bei Tool-freier Anfrage; ~133s gesamt |
+| devstral-small-2:24b | 24B | 5/9 | 3 | 1 | halluziniert beim Leer-Ergebnis-Test |
 | mistral-nemo:12b | 12B | 3/9 | 4 | 2 | Routing: keine Tool-Calls |
 | llama3.1:8b | 8B | 2/9 | 4 | 3 | — |
 
 **Die 20B-Klasse zeigt einen deutlichen Sprung.** Routing, mehrstufige Synthese und Fehlerbehandlung funktionieren zuverlässig. Konsistente Schwäche quer durch alle Modelle: Datumsberechnung bei Agenda-Operationen (Berechnung von "morgen" aus dem System-Prompt-Datum).
 
-`gemma4:e4b` ist ein Mixture-of-Experts-Modell: 9,6 GB auf Disk, ~4B aktive Parameter pro Token. Es erreicht 6/9 — gleichauf mit der 20B-Klasse — hat aber zwei Flags: Halluzination beim Leer-Ergebnis-Szenario (erfundene Dateinamen) und eine leere Antwort bei einer Anfrage ohne nötigen Tool-Call. Mit ~15s pro Szenario auf M4/24 GB ist es das effizienteste Modell auf diesem Score-Niveau. Größere gemma4-Varianten sind für M5-Hardware interessant.
+`gemma4:e4b` ist ein Mixture-of-Experts-Modell: 9,6 GB auf Disk, ~4B aktive Parameter pro Token. Es erreicht 6/9 — gleichauf mit der 20B-Klasse — hat aber zwei Fehler: Halluzination beim Leer-Ergebnis-Szenario (erfindet Dateinamen) und eine leere Antwort bei einer Anfrage ohne nötigen Tool-Call. Mit ~15s pro Szenario auf M4/24 GB ist es das effizienteste Modell auf diesem Score-Niveau. Größere gemma4-Varianten sind für M5-Hardware interessant.
 
-`devstral-small-2:24b` hat einen Halluzinations-Flag beim Leer-Ergebnis-Szenario — das Modell meldete einen Dateinamen, der nur in der "Keine Ergebnisse"-Erklärung des Tools vorkam, nicht als tatsächlichen Treffer.
+`devstral-small-2:24b` halluziniert beim Leer-Ergebnis-Szenario — das Modell meldete einen Dateinamen, der nur in der "Keine Ergebnisse"-Erklärung des Tools vorkam, nicht als tatsächlichen Treffer.
 
 Kein Modell schneidet in allen Szenarien vollständig korrekt ab. Die 20B-Klasse (und gemma4:e4b) ist die aktuelle untere Grenze für den praktischen Einsatz als generische Agenten.
 
@@ -96,9 +96,9 @@ Getestet mit `tools/test_pattern_agent.py` — 10 Szenarien über alle 5 Phasen 
 
 | Modell | Größe | OK | Partiell | Fail | Anmerkung |
 |--------|-------|----|----------|------|-----------|
-| gemma4:26b | 26B | 6/10 | 2 | 2 | Halluzinations-Flag (extract_empty); distill_quality-Fehler; ~270s gesamt |
+| gemma4:26b | 26B | 6/10 | 2 | 2 | halluziniert bei extract_empty; distill_quality-Fehler; ~270s gesamt |
 
-`gemma4:26b` ist ein dichtes 26B-Modell (alle Parameter pro Token aktiv). Es erreicht 6/10 mit zwei Flags: Halluzination im Leer-Extraktions-Szenario (erfundener Memory-Eintrag aus Smalltalk, wo keiner entstehen sollte) und fehlende Destillation trotz reifer Memory-Einträge. Die Konsolidierungsphase findet 0 von 2 Duplikaten (partiell). Mit ~270s Gesamtlaufzeit für alle 10 Szenarien auf M4/24 GB ist der nächtliche Betrieb zeitlich akzeptabel — das Halluzinations-Flag bedeutet aber, dass rumi gelegentlich falsche Memory-Einträge erzeugen würde. Für den produktiven Einsatz als lokaler rumi noch nicht geeignet.
+`gemma4:26b` ist ein dichtes 26B-Modell (alle Parameter pro Token aktiv). Es erreicht 6/10 mit zwei Fehlern: Halluzination im Leer-Extraktions-Szenario (erfindet Memory-Einträge aus Smalltalk, wo keine entstehen sollten) und fehlende Destillation trotz reifer Memory-Einträge. Die Konsolidierungsphase findet 0 von 2 Duplikaten (partiell). Mit ~270s Gesamtlaufzeit für alle 10 Szenarien auf M4/24 GB ist der nächtliche Betrieb zeitlich akzeptabel — das Halluzinations-Problem bedeutet aber, dass rumi gelegentlich falsche Memory-Einträge erzeugen würde. Für den produktiven Einsatz als lokaler rumi noch nicht geeignet.
 
 **Test-Tool:** `python tools/test_pattern_agent.py` im outheis-beta-Repository.
 

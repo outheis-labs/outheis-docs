@@ -71,16 +71,16 @@ Models tested using `tools/test_agent_capability.py` (9 scenarios: relay routing
 | **voytas26/openclaw-oss-20b-deterministic** | 20B | 6/9 | 2 | 1 | Best routing and error recovery |
 | **gpt-oss:20b** | 20B | 6/9 | 2 | 1 | Strong error recovery |
 | **glm-4.7-flash-32k** | 17B | 6/9 | 1 | 2 | Slowest (~180s total for all scenarios) |
-| **gemma4:e4b** | MoE/4B active | 6/9 | 1 | 2 | Hallucination flag; empty-response failure; ~133s total |
-| devstral-small-2:24b | 24B | 5/9 | 3 | 1 | Hallucination flag on empty-results test |
+| **gemma4:e4b** | MoE/4B active | 6/9 | 1 | 2 | hallucinates on empty input; empty response on no-tool query; ~133s total |
+| devstral-small-2:24b | 24B | 5/9 | 3 | 1 | hallucinates on empty-results test |
 | mistral-nemo:12b | 12B | 3/9 | 4 | 2 | Routing: no tool calls |
 | llama3.1:8b | 8B | 2/9 | 4 | 3 | — |
 
 **The 20B class shows a clear step up.** Routing, multi-step result synthesis, and error recovery work reliably. Consistent weakness across all models: date arithmetic in agenda operations (computing "tomorrow" from the system prompt date).
 
-`gemma4:e4b` is a Mixture-of-Experts model: 9.6 GB on disk, ~4B active parameters per token. It scores 6/9 — matching the 20B class — but carries two flags: a hallucination on the empty-results scenario (invented file names), and an empty response on a no-tool-needed query (model produced no text when no tool call was appropriate). At ~15s per scenario on M4/24 GB it is the most efficient model tested at this score level. The larger gemma4 variants are worth evaluating on M5 hardware.
+`gemma4:e4b` is a Mixture-of-Experts model: 9.6 GB on disk, ~4B active parameters per token. It scores 6/9 — matching the 20B class — but has two failures: it hallucinates on the empty-results scenario (invents file names), and produces an empty response on a no-tool-needed query (no text when no tool call was appropriate). At ~15s per scenario on M4/24 GB it is the most efficient model tested at this score level. The larger gemma4 variants are worth evaluating on M5 hardware.
 
-`devstral-small-2:24b` carries a hallucination flag on the empty-results scenario — the model reported a filename that appeared only in the "no results" explanation, not as an actual match.
+`devstral-small-2:24b` hallucinates on the empty-results scenario — the model reported a filename that appeared only in the "no results" explanation, not as an actual match.
 
 No model scores fully correct on all scenarios. The 20B class (and gemma4:e4b) is the current lower bound for practical use as generic agents.
 
@@ -96,9 +96,9 @@ Tested with `tools/test_pattern_agent.py` — 10 scenarios across all 5 phases o
 
 | Model | Size | OK | Partial | Fail | Notes |
 |-------|------|----|---------|------|-------|
-| gemma4:26b | 26B | 6/10 | 2 | 2 | Hallucination flag (extract_empty); distill_quality failure; ~270s total |
+| gemma4:26b | 26B | 6/10 | 2 | 2 | hallucinates on extract_empty; distill_quality failure; ~270s total |
 
-`gemma4:26b` is a dense 26B model (all parameters active per token). It scores 6/10 with two flags: a hallucination on the empty-extraction scenario (invented a memory entry from casual chat where none should be extracted), and a failure to distill when the memory was clearly ready. The consolidate phase finds 0 of 2 duplicates (partial). At ~270s total for all 10 scenarios on M4/24 GB, nightly runtime is acceptable — but the hallucination flag means rumi would occasionally create false memory entries. Not yet suitable for production use as a local rumi.
+`gemma4:26b` is a dense 26B model (all parameters active per token). It scores 6/10 with two failures: it hallucinates on the empty-extraction scenario (invents a memory entry from casual chat where none should be extracted), and fails to distill when the memory is clearly ready. The consolidate phase finds 0 of 2 duplicates (partial). At ~270s total for all 10 scenarios on M4/24 GB, nightly runtime is acceptable — but the hallucination issue means rumi would occasionally create false memory entries. Not yet suitable for production use as a local rumi.
 
 **Test tool:** `python tools/test_pattern_agent.py` from the outheis-beta repository.
 
