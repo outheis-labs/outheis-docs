@@ -34,7 +34,7 @@ All migration happens through natural conversation:
 
 | You say | What happens |
 |---------|--------------|
-| "memory migrate" | Parse Migration/ files, write candidates to Exchange.md |
+| "memory migrate" | Parse Migration/ files, write candidates to Migration/Exchange.md |
 | "migriere memory" | Same, in German |
 | "memory traits" | Show current memory and rules |
 | "zeige traits" | Same, in German |
@@ -120,20 +120,27 @@ Copy your data:
 - Your preferences → `preferences.md`
 - Agent-specific rules → `agenda.md`, `data.md`
 
-### 3. Say "memory migrate"
+### 3. Trigger migration
 
-outheis parses all files in `vault/Migration/`, deduplicates candidates against existing memory via LLM, and writes consolidated items as a block into `vault/Agenda/Exchange.md`:
+**Via chat:** say `memory migrate`
+
+**Via WebUI:** open the Migration view and click **Run now** in the top-right corner. The button is available whether or not the drop zone is visible.
+
+outheis parses all files in `vault/Migration/`, deduplicates candidates against existing memory via LLM, and writes consolidated items as a block into `vault/Migration/Exchange.md`. Proposals are grouped by source file and annotated with the tags found in that file:
 
 ```
 <!-- outheis:migration:start -->
-## Migration-Vorschläge
+## Migration Proposals — 2026-04-05 14:30
 
-*2026-04-03 14:30 — Bitte prüfen und markieren:*
-*`[x]` übernehmen · `[-]` ablehnen · `[ ]` offen lassen*
-*Anschließend: `memory migrate` erneut ausführen.*
+*`[x]` accept · `[-]` reject · `[ ]` leave open · then run `memory migrate` again*
+
+### prototype-user_markus.md  #unit-self #source-human
 
 - [ ] Works as Director Innovation Lab [user]
 - [ ] Prefers short, direct answers [feedback]
+
+### prototype-vault_workflow.md  #unit-senswork #topic-vault
+
 - [ ] Respond in German [rule:relay]
 
 <!-- outheis:migration:end -->
@@ -141,9 +148,9 @@ outheis parses all files in `vault/Migration/`, deduplicates candidates against 
 
 Duplicates are always expected — the LLM deduplication step handles them. Only new or distinct items appear in the block.
 
-### 4. Review Exchange.md
+### 4. Review Migration/Exchange.md
 
-Open `vault/Agenda/Exchange.md` — the same file you already use for async communication with outheis. The migration block appears at the top or inline, clearly delimited.
+Open `vault/Migration/Exchange.md` — the dedicated file for migration approvals. Each Exchange.md is scoped to its directory: Migration/ for memory migration, Agenda/ for async communication with cato, Codebase/ for code proposals.
 
 Mark each item:
 
@@ -158,8 +165,6 @@ Mark each item:
 - `[x]` — apply to memory/rules
 - `[-]` — discard
 - `[ ]` — leave open for next round
-
-Cato (agenda agent) ignores the migration block when processing Exchange.md.
 
 ### 5. Say "memory migrate" Again
 

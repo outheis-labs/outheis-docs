@@ -35,7 +35,7 @@ Alle Migration geschieht durch natürliches Gespräch:
 
 | Du sagst | Was passiert |
 |----------|-------------|
-| "memory migrate" | Migration/-Dateien parsen, Kandidaten in Exchange.md schreiben |
+| "memory migrate" | Migration/-Dateien parsen, Kandidaten in Migration/Exchange.md schreiben |
 | "migriere memory" | Dasselbe, auf Deutsch |
 | "memory traits" | Aktuellen Memory und Rules anzeigen |
 | "zeige traits" | Dasselbe, auf Deutsch |
@@ -121,20 +121,27 @@ Kopiere deine Daten:
 - Deine Präferenzen → `preferences.md`
 - Agenten-spezifische Rules → `agenda.md`, `data.md`
 
-### 3. "memory migrate" sagen
+### 3. Migration auslösen
 
-outheis parst alle Dateien in `vault/Migration/`, dedupliziert Kandidaten gegen bestehendes Memory via LLM und schreibt konsolidierte Einträge als Block in `vault/Agenda/Exchange.md`:
+**Via Chat:** `memory migrate` sagen
+
+**Via WebUI:** Migrationsansicht öffnen und oben rechts auf **Run now** klicken. Der Button ist unabhängig davon verfügbar, ob die Drop-Zone sichtbar ist.
+
+outheis parst alle Dateien in `vault/Migration/`, dedupliziert Kandidaten gegen bestehendes Memory via LLM und schreibt konsolidierte Einträge als Block in `vault/Migration/Exchange.md`. Vorschläge sind nach Quelldatei gruppiert und mit den darin gefundenen Tags annotiert:
 
 ```
 <!-- outheis:migration:start -->
-## Migration-Vorschläge
+## Migration Proposals — 2026-04-05 14:30
 
-*2026-04-03 14:30 — Bitte prüfen und markieren:*
-*`[x]` übernehmen · `[-]` ablehnen · `[ ]` offen lassen*
-*Anschließend: `memory migrate` erneut ausführen.*
+*`[x]` accept · `[-]` reject · `[ ]` leave open · then run `memory migrate` again*
+
+### prototype-user_markus.md  #unit-self #source-human
 
 - [ ] Works as Director Innovation Lab [user]
 - [ ] Prefers short, direct answers [feedback]
+
+### prototype-vault_workflow.md  #unit-senswork #topic-vault
+
 - [ ] Respond in German [rule:relay]
 
 <!-- outheis:migration:end -->
@@ -142,9 +149,9 @@ outheis parst alle Dateien in `vault/Migration/`, dedupliziert Kandidaten gegen 
 
 Duplikate sind immer zu erwarten — der LLM-Deduplizierungsschritt behandelt sie. Nur neue oder eigenständige Einträge erscheinen im Block.
 
-### 4. Exchange.md prüfen
+### 4. Migration/Exchange.md prüfen
 
-Öffne `vault/Agenda/Exchange.md` — dieselbe Datei, die du bereits für asynchrone Kommunikation mit outheis nutzt. Der Migrationsblock erscheint oben oder eingebettet, klar abgegrenzt.
+Öffne `vault/Migration/Exchange.md` — die dedizierte Datei für Migrationsfreigaben. Jede Exchange.md ist auf ihr Verzeichnis beschränkt: Migration/ für Memory-Migration, Agenda/ für asynchrone Kommunikation mit cato, Codebase/ für Code-Proposals.
 
 Markiere jeden Eintrag:
 
@@ -159,8 +166,6 @@ Markiere jeden Eintrag:
 - `[x]` — auf Memory/Rules anwenden
 - `[-]` — verwerfen
 - `[ ]` — für nächste Runde offen lassen
-
-Cato (Agenda-Agent) ignoriert den Migrationsblock bei der Verarbeitung von Exchange.md.
 
 ### 5. Erneut "memory migrate" sagen
 
@@ -196,8 +201,9 @@ Die Migrationsansicht in der Web-Oberfläche bietet:
 - Vollständige Liste der Dateien in `vault/Migration/`
 - Jede Datei direkt ansehen und bearbeiten
 - Drop-Zone zum Hochladen neuer Migrationsdateien
+- **Run now**-Button oben rechts zum direkten Auslösen der Migration
 
-Verwende sie, um Dateien hinzuzufügen ohne den Browser zu verlassen, oder um zu prüfen, was bereits verarbeitet wurde.
+Verwende sie, um Dateien hinzuzufügen und den Migrationsprozess anzustoßen, ohne den Browser zu verlassen, oder um zu prüfen, was bereits verarbeitet wurde.
 
 ## Direkte Rule-Eingabe
 
