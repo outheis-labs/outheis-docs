@@ -37,6 +37,19 @@ Läuft vollständig auf eigener Hardware. Keine API-Kosten, keine Daten verlasse
 
 **GPU-Beschleunigung:** Auf Apple Silicon (M-Reihe) nutzt Ollama automatisch Metal — kein Setup erforderlich. Auf Linux/Windows ist Vulkan-Unterstützung für AMD- und Intel-GPUs über `OLLAMA_VULKAN=1` verfügbar (experimentell). Umgebungsvariablen für den Ollama-Server können in der outheis-Konfiguration unter `llm.providers.ollama.env_vars` gespeichert und in der Web UI eingesehen und bearbeitet werden.
 
+**Mehrere Modelle gleichzeitig:** Standardmäßig lädt Ollama nur ein Modell zur gleichen Zeit (`OLLAMA_MAX_LOADED_MODELS=1`). Wenn verschiedene Agenten unterschiedliche Modellnamen verwenden (z.B. `gemma4:e4b` für Relay, `voytas26/...` für Agenda), löst jede Agenten-Übergabe einen Modell-Swap aus — das eine Modell wird entladen, das andere geladen. Das verursacht mehrere Sekunden Verzögerung pro Wechsel und macht `run_mode: persistent` wirkungslos.
+
+Um zwei Modelle gleichzeitig geladen zu halten, muss `OLLAMA_MAX_LOADED_MODELS=2` **im Ollama-Server-Prozess** gesetzt sein, bevor er startet. Auf macOS mit der Ollama-App:
+
+```sh
+launchctl setenv OLLAMA_MAX_LOADED_MODELS 2
+# dann Ollama neu starten (Menüleiste beenden oder pkill Ollama)
+```
+
+Diese Einstellung geht beim Neustart verloren. Für eine dauerhafte Lösung in `~/.zshrc` oder `~/.profile` eintragen und sicherstellen, dass Ollama aus einer Login-Shell gestartet wird, oder den Wert direkt in `~/Library/LaunchAgents/com.ollama.ollama.plist` setzen.
+
+> **Hinweis:** `llm.providers.ollama.env_vars` in `config.json` ist reine Referenzspeicherung — outheis zeigt diese Werte in der Web UI an, injiziert sie aber nicht in den Ollama-Server-Prozess. Der Server muss mit der Variable in seiner eigenen Umgebung gestartet werden.
+
 ### Code-Agent (alan)
 
 Alans System-Prompt enthält nur Source-Root, Rolle und offene Proposals — keine User-Daten. Tool-Use-Zuverlässigkeit ist die zentrale Anforderung. Die Modelle werden über den Ollama-kompatiblen OpenAI-Endpunkt mit realistischen Tool-Schemas getestet.

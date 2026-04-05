@@ -37,6 +37,19 @@ Runs entirely on your hardware. No API costs, no data leaves the system. Require
 
 **GPU acceleration:** On Apple Silicon (M-series), Ollama uses Metal automatically — no configuration needed. On Linux/Windows, Vulkan support is available for AMD and Intel GPUs via `OLLAMA_VULKAN=1` (experimental). Environment variables for the Ollama server can be stored in outheis config under `llm.providers.ollama.env_vars` and are shown in the Web UI as a reference.
 
+**Multiple models simultaneously:** By default, Ollama loads only one model at a time (`OLLAMA_MAX_LOADED_MODELS=1`). If different agents are configured with different model names (e.g., `gemma4:e4b` for relay, `voytas26/...` for agenda), every agent handoff triggers a model swap — unloading one model and loading the other. This causes a delay of several seconds per swap and effectively nullifies the `run_mode: persistent` setting.
+
+To keep two models loaded at the same time, set `OLLAMA_MAX_LOADED_MODELS=2` **on the Ollama server process** before it starts. On macOS with the Ollama app:
+
+```sh
+launchctl setenv OLLAMA_MAX_LOADED_MODELS 2
+# then restart Ollama (quit from menubar or pkill Ollama)
+```
+
+This setting is lost on reboot. For a permanent solution, add it to `~/.zshrc` or `~/.profile` and ensure Ollama is started from a login shell, or set it in `~/Library/LaunchAgents/com.ollama.ollama.plist`.
+
+> **Note:** `llm.providers.ollama.env_vars` in `config.json` is reference storage — outheis displays these values in the Web UI but does not inject them into the Ollama server process. The server must be started with the variable set in its own environment.
+
 ### Code Agent (alan)
 
 Alan's system prompt contains only source root, role, and open proposals — no user memory. Tool-use reliability is the main requirement. Models are tested via the Ollama OpenAI-compatible endpoint with realistic tool schemas.
