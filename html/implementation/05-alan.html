@@ -61,6 +61,10 @@
       align-items: center;
       padding: 1rem 1.5rem;
       border-bottom: 1px solid #e0e0e0;
+      position: sticky;
+      top: 0;
+      background: #fff;
+      z-index: 100;
     }
 
     .header-left {
@@ -401,6 +405,29 @@
     .book-nav .next {
       text-align: right;
     }
+
+    /* Heading navigation arrows */
+    .nav-arrows {
+      position: fixed;
+      right: 1.5rem;
+      bottom: 2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+      z-index: 200;
+    }
+
+    .nav-arrow {
+      display: block;
+      font-size: 18px;
+      color: #ccc;
+      cursor: pointer;
+      line-height: 1;
+      user-select: none;
+      transition: color 0.15s;
+    }
+
+    .nav-arrow:hover { color: #1a1a1a; }
 
     /* Footer */
     footer {
@@ -751,11 +778,55 @@ Verweis auf staged file oder inline diff.
     </nav>
   </main>
 
+  <div class="nav-arrows">
+    <span class="nav-arrow" id="nav-up">↑</span>
+    <span class="nav-arrow" id="nav-down">↓</span>
+  </div>
+
   <footer>
     <div class="meta">
       open source · AGPL-3.0 · <a href="https://github.com/outheis-labs">github.com/outheis-labs</a>
     </div>
   </footer>
 
+  <script>
+    (function () {
+      const OFFSET = 60;
+      const hs = () => Array.from(document.querySelectorAll('h2, h3'));
+
+      function makeHandler(el, single, double) {
+        let clicks = 0, timer;
+        el.addEventListener('click', function () {
+          clicks++;
+          clearTimeout(timer);
+          timer = setTimeout(function () {
+            if (clicks >= 2) double();
+            else single();
+            clicks = 0;
+          }, 250);
+        });
+      }
+
+      makeHandler(
+        document.getElementById('nav-up'),
+        function () {
+          const y = window.scrollY;
+          const prev = hs().filter(h => h.offsetTop < y - 10).pop();
+          window.scrollTo({ top: prev ? prev.offsetTop - OFFSET : 0, behavior: 'smooth' });
+        },
+        function () { window.scrollTo({ top: 0, behavior: 'smooth' }); }
+      );
+
+      makeHandler(
+        document.getElementById('nav-down'),
+        function () {
+          const y = window.scrollY;
+          const next = hs().find(h => h.offsetTop > y + 10);
+          window.scrollTo({ top: next ? next.offsetTop - OFFSET : document.body.scrollHeight, behavior: 'smooth' });
+        },
+        function () { window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' }); }
+      );
+    })();
+  </script>
 </body>
 </html>
