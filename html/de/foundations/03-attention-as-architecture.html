@@ -766,7 +766,7 @@ Rules (niedrigste Dichte)
       const GAP = 8;
       function headerH() { var h = document.querySelector('header'); return h ? h.offsetHeight : 60; }
       function docTop(el) { var t = 0, n = el; while (n) { t += n.offsetTop; n = n.offsetParent; } return t; }
-      function hs() { return Array.from(document.querySelectorAll('h2, h3')).filter(function(h) { return h.offsetHeight > 0; }); }
+      function hs() { return Array.from(document.querySelectorAll('h2')).filter(function(h) { return h.offsetHeight > 0; }); }
 
       function makeHandler(el, single, dbl) {
         var clicks = 0, timer;
