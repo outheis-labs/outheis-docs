@@ -41,6 +41,24 @@ python server.py
 
 Öffnet unter `http://localhost:8080`. Der Server überwacht `~/.outheis/human/` auf Änderungen.
 
+## Remote-Zugriff via SSH-Tunnel
+
+Die Web-Oberfläche bindet ausschließlich an `localhost`. Um von einem anderen Rechner darauf zuzugreifen, den Port per SSH weiterleiten:
+
+```bash
+ssh -L 8080:localhost:8080 user@your-server
+```
+
+Dann `http://localhost:8080` im lokalen Browser öffnen. Der Tunnel leitet den lokalen Port 8080 an Port 8080 des entfernten Rechners weiter — keine Firewall-Änderungen notwendig, keine öffentliche Exposition.
+
+Um den Tunnel im Hintergrund offen zu halten:
+
+```bash
+ssh -fNL 8080:localhost:8080 user@your-server
+```
+
+`-f` verzweigt in den Hintergrund, `-N` unterdrückt die Shell-Ausführung.
+
 ## Navigation
 
 ### System
@@ -59,7 +77,6 @@ python server.py
 | **Memory** | Dateien in `~/.outheis/human/memory/` anzeigen/bearbeiten |
 | **Skills** | Dateien in `~/.outheis/human/skills/` anzeigen/bearbeiten |
 | **Rules** | Dateien in `~/.outheis/human/rules/` anzeigen/bearbeiten |
-| **Patterns** | Dateien in `~/.outheis/human/cache/patterns/` anzeigen (nur Lesen) |
 
 ### Vault
 
@@ -172,7 +189,7 @@ Geplante Aufgaben verwalten:
 
 ## Datei-Browser
 
-Memory-, Skills-, Rules-, Patterns-, Agenda- und Codebase-Ansichten teilen sich einen Datei-Browser:
+Memory-, Skills-, Rules-, Agenda- und Codebase-Ansichten teilen sich einen Datei-Browser:
 
 ```
 ┌─ Files ───────┬─ Content ──────────────────────────────┐
@@ -221,7 +238,7 @@ Der Server stellt REST-Endpunkte bereit:
 - `GET /api/messages?limit=50` — Aktuelle Nachrichten aus messages.jsonl
 
 ### Files
-- `GET /api/{type}` — Dateien auflisten (type: memory, skills, rules, patterns, agenda, codebase)
+- `GET /api/{type}` — Dateien auflisten (type: memory, skills, rules, agenda, codebase)
 
 - `GET /api/{type}/{filename}` — Dateiinhalt lesen
 - `PUT /api/{type}/{filename}` — Dateiinhalt schreiben
@@ -267,10 +284,10 @@ outheis-minimal/
 
 ### Typografie
 
-Einzelne Schriftfamilie (Lexend Deca) in zwei Stärken:
+Zwei Schriftfamilien, lokal als woff2 geladen:
 
-- **400** — Fließtext, Labels, Eingaben
-- **500** — Titel, Hervorhebungen, Agentennamen
+- **IBM Plex Sans** — Fließtext, Labels, Eingaben, Navigation
+- **Inter** — Logo
 
 ### Farbmodi
 
@@ -291,6 +308,6 @@ Server-seitig:
 Client-seitig:
 
 - `marked.js` — Markdown-Rendering (CDN)
-- Lexend Deca — Typografie (Google Fonts)
+- IBM Plex Sans + Inter — Typografie (woff2, lokal ausgeliefert)
 
 Kein Build-Schritt. Kein Bundler. Einfache Dateien direkt ausgeliefert.

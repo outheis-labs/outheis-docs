@@ -43,6 +43,24 @@ python server.py
 
 Opens at `http://localhost:8080`. The server watches `~/.outheis/human/` for changes.
 
+## Remote Access via SSH Tunnel
+
+The Web UI binds to `localhost` only. To access it from another machine, forward the port over SSH:
+
+```bash
+ssh -L 8080:localhost:8080 user@your-server
+```
+
+Then open `http://localhost:8080` in your local browser. The tunnel forwards your local port 8080 to port 8080 on the remote machine — no firewall changes needed, no public exposure.
+
+To keep the tunnel open in the background:
+
+```bash
+ssh -fNL 8080:localhost:8080 user@your-server
+```
+
+`-f` forks to background, `-N` suppresses shell execution.
+
 ## Navigation
 
 ### System
@@ -61,7 +79,6 @@ Opens at `http://localhost:8080`. The server watches `~/.outheis/human/` for cha
 | **Memory** | View/edit files in `~/.outheis/human/memory/` |
 | **Skills** | View/edit files in `~/.outheis/human/skills/` |
 | **Rules** | View/edit files in `~/.outheis/human/rules/` |
-| **Patterns** | View files in `~/.outheis/human/cache/patterns/` (read-only) |
 
 ### Vault
 
@@ -174,7 +191,7 @@ Manage scheduled tasks:
 
 ## File Browser
 
-Memory, Skills, Rules, Patterns, Agenda, and Codebase views share a file browser:
+Memory, Skills, Rules, Agenda, and Codebase views share a file browser:
 
 ```
 ┌─ Files ───────┬─ Content ──────────────────────────────┐
@@ -223,7 +240,7 @@ The server exposes REST endpoints:
 - `GET /api/messages?limit=50` — Recent messages from messages.jsonl
 
 ### Files
-- `GET /api/{type}` — List files (type: memory, skills, rules, patterns, agenda, codebase)
+- `GET /api/{type}` — List files (type: memory, skills, rules, agenda, codebase)
 
 - `GET /api/{type}/{filename}` — Read file content
 - `PUT /api/{type}/{filename}` — Write file content
@@ -268,10 +285,10 @@ outheis-minimal/
 ## Design Decisions
 
 ### Typography
-Single font family (Lexend Deca) in two weights:
+Two font families, loaded locally as woff2:
 
-- **400** — Body text, labels, inputs
-- **500** — Titles, emphasis, agent names
+- **IBM Plex Sans** — Body text, labels, inputs, navigation
+- **Inter** — Logo
 
 ### Color Modes
 CSS variables support automatic light/dark mode via `prefers-color-scheme`. The logo inverts in dark mode.
@@ -290,6 +307,6 @@ Server-side:
 Client-side:
 
 - `marked.js` — Markdown rendering (CDN)
-- Lexend Deca — Typography (Google Fonts)
+- IBM Plex Sans + Inter — Typography (woff2, served locally)
 
 No build step. No bundler. Plain files served directly.
