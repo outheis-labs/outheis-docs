@@ -562,6 +562,20 @@ python server.py
       </div>
     </section>
 
+    <section class="section" id="remote-zugriff-via-ssh-tunnel">
+      <h2>Remote-Zugriff via SSH-Tunnel</h2>
+      <div class="section-text"><h2>Remote-Zugriff via SSH-Tunnel</h2>
+        <p>Die Web-Oberfläche bindet ausschließlich an <code>localhost</code>. Um von einem anderen Rechner darauf zuzugreifen, den Port per SSH weiterleiten:</p>
+<pre><code class="language-bash">ssh -L 8080:localhost:8080 user@your-server
+</code></pre>
+<p>Dann <code>http://localhost:8080</code> im lokalen Browser öffnen. Der Tunnel leitet den lokalen Port 8080 an Port 8080 des entfernten Rechners weiter — keine Firewall-Änderungen notwendig, keine öffentliche Exposition.</p>
+<p>Um den Tunnel im Hintergrund offen zu halten:</p>
+<pre><code class="language-bash">ssh -fNL 8080:localhost:8080 user@your-server
+</code></pre>
+<p><code>-f</code> verzweigt in den Hintergrund, <code>-N</code> unterdrückt die Shell-Ausführung.</p>
+      </div>
+    </section>
+
     <section class="section" id="navigation">
       <h2>Navigation</h2>
       <div class="section-text"><h2>Navigation</h2>
@@ -612,10 +626,6 @@ python server.py
 <tr>
 <td><strong>Rules</strong></td>
 <td>Dateien in <code>~/.outheis/human/rules/</code> anzeigen/bearbeiten</td>
-</tr>
-<tr>
-<td><strong>Patterns</strong></td>
-<td>Dateien in <code>~/.outheis/human/cache/patterns/</code> anzeigen (nur Lesen)</td>
 </tr>
 </tbody>
 </table>
@@ -812,7 +822,7 @@ reasoning → claude-opus-4-5
     <section class="section" id="datei-browser">
       <h2>Datei-Browser</h2>
       <div class="section-text"><h2>Datei-Browser</h2>
-        <p>Memory-, Skills-, Rules-, Patterns-, Agenda- und Codebase-Ansichten teilen sich einen Datei-Browser:</p>
+        <p>Memory-, Skills-, Rules-, Agenda- und Codebase-Ansichten teilen sich einen Datei-Browser:</p>
 <pre><code>┌─ Files ───────┬─ Content ──────────────────────────────┐
 │ common.md  ✓  │  [Rendered] [Source]                   │
 │ relay.md      │                                        │
@@ -875,7 +885,7 @@ reasoning → claude-opus-4-5
 <h3 id="files">Files</h3>
 <ul>
 <li>
-<p><code>GET /api/{type}</code> — Dateien auflisten (type: memory, skills, rules, patterns, agenda, codebase)</p>
+<p><code>GET /api/{type}</code> — Dateien auflisten (type: memory, skills, rules, agenda, codebase)</p>
 </li>
 <li>
 <p><code>GET /api/{type}/{filename}</code> — Dateiinhalt lesen</p>
@@ -932,10 +942,10 @@ reasoning → claude-opus-4-5
       <h2>Designentscheidungen</h2>
       <div class="section-text"><h2>Designentscheidungen</h2>
         <h3 id="typografie">Typografie</h3>
-<p>Einzelne Schriftfamilie (Lexend Deca) in zwei Stärken:</p>
+<p>Zwei Schriftfamilien, lokal als woff2 geladen:</p>
 <ul>
-<li><strong>400</strong> — Fließtext, Labels, Eingaben</li>
-<li><strong>500</strong> — Titel, Hervorhebungen, Agentennamen</li>
+<li><strong>IBM Plex Sans</strong> — Fließtext, Labels, Eingaben, Navigation</li>
+<li><strong>Inter</strong> — Logo</li>
 </ul>
 <h3 id="farbmodi">Farbmodi</h3>
 <p>CSS-Variablen unterstützen automatischen Hell-/Dunkel-Modus über <code>prefers-color-scheme</code>. Das Logo kehrt im Dunkelmodus die Farben um.</p>
@@ -955,7 +965,7 @@ reasoning → claude-opus-4-5
 <p>Client-seitig:</p>
 <ul>
 <li><code>marked.js</code> — Markdown-Rendering (CDN)</li>
-<li>Lexend Deca — Typografie (Google Fonts)</li>
+<li>IBM Plex Sans + Inter — Typografie (woff2, lokal ausgeliefert)</li>
 </ul>
 <p>Kein Build-Schritt. Kein Bundler. Einfache Dateien direkt ausgeliefert.</p>
       </div>

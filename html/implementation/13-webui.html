@@ -562,6 +562,20 @@ python server.py
       </div>
     </section>
 
+    <section class="section" id="remote-access-via-ssh-tunnel">
+      <h2>Remote Access via SSH Tunnel</h2>
+      <div class="section-text"><h2>Remote Access via SSH Tunnel</h2>
+        <p>The Web UI binds to <code>localhost</code> only. To access it from another machine, forward the port over SSH:</p>
+<pre><code class="language-bash">ssh -L 8080:localhost:8080 user@your-server
+</code></pre>
+<p>Then open <code>http://localhost:8080</code> in your local browser. The tunnel forwards your local port 8080 to port 8080 on the remote machine — no firewall changes needed, no public exposure.</p>
+<p>To keep the tunnel open in the background:</p>
+<pre><code class="language-bash">ssh -fNL 8080:localhost:8080 user@your-server
+</code></pre>
+<p><code>-f</code> forks to background, <code>-N</code> suppresses shell execution.</p>
+      </div>
+    </section>
+
     <section class="section" id="navigation">
       <h2>Navigation</h2>
       <div class="section-text"><h2>Navigation</h2>
@@ -612,10 +626,6 @@ python server.py
 <tr>
 <td><strong>Rules</strong></td>
 <td>View/edit files in <code>~/.outheis/human/rules/</code></td>
-</tr>
-<tr>
-<td><strong>Patterns</strong></td>
-<td>View files in <code>~/.outheis/human/cache/patterns/</code> (read-only)</td>
 </tr>
 </tbody>
 </table>
@@ -812,7 +822,7 @@ reasoning → claude-opus-4-5
     <section class="section" id="file-browser">
       <h2>File Browser</h2>
       <div class="section-text"><h2>File Browser</h2>
-        <p>Memory, Skills, Rules, Patterns, Agenda, and Codebase views share a file browser:</p>
+        <p>Memory, Skills, Rules, Agenda, and Codebase views share a file browser:</p>
 <pre><code>┌─ Files ───────┬─ Content ──────────────────────────────┐
 │ common.md  ✓  │  [Rendered] [Source]                   │
 │ relay.md      │                                        │
@@ -875,7 +885,7 @@ reasoning → claude-opus-4-5
 <h3 id="files">Files</h3>
 <ul>
 <li>
-<p><code>GET /api/{type}</code> — List files (type: memory, skills, rules, patterns, agenda, codebase)</p>
+<p><code>GET /api/{type}</code> — List files (type: memory, skills, rules, agenda, codebase)</p>
 </li>
 <li>
 <p><code>GET /api/{type}/{filename}</code> — Read file content</p>
@@ -932,10 +942,10 @@ reasoning → claude-opus-4-5
       <h2>Design Decisions</h2>
       <div class="section-text"><h2>Design Decisions</h2>
         <h3 id="typography">Typography</h3>
-<p>Single font family (Lexend Deca) in two weights:</p>
+<p>Two font families, loaded locally as woff2:</p>
 <ul>
-<li><strong>400</strong> — Body text, labels, inputs</li>
-<li><strong>500</strong> — Titles, emphasis, agent names</li>
+<li><strong>IBM Plex Sans</strong> — Body text, labels, inputs, navigation</li>
+<li><strong>Inter</strong> — Logo</li>
 </ul>
 <h3 id="color-modes">Color Modes</h3>
 <p>CSS variables support automatic light/dark mode via <code>prefers-color-scheme</code>. The logo inverts in dark mode.</p>
@@ -955,7 +965,7 @@ reasoning → claude-opus-4-5
 <p>Client-side:</p>
 <ul>
 <li><code>marked.js</code> — Markdown rendering (CDN)</li>
-<li>Lexend Deca — Typography (Google Fonts)</li>
+<li>IBM Plex Sans + Inter — Typography (woff2, served locally)</li>
 </ul>
 <p>No build step. No bundler. Plain files served directly.</p>
       </div>
