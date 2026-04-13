@@ -14,7 +14,7 @@ Those assistants learn from you. The learning belongs to someone else. This isn'
 
 ## οὐθείς
 
-When Polyphemus asks who blinded him, Odysseus answers: οὐθείς — nobody. The Cyclops calls for help: "Nobody has blinded me!" No help comes. Odysseus slips away, clinging to the belly of the ram.
+When Polyphemus asks who blinded him, Ulysses answers: οὐθείς — nobody. The Cyclops calls for help: "Nobody has blinded me!" No help comes. Ulysses slips away, clinging to the belly of the ram.
 
 It's a trick, but also a stance: by refusing to be named, captured, pinned down, Odysseus remains free to act.
 
