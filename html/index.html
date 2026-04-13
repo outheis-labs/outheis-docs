@@ -441,20 +441,29 @@
       .links-list {
         display: flex;
         flex-wrap: wrap;
+        align-items: baseline;
         gap: 0 2rem;
+        margin-top: 0;
       }
 
       .links-list li {
         border-bottom: none;
       }
 
+      .links-list li:first-child a,
       .links-list a {
-        padding: 0.25rem 0;
+        display: inline;
+        padding: 0;
         font-size: 15px;
+        color: #555;
       }
 
       .links-list a::after {
         display: none;
+      }
+
+      .links-list a:hover {
+        color: #1a1a1a;
       }
 
       footer {
