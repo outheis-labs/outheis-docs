@@ -688,7 +688,8 @@
       const gap = 8;
       const offset = () => (header ? header.getBoundingClientRect().height : 60) + gap;
       const absTop = el => el.getBoundingClientRect().top + window.scrollY;
-      const hs = () => Array.from(document.querySelectorAll('h2, h3'));
+      const hs = () => Array.from(document.querySelectorAll('h2, h3'))
+        .filter(h => h.getBoundingClientRect().height > 0);
 
       function makeHandler(el, single, dbl) {
         let clicks = 0, timer;
