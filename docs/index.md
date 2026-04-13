@@ -33,7 +33,7 @@ A multi-agent AI assistant running locally. A second brain — private, human-ce
 
 ## Architecture
 
-Different agents, each responsible for a defined task. Proven operating system design principles: coordinated through messages, explicit capabilities, fault-isolated.
+Different agents, each responsible for a defined task. Acting like a single entity. Proven operating system design principles: coordinated through messages, explicit capabilities, fault-isolated.
 
 <div class="agents-grid">
   <div class="agent agent-ou"><div class="agent-name">ou</div><div class="agent-role">Relay Agent</div></div>

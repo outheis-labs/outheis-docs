@@ -33,7 +33,7 @@ Ein lokal laufender Multi-Agenten-KI-Assistent. Ein zweites Gehirn — privat, m
 
 ## Architektur
 
-Unterschiedliche Agenten, jeder verantwortlich für eine definierte Aufgabe. Bewährte Betriebssystem-Designprinzipien: Microkernel-angelehnter Dispatcher, Koordination via Messages, abgegrenzte Aufgabenkorridore, Fehlerisolation.
+Unterschiedliche Agenten, jeder verantwortlich für eine definierte Aufgabe. Nach außen wie eine einzige Instanz. Bewährte Betriebssystem-Designprinzipien: Microkernel-angelehnter Dispatcher, Koordination via Messages, abgegrenzte Aufgabenkorridore, Fehlerisolation.
 
 <div class="agents-grid">
   <div class="agent agent-ou"><div class="agent-name">ou</div><div class="agent-role">Relay Agent</div></div>
