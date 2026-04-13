@@ -165,6 +165,3 @@ Derived from OS research:
 - Martin Kleppmann's work on event sourcing
 - Rob Pike's Plan 9 papers
 
----
-
-Next: [02-systems-survey.md](02-systems-survey.md) — A survey of relevant operating systems and their applicable concepts.

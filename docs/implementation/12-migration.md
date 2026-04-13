@@ -34,11 +34,9 @@ All migration happens through natural conversation:
 | You say | What happens |
 |---------|--------------|
 | "memory migrate" | Parse Migration/ files, write candidates to Migration/Exchange.md |
-| "migriere memory" | Same, in German |
 | "memory traits" | Show current memory and rules |
-| "zeige traits" | Same, in German |
-| "was weißt du über mich" | Same, conversational |
-| "schreibe regel: ..." | Add rule directly, bypassing Pattern agent |
+| "what do you know about me" | Same, conversational |
+| "write rule: ..." | Add rule directly, bypassing Pattern agent |
 
 No CLI commands needed. Just talk to outheis.
 
@@ -50,15 +48,15 @@ No CLI commands needed. Just talk to outheis.
 {
   "entries": [
     {
-      "content": "User arbeitet als Projektleiter",
+      "content": "User works as project lead",
       "type": "user"
     },
     {
-      "content": "Antworte knapp und direkt",
+      "content": "Keep answers short and direct",
       "type": "feedback"
     },
     {
-      "content": "Arbeitet gerade an outheis",
+      "content": "Currently working on outheis",
       "type": "context"
     }
   ]
@@ -79,21 +77,21 @@ If `type` is omitted, outheis infers from content.
 # Preferences
 
 ## user
-- Lebt in München
-- Arbeitet als Software-Entwickler
+- Lives in Vienna
+- Works as software developer
 
 ## feedback
-- Antworte immer auf Deutsch
-- Bevorzuge kurze Antworten
+- Keep answers short
+- Prefer plain text output
 
 ## rule:agenda
 
 - MAX 10 Items in Daily.md
-- Keine Meetings vor 10 Uhr
+- No meetings before 10:00
 
 ## rule:data
 
-- Durchsuche auch PDF-Dateien
+- Also search PDF files
 ```
 
 Sections map to memory types or rules:
@@ -158,7 +156,7 @@ Mark each item:
 - [x] Prefers short, direct answers [feedback]
 - [-] Respond in German [rule:relay]
 
-- [ ] Lebt in München [user]
+- [ ] Lives in Vienna [user]
 ```
 
 - `[x]` — apply to memory/rules
@@ -168,11 +166,11 @@ Mark each item:
 ### 5. Say "memory migrate" Again
 
 ```
-Du: memory migrate
-Ou: Migration verarbeitet:
-    - 2 übernommen
-    - 1 abgelehnt
-    - 1 noch offen
+You: memory migrate
+Ou: Migration processed:
+    - 2 accepted
+    - 1 rejected
+    - 1 still open
 ```
 
 - `[x]` items are written to memory and rules
@@ -207,15 +205,15 @@ Use it to add files without leaving the browser, or to inspect what has already 
 To add a rule immediately without the Migration workflow:
 
 ```
-Du: schreibe regel: antworte immer auf Deutsch
-Ou: ✓ Regel hinzugefügt zu relay: antworte immer auf Deutsch
+You: write rule: no meetings before 10:00
+Ou: ✓ Rule added to agenda: no meetings before 10:00
 ```
 
 Or specify the agent:
 
 ```
-Du: schreibe regel für agenda: keine Meetings vor 10 Uhr
-Ou: ✓ Regel hinzugefügt zu agenda: keine Meetings vor 10 Uhr
+You: write rule for relay: always respond in plain text
+Ou: ✓ Rule added to relay: always respond in plain text
 ```
 
 This bypasses Pattern agent and writes directly to `~/.outheis/human/rules/{agent}.md`.
@@ -225,27 +223,27 @@ This bypasses Pattern agent and writes directly to `~/.outheis/human/rules/{agen
 To see what outheis knows:
 
 ```
-Du: memory traits
+You: memory traits
 
-Ou: Erkannte Eigenschaften:
+Ou: Recognized traits:
 
-    ## Identität
-      • User arbeitet als Projektleiter
-      • User lebt in München
+    ## Identity
+      • User works as project lead
+      • User lives in Vienna
 
-    ## Präferenzen
-      • Antworte knapp und direkt
-      • Bevorzuge deutsche Sprache
+    ## Preferences
+      • Keep answers short and direct
+      • Prefer plain text output
 
-    ## Etablierte Regeln
-      • agenda: 2 Regeln
-      • relay: 1 Regel
+    ## Established rules
+      • agenda: 2 rules
+      • relay: 1 rule
 ```
 
 Or more conversationally:
 
 ```
-Du: was weißt du über mich?
+You: what do you know about me?
 ```
 
 ## Memory vs Rules
@@ -255,7 +253,7 @@ Du: was weißt du über mich?
 | Location | `~/.outheis/human/memory/` | `~/.outheis/human/rules/` |
 | Format | JSON | Markdown |
 | Volatility | Can change, context decays | Stable once set |
-| Example | "User ist 35" | "Antworte auf Deutsch" |
+| Example | "User is 35" | "Respond in plain text" |
 
 Memory = "what I know about you"
 Rules = "how I should behave"

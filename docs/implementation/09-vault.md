@@ -89,15 +89,15 @@ Agenda.md is regenerated each day by the agenda agent. The default template:
 *Refresh: HH:MM*
 
 ---
-## 🧘 Persönlich
+## 🧘 Personal
 
 - [ ]
 
 ---
-## 📅 Heute
+## 📅 Today
 
 ---
-## 🗓️ Diese Woche
+## 🗓️ This Week
 
 ---
 ## 💶 Cashflow

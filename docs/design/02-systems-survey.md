@@ -447,6 +447,3 @@ A well-designed multi-agent system can combine:
 
 These are not competing approaches—they address orthogonal concerns and compose naturally.
 
----
-
-Next: [03-architecture.md](03-architecture.md) — The outheis architecture derived from these principles.

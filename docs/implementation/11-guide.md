@@ -176,9 +176,9 @@ Just talk naturally. Relay decides when to use tools:
 | You say | What happens |
 |---------|--------------|
 | "hi" | Direct response |
-| "was steht heute an?" | Uses check_agenda tool → Agenda agent |
-| "wo wohne ich?" | Uses search_vault tool → Data agent |
-| "! ich bin 54" | Saves to Memory (explicit marker) |
+| "what's on today?" | Uses check_agenda tool → Agenda agent |
+| "where do I live?" | Uses search_vault tool → Data agent |
+| "! I am 54" | Saves to Memory (explicit marker) |
 
 ### Explicit Agent Mentions
 

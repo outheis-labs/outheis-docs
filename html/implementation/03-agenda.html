@@ -568,30 +568,30 @@
 *Refresh: HH:MM*
 
 ---
-## 🧘 Persönlich
+## 🧘 Personal
 
 - [ ]
 
 ---
-## 📅 Heute
+## 📅 Today
 
 ---
-## 🗓️ Diese Woche
+## 🗓️ This Week
 
 ---
 ## 💶 Cashflow
 </code></pre>
 <p>The structure is user-configurable via <code>DailyTemplate.md</code> in your vault. Once established, outheis preserves it exactly on each refresh — only the content changes, never the structure.</p>
-<p>outheis reads this file, understands your commitments, and can answer questions like "bin ich heute nachmittag frei?" or "was steht morgen an?"</p>
+<p>outheis reads this file, understands your commitments, and can answer questions like "am I free this afternoon?" or "what's on tomorrow?"</p>
 <h3 id="exchangemd">Exchange.md</h3>
 <p>Asynchronous dialogue between you and outheis:</p>
 <pre><code class="language-markdown"># Exchange
 
 ---
 
-## 2026-04-08T10:15:00 – Rückfrage
+## 2026-04-08T10:15:00 – Question
 
-Welcher Tag passt für das Meeting mit X?
+Which day works for the meeting with X?
 
 - [ ] Accept
 - [ ] Reject
@@ -623,9 +623,9 @@ Welcher Tag passt für das Meeting mit X?
 </ol>
 <h3 id="annotations">Annotations</h3>
 <p>A <code>&gt;</code> line written immediately below an item is a direct instruction to cato:</p>
-<pre><code class="language-markdown">#action-required #topic-justiz
-Email an Justizministerium senden
-&gt; erledigt, Antwort erwartet bis Freitag
+<pre><code class="language-markdown">#action-required #topic-admin
+Call supplier about delivery date
+&gt; done, confirmation expected by Friday
 </code></pre>
 <p>cato classifies each annotation into one of three types:</p>
 <table>
@@ -639,12 +639,12 @@ Email an Justizministerium senden
 <tbody>
 <tr>
 <td><strong>Completion</strong></td>
-<td>erledigt, done, fertig, bestätigt, geklärt</td>
+<td>done, finished, confirmed, resolved</td>
 <td>Remove item from Agenda.md</td>
 </tr>
 <tr>
 <td><strong>Postpone</strong></td>
-<td>vertagen, später, nächste Woche, [future date]</td>
+<td>later, next week, [future date]</td>
 <td>Remove from Agenda.md, update date in Shadow.md</td>
 </tr>
 <tr>
@@ -674,8 +674,6 @@ Email an Justizministerium senden
       <div class="section-text"><h2>Manual Refresh</h2>
         <p>You can trigger an immediate agenda update:</p>
 <ul>
-<li>"aktualisiere daily"</li>
-<li>"aktualisiere meine agenda"</li>
 <li>"update daily"</li>
 <li>"refresh agenda"</li>
 </ul>
@@ -698,21 +696,21 @@ touch ~/Documents/Vault/Agenda/{Agenda,Exchange}.md
       <div class="section-text"><h2>Asking About Your Schedule</h2>
         <p>Once set up, you can ask:</p>
 <ul>
-<li>"Was steht heute an?"</li>
-<li>"Bin ich morgen nachmittag frei?"</li>
-<li>"Wann ist mein nächster Termin mit X?"</li>
-<li>"Schreib auf: Meeting mit Y am Freitag 10 Uhr"</li>
+<li>"What's on today?"</li>
+<li>"Am I free tomorrow afternoon?"</li>
+<li>"When is my next appointment with X?"</li>
+<li>"Add: meeting with Y on Friday at 10"</li>
 </ul>
 <p>outheis reads your Agenda files and responds naturally.</p>
 <h3 id="read-queries">Read Queries</h3>
-<p>When asked to show the agenda ("Agenda", "was steht heute an", "gib mir die Agenda"), cato returns the content of Daily.md verbatim — no reformatting, no summarizing. The file content is the answer. Relay passes it through directly without a second LLM call.</p>
+<p>When asked to show the agenda ("Agenda", "what's on today", "show my agenda"), cato returns the content of Daily.md verbatim — no reformatting, no summarizing. The file content is the answer. Relay passes it through directly without a second LLM call.</p>
       </div>
     </section>
 
     <section class="section" id="integration-with-other-agents">
       <h2>Integration with Other Agents</h2>
       <div class="section-text"><h2>Integration with Other Agents</h2>
-        <p><strong>Relay (ou)</strong> routes schedule questions to Agenda. Read queries ("Agenda", "was steht heute") are routed directly to cato, which returns Agenda.md verbatim. Write/update queries go through the full tool loop.</p>
+        <p><strong>Relay (ou)</strong> routes schedule questions to Agenda. Read queries ("Agenda", "what's on today") are routed directly to cato, which returns Agenda.md verbatim. Write/update queries go through the full tool loop.</p>
 <p><strong>Data Agent (zeno)</strong> can search your vault but doesn't write to Agenda files.</p>
 <p><strong>Action Agent (hiro)</strong> can execute tasks (send emails, create calendar events) but Agenda manages what's scheduled.</p>
 <p><strong>Pattern Agent (rumi)</strong> observes your scheduling patterns and may:</p>
@@ -838,7 +836,7 @@ touch ~/Documents/Vault/Agenda/{Agenda,Exchange}.md
 <p><strong>Overdue items</strong> — if a <code>#date</code> is in the past and no decision has been recorded, the item stays visible. Overdue = must decide (complete, defer, or drop).</p>
 <p><strong>Tag names are yours to choose.</strong> <code>#action-required</code> is outheis's default; you can use <code>#attention</code>, <code>#priority</code>, <code>#open</code>, or any marker your rules file defines — as long as the agent knows which tag means "always show".</p>
 <h3 id="integration-with-daily">Integration with Daily</h3>
-<p>Agenda agent reads Shadow.md and can surface relevant entries in Daily.md. When you ask "was steht diese Woche an?", outheis checks both your explicit schedule and Shadow's detected dates.</p>
+<p>Agenda agent reads Shadow.md and can surface relevant entries in Daily.md. When you ask "what's on this week?", outheis checks both your explicit schedule and Shadow's detected dates.</p>
 <h3 id="configuration">Configuration</h3>
 <pre><code class="language-json">{
   &quot;schedule&quot;: {
@@ -851,7 +849,7 @@ touch ~/Documents/Vault/Agenda/{Agenda,Exchange}.md
 }
 </code></pre>
 <h3 id="manual-trigger">Manual Trigger</h3>
-<p>You can ask: "scanne den vault nach terminen" or "aktualisiere shadow" to run the scan immediately.</p>
+<p>You can ask: "scan vault for dates" or "update shadow" to run the scan immediately.</p>
       </div>
     </section>
 
@@ -906,7 +904,7 @@ touch ~/Documents/Vault/Agenda/{Agenda,Exchange}.md
       <div class="section-text"><h2>Best Practices</h2>
         <ol>
 <li><strong>Keep Agenda.md simple</strong> — 🧘 Personal + 📅 Today + 🗓️ This Week is enough</li>
-<li><strong>Annotate with <code>&gt;</code></strong> — Use <code>&gt; verschieben auf ...</code> or <code>&gt; erledigt</code> to instruct cato without editing the task itself</li>
+<li><strong>Annotate with <code>&gt;</code></strong> — Use <code>&gt; defer to ...</code> or <code>&gt; done</code> to instruct cato without editing the task itself</li>
 <li><strong>Answer Exchange when you can</strong> — No rush, but it helps outheis learn</li>
 <li><strong>Let outheis manage structure</strong> — Focus on content, not formatting</li>
 <li><strong>Use manual refresh sparingly</strong> — Hourly is usually sufficient</li>

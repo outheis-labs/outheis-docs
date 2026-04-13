@@ -570,20 +570,20 @@
 </code></pre>
 <h3 id="exchangemd">Exchange.md</h3>
 <p>Each proposal from alan is an entry in <code>vault/Codebase/Exchange.md</code>:</p>
-<pre><code class="language-markdown">## 2026-04-01 — Beschreibung des Vorschlags
+<pre><code class="language-markdown">## 2026-04-01 — Description of the proposal
 
 **Type:** refactor | bugfix | improvement | answer
 **Files:** src/outheis/agents/data.py
 **Status:** proposed | approved | rejected | discussing
 
 ### Summary
-Was wird vorgeschlagen und warum.
+What is being proposed and why.
 
 ### Proposed Change
-Verweis auf staged file oder inline diff.
+Reference to staged file or inline diff.
 
 ### Discussion
-(Deine Antworten und Rückfragen kommen hier hin)
+(Your answers and follow-up questions go here)
 </code></pre>
 <p>You respond under "Discussion", approve or reject with a keyword (<code>approved</code>, <code>rejected</code>), and alan picks up the decision at the next run.</p>
 <h3 id="staged-files">Staged Files</h3>
@@ -597,9 +597,9 @@ Verweis auf staged file oder inline diff.
         <h3 id="code-introspection">Code Introspection</h3>
 <p>Answer questions about how outheis is implemented. Examples:</p>
 <ul>
-<li>"Wie funktioniert der Dispatcher?"</li>
-<li>"Wo wird memory.json geschrieben?"</li>
-<li>"Was passiert wenn ich <code>@zeno</code> verwende?"</li>
+<li>"How does the dispatcher work?"</li>
+<li>"Where is memory.json written?"</li>
+<li>"What happens when I use <code>@zeno</code>?"</li>
 </ul>
 <p>alan reads source files, traces call paths, and explains logic — without making any changes.</p>
 <h3 id="improvement-proposals">Improvement Proposals</h3>
@@ -613,9 +613,9 @@ Verweis auf staged file oder inline diff.
 <h3 id="code-search">Code Search</h3>
 <p>Find implementations, patterns, and references across the local codebase:</p>
 <ul>
-<li>"Zeig mir alle Stellen wo Vault-Dateien gelesen werden"</li>
-<li>"Welcher Agent ist für Scheduling zuständig?"</li>
-<li>"Wie ist das Tool <code>append_file</code> implementiert?"</li>
+<li>"Show me all places where vault files are read"</li>
+<li>"Which agent handles scheduling?"</li>
+<li>"How is the <code>append_file</code> tool implemented?"</li>
 </ul>
       </div>
     </section>
@@ -678,8 +678,8 @@ Verweis auf staged file oder inline diff.
       <h2>Asking alan</h2>
       <div class="section-text"><h2>Asking alan</h2>
         <p>Invoke directly:</p>
-<pre><code>@alan wie ist der Dispatcher implementiert?
-@alan schlage eine Verbesserung für die Vault-Suche vor
+<pre><code>@alan how is the dispatcher implemented?
+@alan suggest an improvement for vault search
 </code></pre>
 <p>Or naturally in chat — ou detects code-related questions and delegates to alan automatically.</p>
       </div>

@@ -593,23 +593,15 @@
 <td>Parse Migration/ files, write candidates to Migration/Exchange.md</td>
 </tr>
 <tr>
-<td>"migriere memory"</td>
-<td>Same, in German</td>
-</tr>
-<tr>
 <td>"memory traits"</td>
 <td>Show current memory and rules</td>
 </tr>
 <tr>
-<td>"zeige traits"</td>
-<td>Same, in German</td>
-</tr>
-<tr>
-<td>"was weißt du über mich"</td>
+<td>"what do you know about me"</td>
 <td>Same, conversational</td>
 </tr>
 <tr>
-<td>"schreibe regel: ..."</td>
+<td>"write rule: ..."</td>
 <td>Add rule directly, bypassing Pattern agent</td>
 </tr>
 </tbody>
@@ -625,15 +617,15 @@
 <pre><code class="language-json">{
   &quot;entries&quot;: [
     {
-      &quot;content&quot;: &quot;User arbeitet als Projektleiter&quot;,
+      &quot;content&quot;: &quot;User works as project lead&quot;,
       &quot;type&quot;: &quot;user&quot;
     },
     {
-      &quot;content&quot;: &quot;Antworte knapp und direkt&quot;,
+      &quot;content&quot;: &quot;Keep answers short and direct&quot;,
       &quot;type&quot;: &quot;feedback&quot;
     },
     {
-      &quot;content&quot;: &quot;Arbeitet gerade an outheis&quot;,
+      &quot;content&quot;: &quot;Currently working on outheis&quot;,
       &quot;type&quot;: &quot;context&quot;
     }
   ]
@@ -650,21 +642,21 @@
 <pre><code class="language-markdown"># Preferences
 
 ## user
-- Lebt in München
-- Arbeitet als Software-Entwickler
+- Lives in Vienna
+- Works as software developer
 
 ## feedback
-- Antworte immer auf Deutsch
-- Bevorzuge kurze Antworten
+- Keep answers short
+- Prefer plain text output
 
 ## rule:agenda
 
 - MAX 10 Items in Daily.md
-- Keine Meetings vor 10 Uhr
+- No meetings before 10:00
 
 ## rule:data
 
-- Durchsuche auch PDF-Dateien
+- Also search PDF files
 </code></pre>
 <p>Sections map to memory types or rules:</p>
 <ul>
@@ -716,7 +708,7 @@
 - [x] Prefers short, direct answers [feedback]
 - [-] Respond in German [rule:relay]
 
-- [ ] Lebt in München [user]
+- [ ] Lives in Vienna [user]
 </code></pre>
 <ul>
 <li><code>[x]</code> — apply to memory/rules</li>
@@ -724,11 +716,11 @@
 <li><code>[ ]</code> — leave open for next round</li>
 </ul>
 <h3 id="5-say-memory-migrate-again">5. Say "memory migrate" Again</h3>
-<pre><code>Du: memory migrate
-Ou: Migration verarbeitet:
-    - 2 übernommen
-    - 1 abgelehnt
-    - 1 noch offen
+<pre><code>You: memory migrate
+Ou: Migration processed:
+    - 2 accepted
+    - 1 rejected
+    - 1 still open
 </code></pre>
 <ul>
 <li><code>[x]</code> items are written to memory and rules</li>
@@ -763,12 +755,12 @@ Ou: Migration verarbeitet:
       <h2>Direct Rule Writing</h2>
       <div class="section-text"><h2>Direct Rule Writing</h2>
         <p>To add a rule immediately without the Migration workflow:</p>
-<pre><code>Du: schreibe regel: antworte immer auf Deutsch
-Ou: ✓ Regel hinzugefügt zu relay: antworte immer auf Deutsch
+<pre><code>You: write rule: no meetings before 10:00
+Ou: ✓ Rule added to agenda: no meetings before 10:00
 </code></pre>
 <p>Or specify the agent:</p>
-<pre><code>Du: schreibe regel für agenda: keine Meetings vor 10 Uhr
-Ou: ✓ Regel hinzugefügt zu agenda: keine Meetings vor 10 Uhr
+<pre><code>You: write rule for relay: always respond in plain text
+Ou: ✓ Rule added to relay: always respond in plain text
 </code></pre>
 <p>This bypasses Pattern agent and writes directly to <code>~/.outheis/human/rules/{agent}.md</code>.</p>
       </div>
@@ -778,24 +770,24 @@ Ou: ✓ Regel hinzugefügt zu agenda: keine Meetings vor 10 Uhr
       <h2>Viewing Current State</h2>
       <div class="section-text"><h2>Viewing Current State</h2>
         <p>To see what outheis knows:</p>
-<pre><code>Du: memory traits
+<pre><code>You: memory traits
 
-Ou: Erkannte Eigenschaften:
+Ou: Recognized traits:
 
-    ## Identität
-      • User arbeitet als Projektleiter
-      • User lebt in München
+    ## Identity
+      • User works as project lead
+      • User lives in Vienna
 
-    ## Präferenzen
-      • Antworte knapp und direkt
-      • Bevorzuge deutsche Sprache
+    ## Preferences
+      • Keep answers short and direct
+      • Prefer plain text output
 
-    ## Etablierte Regeln
-      • agenda: 2 Regeln
-      • relay: 1 Regel
+    ## Established rules
+      • agenda: 2 rules
+      • relay: 1 rule
 </code></pre>
 <p>Or more conversationally:</p>
-<pre><code>Du: was weißt du über mich?
+<pre><code>You: what do you know about me?
 </code></pre>
       </div>
     </section>
@@ -829,8 +821,8 @@ Ou: Erkannte Eigenschaften:
 </tr>
 <tr>
 <td>Example</td>
-<td>"User ist 35"</td>
-<td>"Antworte auf Deutsch"</td>
+<td>"User is 35"</td>
+<td>"Respond in plain text"</td>
 </tr>
 </tbody>
 </table>

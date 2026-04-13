@@ -240,7 +240,7 @@ outheis tracks tag usage and can report:
 - **Tag hierarchies** — prefixes like `status-*`, `project/*`
 - **Singular tags** — used only once (cleanup candidates)
 
-Ask in chat: "welche tags habe ich?" or "tag-analyse"
+Ask in chat: "what tags do I have?" or "analyze tags"
 
 ### Tag Philosophy
 

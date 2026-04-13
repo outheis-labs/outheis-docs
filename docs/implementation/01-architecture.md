@@ -73,10 +73,10 @@ The Data agent handles vault queries. For simple questions, it answers directly 
 
 | Query Type | Example | Response |
 |------------|---------|----------|
-| File existence | "Habe ich X?" | `Ja, die Datei existiert: /path/to/X` |
-| Stats | "Wie viele PDFs?" | `Du hast 12 PDF-Dateien im Vault.` |
-| List | "Welche PDFs?" | List of matching files |
-| Path lookup | "Wo ist X?" | Direct path or fuzzy matches |
+| File existence | "Do I have X?" | `Yes, the file exists: /path/to/X` |
+| Stats | "How many PDFs?" | `You have 12 PDF files in the vault.` |
+| List | "Which PDFs?" | List of matching files |
+| Path lookup | "Where is X?" | Direct path or fuzzy matches |
 
 Complex queries still use LLM for intelligent search and synthesis.
 
@@ -94,7 +94,7 @@ The Agenda agent manages three files in `vault/Agenda/`:
 
 **Commands:**
 
-- "aktualisiere daily" / "update agenda" → triggers manual refresh
+- "update agenda" → triggers manual refresh
 - Processes Inbox items, checks Exchange responses, updates Daily
 
 **Hourly Review (conditional):**

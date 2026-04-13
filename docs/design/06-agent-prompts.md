@@ -262,7 +262,7 @@ Your job is to determine:
 Examples:
 
 - "User showed me how to format tables for Signal" → Generalizable (formatting strategy)
-- "User's dentist is Dr. Müller" → Specific (personal fact, stays in vault/archive)
+- "User's dentist is Dr. Smith" → Specific (personal fact, stays in vault/archive)
 - "When user says 'later' they usually mean 'this week'" → Generalizable (user pattern)
 - "The project deadline is March 15" → Specific (temporal fact)
 
@@ -380,7 +380,7 @@ priority: normal
 
 # Communication Style
 
-- Use "du" (informal German) in German contexts
+- Use informal address in language-appropriate contexts
 - Be direct, avoid corporate speak
 - No emoji unless I use them first
 ```

@@ -93,7 +93,7 @@ rumi's Phase A parser already reads:
 ```markdown
 ---
 *from annotation: 2026-04-08 09:15*
-Email an Justizministerium gesendet, Antwort erwartet bis Freitag. [user]
+Called the supplier yesterday, confirmation expected by Friday. [user]
 - [ ] Accept
 - [ ] Reject
 ---
@@ -106,9 +106,9 @@ The `[type]` tag uses the existing vocabulary: `user`, `rule:agenda`, `skill`.
 | Annotation type | Trigger | Memory type |
 |---|---|---|
 | Correction / clarification | Always | `user` |
-| Behavioral instruction (`immer`, `grundsätzlich`, `nie`, `ab jetzt`, `always`, `never`) | Always | `rule:agenda` |
+| Behavioral instruction (`always`, `never`, `from now on`) | Always | `rule:agenda` |
 | Completion with meaningful context | When outcome contains a fact | `user` |
-| Trivial completion (`erledigt`, `done`) | Never | — |
+| Trivial completion (`done`) | Never | — |
 | Postpone | Never | — |
 
 ### Data flow

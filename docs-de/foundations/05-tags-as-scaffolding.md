@@ -19,8 +19,8 @@ Ein Tag wie `#action-required` oder `#money` ist ein diskretisiertes Signal. Er 
 Zwei Items können strukturell identisch aussehen:
 
 ```
-- 📋 **—** Gewerbeanmeldung durchführen `#action-required`
-- 📋 **—** Nussbaum-Material kalkulieren `#action-required`
+- 📋 **—** Neuen Lieferanten registrieren `#action-required`
+- 📋 **—** Materialkosten kalkulieren `#action-required`
 ```
 
 Ohne Tags erfordert die Unterscheidung ihrer Dringlichkeit ein Verständnis der aktuellen Projekte, Fristen und Prioritäten des Nutzers. Mit Tags steht ein minimales Signal zur Verfügung, selbst wenn der Kontext fehlt.

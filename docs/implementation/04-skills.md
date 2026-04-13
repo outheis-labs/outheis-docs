@@ -99,7 +99,7 @@ Example evolution:
 ## Date Formats
 
 - User writes dates as DD.MM.YYYY, not MM/DD/YYYY
-- "nächste Woche" means Monday, not 7 days from now
+- "next week" means Monday, not 7 days from now
 
 ## Daily Structure
 
@@ -142,8 +142,8 @@ Skills should be:
 Good skill:
 ```markdown
 ## Date Recognition
-- "morgen" → tomorrow's date
-- "nächsten Montag" → next Monday (not today if today is Monday)
+- "tomorrow" → tomorrow's date
+- "next Monday" → next Monday (not today if today is Monday)
 - "24.03.2026" → parse as YYYY-MM-DD internally
 ```
 

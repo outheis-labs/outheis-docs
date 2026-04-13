@@ -23,8 +23,8 @@ A tag like `#action-required` or `#money` is a discretized signal. It compresses
 Two items may look identical structurally:
 
 ```
-- 📋 **—** Gewerbeanmeldung durchführen `#action-required`
-- 📋 **—** Nussbaum-Material kalkulieren `#action-required`
+- 📋 **—** Register new supplier `#action-required`
+- 📋 **—** Calculate material costs `#action-required`
 ```
 
 Without tags, distinguishing their urgency requires understanding the user's current projects, deadlines, and priorities. With tags, a minimal signal is available even when context is absent.

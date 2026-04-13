@@ -26,15 +26,15 @@ Your day at a glance. The default template:
 *Refresh: HH:MM*
 
 ---
-## 🧘 Persönlich
+## 🧘 Personal
 
 - [ ]
 
 ---
-## 📅 Heute
+## 📅 Today
 
 ---
-## 🗓️ Diese Woche
+## 🗓️ This Week
 
 ---
 ## 💶 Cashflow
@@ -42,7 +42,7 @@ Your day at a glance. The default template:
 
 The structure is user-configurable via `DailyTemplate.md` in your vault. Once established, outheis preserves it exactly on each refresh — only the content changes, never the structure.
 
-outheis reads this file, understands your commitments, and can answer questions like "bin ich heute nachmittag frei?" or "was steht morgen an?"
+outheis reads this file, understands your commitments, and can answer questions like "am I free this afternoon?" or "what's on tomorrow?"
 
 ### Exchange.md
 
@@ -53,9 +53,9 @@ Asynchronous dialogue between you and outheis:
 
 ---
 
-## 2026-04-08T10:15:00 – Rückfrage
+## 2026-04-08T10:15:00 – Question
 
-Welcher Tag passt für das Meeting mit X?
+Which day works for the meeting with X?
 
 - [ ] Accept
 - [ ] Reject
@@ -95,17 +95,17 @@ If nothing changed since the last run, no LLM call is made. This saves API costs
 A `>` line written immediately below an item is a direct instruction to cato:
 
 ```markdown
-#action-required #topic-justiz
-Email an Justizministerium senden
-> erledigt, Antwort erwartet bis Freitag
+#action-required #topic-admin
+Call supplier about delivery date
+> done, confirmation expected by Friday
 ```
 
 cato classifies each annotation into one of three types:
 
 | Type | Identified by | Action |
 |---|---|---|
-| **Completion** | erledigt, done, fertig, bestätigt, geklärt | Remove item from Agenda.md |
-| **Postpone** | vertagen, später, nächste Woche, [future date] | Remove from Agenda.md, update date in Shadow.md |
+| **Completion** | done, finished, confirmed, resolved | Remove item from Agenda.md |
+| **Postpone** | later, next week, [future date] | Remove from Agenda.md, update date in Shadow.md |
 | **Correction** | explanation, rephrasing, new context | Rewrite item in place, keep it |
 
 The `>` line is always removed after processing. See [Annotation Feedback Loop](annotation-feedback.html) for how annotations feed into long-term memory.
@@ -129,8 +129,6 @@ By default, hourly reviews only run between 04:55 and 23:55. No reviews during n
 
 You can trigger an immediate agenda update:
 
-- "aktualisiere daily"
-- "aktualisiere meine agenda"
 - "update daily"
 - "refresh agenda"
 
@@ -149,20 +147,20 @@ touch ~/Documents/Vault/Agenda/{Agenda,Exchange}.md
 
 Once set up, you can ask:
 
-- "Was steht heute an?"
-- "Bin ich morgen nachmittag frei?"
-- "Wann ist mein nächster Termin mit X?"
-- "Schreib auf: Meeting mit Y am Freitag 10 Uhr"
+- "What's on today?"
+- "Am I free tomorrow afternoon?"
+- "When is my next appointment with X?"
+- "Add: meeting with Y on Friday at 10"
 
 outheis reads your Agenda files and responds naturally.
 
 ### Read Queries
 
-When asked to show the agenda ("Agenda", "was steht heute an", "gib mir die Agenda"), cato returns the content of Daily.md verbatim — no reformatting, no summarizing. The file content is the answer. Relay passes it through directly without a second LLM call.
+When asked to show the agenda ("Agenda", "what's on today", "show my agenda"), cato returns the content of Daily.md verbatim — no reformatting, no summarizing. The file content is the answer. Relay passes it through directly without a second LLM call.
 
 ## Integration with Other Agents
 
-**Relay (ou)** routes schedule questions to Agenda. Read queries ("Agenda", "was steht heute") are routed directly to cato, which returns Agenda.md verbatim. Write/update queries go through the full tool loop.
+**Relay (ou)** routes schedule questions to Agenda. Read queries ("Agenda", "what's on today") are routed directly to cato, which returns Agenda.md verbatim. Write/update queries go through the full tool loop.
 
 **Data Agent (zeno)** can search your vault but doesn't write to Agenda files.
 
@@ -257,7 +255,7 @@ Items without either anchor are semantically incomplete: the agent cannot know w
 
 ### Integration with Daily
 
-Agenda agent reads Shadow.md and can surface relevant entries in Daily.md. When you ask "was steht diese Woche an?", outheis checks both your explicit schedule and Shadow's detected dates.
+Agenda agent reads Shadow.md and can surface relevant entries in Daily.md. When you ask "what's on this week?", outheis checks both your explicit schedule and Shadow's detected dates.
 
 ### Configuration
 
@@ -275,7 +273,7 @@ Agenda agent reads Shadow.md and can surface relevant entries in Daily.md. When 
 
 ### Manual Trigger
 
-You can ask: "scanne den vault nach terminen" or "aktualisiere shadow" to run the scan immediately.
+You can ask: "scan vault for dates" or "update shadow" to run the scan immediately.
 
 ## Configuration
 
@@ -309,7 +307,7 @@ In `config.json`:
 ## Best Practices
 
 1. **Keep Agenda.md simple** — 🧘 Personal + 📅 Today + 🗓️ This Week is enough
-2. **Annotate with `>`** — Use `> verschieben auf ...` or `> erledigt` to instruct cato without editing the task itself
+2. **Annotate with `>`** — Use `> defer to ...` or `> done` to instruct cato without editing the task itself
 3. **Answer Exchange when you can** — No rush, but it helps outheis learn
 4. **Let outheis manage structure** — Focus on content, not formatting
 5. **Use manual refresh sparingly** — Hourly is usually sufficient

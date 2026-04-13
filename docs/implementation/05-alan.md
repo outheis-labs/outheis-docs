@@ -26,20 +26,20 @@ vault/Codebase/
 Each proposal from alan is an entry in `vault/Codebase/Exchange.md`:
 
 ```markdown
-## 2026-04-01 — Beschreibung des Vorschlags
+## 2026-04-01 — Description of the proposal
 
 **Type:** refactor | bugfix | improvement | answer
 **Files:** src/outheis/agents/data.py
 **Status:** proposed | approved | rejected | discussing
 
 ### Summary
-Was wird vorgeschlagen und warum.
+What is being proposed and why.
 
 ### Proposed Change
-Verweis auf staged file oder inline diff.
+Reference to staged file or inline diff.
 
 ### Discussion
-(Deine Antworten und Rückfragen kommen hier hin)
+(Your answers and follow-up questions go here)
 ```
 
 You respond under "Discussion", approve or reject with a keyword (`approved`, `rejected`), and alan picks up the decision at the next run.
@@ -54,9 +54,9 @@ For non-trivial changes, alan writes the modified file to `vault/Codebase/<filen
 
 Answer questions about how outheis is implemented. Examples:
 
-- "Wie funktioniert der Dispatcher?"
-- "Wo wird memory.json geschrieben?"
-- "Was passiert wenn ich `@zeno` verwende?"
+- "How does the dispatcher work?"
+- "Where is memory.json written?"
+- "What happens when I use `@zeno`?"
 
 alan reads source files, traces call paths, and explains logic — without making any changes.
 
@@ -74,9 +74,9 @@ All proposals go through Exchange.md. alan never modifies `src/` directly.
 
 Find implementations, patterns, and references across the local codebase:
 
-- "Zeig mir alle Stellen wo Vault-Dateien gelesen werden"
-- "Welcher Agent ist für Scheduling zuständig?"
-- "Wie ist das Tool `append_file` implementiert?"
+- "Show me all places where vault files are read"
+- "Which agent handles scheduling?"
+- "How is the `append_file` tool implemented?"
 
 ## Tools
 
@@ -106,8 +106,8 @@ For large repositories, full file contents are fetched on demand via `read_file`
 Invoke directly:
 
 ```
-@alan wie ist der Dispatcher implementiert?
-@alan schlage eine Verbesserung für die Vault-Suche vor
+@alan how is the dispatcher implemented?
+@alan suggest an improvement for vault search
 ```
 
 Or naturally in chat — ou detects code-related questions and delegates to alan automatically.
