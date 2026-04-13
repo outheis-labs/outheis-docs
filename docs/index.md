@@ -55,4 +55,4 @@ Different agents, each responsible for a defined task. Acting like a single enti
 
 ## About
 
-outheis is built by Markus Schatzl. If you're interested in the direction — as a user, collaborator, or investor — reach out: [technology.culture@proton.me](mailto:technology.culture@proton.me)
+outheis is built by Markus Schatzl. If you're interested in the direction — as a user, collaborator, or philantropic investor — reach out: [technology.culture@proton.me](mailto:technology.culture@proton.me)
