@@ -359,13 +359,8 @@ def build_page(src: Path, src_root: Path, out_root: Path, template: str, lang: s
     book_nav_html = build_book_nav(prev_item, current_item, next_item, root, lang)
     section_anchor = f'#{current_item["section_id"]}' if current_item else ''
     
-    # Language switcher
-    if lang == 'en':
-        other_href = f'{root}de/{rel_local}'
-        lang_switch_html = f'<span class="lang-active">EN</span> · <a href="{other_href}">DE</a>'
-    else:
-        other_href = f'{root}{rel_local}'
-        lang_switch_html = f'<a href="{other_href}">EN</a> · <span class="lang-active">DE</span>'
+    # Language switcher — DE hidden until translation is ready for publication
+    lang_switch_html = ''
     
     # Subtitle HTML
     subtitle_html = f'<p class="subtitle">{subtitle}</p>' if subtitle else ''
@@ -418,11 +413,8 @@ def build_index_page(src: Path, src_root: Path, out_root: Path, hero_template: s
     depth = len(rel_from_html.split('/')) - 1
     root = '../' * depth if depth > 0 else ''
     
-    # Language switcher
-    if lang == 'en':
-        lang_switch_html = '<span class="lang-active">EN</span> · <a href="de/index.html">DE</a>'
-    else:
-        lang_switch_html = '<a href="../index.html">EN</a> · <span class="lang-active">DE</span>'
+    # Language switcher — DE hidden until translation is ready for publication
+    lang_switch_html = ''
     
     page = (hero_template
             .replace('<!-- ROOT -->', root)
