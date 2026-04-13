@@ -55,4 +55,4 @@ Unterschiedliche Agenten, jeder verantwortlich für eine definierte Aufgabe. Nac
 
 ## Über das Projekt
 
-outheis wird von Markus Schatzl entwickelt. Bei Interesse — als Nutzer, Mitarbeiter oder Investor — gerne melden: [technology.culture@proton.me](mailto:technology.culture@proton.me)
+outheis wird von Markus Schatzl entwickelt. Bei Interesse — als Nutzer, Mitarbeiter oder philantropischer Investor — gerne melden: [technology.culture@proton.me](mailto:technology.culture@proton.me)
