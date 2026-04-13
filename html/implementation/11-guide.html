@@ -863,41 +863,34 @@ outheis start
 
   <script>
     (function () {
-      const header = document.querySelector('header');
-      const gap = 8;
-      const offset = () => (header ? header.getBoundingClientRect().height : 60) + gap;
-      const absTop = el => el.getBoundingClientRect().top + window.scrollY;
-      const hs = () => Array.from(document.querySelectorAll('h2, h3'))
-        .filter(h => h.getBoundingClientRect().height > 0);
+      const GAP = 8;
+      function headerH() { var h = document.querySelector('header'); return h ? h.offsetHeight : 60; }
+      function docTop(el) { var t = 0, n = el; while (n) { t += n.offsetTop; n = n.offsetParent; } return t; }
+      function hs() { return Array.from(document.querySelectorAll('h2, h3')).filter(function(h) { return h.offsetHeight > 0; }); }
 
       function makeHandler(el, single, dbl) {
-        let clicks = 0, timer;
+        var clicks = 0, timer;
         el.addEventListener('click', function () {
           clicks++;
           clearTimeout(timer);
-          timer = setTimeout(function () {
-            if (clicks >= 2) dbl(); else single();
-            clicks = 0;
-          }, 250);
+          timer = setTimeout(function () { (clicks >= 2 ? dbl : single)(); clicks = 0; }, 250);
         });
       }
 
-      makeHandler(
-        document.getElementById('nav-up'),
+      makeHandler(document.getElementById('nav-up'),
         function () {
-          const off = offset();
-          const prev = hs().filter(h => absTop(h) < window.scrollY + off - 10).pop();
-          window.scrollTo({ top: prev ? absTop(prev) - off : 0, behavior: 'smooth' });
+          var off = headerH() + GAP, y = Math.round(window.scrollY);
+          var prev = hs().filter(function(h) { return docTop(h) < y + off - 2; }).pop();
+          window.scrollTo({ top: prev ? docTop(prev) - off : 0, behavior: 'smooth' });
         },
         function () { window.scrollTo({ top: 0, behavior: 'smooth' }); }
       );
 
-      makeHandler(
-        document.getElementById('nav-down'),
+      makeHandler(document.getElementById('nav-down'),
         function () {
-          const off = offset();
-          const next = hs().find(h => absTop(h) > window.scrollY + off + 10);
-          window.scrollTo({ top: next ? absTop(next) - off : document.body.scrollHeight, behavior: 'smooth' });
+          var off = headerH() + GAP, y = Math.round(window.scrollY);
+          var next = hs().find(function(h) { return docTop(h) > y + off + 2; });
+          window.scrollTo({ top: next ? docTop(next) - off : document.body.scrollHeight, behavior: 'smooth' });
         },
         function () { window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' }); }
       );
