@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hiro · outheis</title>
+  <link rel="icon" type="image/png" href="../favicon-96x96.png" sizes="96x96">
+  <link rel="icon" type="image/svg+xml" href="../favicon.svg">
+  <link rel="shortcut icon" href="../favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="../apple-touch-icon.png">
+  <link rel="manifest" href="../site.webmanifest">
+  <style>
+    @font-face {
+      font-family: 'Inter';
+      src: url('../assets/fonts/InterVariable.woff2') format('woff2');
+      font-weight: 100 900;
+      font-style: normal;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'IBM Plex Sans';
+      src: url('../assets/fonts/IBMPlexSans-Variable.woff2') format('woff2-variations');
+      font-weight: 100 700;
+      font-style: normal;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'IBM Plex Mono';
+      src: url('../assets/fonts/IBMPlexMono-Regular.woff2') format('woff2');
+      font-weight: 400;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'IBM Plex Sans', -apple-system, sans-serif;
+      background: #fff;
+      color: #1a1a1a;
+      line-height: 1.65;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .greek {
+      font-family: 'Inter', sans-serif;
+    }
+
+    /* Header with breadcrumb */
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 1.5rem;
+      border-bottom: 1px solid #e0e0e0;
+    }
+
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .logo {
+      font-family: 'Inter', sans-serif;
+      font-size: 20px;
+      font-weight: 500;
+    }
+
+    .breadcrumb {
+      font-size: 14px;
+      color: #888;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .breadcrumb a {
+      color: #666;
+    }
+
+    .breadcrumb a:hover {
+      color: #1a1a1a;
+    }
+
+    .breadcrumb .separator {
+      color: #ccc;
+    }
+
+    .breadcrumb .current {
+      color: #1a1a1a;
+    }
+
+    header nav {
+      font-size: 14px;
+      display: flex;
+      align-items: baseline;
+      gap: 1rem;
+    }
+
+    header nav a {
+      color: #888;
+    }
+
+    header nav a:hover {
+      color: #1a1a1a;
+    }
+
+    .lang-switch {
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-size: 14px;
+      color: #888;
+    }
+
+    .lang-switch a {
+      font-size: 14px;
+      color: #888;
+    }
+
+    .lang-switch a:hover {
+      color: #1a1a1a;
+    }
+
+    .lang-switch .lang-active {
+      color: #1a1a1a;
+      font-weight: 500;
+    }
+
+    /* Main */
+    main {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 3rem 1.5rem;
+    }
+
+    /* Page header */
+    .page-header {
+      margin-bottom: 3rem;
+    }
+
+    .page-header h1 {
+      font-family: 'Inter', sans-serif;
+      font-size: 36px;
+      font-weight: 500;
+      letter-spacing: -0.02em;
+    }
+
+    .page-header .subtitle {
+      font-size: 18px;
+      font-style: italic;
+      color: #555;
+      margin-top: 0.75rem;
+    }
+
+    /* Content sections */
+    .section {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+      padding: 2.5rem 0;
+      border-top: 1px solid #e0e0e0;
+    }
+
+    /* Mobile: hide label h2, show section-text h2 */
+    .section > h2 {
+      display: none;
+    }
+
+    .section-text h2 {
+      font-size: 20px;
+      font-weight: 500;
+      margin-bottom: 1rem;
+    }
+
+    .section-text > *:first-child {
+      margin-top: 0;
+    }
+
+    /* Hidden h2 is first-child on desktop, so target the visible first element */
+    .section-text > h2 + * {
+      margin-top: 0;
+    }
+
+    .section-text > h2 + p {
+      margin-top: 0;
+    }
+
+    .section-text p {
+      font-size: 16px;
+      line-height: 1.75;
+      color: #333;
+      margin-bottom: 1rem;
+    }
+
+    .section-text p:last-child {
+      margin-bottom: 0;
+    }
+
+    .section-text h3 {
+      font-size: 16px;
+      font-weight: 450;
+      color: #1a1a1a;
+      line-height: 1.75;
+      margin-top: 1.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .section-text h3:first-child,
+    .section-text > h2 + h3 {
+      margin-top: 0;
+    }
+
+    .section-text ul {
+      list-style: none;
+      margin-bottom: 1rem;
+    }
+
+    .section-text ul li {
+      font-size: 16px;
+      line-height: 1.65;
+      color: #333;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid #eee;
+    }
+
+    .section-text ul li:last-child {
+      border-bottom: none;
+    }
+
+    .section-text ol {
+      margin-bottom: 1rem;
+      padding-left: 1.5rem;
+    }
+
+    .section-text ol li {
+      font-size: 16px;
+      line-height: 1.65;
+      color: #333;
+      margin-bottom: 0.5rem;
+    }
+
+    .section-text code {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 14px;
+      background: #f5f5f5;
+      padding: 0.15em 0.4em;
+      border-radius: 2px;
+    }
+
+    .section-text pre {
+      background: #f5f5f5;
+      padding: 1rem 1.25rem;
+      overflow-x: auto;
+      margin: 1.5rem 0;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 13px;
+      line-height: 1.5;
+      border-radius: 2px;
+    }
+
+    .section-text pre code {
+      background: none;
+      padding: 0;
+    }
+
+    .section-text table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1.5rem 0;
+      font-size: 14px;
+    }
+
+    .section-text th,
+    .section-text td {
+      text-align: left;
+      padding: 0.5rem 0.75rem;
+      border-bottom: 1px solid #e0e0e0;
+    }
+
+    .section-text th {
+      font-weight: 500;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: #666;
+    }
+
+    .section-text blockquote {
+      border-left: 2px solid #e0e0e0;
+      padding-left: 1.25rem;
+      margin: 1.5rem 0;
+      color: #666;
+      font-style: italic;
+    }
+
+    .section-text a {
+      color: #666;
+    }
+
+    .section-text a:hover {
+      color: #1a1a1a;
+    }
+
+    /* TOC list styling */
+    .toc-list {
+      list-style: none;
+      padding-left: 0;
+    }
+
+    .toc-list li {
+      border-bottom: 1px solid #eee;
+    }
+
+    .toc-list li:last-child {
+      border-bottom: none;
+    }
+
+    .toc-list a {
+      display: block;
+      padding: 1rem 0;
+      color: #1a1a1a;
+    }
+
+    .toc-list li:first-child a {
+      padding-top: 0;
+    }
+
+    .toc-list a:hover {
+      background: #fafafa;
+      margin: 0 -1rem;
+      padding: 1rem;
+    }
+
+    .toc-list .title {
+      font-size: 16px;
+      font-weight: 500;
+      color: #1a1a1a;
+      margin-bottom: 0.25rem;
+    }
+
+    .toc-list .description {
+      font-size: 14px;
+      color: #666;
+      line-height: 1.5;
+    }
+
+    /* Book navigation */
+    .book-nav {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      gap: 1rem;
+      align-items: center;
+      padding: 2rem 0;
+      margin-top: 2rem;
+      border-top: 1px solid #e0e0e0;
+    }
+
+    .book-nav a {
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+      color: #666;
+    }
+
+    .book-nav a:hover {
+      color: #1a1a1a;
+    }
+
+    .book-nav .label {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: #888;
+    }
+
+    .book-nav .title {
+      font-size: 15px;
+      font-weight: 500;
+    }
+
+    .book-nav .prev {
+      text-align: left;
+    }
+
+    .book-nav .toc-center {
+      text-align: center;
+    }
+
+    .book-nav .toc-center a {
+      align-items: center;
+    }
+
+    .book-nav .next {
+      text-align: right;
+    }
+
+    /* Footer */
+    footer {
+      padding: 2rem 1.5rem;
+      max-width: 1100px;
+      margin: 0 auto;
+      border-top: 1px solid #e0e0e0;
+    }
+
+    footer .meta {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 12px;
+      color: #888;
+    }
+
+    footer .meta a {
+      color: #888;
+    }
+
+    footer .meta a:hover {
+      color: #333;
+    }
+
+    /* Desktop */
+    @media (min-width: 800px) {
+      header {
+        padding: 1.5rem 3rem;
+      }
+
+      main {
+        padding: 4rem 3rem;
+      }
+
+      .page-header h1 {
+        font-size: 48px;
+      }
+
+      .section {
+        grid-template-columns: 180px 1fr;
+        gap: 3rem;
+        padding: 3rem 0;
+        align-items: baseline;
+      }
+
+      .section > h2 {
+        display: block;
+        font-size: 18px;
+        font-weight: 500;
+        color: #1a1a1a;
+        line-height: 1.75;
+      }
+
+      .section-text h2 {
+        display: none;
+        position: absolute;
+        visibility: hidden;
+      }
+
+      .book-nav .title {
+        font-size: 16px;
+      }
+
+      footer {
+        padding: 2rem 3rem;
+      }
+    }
+
+    /* Mobile */
+    @media (max-width: 600px) {
+      .breadcrumb {
+        display: none;
+      }
+
+      .book-nav {
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: auto auto;
+      }
+
+      .book-nav .prev {
+        grid-column: 1;
+      }
+
+      .book-nav .next {
+        grid-column: 2;
+      }
+
+      .book-nav .toc-center {
+        grid-column: 1 / -1;
+        grid-row: 2;
+        margin-top: 1rem;
+        padding-top: 1rem;
+        border-top: 1px solid #eee;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="header-left">
+      <a href="../index.html" class="logo">οὐθείς</a>
+      <div class="breadcrumb">
+        <span class="separator">/</span>
+        <a href="../contents.html#implementation">Implementation</a>
+        <span class="separator">/</span>
+        <span class="current">Action Agent</span>
+      </div>
+    </div>
+    <nav>
+      <a href="../contents.html#implementation">Contents</a>
+      <a href="https://github.com/outheis-labs/outheis-beta">GitHub ↗</a>
+      <span class="lang-switch"><span class="lang-active">EN</span> · <a href="../de/implementation/06-hiro.html">DE</a></span>
+    </nav>
+  </header>
+
+  <main>
+    <div class="page-header">
+      <h1>Hiro</h1>
+      <p class="subtitle">External action agent — not yet implemented.</p>
+    </div>
+
+    <section class="section" id="what-hiro-does">
+      <h2>What hiro does</h2>
+      <div class="section-text"><h2>What hiro does</h2>
+        <p>hiro is outheis's action agent. Where zeno searches the vault and cato manages time, hiro acts on the outside world: sending email, updating calendars, triggering external services.</p>
+<p><strong>hiro is present in the current release but has no capabilities.</strong> The agent starts, routes messages, and responds, but no external integrations exist yet. Enabling it in <code>config.json</code> has no practical effect.</p>
+      </div>
+    </section>
+
+    <section class="section" id="planned-architecture">
+      <h2>Planned Architecture</h2>
+      <div class="section-text"><h2>Planned Architecture</h2>
+        <p>hiro will be built as an <strong>MCP client</strong>. Rather than implementing integrations directly in outheis, hiro connects to external MCP servers — one per service — and exposes their tools through the standard agent interface.</p>
+<h3 id="why-mcp">Why MCP</h3>
+<p>Model Context Protocol provides a standardized interface between LLMs and external tools. The MCP server ecosystem already covers many common integrations (email, calendar, browser, shell). Building hiro as an MCP client means:</p>
+<ul>
+<li>No integration code lives in outheis itself</li>
+<li>New capabilities are added by configuring a server, not by writing code</li>
+<li>Each server runs as an isolated process with its own permissions</li>
+</ul>
+<h3 id="server-lifecycle">Server Lifecycle</h3>
+<p>MCP servers run as subprocesses managed by the dispatcher. hiro does not manage server lifecycle directly — the dispatcher starts configured servers at launch, monitors them, and restarts them if they exit. hiro connects to already-running servers.</p>
+<p>Two modes are planned:</p>
+<table>
+<thead>
+<tr>
+<th>Mode</th>
+<th>Behavior</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Persistent</td>
+<td>Server runs continuously alongside the dispatcher</td>
+</tr>
+<tr>
+<td>On-demand</td>
+<td>Server is started when hiro needs it, stopped after a configurable idle timeout</td>
+</tr>
+</tbody>
+</table>
+<h3 id="curated-server-list">Curated Server List</h3>
+<p>hiro will not accept arbitrary MCP server configurations. Supported servers are maintained in a curated list that records which server was tested, against which version, and when. A server appears in the list only after it has been verified to work correctly with outheis.</p>
+<p>This is a deliberate constraint. The MCP ecosystem is large and uneven — quality varies significantly. A whitelist approach means you know exactly what hiro can do and that it works.</p>
+<p>The list will be maintained in the outheis repository and updated as servers are tested.</p>
+<h3 id="configuration">Configuration</h3>
+<p>When implemented, hiro's servers will be configured in <code>config.json</code>:</p>
+<pre><code class="language-json">{
+  &quot;agents&quot;: {
+    &quot;action&quot;: {
+      &quot;enabled&quot;: true,
+      &quot;servers&quot;: [
+        {&quot;name&quot;: &quot;gmail&quot;,  &quot;command&quot;: &quot;npx&quot;, &quot;args&quot;: [&quot;-y&quot;, &quot;@modelcontextprotocol/server-gmail&quot;]},
+        {&quot;name&quot;: &quot;gcal&quot;,   &quot;command&quot;: &quot;npx&quot;, &quot;args&quot;: [&quot;-y&quot;, &quot;@modelcontextprotocol/server-gcal&quot;]}
+      ]
+    }
+  }
+}
+</code></pre>
+<p>Only servers on the curated list will be accepted. Unknown servers are ignored with a warning at startup.</p>
+      </div>
+    </section>
+
+    <section class="section" id="current-status">
+      <h2>Current Status</h2>
+      <div class="section-text"><h2>Current Status</h2>
+        <table>
+<thead>
+<tr>
+<th>Component</th>
+<th>Status</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Agent shell (routing, dispatch)</td>
+<td>✓ present</td>
+</tr>
+<tr>
+<td>MCP client</td>
+<td>not implemented</td>
+</tr>
+<tr>
+<td>Server lifecycle management</td>
+<td>not implemented</td>
+</tr>
+<tr>
+<td>Curated server list</td>
+<td>not started</td>
+</tr>
+<tr>
+<td>Any external integration</td>
+<td>not implemented</td>
+</tr>
+</tbody>
+</table>
+      </div>
+    </section>
+
+    <nav class="book-nav">
+      <div class="prev"><a href="../implementation/05-alan.html">
+          <span class="label">← Previous</span>
+          <span class="title">Code Agent</span>
+        </a></div>
+      <div class="toc-center"><a href="../contents.html#implementation">
+          <span class="label">Contents</span>
+          <span class="title">Implementation</span>
+        </a></div>
+      <div class="next"><a href="../implementation/07-signal.html">
+          <span class="label">Next →</span>
+          <span class="title">Signal</span>
+        </a></div>
+    </nav>
+  </main>
+
+  <footer>
+    <div class="meta">
+      open source · AGPL-3.0 · <a href="https://github.com/outheis-labs">github.com/outheis-labs</a>
+    </div>
+  </footer>
+
+</body>
+</html>

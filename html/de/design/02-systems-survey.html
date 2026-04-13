@@ -12,265 +12,522 @@
   <style>
     @font-face {
       font-family: 'Inter';
-      src: url('../../assets/fonts/InterVariable.woff2') format('woff2'),
-           url('../../assets/fonts/InterVariable.ttf') format('truetype');
+      src: url('../../assets/fonts/InterVariable.woff2') format('woff2');
       font-weight: 100 900;
       font-style: normal;
       font-display: swap;
     }
     @font-face {
-      font-family: 'Inter';
-      src: url('../../assets/fonts/InterVariable-Italic.woff2') format('woff2');
-      font-weight: 100 900;
-      font-style: italic;
-      font-display: swap;
-    }
-    @font-face {
-      font-family: 'Inter var';
-      src: url('../../assets/fonts/InterVariable.woff2') format('woff2'),
-           url('../../assets/fonts/InterVariable.ttf') format('truetype');
-      font-weight: 100 900;
+      font-family: 'IBM Plex Sans';
+      src: url('../../assets/fonts/IBMPlexSans-Variable.woff2') format('woff2-variations');
+      font-weight: 100 700;
       font-style: normal;
       font-display: swap;
     }
     @font-face {
-      font-family: 'Inter var';
-      src: url('../../assets/fonts/InterVariable-Italic.woff2') format('woff2');
-      font-weight: 100 900;
-      font-style: italic;
+      font-family: 'IBM Plex Mono';
+      src: url('../../assets/fonts/IBMPlexMono-Regular.woff2') format('woff2');
+      font-weight: 400;
+      font-style: normal;
       font-display: swap;
     }
-  </style>
-  <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-    :root {
-      --font-body: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
-      --font-ui: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
-      --font-mono: SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-      --color-text: #1a1a1a;
-      --color-text-muted: #666;
-      --color-text-faint: #999;
-      --color-border: #e0e0e0;
-      --color-bg-code: #f5f5f5;
-      --header-height: 52px;
-      --subnav-height: 40px;
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
     }
 
-    @supports (font-variation-settings: normal) {
-      :root { --font-body: "Inter var", sans-serif; --font-ui: "Inter var", sans-serif; }
-    }
-
-    html, body {
-      width: 100%;
-      min-height: 100vh;
+    body {
+      font-family: 'IBM Plex Sans', -apple-system, sans-serif;
       background: #fff;
-      font-family: var(--font-body);
-      font-size: 15px;
-      line-height: 1.6;
-      color: var(--color-text);
+      color: #1a1a1a;
+      line-height: 1.65;
     }
 
-    /* ── Header ── */
-
-    .header {
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      background: #fff;
-      border-bottom: 1px solid var(--color-border);
+    a {
+      color: inherit;
+      text-decoration: none;
     }
 
-    .header-inner {
+    .greek {
+      font-family: 'Inter', sans-serif;
+    }
+
+    /* Header with breadcrumb */
+    header {
       display: flex;
-      align-items: center;
       justify-content: space-between;
-      max-width: 900px;
-      margin: 0 auto;
-      padding: 0 2rem;
-      height: var(--header-height);
-      gap: 2rem;
+      align-items: center;
+      padding: 1rem 1.5rem;
+      border-bottom: 1px solid #e0e0e0;
     }
 
-    .logo-link {
+    .header-left {
       display: flex;
       align-items: center;
-      text-decoration: none;
-      flex-shrink: 0;
+      gap: 1rem;
     }
 
-    .site-name {
-      font-family: var(--font-ui);
+    .logo {
+      font-family: 'Inter', sans-serif;
       font-size: 20px;
-      font-weight: 600;
-      color: var(--color-text);
-      letter-spacing: -0.01em;
-    }
-
-    .topnav {
-      display: flex;
-      align-items: center;
-      gap: 0.25rem;
-    }
-
-    .topnav a {
-      font-family: var(--font-ui);
-      font-size: 14px;
       font-weight: 500;
-      color: var(--color-text-muted);
-      text-decoration: none;
-      padding: 0.3rem 0.65rem;
-      border-radius: 4px;
-      white-space: nowrap;
     }
 
-    .topnav a:hover { color: var(--color-text); background: var(--color-bg-code); }
-    .topnav a.active { color: var(--color-text); font-weight: 600; }
-    .topnav a.external { color: var(--color-text-faint); }
-
-    /* ── Sub-nav ── */
-
-    .subnav-bar {
-      border-bottom: 1px solid var(--color-border);
-      overflow-x: auto;
-      -webkit-overflow-scrolling: touch;
-      scrollbar-width: none;
-    }
-    .subnav-bar::-webkit-scrollbar { display: none; }
-    .subnav-bar:empty,
-    .subnav-bar.hidden { display: none; }
-
-    .subnav-inner {
+    .breadcrumb {
+      font-size: 14px;
+      color: #888;
       display: flex;
       align-items: center;
-      max-width: 900px;
-      margin: 0 auto;
-      padding: 0 2rem;
-      gap: 0.1rem;
-      height: var(--subnav-height);
+      gap: 0.5rem;
     }
 
-    .subnav-inner a {
-      font-family: var(--font-ui);
-      font-size: 13px;
-      color: var(--color-text-muted);
-      text-decoration: none;
-      padding: 0.25rem 0.6rem;
-      border-radius: 3px;
-      white-space: nowrap;
+    .breadcrumb a {
+      color: #666;
     }
 
-    .subnav-inner a:hover { color: var(--color-text); background: var(--color-bg-code); }
-    .subnav-inner a.active { color: var(--color-text); font-weight: 500; }
-
-    /* ── Content ── */
-
-    .content {
-      max-width: 680px;
-      margin: 0 auto;
-      padding: 2.5rem 2rem 4rem;
+    .breadcrumb a:hover {
+      color: #1a1a1a;
     }
 
-    .content > *:first-child { margin-top: 0; }
+    .breadcrumb .separator {
+      color: #ccc;
+    }
 
-    .content h1 { font-family: var(--font-ui); font-size: 28px; font-weight: 600; margin-bottom: 0.5rem; letter-spacing: -0.02em; }
-    .content h2 { font-family: var(--font-ui); font-size: 18px; font-weight: 600; margin-top: 2rem; margin-bottom: 1.25rem; }
-    .content h3 { font-family: var(--font-ui); font-size: 15px; font-weight: 600; margin-top: 1.5rem; margin-bottom: 0.75rem; }
-    .content p { margin-bottom: 1rem; }
-    .content a { color: var(--color-text-muted); }
-    .content a:hover { color: var(--color-text); }
-    .content ul, .content ol { margin-bottom: 1rem; padding-left: 1.5rem; }
-    .content li { margin-bottom: 0.4rem; }
+    .breadcrumb .current {
+      color: #1a1a1a;
+    }
 
-    .content table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; font-family: var(--font-ui); font-size: 13px; }
-    .content th, .content td { text-align: left; padding: 0.5rem 0.75rem; border-bottom: 1px solid var(--color-border); }
-    .content th { font-weight: 500; font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--color-text-muted); }
+    header nav {
+      font-size: 14px;
+      display: flex;
+      align-items: baseline;
+      gap: 1rem;
+    }
 
-    .content code { font-family: var(--font-mono); font-size: 14px; background: var(--color-bg-code); padding: 0.15em 0.4em; border-radius: 3px; }
-    .content pre { background: var(--color-bg-code); padding: 1rem 1.25rem; overflow-x: auto; margin: 1.5rem 0; font-size: 13px; border-radius: 4px; line-height: 1.5; }
-    .content pre code { background: none; padding: 0; border-radius: 0; }
+    header nav a {
+      color: #888;
+    }
 
-    .content hr { border: none; border-top: 1px solid var(--color-border); margin: 1.5rem 0; }
-    .content strong { font-weight: 500; }
-    .content em { font-style: italic; }
-    .content blockquote { border-left: 2px solid var(--color-border); padding-left: 1.25rem; margin: 1.5rem 0; color: var(--color-text-muted); font-style: italic; }
-    .content .lead { font-style: italic; color: var(--color-text-muted); margin-bottom: 2rem; }
-    .content .footer { font-size: 12px; color: var(--color-text-faint); font-style: italic; }
-
-    /* ── Mobile ── */
-
-    /* ── Language switch ── */
+    header nav a:hover {
+      color: #1a1a1a;
+    }
 
     .lang-switch {
-      font-family: var(--font-ui);
-      font-size: 13px;
-      color: var(--color-text-muted);
-      white-space: nowrap;
-      flex-shrink: 0;
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-size: 14px;
+      color: #888;
+    }
+
+    .lang-switch a {
+      font-size: 14px;
+      color: #888;
+    }
+
+    .lang-switch a:hover {
+      color: #1a1a1a;
     }
 
     .lang-switch .lang-active {
-      color: var(--color-text);
+      color: #1a1a1a;
       font-weight: 500;
     }
 
-    .lang-switch a.lang-link {
-      color: var(--color-text-muted);
-      text-decoration: none;
+    /* Main */
+    main {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 3rem 1.5rem;
     }
 
-    .lang-switch a.lang-link:hover { color: var(--color-text); }
+    /* Page header */
+    .page-header {
+      margin-bottom: 3rem;
+    }
 
-    /* ── Mobile ── */
+    .page-header h1 {
+      font-family: 'Inter', sans-serif;
+      font-size: 36px;
+      font-weight: 500;
+      letter-spacing: -0.02em;
+    }
 
-    @media (max-width: 640px) {
-      .header-inner { padding: 0 1.25rem; gap: 1rem; }
-      .topnav { gap: 0; }
-      .topnav a { padding: 0.3rem 0.5rem; font-size: 13px; }
-      .topnav a.external { display: none; }
-      .subnav-inner { padding: 0 1.25rem; }
-      .content { padding: 2rem 1.25rem 3rem; }
-      .content h1 { font-size: 24px; }
-      .content h2 { font-size: 16px; }
+    .page-header .subtitle {
+      font-size: 18px;
+      font-style: italic;
+      color: #555;
+      margin-top: 0.75rem;
+    }
+
+    /* Content sections */
+    .section {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+      padding: 2.5rem 0;
+      border-top: 1px solid #e0e0e0;
+    }
+
+    /* Mobile: hide label h2, show section-text h2 */
+    .section > h2 {
+      display: none;
+    }
+
+    .section-text h2 {
+      font-size: 20px;
+      font-weight: 500;
+      margin-bottom: 1rem;
+    }
+
+    .section-text > *:first-child {
+      margin-top: 0;
+    }
+
+    /* Hidden h2 is first-child on desktop, so target the visible first element */
+    .section-text > h2 + * {
+      margin-top: 0;
+    }
+
+    .section-text > h2 + p {
+      margin-top: 0;
+    }
+
+    .section-text p {
+      font-size: 16px;
+      line-height: 1.75;
+      color: #333;
+      margin-bottom: 1rem;
+    }
+
+    .section-text p:last-child {
+      margin-bottom: 0;
+    }
+
+    .section-text h3 {
+      font-size: 16px;
+      font-weight: 450;
+      color: #1a1a1a;
+      line-height: 1.75;
+      margin-top: 1.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .section-text h3:first-child,
+    .section-text > h2 + h3 {
+      margin-top: 0;
+    }
+
+    .section-text ul {
+      list-style: none;
+      margin-bottom: 1rem;
+    }
+
+    .section-text ul li {
+      font-size: 16px;
+      line-height: 1.65;
+      color: #333;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid #eee;
+    }
+
+    .section-text ul li:last-child {
+      border-bottom: none;
+    }
+
+    .section-text ol {
+      margin-bottom: 1rem;
+      padding-left: 1.5rem;
+    }
+
+    .section-text ol li {
+      font-size: 16px;
+      line-height: 1.65;
+      color: #333;
+      margin-bottom: 0.5rem;
+    }
+
+    .section-text code {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 14px;
+      background: #f5f5f5;
+      padding: 0.15em 0.4em;
+      border-radius: 2px;
+    }
+
+    .section-text pre {
+      background: #f5f5f5;
+      padding: 1rem 1.25rem;
+      overflow-x: auto;
+      margin: 1.5rem 0;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 13px;
+      line-height: 1.5;
+      border-radius: 2px;
+    }
+
+    .section-text pre code {
+      background: none;
+      padding: 0;
+    }
+
+    .section-text table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1.5rem 0;
+      font-size: 14px;
+    }
+
+    .section-text th,
+    .section-text td {
+      text-align: left;
+      padding: 0.5rem 0.75rem;
+      border-bottom: 1px solid #e0e0e0;
+    }
+
+    .section-text th {
+      font-weight: 500;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: #666;
+    }
+
+    .section-text blockquote {
+      border-left: 2px solid #e0e0e0;
+      padding-left: 1.25rem;
+      margin: 1.5rem 0;
+      color: #666;
+      font-style: italic;
+    }
+
+    .section-text a {
+      color: #666;
+    }
+
+    .section-text a:hover {
+      color: #1a1a1a;
+    }
+
+    /* TOC list styling */
+    .toc-list {
+      list-style: none;
+      padding-left: 0;
+    }
+
+    .toc-list li {
+      border-bottom: 1px solid #eee;
+    }
+
+    .toc-list li:last-child {
+      border-bottom: none;
+    }
+
+    .toc-list a {
+      display: block;
+      padding: 1rem 0;
+      color: #1a1a1a;
+    }
+
+    .toc-list li:first-child a {
+      padding-top: 0;
+    }
+
+    .toc-list a:hover {
+      background: #fafafa;
+      margin: 0 -1rem;
+      padding: 1rem;
+    }
+
+    .toc-list .title {
+      font-size: 16px;
+      font-weight: 500;
+      color: #1a1a1a;
+      margin-bottom: 0.25rem;
+    }
+
+    .toc-list .description {
+      font-size: 14px;
+      color: #666;
+      line-height: 1.5;
+    }
+
+    /* Book navigation */
+    .book-nav {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      gap: 1rem;
+      align-items: center;
+      padding: 2rem 0;
+      margin-top: 2rem;
+      border-top: 1px solid #e0e0e0;
+    }
+
+    .book-nav a {
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+      color: #666;
+    }
+
+    .book-nav a:hover {
+      color: #1a1a1a;
+    }
+
+    .book-nav .label {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: #888;
+    }
+
+    .book-nav .title {
+      font-size: 15px;
+      font-weight: 500;
+    }
+
+    .book-nav .prev {
+      text-align: left;
+    }
+
+    .book-nav .toc-center {
+      text-align: center;
+    }
+
+    .book-nav .toc-center a {
+      align-items: center;
+    }
+
+    .book-nav .next {
+      text-align: right;
+    }
+
+    /* Footer */
+    footer {
+      padding: 2rem 1.5rem;
+      max-width: 1100px;
+      margin: 0 auto;
+      border-top: 1px solid #e0e0e0;
+    }
+
+    footer .meta {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 12px;
+      color: #888;
+    }
+
+    footer .meta a {
+      color: #888;
+    }
+
+    footer .meta a:hover {
+      color: #333;
+    }
+
+    /* Desktop */
+    @media (min-width: 800px) {
+      header {
+        padding: 1.5rem 3rem;
+      }
+
+      main {
+        padding: 4rem 3rem;
+      }
+
+      .page-header h1 {
+        font-size: 48px;
+      }
+
+      .section {
+        grid-template-columns: 180px 1fr;
+        gap: 3rem;
+        padding: 3rem 0;
+        align-items: baseline;
+      }
+
+      .section > h2 {
+        display: block;
+        font-size: 18px;
+        font-weight: 500;
+        color: #1a1a1a;
+        line-height: 1.75;
+      }
+
+      .section-text h2 {
+        display: none;
+        position: absolute;
+        visibility: hidden;
+      }
+
+      .book-nav .title {
+        font-size: 16px;
+      }
+
+      footer {
+        padding: 2rem 3rem;
+      }
+    }
+
+    /* Mobile */
+    @media (max-width: 600px) {
+      .breadcrumb {
+        display: none;
+      }
+
+      .book-nav {
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: auto auto;
+      }
+
+      .book-nav .prev {
+        grid-column: 1;
+      }
+
+      .book-nav .next {
+        grid-column: 2;
+      }
+
+      .book-nav .toc-center {
+        grid-column: 1 / -1;
+        grid-row: 2;
+        margin-top: 1rem;
+        padding-top: 1rem;
+        border-top: 1px solid #eee;
+      }
     }
   </style>
 </head>
 <body>
-  <header class="header">
-    <div class="header-inner">
-      <a href="../../index.html" class="logo-link">
-        <span class="site-name">οὐθείς</span>
-      </a>
-      <nav class="topnav">
-        <a href="../foundations/index.html">Grundlagen</a>
-        <a href="../design/index.html" class="active">Design</a>
-        <a href="../implementation/architecture.html">Implementierung</a>
-        <a href="../installation/release-notes.html">Installation</a>
-        <a href="../workflows/index.html">Workflows</a>
-        <a href="https://github.com/outheis-labs/outheis-beta" class="external">GitHub ↗</a>
-      </nav>
-      <div class="lang-switch"><a href="../../design/02-systems-survey.html" class="lang-link">EN</a> · <span class="lang-active">DE</span></div>
+
+  <header>
+    <div class="header-left">
+      <a href="../../index.html" class="logo">οὐθείς</a>
+      <div class="breadcrumb">
+        <span class="separator">/</span>
+        <a href="../../contents.html#design">Design</a>
+        <span class="separator">/</span>
+        <span class="current">Systemvergleich</span>
+      </div>
     </div>
+    <nav>
+      <a href="../../contents.html#design">Contents</a>
+      <a href="https://github.com/outheis-labs/outheis-beta">GitHub ↗</a>
+      <span class="lang-switch"><a href="../../design/02-systems-survey.html">EN</a> · <span class="lang-active">DE</span></span>
+    </nav>
   </header>
-  <div class="subnav-bar">
-    <div class="subnav-inner">
-      <a href="../design/index.html">Überblick</a>
-      <a href="../design/01-why-os-principles.html">OS-Prinzipien</a>
-      <a href="../design/02-systems-survey.html" class="active">Systemvergleich</a>
-      <a href="../design/03-architecture.html">Architektur</a>
-      <a href="../design/04-data-formats.html">Datenformate</a>
-      <a href="../design/05-related-work.html">Verwandte Ansätze</a>
-      <a href="../design/06-agent-prompts.html">Agenten-Prompts</a>
-      <a href="../design/07-hybrid-memory-stack.html">Hybrider Memory-Stack</a>
-      <a href="../design/08-quality-threshold.html">Qualitätsschwelle</a>
+
+  <main>
+    <div class="page-header">
+      <h1>Systemüberblick: Betriebssysteme und anwendbare Konzepte</h1>
+      
     </div>
-  </div>
-  <main class="content">
-    <h1 id="systemuberblick-betriebssysteme-und-anwendbare-konzepte">Systemüberblick: Betriebssysteme und anwendbare Konzepte</h1>
-<p>Betriebssysteme haben Probleme gelöst, die agent-Architekturen gerade erst entdecken. Dieser Überblick zeigt, welche Konzepte übertragbar sind — und warum.</p>
-<hr />
-<h2 id="dragonflybsd">DragonFlyBSD</h2>
-<p><strong>Ursprung</strong>: Abgespalten von FreeBSD 4.x im Jahr 2003 von Matthew Dillon
+
+    <section class="section"><h2></h2><div class="section-text"><p>Betriebssysteme haben Probleme gelöst, die agent-Architekturen gerade erst entdecken. Dieser Überblick zeigt, welche Konzepte übertragbar sind — und warum.</p></div></section>
+
+    <section class="section" id="dragonflybsd">
+      <h2>DragonFlyBSD</h2>
+      <div class="section-text"><h2>DragonFlyBSD</h2>
+        <p><strong>Ursprung</strong>: Abgespalten von FreeBSD 4.x im Jahr 2003 von Matthew Dillon
 <strong>Fokus</strong>: SMP-Skalierbarkeit durch Message-Passing</p>
 <h3 id="relevante-konzepte">Relevante Konzepte</h3>
 <h4 id="lwkt-light-weight-kernel-threads">LWKT (Light Weight Kernel Threads)</h4>
@@ -331,9 +588,13 @@
 </tr>
 </tbody>
 </table>
-<hr />
-<h2 id="erlangotp">Erlang/OTP</h2>
-<p><strong>Ursprung</strong>: Entwickelt bei Ericsson für Telecom-Switches (1986)
+      </div>
+    </section>
+
+    <section class="section" id="erlangotp">
+      <h2>Erlang/OTP</h2>
+      <div class="section-text"><h2>Erlang/OTP</h2>
+        <p><strong>Ursprung</strong>: Entwickelt bei Ericsson für Telecom-Switches (1986)
 <strong>Fokus</strong>: Fehlertoleranz, Parallelität, Hot-Code-Reloading</p>
 <h3 id="relevante-konzepte_1">Relevante Konzepte</h3>
 <h4 id="actor-modell">Actor-Modell</h4>
@@ -413,9 +674,13 @@
 </tr>
 </tbody>
 </table>
-<hr />
-<h2 id="sel4">seL4</h2>
-<p><strong>Ursprung</strong>: Formal verifizierter Microkernel (NICTA/Data61)
+      </div>
+    </section>
+
+    <section class="section" id="sel4">
+      <h2>seL4</h2>
+      <div class="section-text"><h2>seL4</h2>
+        <p><strong>Ursprung</strong>: Formal verifizierter Microkernel (NICTA/Data61)
 <strong>Fokus</strong>: Sicherheit durch minimale Trusted Computing Base</p>
 <h3 id="relevante-konzepte_2">Relevante Konzepte</h3>
 <h4 id="capabilities">Capabilities</h4>
@@ -466,9 +731,13 @@
 </tbody>
 </table>
 <p>Beispiel: Ein Pattern-agent hat Schreib-Capability für insights; andere haben nur Lese-Capability.</p>
-<hr />
-<h2 id="openbsd">OpenBSD</h2>
-<p><strong>Ursprung</strong>: Abgespalten von NetBSD im Jahr 1995 von Theo de Raadt
+      </div>
+    </section>
+
+    <section class="section" id="openbsd">
+      <h2>OpenBSD</h2>
+      <div class="section-text"><h2>OpenBSD</h2>
+        <p><strong>Ursprung</strong>: Abgespalten von NetBSD im Jahr 1995 von Theo de Raadt
 <strong>Fokus</strong>: Sicherheit, Korrektheit, Einfachheit</p>
 <h3 id="relevante-konzepte_3">Relevante Konzepte</h3>
 <p>Für agent-Architekturen sind zwei Mechanismen besonders anwendbar:</p>
@@ -528,9 +797,13 @@ unveil(NULL, NULL);         // Lock it down—no more unveil calls allowed
 </tbody>
 </table>
 <p>Beispiel: Ein Daten-agent pledged <code>["vault:read", "vault:write"]</code> und unveiled nur <code>vault/</code>. Er kann nicht auf <code>human/</code> zugreifen, keine Netzwerkanrufe machen, keinen Code ausführen.</p>
-<hr />
-<h2 id="macos-darwin">macOS / Darwin</h2>
-<p><strong>Ursprung</strong>: Apples XNU-Kernel, kombiniert Mach-Microkernel mit BSD
+      </div>
+    </section>
+
+    <section class="section" id="macos-darwin">
+      <h2>macOS / Darwin</h2>
+      <div class="section-text"><h2>macOS / Darwin</h2>
+        <p><strong>Ursprung</strong>: Apples XNU-Kernel, kombiniert Mach-Microkernel mit BSD
 <strong>Fokus</strong>: Verbraucherfreundlichkeit mit Unix-Unterbau</p>
 <h3 id="relevante-konzepte_4">Relevante Konzepte</h3>
 <h4 id="grand-central-dispatch-gcd">Grand Central Dispatch (GCD)</h4>
@@ -594,9 +867,13 @@ unveil(NULL, NULL);         // Lock it down—no more unveil calls allowed
 </tbody>
 </table>
 <p>Beispiel: Ein relay-agent verarbeitet Nutzereingaben mit hoher Priorität. Ein Pattern-agent analysiert Geschichte im Hintergrund. Der dispatcher verwaltet Queue-Prioritäten basierend auf Systemlast und Nutzeraktivität.</p>
-<hr />
-<h2 id="plan-9">Plan 9</h2>
-<p><strong>Ursprung</strong>: Bell Labs (1980er–2000er), Nachfolger von Unix
+      </div>
+    </section>
+
+    <section class="section" id="plan-9">
+      <h2>Plan 9</h2>
+      <div class="section-text"><h2>Plan 9</h2>
+        <p><strong>Ursprung</strong>: Bell Labs (1980er–2000er), Nachfolger von Unix
 <strong>Fokus</strong>: Verteilte Systeme, einheitliche Schnittstellen</p>
 <h3 id="relevante-konzepte_5">Relevante Konzepte</h3>
 <h4 id="alles-ist-eine-datei">Alles ist eine Datei</h4>
@@ -637,9 +914,13 @@ unveil(NULL, NULL);         // Lock it down—no more unveil calls allowed
 </tbody>
 </table>
 <p>Beispiel: Ein vault wird in den Namespace eines agents eingehängt. Der agent interagiert damit durch eine einheitliche dateiähnliche Schnittstelle.</p>
-<hr />
-<h2 id="event-sourcing">Event Sourcing</h2>
-<p><strong>Ursprung</strong>: Domain-Driven-Design-Community
+      </div>
+    </section>
+
+    <section class="section" id="event-sourcing">
+      <h2>Event Sourcing</h2>
+      <div class="section-text"><h2>Event Sourcing</h2>
+        <p><strong>Ursprung</strong>: Domain-Driven-Design-Community
 <strong>Fokus</strong>: Zustand als abgeleitet aus unveränderlichen Ereignissen</p>
 <h3 id="relevante-konzepte_6">Relevante Konzepte</h3>
 <h4 id="append-only-log">Append-Only-Log</h4>
@@ -695,9 +976,13 @@ unveil(NULL, NULL);         // Lock it down—no more unveil calls allowed
 </tr>
 </tbody>
 </table>
-<hr />
-<h2 id="unikernels">Unikernels</h2>
-<p><strong>Ursprung</strong>: Akademische Forschung (MirageOS, IncludeOS, Nanos)
+      </div>
+    </section>
+
+    <section class="section" id="unikernels">
+      <h2>Unikernels</h2>
+      <div class="section-text"><h2>Unikernels</h2>
+        <p><strong>Ursprung</strong>: Akademische Forschung (MirageOS, IncludeOS, Nanos)
 <strong>Fokus</strong>: Einzelzweck, minimale Angriffsfläche</p>
 <h3 id="relevante-konzepte_7">Relevante Konzepte</h3>
 <h4 id="library-operating-system">Library Operating System</h4>
@@ -740,9 +1025,13 @@ Unikernel:
 </tbody>
 </table>
 <p>Beispiel: Ein action-agent ist spezialisiert — er führt Aufgaben aus. Er analysiert keine Muster und verfasst keine Nachrichten.</p>
-<hr />
-<h2 id="vergleichsmatrix">Vergleichsmatrix</h2>
-<table>
+      </div>
+    </section>
+
+    <section class="section" id="vergleichsmatrix">
+      <h2>Vergleichsmatrix</h2>
+      <div class="section-text"><h2>Vergleichsmatrix</h2>
+        <table>
 <thead>
 <tr>
 <th>System</th>
@@ -793,9 +1082,13 @@ Unikernel:
 </tr>
 </tbody>
 </table>
-<hr />
-<h2 id="synthese-fur-agent-architekturen">Synthese für agent-Architekturen</h2>
-<p>Kein konkurrierender Ansatz — sie addressieren orthogonale Belange und kombinieren sich natürlich:</p>
+      </div>
+    </section>
+
+    <section class="section" id="synthese-fur-agent-architekturen">
+      <h2>Synthese für agent-Architekturen</h2>
+      <div class="section-text"><h2>Synthese für agent-Architekturen</h2>
+        <p>Kein konkurrierender Ansatz — sie addressieren orthogonale Belange und kombinieren sich natürlich:</p>
 <ol>
 <li><strong>DragonFlyBSDs Message-Passing</strong> für agent-Kommunikation</li>
 <li><strong>Erlangs Supervision</strong> für Fehlertoleranz</li>
@@ -806,10 +1099,31 @@ Unikernel:
 <li><strong>Event-Sourcings append-only-Log</strong> für Auditierbarkeit</li>
 <li><strong>Unikernels Spezialisierung</strong> für fokussierte agent-Rollen</li>
 </ol>
-<hr />
 <p>Weiter: <a href="03-architecture.md">03-architecture.md</a> — Die outheis-Architektur, abgeleitet aus diesen Prinzipien.</p>
-    <hr>
-    <p class="footer">Open source under AGPL-3.0 · <a href="https://github.com/outheis-labs/outheis-beta">Code on GitHub</a></p>
+      </div>
+    </section>
+
+    <nav class="book-nav">
+      <div class="prev"><a href="../../design/01-why-os-principles.html">
+          <span class="label">← Zurück</span>
+          <span class="title">OS-Prinzipien</span>
+        </a></div>
+      <div class="toc-center"><a href="../../contents.html#design">
+          <span class="label">Inhalt</span>
+          <span class="title">Design</span>
+        </a></div>
+      <div class="next"><a href="../../design/03-architecture.html">
+          <span class="label">Weiter →</span>
+          <span class="title">Architektur</span>
+        </a></div>
+    </nav>
   </main>
+
+  <footer>
+    <div class="meta">
+      open source · AGPL-3.0 · <a href="https://github.com/outheis-labs">github.com/outheis-labs</a>
+    </div>
+  </footer>
+
 </body>
 </html>

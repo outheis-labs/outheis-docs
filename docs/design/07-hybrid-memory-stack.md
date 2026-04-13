@@ -1,5 +1,9 @@
 # The Hybrid Memory Stack: Where Code Ends and LLM Begins
 
+*The line that's separating the domain of tasks to be handled with deterministic rule-based approaches from ones that require fuzzy AI language-based decisions.*
+
+---
+
 ## The Problem with Pure Approaches
 
 Two failure modes define the design space for adaptive AI systems.

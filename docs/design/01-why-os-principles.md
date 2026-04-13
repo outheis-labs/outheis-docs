@@ -1,4 +1,8 @@
-# Why Operating System Principles Apply to Agent Architectures
+# Operating System Engineering
+
+*Why Operating System Principles Apply to Agent Architectures*
+
+---
 
 ## The Problem
 

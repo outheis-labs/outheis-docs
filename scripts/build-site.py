@@ -3,7 +3,7 @@
 Build the outheis website from docs/ and docs-de/.
 
 Reads Markdown, converts to HTML, wraps in the layout template,
-and outputs to html/ (EN) and html/de/ (DE). Run locally or via GitHub Actions.
+and outputs to html/ (EN) and html/de/ (DE).
 
 Usage:
     python scripts/build-site.py
@@ -17,195 +17,116 @@ import markdown
 ROOT = Path(__file__).parent.parent
 DOCS_SOURCE = ROOT / "docs"
 DOCS_DE = ROOT / "docs-de"
-DOCS = ROOT / "html"  # Output root (served by GitHub Pages)
+DOCS = ROOT / "html"
 TEMPLATES = ROOT / "templates"
 
 SITE_TITLE = "outheis"
 
-# Navigation: five top-level sections, each with sub-pages.
-# 'match' is a regex tested against the current page's path (without lang prefix).
-NAV_SECTIONS = [
+# Navigation structure
+NAV_STRUCTURE = [
     {
+        "id": "foundations",
         "label": "Foundations",
-        "url": "foundations/index.html",
-        "match": "foundations",
+        "label_de": "Grundlagen",
         "items": [
-            {"label": "Why outheis",               "url": "foundations/index.html",                          "match": "foundations/index"},
-            {"label": "Design Principles",         "url": "foundations/01-design-principles.html",          "match": "01-design-principles"},
-            {"label": "Information and Semantics", "url": "foundations/02-semantic-foundations.html",       "match": "02-semantic"},
-            {"label": "Attention as Architecture", "url": "foundations/03-attention-as-architecture.html",  "match": "03-attention"},
-            {"label": "Annotation as Ground Truth","url": "foundations/04-annotation-as-ground-truth.html", "match": "04-annotation"},
-            {"label": "Tags as Scaffolding",        "url": "foundations/05-tags-as-scaffolding.html",        "match": "05-tags"},
+            {"label": "Why outheis", "label_de": "Warum outheis", "url": "foundations/index.html", "match": "foundations/index", "desc": "The case for cognitive sovereignty — why AI assistance needs a different model.", "desc_de": "Das Argument für kognitive Souveränität — warum KI-Assistenz ein anderes Modell braucht."},
+            {"label": "Design Principles", "label_de": "Designprinzipien", "url": "foundations/01-design-principles.html", "match": "01-design-principles", "desc": "Local-first, transparent, separated — the core principles behind the architecture.", "desc_de": "Local-first, transparent, getrennt — die Kernprinzipien hinter der Architektur."},
+            {"label": "Information and Semantics", "label_de": "Information und Semantik", "url": "foundations/02-semantic-foundations.html", "match": "02-semantic", "desc": "How meaning emerges from structure, and why formats matter.", "desc_de": "Wie Bedeutung aus Struktur entsteht, und warum Formate wichtig sind."},
+            {"label": "Attention as Architecture", "label_de": "Aufmerksamkeit als Architekturprinzip", "url": "foundations/03-attention-as-architecture.html", "match": "03-attention", "desc": "Designing systems that respect and direct human attention.", "desc_de": "Systeme entwerfen, die menschliche Aufmerksamkeit respektieren und lenken."},
+            {"label": "Annotation as Ground Truth", "label_de": "Annotation als Ground Truth", "url": "foundations/04-annotation-as-ground-truth.html", "match": "04-annotation", "desc": "Why explicit annotation beats implicit inference.", "desc_de": "Warum explizite Annotation implizite Inferenz schlägt."},
+            {"label": "Tags as Scaffolding", "label_de": "Tags als Gerüst", "url": "foundations/05-tags-as-scaffolding.html", "match": "05-tags", "desc": "Lightweight structure that grows with your thinking.", "desc_de": "Leichtgewichtige Struktur, die mit deinem Denken wächst."},
         ],
     },
     {
+        "id": "design",
         "label": "Design",
-        "url": "design/index.html",
-        "match": "^design/",
+        "label_de": "Design",
         "items": [
-            {"label": "Overview",              "url": "design/index.html",                        "match": "^design/index"},
-            {"label": "OS Principles",         "url": "design/01-why-os-principles.html",         "match": "01-why-os"},
-            {"label": "Systems Survey",        "url": "design/02-systems-survey.html",            "match": "02-systems"},
-            {"label": "Architecture",          "url": "design/03-architecture.html",              "match": "03-architecture"},
-            {"label": "Data Formats",          "url": "design/04-data-formats.html",              "match": "04-data"},
-            {"label": "Related Work",          "url": "design/05-related-work.html",              "match": "05-related"},
-            {"label": "Agent Prompts",         "url": "design/06-agent-prompts.html",             "match": "06-agent"},
-            {"label": "Hybrid Memory Stack",   "url": "design/07-hybrid-memory-stack.html",       "match": "07-hybrid"},
-            {"label": "Quality Threshold",     "url": "design/08-quality-threshold.html",         "match": "08-quality"},
+            {"label": "Overview", "label_de": "Überblick", "url": "design/index.html", "match": "^design/index", "desc": "The big picture — how the pieces fit together.", "desc_de": "Das große Bild — wie die Teile zusammenpassen."},
+            {"label": "OS Principles", "label_de": "OS-Prinzipien", "url": "design/01-why-os-principles.html", "match": "01-why-os", "desc": "What we learned from decades of operating system design.", "desc_de": "Was wir aus Jahrzehnten Betriebssystem-Design gelernt haben."},
+            {"label": "Systems Survey", "label_de": "Systemvergleich", "url": "design/02-systems-survey.html", "match": "02-systems", "desc": "Existing approaches and why they fall short.", "desc_de": "Bestehende Ansätze und warum sie nicht ausreichen."},
+            {"label": "Architecture", "label_de": "Architektur", "url": "design/03-architecture.html", "match": "03-architecture", "desc": "Five agents, message passing, explicit capabilities.", "desc_de": "Fünf Agenten, Nachrichtenübermittlung, explizite Fähigkeiten."},
+            {"label": "Data Formats", "label_de": "Datenformate", "url": "design/04-data-formats.html", "match": "04-data", "desc": "Markdown, JSON, and the case for human-readable storage.", "desc_de": "Markdown, JSON und das Argument für menschenlesbare Speicherung."},
+            {"label": "Related Work", "label_de": "Verwandte Ansätze", "url": "design/05-related-work.html", "match": "05-related", "desc": "Prior art and influences.", "desc_de": "Vorarbeiten und Einflüsse."},
+            {"label": "Agent Prompts", "label_de": "Agenten-Prompts", "url": "design/06-agent-prompts.html", "match": "06-agent", "desc": "How agents are instructed and constrained.", "desc_de": "Wie Agenten instruiert und eingeschränkt werden."},
+            {"label": "Hybrid Memory Stack", "label_de": "Hybrider Memory-Stack", "url": "design/07-hybrid-memory-stack.html", "match": "07-hybrid", "desc": "Combining retrieval methods for robust context.", "desc_de": "Kombination von Abrufmethoden für robusten Kontext."},
+            {"label": "Quality Threshold", "label_de": "Qualitätsschwelle", "url": "design/08-quality-threshold.html", "match": "08-quality", "desc": "When to act, when to wait.", "desc_de": "Wann handeln, wann warten."},
         ],
     },
     {
+        "id": "implementation",
         "label": "Implementation",
-        "url": "implementation/architecture.html",
-        "match": "implementation/(architecture|memory|agenda|skills|alan|hiro|signal|annotation)",
+        "label_de": "Implementierung",
         "items": [
-            {"label": "Current State",        "url": "implementation/architecture.html",       "match": "implementation/architecture"},
-            {"label": "Memory & Rules",        "url": "implementation/memory.html",             "match": "implementation/memory"},
-            {"label": "Agenda",                "url": "implementation/agenda.html",             "match": "implementation/agenda"},
-            {"label": "Skills",                "url": "implementation/skills.html",             "match": "implementation/skills"},
-            {"label": "Code Agent",            "url": "implementation/alan.html",               "match": "implementation/alan"},
-            {"label": "Action Agent",          "url": "implementation/hiro.html",               "match": "implementation/hiro"},
-            {"label": "Signal",                "url": "implementation/signal.html",             "match": "implementation/signal"},
-            {"label": "Annotation Feedback",   "url": "implementation/annotation-feedback.html","match": "annotation-feedback"},
+            {"label": "Current State", "label_de": "Aktueller Stand", "url": "implementation/01-architecture.html", "match": "01-architecture", "desc": "Where we are now.", "desc_de": "Wo wir jetzt stehen."},
+            {"label": "Memory & Rules", "label_de": "Memory & Regeln", "url": "implementation/02-memory.html", "match": "02-memory", "desc": "How memory and rules work.", "desc_de": "Wie Memory und Regeln funktionieren."},
+            {"label": "Agenda", "label_de": "Agenda", "url": "implementation/03-agenda.html", "match": "03-agenda", "desc": "Task management and scheduling.", "desc_de": "Aufgabenverwaltung und Planung."},
+            {"label": "Skills", "label_de": "Skills", "url": "implementation/04-skills.html", "match": "04-skills", "desc": "Extending agent capabilities.", "desc_de": "Agentenfähigkeiten erweitern."},
+            {"label": "Code Agent", "label_de": "Code-Agent", "url": "implementation/05-alan.html", "match": "05-alan", "desc": "The alan agent for code tasks.", "desc_de": "Der alan-Agent für Code-Aufgaben."},
+            {"label": "Action Agent", "label_de": "Action-Agent", "url": "implementation/06-hiro.html", "match": "06-hiro", "desc": "The hiro agent for actions.", "desc_de": "Der hiro-Agent für Aktionen."},
+            {"label": "Signal", "label_de": "Signal", "url": "implementation/07-signal.html", "match": "07-signal", "desc": "The signal mechanism.", "desc_de": "Der Signal-Mechanismus."},
+            {"label": "Annotation Feedback", "label_de": "Annotations-Feedback", "url": "implementation/08-annotation-feedback.html", "match": "08-annotation-feedback", "desc": "Learning from corrections.", "desc_de": "Aus Korrekturen lernen."},
+            {"label": "Vault", "label_de": "Vault", "url": "implementation/09-vault.html", "match": "09-vault", "desc": "Data storage structure.", "desc_de": "Datenspeicherstruktur."},
+            {"label": "Configuration", "label_de": "Konfiguration", "url": "implementation/10-config.html", "match": "10-config", "desc": "Configuration options.", "desc_de": "Konfigurationsoptionen."},
+            {"label": "Getting Started", "label_de": "Erste Schritte", "url": "implementation/11-guide.html", "match": "11-guide", "desc": "Setup and first steps.", "desc_de": "Einrichtung und erste Schritte."},
+            {"label": "Migration", "label_de": "Migration", "url": "implementation/12-migration.html", "match": "12-migration", "desc": "Upgrading between versions.", "desc_de": "Zwischen Versionen wechseln."},
+            {"label": "Web UI", "label_de": "Web UI", "url": "implementation/13-webui.html", "match": "13-webui", "desc": "The browser interface.", "desc_de": "Die Browser-Oberfläche."},
         ],
     },
     {
+        "id": "installation",
         "label": "Installation",
-        "url": "installation/release-notes.html",
-        "match": "installation|guide|config|migration|webui",
+        "label_de": "Installation",
         "items": [
-            {"label": "Release Notes",   "url": "installation/release-notes.html",   "match": "release-notes"},
-            {"label": "Getting Started", "url": "implementation/guide.html",         "match": "implementation/guide"},
-            {"label": "Models",          "url": "installation/models.html",          "match": "installation/models"},
-            {"label": "Communication",   "url": "installation/communication.html",   "match": "installation/communication"},
-            {"label": "Configuration",   "url": "implementation/config.html",        "match": "implementation/config"},
-            {"label": "Migration",       "url": "implementation/migration.html",     "match": "implementation/migration"},
-            {"label": "Web UI",          "url": "implementation/webui.html",         "match": "implementation/webui"},
+            {"label": "Release Notes", "label_de": "Release Notes", "url": "installation/01-release-notes.html", "match": "01-release-notes", "desc": "What's new in each version.", "desc_de": "Was in jeder Version neu ist."},
+            {"label": "Models", "label_de": "Modelle", "url": "installation/02-models.html", "match": "02-models", "desc": "Supported LLM providers.", "desc_de": "Unterstützte LLM-Anbieter."},
+            {"label": "Communication", "label_de": "Kommunikation", "url": "installation/03-communication.html", "match": "03-communication", "desc": "How to talk to outheis.", "desc_de": "Wie man mit outheis spricht."},
         ],
     },
     {
+        "id": "workflows",
         "label": "Workflows",
-        "url": "workflows/index.html",
-        "match": "^workflows/",
+        "label_de": "Workflows",
         "items": [
-            {"label": "Overview", "url": "workflows/index.html", "match": "workflows/index"},
-        ],
-    },
-]
-
-NAV_SECTIONS_DE = [
-    {
-        "label": "Grundlagen",
-        "url": "foundations/index.html",
-        "match": "foundations",
-        "items": [
-            {"label": "Warum outheis",                        "url": "foundations/index.html",                          "match": "foundations/index"},
-            {"label": "Designprinzipien",                     "url": "foundations/01-design-principles.html",          "match": "01-design-principles"},
-            {"label": "Information und Semantik",             "url": "foundations/02-semantic-foundations.html",       "match": "02-semantic"},
-            {"label": "Aufmerksamkeit als Architekturprinzip","url": "foundations/03-attention-as-architecture.html",  "match": "03-attention"},
-            {"label": "Annotation als Ground Truth",          "url": "foundations/04-annotation-as-ground-truth.html", "match": "04-annotation"},
-            {"label": "Tags als Gerüst",                      "url": "foundations/05-tags-as-scaffolding.html",        "match": "05-tags"},
-        ],
-    },
-    {
-        "label": "Design",
-        "url": "design/index.html",
-        "match": "^design/",
-        "items": [
-            {"label": "Überblick",             "url": "design/index.html",                        "match": "^design/index"},
-            {"label": "OS-Prinzipien",         "url": "design/01-why-os-principles.html",         "match": "01-why-os"},
-            {"label": "Systemvergleich",       "url": "design/02-systems-survey.html",            "match": "02-systems"},
-            {"label": "Architektur",           "url": "design/03-architecture.html",              "match": "03-architecture"},
-            {"label": "Datenformate",          "url": "design/04-data-formats.html",              "match": "04-data"},
-            {"label": "Verwandte Ansätze",     "url": "design/05-related-work.html",              "match": "05-related"},
-            {"label": "Agenten-Prompts",       "url": "design/06-agent-prompts.html",             "match": "06-agent"},
-            {"label": "Hybrider Memory-Stack", "url": "design/07-hybrid-memory-stack.html",       "match": "07-hybrid"},
-            {"label": "Qualitätsschwelle",     "url": "design/08-quality-threshold.html",         "match": "08-quality"},
-        ],
-    },
-    {
-        "label": "Implementierung",
-        "url": "implementation/architecture.html",
-        "match": "implementation/(architecture|memory|agenda|skills|alan|hiro|signal|annotation)",
-        "items": [
-            {"label": "Aktueller Stand",          "url": "implementation/architecture.html",       "match": "implementation/architecture"},
-            {"label": "Memory & Regeln",           "url": "implementation/memory.html",             "match": "implementation/memory"},
-            {"label": "Agenda",                    "url": "implementation/agenda.html",             "match": "implementation/agenda"},
-            {"label": "Skills",                    "url": "implementation/skills.html",             "match": "implementation/skills"},
-            {"label": "Code-Agent",                "url": "implementation/alan.html",               "match": "implementation/alan"},
-            {"label": "Action-Agent",              "url": "implementation/hiro.html",               "match": "implementation/hiro"},
-            {"label": "Signal",                    "url": "implementation/signal.html",             "match": "implementation/signal"},
-            {"label": "Annotations-Feedback",      "url": "implementation/annotation-feedback.html","match": "annotation-feedback"},
-        ],
-    },
-    {
-        "label": "Installation",
-        "url": "installation/release-notes.html",
-        "match": "installation|guide|config|migration|webui",
-        "items": [
-            {"label": "Release Notes",   "url": "installation/release-notes.html",   "match": "release-notes"},
-            {"label": "Erste Schritte",  "url": "implementation/guide.html",         "match": "implementation/guide"},
-            {"label": "Modelle",         "url": "installation/models.html",          "match": "installation/models"},
-            {"label": "Kommunikation",   "url": "installation/communication.html",   "match": "installation/communication"},
-            {"label": "Konfiguration",   "url": "implementation/config.html",        "match": "implementation/config"},
-            {"label": "Migration",       "url": "implementation/migration.html",     "match": "implementation/migration"},
-            {"label": "Web UI",          "url": "implementation/webui.html",         "match": "implementation/webui"},
-        ],
-    },
-    {
-        "label": "Workflows",
-        "url": "workflows/index.html",
-        "match": "^workflows/",
-        "items": [
-            {"label": "Überblick", "url": "workflows/index.html", "match": "workflows/index"},
+            {"label": "Overview", "label_de": "Überblick", "url": "workflows/index.html", "match": "workflows/index", "desc": "Practical patterns for daily use.", "desc_de": "Praktische Muster für den täglichen Gebrauch."},
+            {"label": "Tags", "label_de": "Tags", "url": "workflows/01-tags.html", "match": "01-tags", "desc": "Using tags for organization.", "desc_de": "Tags zur Organisation verwenden."},
         ],
     },
 ]
 
 
-def relative_url(from_path: str, to_path: str) -> str:
-    """Calculate relative URL from one page to another."""
-    from_parts = from_path.split('/')
-    if len(from_parts) == 1:
-        return to_path
-    depth = len(from_parts) - 1
-    return '../' * depth + to_path
+def get_flat_nav_list(lang: str) -> list:
+    """Get a flat list of all pages in order for prev/next navigation."""
+    flat = []
+    label_key = 'label_de' if lang == 'de' else 'label'
+    for section in NAV_STRUCTURE:
+        for item in section['items']:
+            flat.append({
+                'label': item.get(label_key, item['label']),
+                'url': item['url'],
+                'match': item['match'],
+                'section_id': section['id'],
+                'section_label': section.get(label_key, section['label']),
+            })
+    return flat
 
 
-def build_nav(current_rel: str, nav_sections: list) -> tuple[str, str]:
-    """
-    Build top nav and sub-nav HTML for the current page.
-
-    Returns (topnav_html, subnav_html).
-    current_rel: path relative to the language output dir (no lang prefix).
-    """
-    active_section = None
-    for section in nav_sections:
-        if re.search(section["match"], current_rel):
-            active_section = section
+def find_current_page(current_rel: str, flat_nav: list) -> tuple:
+    """Find current page index and return (prev, current, next) info."""
+    current_idx = None
+    for i, item in enumerate(flat_nav):
+        if re.search(item['match'], current_rel):
+            current_idx = i
             break
-
-    top_items = []
-    for section in nav_sections:
-        is_active = section is active_section
-        active_cls = ' class="active"' if is_active else ''
-        url = relative_url(current_rel, section["url"])
-        top_items.append(f'<a href="{url}"{active_cls}>{section["label"]}</a>')
-    top_items.append('<a href="https://github.com/outheis-labs/outheis-beta" class="external">GitHub ↗</a>')
-    topnav_html = "\n        ".join(top_items)
-
-    subnav_html = ""
-    if active_section:
-        sub_items = []
-        for item in active_section.get("items", []):
-            match = item.get("match", "")
-            is_active = bool(re.search(match, current_rel)) if match else False
-            active_cls = ' class="active"' if is_active else ''
-            url = relative_url(current_rel, item["url"])
-            sub_items.append(f'<a href="{url}"{active_cls}>{item["label"]}</a>')
-        subnav_html = "\n      ".join(sub_items)
-
-    return topnav_html, subnav_html
+    
+    if current_idx is None:
+        return None, None, None
+    
+    prev_item = flat_nav[current_idx - 1] if current_idx > 0 else None
+    current_item = flat_nav[current_idx]
+    next_item = flat_nav[current_idx + 1] if current_idx < len(flat_nav) - 1 else None
+    
+    return prev_item, current_item, next_item
 
 
 def extract_title(content: str, filepath: Path) -> str:
@@ -214,6 +135,41 @@ def extract_title(content: str, filepath: Path) -> str:
     if match:
         return match.group(1).strip()
     return filepath.stem.replace('-', ' ').title()
+
+
+def extract_subtitle(content: str) -> str:
+    """
+    Extract subtitle from markdown content.
+    Subtitle is the first italic line after H1 and before ---.
+    Returns empty string if no subtitle found.
+    """
+    lines = content.strip().split('\n')
+    found_h1 = False
+    
+    for line in lines:
+        line = line.strip()
+        
+        # Skip until we find H1
+        if line.startswith('# '):
+            found_h1 = True
+            continue
+        
+        if not found_h1:
+            continue
+        
+        # Stop at horizontal rule
+        if line.startswith('---'):
+            break
+        
+        # Skip empty lines
+        if not line:
+            continue
+        
+        # Italic line = subtitle
+        if line.startswith('*') and line.endswith('*') and not line.startswith('**'):
+            return line.strip('*').strip()
+    
+    return ''
 
 
 def strip_frontmatter(content: str) -> str:
@@ -227,67 +183,258 @@ def strip_frontmatter(content: str) -> str:
 
 def md_to_html(content: str) -> str:
     """Convert Markdown to HTML."""
-    return markdown.markdown(
+    html = markdown.markdown(
         content,
         extensions=['tables', 'fenced_code', 'attr_list', 'toc'],
-        extension_configs={
-            'toc': {'permalink': False}
-        }
+        extension_configs={'toc': {'permalink': False}}
+    )
+    # Wrap Greek text (οὐθείς) in span for Inter font
+    html = re.sub(r'οὐθείς', '<span class="greek">οὐθείς</span>', html)
+    return html
+
+
+def wrap_content_in_sections(html: str) -> str:
+    """
+    Wrap content in section divs with the two-column layout.
+    Each H2 starts a new section with the heading as the left label.
+    H1 is removed (shown in page header).
+    Subtitle (first italic paragraph before H2) is removed (shown in page header).
+    All hr tags are removed (section borders are CSS-based).
+    H2 is duplicated in section-text for mobile/desktop CSS switching.
+    H2 IDs are transferred to the section element.
+    """
+    # Remove H1 (shown in page header)
+    html = re.sub(r'<h1[^>]*>.*?</h1>\s*', '', html, count=1, flags=re.DOTALL)
+    
+    # Remove all hr tags (section borders are handled by CSS)
+    html = re.sub(r'\s*<hr\s*/?>\s*', '\n', html)
+    
+    # Split by H2 headings
+    parts = re.split(r'(<h2[^>]*>.*?</h2>)', html, flags=re.DOTALL)
+    
+    if len(parts) <= 1:
+        # No H2 headings
+        content = html.strip()
+        # Remove subtitle (first <p><em>...</em></p>)
+        content = re.sub(r'^(\s*<p><em>.*?</em></p>\s*)', '', content, count=1)
+        if content:
+            return f'<section class="section"><h2></h2><div class="section-text">{content}</div></section>'
+        return ''
+    
+    sections = []
+    current_heading = None
+    current_content = []
+    
+    # First part before any H2 (intro/lead text)
+    intro = parts[0].strip()
+    # Remove subtitle (first <p><em>...</em></p>) - it's shown in page header
+    intro = re.sub(r'^(\s*<p><em>.*?</em></p>\s*)', '', intro, count=1)
+    intro = intro.strip()
+    if intro:
+        sections.append(f'<section class="section"><h2></h2><div class="section-text">{intro}</div></section>')
+    
+    for part in parts[1:]:
+        if re.match(r'<h2[^>]*>', part):
+            # Save previous section
+            if current_heading is not None:
+                content = ''.join(current_content).strip()
+                # Extract ID from heading if present
+                id_match = re.search(r'id="([^"]*)"', current_heading)
+                section_id = f' id="{id_match.group(1)}"' if id_match else ''
+                # Get heading text without tags and ID
+                heading_text = re.sub(r'</?h2[^>]*>', '', current_heading).strip()
+                sections.append(
+                    f'<section class="section"{section_id}>\n'
+                    f'      <h2>{heading_text}</h2>\n'
+                    f'      <div class="section-text"><h2>{heading_text}</h2>\n'
+                    f'        {content}\n'
+                    f'      </div>\n'
+                    f'    </section>'
+                )
+            current_heading = part
+            current_content = []
+        else:
+            current_content.append(part)
+    
+    # Last section
+    if current_heading is not None:
+        content = ''.join(current_content).strip()
+        # Extract ID from heading if present
+        id_match = re.search(r'id="([^"]*)"', current_heading)
+        section_id = f' id="{id_match.group(1)}"' if id_match else ''
+        # Get heading text without tags and ID
+        heading_text = re.sub(r'</?h2[^>]*>', '', current_heading).strip()
+        sections.append(
+            f'<section class="section"{section_id}>\n'
+            f'      <h2>{heading_text}</h2>\n'
+            f'      <div class="section-text"><h2>{heading_text}</h2>\n'
+            f'        {content}\n'
+            f'      </div>\n'
+            f'    </section>'
+        )
+    
+    return '\n\n    '.join(sections)
+
+
+def build_breadcrumb(current_item: dict, root: str) -> str:
+    """Build breadcrumb HTML."""
+    if current_item is None:
+        return ''
+    
+    return (
+        f'<div class="breadcrumb">\n'
+        f'        <span class="separator">/</span>\n'
+        f'        <a href="{root}contents.html#{current_item["section_id"]}">{current_item["section_label"]}</a>\n'
+        f'        <span class="separator">/</span>\n'
+        f'        <span class="current">{current_item["label"]}</span>\n'
+        f'      </div>'
     )
 
 
-def build_page(src: Path, src_root: Path, out_root: Path, template: str,
-               nav_sections: list, lang: str):
+def build_book_nav(prev_item: dict, current_item: dict, next_item: dict, root: str, lang: str) -> str:
+    """Build book-style navigation HTML."""
+    section_id = current_item['section_id'] if current_item else ''
+    section_label = current_item['section_label'] if current_item else ''
+    
+    prev_html = ''
+    if prev_item:
+        prev_label = "Zurück" if lang == "de" else "Previous"
+        prev_html = (
+            f'<a href="{root}{prev_item["url"]}">\n'
+            f'          <span class="label">← {prev_label}</span>\n'
+            f'          <span class="title">{prev_item["label"]}</span>\n'
+            f'        </a>'
+        )
+    
+    toc_label = "Inhalt" if lang == "de" else "Contents"
+    toc_html = (
+        f'<a href="{root}contents.html#{section_id}">\n'
+        f'          <span class="label">{toc_label}</span>\n'
+        f'          <span class="title">{section_label}</span>\n'
+        f'        </a>'
+    )
+    
+    next_html = ''
+    if next_item:
+        next_label = "Weiter" if lang == "de" else "Next"
+        next_html = (
+            f'<a href="{root}{next_item["url"]}">\n'
+            f'          <span class="label">{next_label} →</span>\n'
+            f'          <span class="title">{next_item["label"]}</span>\n'
+            f'        </a>'
+        )
+    
+    return (
+        f'<nav class="book-nav">\n'
+        f'      <div class="prev">{prev_html}</div>\n'
+        f'      <div class="toc-center">{toc_html}</div>\n'
+        f'      <div class="next">{next_html}</div>\n'
+        f'    </nav>'
+    )
+
+
+def build_page(src: Path, src_root: Path, out_root: Path, template: str, lang: str):
     """Build one page: Markdown → HTML → wrapped in template."""
     raw = src.read_text(encoding='utf-8')
     content_md = strip_frontmatter(raw)
     title = extract_title(content_md, src)
+    subtitle = extract_subtitle(content_md)
     content_html = md_to_html(content_md)
-
-    if src.name == 'index.md':
-        content_html = content_html.replace('<img ', '<img style="width:50%" ')
-
-    rel_local = str(src.relative_to(src_root).with_suffix('.html'))  # e.g. "design/03-architecture.html"
+    
+    # Wrap content in sections
+    content_wrapped = wrap_content_in_sections(content_html)
+    
+    rel_local = str(src.relative_to(src_root).with_suffix('.html'))
     dst = out_root / rel_local
-    rel_from_html = str(dst.relative_to(DOCS))  # e.g. "design/..." or "de/design/..."
-
+    rel_from_html = str(dst.relative_to(DOCS))
+    
     depth = len(rel_from_html.split('/')) - 1
     root = '../' * depth if depth > 0 else ''
-
-    topnav_html, subnav_html = build_nav(rel_local, nav_sections)
-
-    # Language switcher: link to the equivalent page in the other language
+    
+    # Navigation
+    flat_nav = get_flat_nav_list(lang)
+    prev_item, current_item, next_item = find_current_page(rel_local, flat_nav)
+    
+    breadcrumb_html = build_breadcrumb(current_item, root)
+    book_nav_html = build_book_nav(prev_item, current_item, next_item, root, lang)
+    section_anchor = f'#{current_item["section_id"]}' if current_item else ''
+    
+    # Language switcher
     if lang == 'en':
         other_href = f'{root}de/{rel_local}'
-        lang_switch_html = f'<span class="lang-active">EN</span> · <a href="{other_href}" class="lang-link">DE</a>'
+        lang_switch_html = f'<span class="lang-active">EN</span> · <a href="{other_href}">DE</a>'
     else:
-        other_href = f'{root}{rel_local}'  # root goes to html/de/, then back to html/ via rel
-        # Actually root already brings us to html/ for DE pages (depth accounts for de/ prefix)
-        # From html/de/design/foo.html: root = ../../, rel_local = design/foo.html → ../../design/foo.html ✓
-        lang_switch_html = f'<a href="{other_href}" class="lang-link">EN</a> · <span class="lang-active">DE</span>'
-
-    if subnav_html:
-        subnavbar_html = (
-            '<div class="subnav-bar">\n'
-            '    <div class="subnav-inner">\n'
-            f'      {subnav_html}\n'
-            '    </div>\n'
-            '  </div>'
-        )
-    else:
-        subnavbar_html = ''
-
+        other_href = f'{root}{rel_local}'
+        lang_switch_html = f'<a href="{other_href}">EN</a> · <span class="lang-active">DE</span>'
+    
+    # Subtitle HTML
+    subtitle_html = f'<p class="subtitle">{subtitle}</p>' if subtitle else ''
+    
     page = (template
             .replace('<!-- ROOT -->', root)
-            .replace('<!-- TITLE -->', f'{title} · {SITE_TITLE}' if title != SITE_TITLE else SITE_TITLE)
-            .replace('<!-- TOPNAV -->', topnav_html)
-            .replace('<!-- SUBNAVBAR -->', subnavbar_html)
+            .replace('<!-- TITLE -->', f'{title} · {SITE_TITLE}')
+            .replace('<!-- PAGE_TITLE -->', title)
+            .replace('<!-- SUBTITLE -->', subtitle_html)
+            .replace('<!-- BREADCRUMB -->', breadcrumb_html)
+            .replace('<!-- SECTION_ANCHOR -->', section_anchor)
             .replace('<!-- LANG_SWITCH -->', lang_switch_html)
-            .replace('<!-- CONTENT -->', content_html))
-
+            .replace('<!-- CONTENT -->', content_wrapped)
+            .replace('<!-- BOOK_NAV -->', book_nav_html))
+    
     dst.parent.mkdir(parents=True, exist_ok=True)
     dst.write_text(page, encoding='utf-8')
     print(f"  {src.relative_to(src_root)} → {dst.relative_to(DOCS)}")
+
+
+def build_index_page(src: Path, src_root: Path, out_root: Path, hero_template: str, lang: str):
+    """Build the index/landing page with hero template."""
+    raw = src.read_text(encoding='utf-8')
+    content_md = strip_frontmatter(raw)
+    title = extract_title(content_md, src)
+    
+    # Split content at first --- to separate lead from rest
+    parts = re.split(r'\n---\n', content_md, maxsplit=1)
+    
+    # Extract lead (everything after H1, before ---)
+    lead_md = parts[0]
+    lead_md = re.sub(r'^#\s+.+\n+', '', lead_md)  # Remove H1
+    lead_html = md_to_html(lead_md)
+    
+    # Convert <p>...</p><p>...</p> to inline format with <br><br>
+    # Strip <p> tags and join with <br><br>
+    lead_html = re.sub(r'<p>(.*?)</p>\s*', r'\1<br><br>', lead_html, flags=re.DOTALL)
+    lead_html = re.sub(r'(<br><br>)+$', '', lead_html)  # Remove trailing br
+    lead_html = lead_html.strip()
+    
+    # Rest of content (after ---)
+    rest_md = parts[1] if len(parts) > 1 else ''
+    rest_html = md_to_html(rest_md)
+    content_wrapped = wrap_content_in_sections(rest_html)
+    
+    rel_local = str(src.relative_to(src_root).with_suffix('.html'))
+    dst = out_root / rel_local
+    rel_from_html = str(dst.relative_to(DOCS))
+    
+    depth = len(rel_from_html.split('/')) - 1
+    root = '../' * depth if depth > 0 else ''
+    
+    # Language switcher
+    if lang == 'en':
+        lang_switch_html = '<span class="lang-active">EN</span> · <a href="de/index.html">DE</a>'
+    else:
+        lang_switch_html = '<a href="../index.html">EN</a> · <span class="lang-active">DE</span>'
+    
+    page = (hero_template
+            .replace('<!-- ROOT -->', root)
+            .replace('<!-- TITLE -->', f'{title} · {SITE_TITLE}')
+            .replace('<!-- PAGE_TITLE -->', title)
+            .replace('<!-- HERO_LEAD -->', lead_html)
+            .replace('<!-- LANG_SWITCH -->', lang_switch_html)
+            .replace('<!-- CONTENT -->', content_wrapped))
+    
+    dst.parent.mkdir(parents=True, exist_ok=True)
+    dst.write_text(page, encoding='utf-8')
+    print(f"  {src.relative_to(src_root)} → {dst.relative_to(DOCS)} (hero)")
 
 
 def copy_assets():
@@ -295,23 +442,11 @@ def copy_assets():
     assets_src = DOCS_SOURCE / "assets"
     if not assets_src.exists():
         return
-
+    
     assets_dst = DOCS / "assets"
     assets_dst.mkdir(parents=True, exist_ok=True)
-
-    logo_src = assets_src / "logo.svg"
-    if logo_src.exists():
-        shutil.copy(logo_src, assets_dst / "logo.svg")
-        print("  assets/logo.svg → assets/logo.svg")
-
-    logo_png = assets_src / "logo.png"
-    if logo_png.exists():
-        shutil.copy(logo_png, assets_dst / "logo.png")
-        print("  assets/logo.png → assets/logo.png")
-
+    
     for f in assets_src.iterdir():
-        if f.name in ("logo.svg", "logo.png"):
-            continue
         if f.is_dir():
             dst_dir = assets_dst / f.name
             if dst_dir.exists():
@@ -319,29 +454,41 @@ def copy_assets():
             shutil.copytree(f, dst_dir)
             print(f"  assets/{f.name}/ → assets/{f.name}/")
         else:
-            shutil.copy(f, DOCS / f.name)
-            print(f"  assets/{f.name} → {f.name}")
+            shutil.copy(f, assets_dst / f.name)
+            # Copy favicon files to root
+            if f.name.startswith('favicon') or f.name.startswith('apple-touch') or f.name.startswith('web-app') or f.name == 'site.webmanifest':
+                shutil.copy(f, DOCS / f.name)
+                print(f"  assets/{f.name} → {f.name}")
+            else:
+                print(f"  assets/{f.name} → assets/{f.name}")
 
 
 def main():
     template = (TEMPLATES / "default.html").read_text(encoding='utf-8')
-
+    hero_template = (TEMPLATES / "hero.html").read_text(encoding='utf-8')
+    
     if DOCS.exists():
         shutil.rmtree(DOCS)
     DOCS.mkdir(exist_ok=True)
-
+    
     print(f"Building EN: {DOCS_SOURCE.name}/ → {DOCS.name}/")
     for md_file in sorted(DOCS_SOURCE.rglob("*.md")):
         if any(part.startswith('_') for part in md_file.parts):
             continue
-        build_page(md_file, DOCS_SOURCE, DOCS, template, NAV_SECTIONS, 'en')
-
+        if md_file.name == 'index.md' and md_file.parent == DOCS_SOURCE:
+            build_index_page(md_file, DOCS_SOURCE, DOCS, hero_template, 'en')
+        else:
+            build_page(md_file, DOCS_SOURCE, DOCS, template, 'en')
+    
     print(f"\nBuilding DE: {DOCS_DE.name}/ → {DOCS.name}/de/")
     for md_file in sorted(DOCS_DE.rglob("*.md")):
         if any(part.startswith('_') for part in md_file.parts):
             continue
-        build_page(md_file, DOCS_DE, DOCS / 'de', template, NAV_SECTIONS_DE, 'de')
-
+        if md_file.name == 'index.md' and md_file.parent == DOCS_DE:
+            build_index_page(md_file, DOCS_DE, DOCS / 'de', hero_template, 'de')
+        else:
+            build_page(md_file, DOCS_DE, DOCS / 'de', template, 'de')
+    
     print("\nCopying assets...")
     copy_assets()
     print("\nDone.")

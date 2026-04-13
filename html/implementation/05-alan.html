@@ -1,0 +1,761 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Alan · outheis</title>
+  <link rel="icon" type="image/png" href="../favicon-96x96.png" sizes="96x96">
+  <link rel="icon" type="image/svg+xml" href="../favicon.svg">
+  <link rel="shortcut icon" href="../favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="../apple-touch-icon.png">
+  <link rel="manifest" href="../site.webmanifest">
+  <style>
+    @font-face {
+      font-family: 'Inter';
+      src: url('../assets/fonts/InterVariable.woff2') format('woff2');
+      font-weight: 100 900;
+      font-style: normal;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'IBM Plex Sans';
+      src: url('../assets/fonts/IBMPlexSans-Variable.woff2') format('woff2-variations');
+      font-weight: 100 700;
+      font-style: normal;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'IBM Plex Mono';
+      src: url('../assets/fonts/IBMPlexMono-Regular.woff2') format('woff2');
+      font-weight: 400;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'IBM Plex Sans', -apple-system, sans-serif;
+      background: #fff;
+      color: #1a1a1a;
+      line-height: 1.65;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .greek {
+      font-family: 'Inter', sans-serif;
+    }
+
+    /* Header with breadcrumb */
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 1.5rem;
+      border-bottom: 1px solid #e0e0e0;
+    }
+
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .logo {
+      font-family: 'Inter', sans-serif;
+      font-size: 20px;
+      font-weight: 500;
+    }
+
+    .breadcrumb {
+      font-size: 14px;
+      color: #888;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .breadcrumb a {
+      color: #666;
+    }
+
+    .breadcrumb a:hover {
+      color: #1a1a1a;
+    }
+
+    .breadcrumb .separator {
+      color: #ccc;
+    }
+
+    .breadcrumb .current {
+      color: #1a1a1a;
+    }
+
+    header nav {
+      font-size: 14px;
+      display: flex;
+      align-items: baseline;
+      gap: 1rem;
+    }
+
+    header nav a {
+      color: #888;
+    }
+
+    header nav a:hover {
+      color: #1a1a1a;
+    }
+
+    .lang-switch {
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-size: 14px;
+      color: #888;
+    }
+
+    .lang-switch a {
+      font-size: 14px;
+      color: #888;
+    }
+
+    .lang-switch a:hover {
+      color: #1a1a1a;
+    }
+
+    .lang-switch .lang-active {
+      color: #1a1a1a;
+      font-weight: 500;
+    }
+
+    /* Main */
+    main {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 3rem 1.5rem;
+    }
+
+    /* Page header */
+    .page-header {
+      margin-bottom: 3rem;
+    }
+
+    .page-header h1 {
+      font-family: 'Inter', sans-serif;
+      font-size: 36px;
+      font-weight: 500;
+      letter-spacing: -0.02em;
+    }
+
+    .page-header .subtitle {
+      font-size: 18px;
+      font-style: italic;
+      color: #555;
+      margin-top: 0.75rem;
+    }
+
+    /* Content sections */
+    .section {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+      padding: 2.5rem 0;
+      border-top: 1px solid #e0e0e0;
+    }
+
+    /* Mobile: hide label h2, show section-text h2 */
+    .section > h2 {
+      display: none;
+    }
+
+    .section-text h2 {
+      font-size: 20px;
+      font-weight: 500;
+      margin-bottom: 1rem;
+    }
+
+    .section-text > *:first-child {
+      margin-top: 0;
+    }
+
+    /* Hidden h2 is first-child on desktop, so target the visible first element */
+    .section-text > h2 + * {
+      margin-top: 0;
+    }
+
+    .section-text > h2 + p {
+      margin-top: 0;
+    }
+
+    .section-text p {
+      font-size: 16px;
+      line-height: 1.75;
+      color: #333;
+      margin-bottom: 1rem;
+    }
+
+    .section-text p:last-child {
+      margin-bottom: 0;
+    }
+
+    .section-text h3 {
+      font-size: 16px;
+      font-weight: 450;
+      color: #1a1a1a;
+      line-height: 1.75;
+      margin-top: 1.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .section-text h3:first-child,
+    .section-text > h2 + h3 {
+      margin-top: 0;
+    }
+
+    .section-text ul {
+      list-style: none;
+      margin-bottom: 1rem;
+    }
+
+    .section-text ul li {
+      font-size: 16px;
+      line-height: 1.65;
+      color: #333;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid #eee;
+    }
+
+    .section-text ul li:last-child {
+      border-bottom: none;
+    }
+
+    .section-text ol {
+      margin-bottom: 1rem;
+      padding-left: 1.5rem;
+    }
+
+    .section-text ol li {
+      font-size: 16px;
+      line-height: 1.65;
+      color: #333;
+      margin-bottom: 0.5rem;
+    }
+
+    .section-text code {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 14px;
+      background: #f5f5f5;
+      padding: 0.15em 0.4em;
+      border-radius: 2px;
+    }
+
+    .section-text pre {
+      background: #f5f5f5;
+      padding: 1rem 1.25rem;
+      overflow-x: auto;
+      margin: 1.5rem 0;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 13px;
+      line-height: 1.5;
+      border-radius: 2px;
+    }
+
+    .section-text pre code {
+      background: none;
+      padding: 0;
+    }
+
+    .section-text table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1.5rem 0;
+      font-size: 14px;
+    }
+
+    .section-text th,
+    .section-text td {
+      text-align: left;
+      padding: 0.5rem 0.75rem;
+      border-bottom: 1px solid #e0e0e0;
+    }
+
+    .section-text th {
+      font-weight: 500;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: #666;
+    }
+
+    .section-text blockquote {
+      border-left: 2px solid #e0e0e0;
+      padding-left: 1.25rem;
+      margin: 1.5rem 0;
+      color: #666;
+      font-style: italic;
+    }
+
+    .section-text a {
+      color: #666;
+    }
+
+    .section-text a:hover {
+      color: #1a1a1a;
+    }
+
+    /* TOC list styling */
+    .toc-list {
+      list-style: none;
+      padding-left: 0;
+    }
+
+    .toc-list li {
+      border-bottom: 1px solid #eee;
+    }
+
+    .toc-list li:last-child {
+      border-bottom: none;
+    }
+
+    .toc-list a {
+      display: block;
+      padding: 1rem 0;
+      color: #1a1a1a;
+    }
+
+    .toc-list li:first-child a {
+      padding-top: 0;
+    }
+
+    .toc-list a:hover {
+      background: #fafafa;
+      margin: 0 -1rem;
+      padding: 1rem;
+    }
+
+    .toc-list .title {
+      font-size: 16px;
+      font-weight: 500;
+      color: #1a1a1a;
+      margin-bottom: 0.25rem;
+    }
+
+    .toc-list .description {
+      font-size: 14px;
+      color: #666;
+      line-height: 1.5;
+    }
+
+    /* Book navigation */
+    .book-nav {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      gap: 1rem;
+      align-items: center;
+      padding: 2rem 0;
+      margin-top: 2rem;
+      border-top: 1px solid #e0e0e0;
+    }
+
+    .book-nav a {
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+      color: #666;
+    }
+
+    .book-nav a:hover {
+      color: #1a1a1a;
+    }
+
+    .book-nav .label {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: #888;
+    }
+
+    .book-nav .title {
+      font-size: 15px;
+      font-weight: 500;
+    }
+
+    .book-nav .prev {
+      text-align: left;
+    }
+
+    .book-nav .toc-center {
+      text-align: center;
+    }
+
+    .book-nav .toc-center a {
+      align-items: center;
+    }
+
+    .book-nav .next {
+      text-align: right;
+    }
+
+    /* Footer */
+    footer {
+      padding: 2rem 1.5rem;
+      max-width: 1100px;
+      margin: 0 auto;
+      border-top: 1px solid #e0e0e0;
+    }
+
+    footer .meta {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 12px;
+      color: #888;
+    }
+
+    footer .meta a {
+      color: #888;
+    }
+
+    footer .meta a:hover {
+      color: #333;
+    }
+
+    /* Desktop */
+    @media (min-width: 800px) {
+      header {
+        padding: 1.5rem 3rem;
+      }
+
+      main {
+        padding: 4rem 3rem;
+      }
+
+      .page-header h1 {
+        font-size: 48px;
+      }
+
+      .section {
+        grid-template-columns: 180px 1fr;
+        gap: 3rem;
+        padding: 3rem 0;
+        align-items: baseline;
+      }
+
+      .section > h2 {
+        display: block;
+        font-size: 18px;
+        font-weight: 500;
+        color: #1a1a1a;
+        line-height: 1.75;
+      }
+
+      .section-text h2 {
+        display: none;
+        position: absolute;
+        visibility: hidden;
+      }
+
+      .book-nav .title {
+        font-size: 16px;
+      }
+
+      footer {
+        padding: 2rem 3rem;
+      }
+    }
+
+    /* Mobile */
+    @media (max-width: 600px) {
+      .breadcrumb {
+        display: none;
+      }
+
+      .book-nav {
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: auto auto;
+      }
+
+      .book-nav .prev {
+        grid-column: 1;
+      }
+
+      .book-nav .next {
+        grid-column: 2;
+      }
+
+      .book-nav .toc-center {
+        grid-column: 1 / -1;
+        grid-row: 2;
+        margin-top: 1rem;
+        padding-top: 1rem;
+        border-top: 1px solid #eee;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="header-left">
+      <a href="../index.html" class="logo">οὐθείς</a>
+      <div class="breadcrumb">
+        <span class="separator">/</span>
+        <a href="../contents.html#implementation">Implementation</a>
+        <span class="separator">/</span>
+        <span class="current">Code Agent</span>
+      </div>
+    </div>
+    <nav>
+      <a href="../contents.html#implementation">Contents</a>
+      <a href="https://github.com/outheis-labs/outheis-beta">GitHub ↗</a>
+      <span class="lang-switch"><span class="lang-active">EN</span> · <a href="../de/implementation/05-alan.html">DE</a></span>
+    </nav>
+  </header>
+
+  <main>
+    <div class="page-header">
+      <h1>Alan</h1>
+      <p class="subtitle">Code intelligence for development environments.</p>
+    </div>
+
+    <section class="section" id="what-alan-does">
+      <h2>What alan does</h2>
+      <div class="section-text"><h2>What alan does</h2>
+        <p>alan is outheis's code agent. It reads locally available source code, answers questions about implementation, and proposes improvements through a structured review workflow.</p>
+<p><strong>alan is a development-only agent. It is never active in production environments.</strong></p>
+      </div>
+    </section>
+
+    <section class="section" id="the-codebase-workflow">
+      <h2>The Codebase Workflow</h2>
+      <div class="section-text"><h2>The Codebase Workflow</h2>
+        <p>alan stages all proposals in <code>vault/Codebase/</code>, mirroring the pattern established by cato's <code>vault/Agenda/</code>:</p>
+<pre><code>vault/Codebase/
+├── Exchange.md          # proposals for review
+└── &lt;staged files&gt;       # modified files or diffs for context
+</code></pre>
+<h3 id="exchangemd">Exchange.md</h3>
+<p>Each proposal from alan is an entry in <code>vault/Codebase/Exchange.md</code>:</p>
+<pre><code class="language-markdown">## 2026-04-01 — Beschreibung des Vorschlags
+
+**Type:** refactor | bugfix | improvement | answer
+**Files:** src/outheis/agents/data.py
+**Status:** proposed | approved | rejected | discussing
+
+### Summary
+Was wird vorgeschlagen und warum.
+
+### Proposed Change
+Verweis auf staged file oder inline diff.
+
+### Discussion
+(Deine Antworten und Rückfragen kommen hier hin)
+</code></pre>
+<p>You respond under "Discussion", approve or reject with a keyword (<code>approved</code>, <code>rejected</code>), and alan picks up the decision at the next run.</p>
+<h3 id="staged-files">Staged Files</h3>
+<p>For non-trivial changes, alan writes the modified file to <code>vault/Codebase/&lt;filename&gt;</code> alongside the Exchange.md entry. Review the diff, then respond in Exchange.md.</p>
+      </div>
+    </section>
+
+    <section class="section" id="responsibilities">
+      <h2>Responsibilities</h2>
+      <div class="section-text"><h2>Responsibilities</h2>
+        <h3 id="code-introspection">Code Introspection</h3>
+<p>Answer questions about how outheis is implemented. Examples:</p>
+<ul>
+<li>"Wie funktioniert der Dispatcher?"</li>
+<li>"Wo wird memory.json geschrieben?"</li>
+<li>"Was passiert wenn ich <code>@zeno</code> verwende?"</li>
+</ul>
+<p>alan reads source files, traces call paths, and explains logic — without making any changes.</p>
+<h3 id="improvement-proposals">Improvement Proposals</h3>
+<p>Respond to requests or proactively identify:</p>
+<ul>
+<li>Refactoring opportunities</li>
+<li>Bug fixes</li>
+<li>Inconsistencies between documentation and implementation</li>
+</ul>
+<p>All proposals go through Exchange.md. alan never modifies <code>src/</code> directly.</p>
+<h3 id="code-search">Code Search</h3>
+<p>Find implementations, patterns, and references across the local codebase:</p>
+<ul>
+<li>"Zeig mir alle Stellen wo Vault-Dateien gelesen werden"</li>
+<li>"Welcher Agent ist für Scheduling zuständig?"</li>
+<li>"Wie ist das Tool <code>append_file</code> implementiert?"</li>
+</ul>
+      </div>
+    </section>
+
+    <section class="section" id="tools">
+      <h2>Tools</h2>
+      <div class="section-text"><h2>Tools</h2>
+        <table>
+<thead>
+<tr>
+<th>Tool</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>read_file(path)</code></td>
+<td>Read any local source file</td>
+</tr>
+<tr>
+<td><code>search_code(query, path)</code></td>
+<td>Search for patterns, function names, identifiers</td>
+</tr>
+<tr>
+<td><code>list_files(path)</code></td>
+<td>Explore directory structure</td>
+</tr>
+<tr>
+<td><code>write_vault(path, content)</code></td>
+<td>Write to <code>vault/Codebase/</code> only</td>
+</tr>
+<tr>
+<td><code>append_vault(path, content)</code></td>
+<td>Append to Exchange.md</td>
+</tr>
+<tr>
+<td><code>load_skill(topic)</code></td>
+<td>Load alan-specific skills on demand</td>
+</tr>
+</tbody>
+</table>
+<p>alan has <strong>read access</strong> to any local path. <strong>Write access is restricted to <code>vault/Codebase/</code>.</strong></p>
+      </div>
+    </section>
+
+    <section class="section" id="context-at-startup">
+      <h2>Context at Startup</h2>
+      <div class="section-text"><h2>Context at Startup</h2>
+        <p>alan receives at invocation:</p>
+<ul>
+<li>A code index of the target repository (file tree + brief descriptions)</li>
+<li>Current contents of <code>vault/Codebase/Exchange.md</code></li>
+<li>Skills from <code>agents/skills/code.md</code></li>
+</ul>
+<p>For large repositories, full file contents are fetched on demand via <code>read_file</code> — the index provides orientation.</p>
+      </div>
+    </section>
+
+    <section class="section" id="asking-alan">
+      <h2>Asking alan</h2>
+      <div class="section-text"><h2>Asking alan</h2>
+        <p>Invoke directly:</p>
+<pre><code>@alan wie ist der Dispatcher implementiert?
+@alan schlage eine Verbesserung für die Vault-Suche vor
+</code></pre>
+<p>Or naturally in chat — ou detects code-related questions and delegates to alan automatically.</p>
+      </div>
+    </section>
+
+    <section class="section" id="availability">
+      <h2>Availability</h2>
+      <div class="section-text"><h2>Availability</h2>
+        <p>alan is registered in the dispatcher only when <code>config.json</code> contains:</p>
+<pre><code class="language-json">{
+  &quot;agents&quot;: {
+    &quot;code&quot;: {
+      &quot;name&quot;: &quot;alan&quot;,
+      &quot;model&quot;: &quot;capable&quot;,
+      &quot;enabled&quot;: true
+    }
+  }
+}
+</code></pre>
+<p>Note: The config key is <code>code</code> (function name), the display name is <code>alan</code> (persona).</p>
+<p>Production deployments omit this entry. alan is never loaded by default.</p>
+      </div>
+    </section>
+
+    <section class="section" id="configuration">
+      <h2>Configuration</h2>
+      <div class="section-text"><h2>Configuration</h2>
+        <table>
+<thead>
+<tr>
+<th>Setting</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>enabled</code></td>
+<td>false</td>
+<td>Must be explicitly enabled</td>
+</tr>
+<tr>
+<td><code>model</code></td>
+<td>capable</td>
+<td>Use a capable model — code understanding benefits from it</td>
+</tr>
+</tbody>
+</table>
+      </div>
+    </section>
+
+    <section class="section" id="storage">
+      <h2>Storage</h2>
+      <div class="section-text"><h2>Storage</h2>
+        <pre><code>vault/Codebase/
+├── Exchange.md           # Open proposals and decisions
+└── &lt;staged files&gt;        # Proposed changes awaiting review
+</code></pre>
+      </div>
+    </section>
+
+    <section class="section" id="integration-with-other-agents">
+      <h2>Integration with Other Agents</h2>
+      <div class="section-text"><h2>Integration with Other Agents</h2>
+        <p><strong>Relay (ou)</strong> detects code questions and delegates to alan. Routes <code>@alan</code> prefix directly.</p>
+<p><strong>Data Agent (zeno)</strong> handles vault and personal data. alan handles source code. The domains do not overlap.</p>
+<p><strong>Pattern Agent (rumi)</strong> can observe alan's proposal history and extract patterns — e.g., recurring refactoring suggestions may indicate a deeper structural issue worth noting.</p>
+      </div>
+    </section>
+
+    <section class="section" id="design-notes">
+      <h2>Design Notes</h2>
+      <div class="section-text"><h2>Design Notes</h2>
+        <ul>
+<li>
+<p>The <code>vault/Codebase/Exchange.md</code> pattern is intentionally parallel to <code>vault/Agenda/Exchange.md</code>. The interaction model is the same: outheis proposes, you decide.</p>
+</li>
+<li>
+<p>Write access restricted to <code>vault/Codebase/</code> is enforced at the tool level, not by prompt instruction alone.</p>
+</li>
+<li>alan is deliberately absent from production. Code introspection and proposal workflows are development concerns only.</li>
+</ul>
+      </div>
+    </section>
+
+    <nav class="book-nav">
+      <div class="prev"><a href="../implementation/04-skills.html">
+          <span class="label">← Previous</span>
+          <span class="title">Skills</span>
+        </a></div>
+      <div class="toc-center"><a href="../contents.html#implementation">
+          <span class="label">Contents</span>
+          <span class="title">Implementation</span>
+        </a></div>
+      <div class="next"><a href="../implementation/06-hiro.html">
+          <span class="label">Next →</span>
+          <span class="title">Action Agent</span>
+        </a></div>
+    </nav>
+  </main>
+
+  <footer>
+    <div class="meta">
+      open source · AGPL-3.0 · <a href="https://github.com/outheis-labs">github.com/outheis-labs</a>
+    </div>
+  </footer>
+
+</body>
+</html>

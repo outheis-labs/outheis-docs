@@ -6,7 +6,7 @@
 
 ## Attention is all you got
 
-It cannot be saved, multiplied, or transferred. Every moment of attention spent is gone.
+Attention cannot be saved, multiplied, or transferred. Every moment of attention spent is gone.
 
 Most software is designed to capture as much of it as possible. Notifications, feeds, badges — not bugs, but features. The longer you stay, the more is extracted.
 

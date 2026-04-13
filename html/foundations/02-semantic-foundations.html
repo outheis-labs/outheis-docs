@@ -12,291 +12,565 @@
   <style>
     @font-face {
       font-family: 'Inter';
-      src: url('../assets/fonts/InterVariable.woff2') format('woff2'),
-           url('../assets/fonts/InterVariable.ttf') format('truetype');
+      src: url('../assets/fonts/InterVariable.woff2') format('woff2');
       font-weight: 100 900;
       font-style: normal;
       font-display: swap;
     }
     @font-face {
-      font-family: 'Inter';
-      src: url('../assets/fonts/InterVariable-Italic.woff2') format('woff2');
-      font-weight: 100 900;
-      font-style: italic;
-      font-display: swap;
-    }
-    @font-face {
-      font-family: 'Inter var';
-      src: url('../assets/fonts/InterVariable.woff2') format('woff2'),
-           url('../assets/fonts/InterVariable.ttf') format('truetype');
-      font-weight: 100 900;
+      font-family: 'IBM Plex Sans';
+      src: url('../assets/fonts/IBMPlexSans-Variable.woff2') format('woff2-variations');
+      font-weight: 100 700;
       font-style: normal;
       font-display: swap;
     }
     @font-face {
-      font-family: 'Inter var';
-      src: url('../assets/fonts/InterVariable-Italic.woff2') format('woff2');
-      font-weight: 100 900;
-      font-style: italic;
+      font-family: 'IBM Plex Mono';
+      src: url('../assets/fonts/IBMPlexMono-Regular.woff2') format('woff2');
+      font-weight: 400;
+      font-style: normal;
       font-display: swap;
     }
-  </style>
-  <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-    :root {
-      --font-body: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
-      --font-ui: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
-      --font-mono: SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-      --color-text: #1a1a1a;
-      --color-text-muted: #666;
-      --color-text-faint: #999;
-      --color-border: #e0e0e0;
-      --color-bg-code: #f5f5f5;
-      --header-height: 52px;
-      --subnav-height: 40px;
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
     }
 
-    @supports (font-variation-settings: normal) {
-      :root { --font-body: "Inter var", sans-serif; --font-ui: "Inter var", sans-serif; }
-    }
-
-    html, body {
-      width: 100%;
-      min-height: 100vh;
+    body {
+      font-family: 'IBM Plex Sans', -apple-system, sans-serif;
       background: #fff;
-      font-family: var(--font-body);
-      font-size: 15px;
-      line-height: 1.6;
-      color: var(--color-text);
+      color: #1a1a1a;
+      line-height: 1.65;
     }
 
-    /* ── Header ── */
-
-    .header {
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      background: #fff;
-      border-bottom: 1px solid var(--color-border);
+    a {
+      color: inherit;
+      text-decoration: none;
     }
 
-    .header-inner {
+    .greek {
+      font-family: 'Inter', sans-serif;
+    }
+
+    /* Header with breadcrumb */
+    header {
       display: flex;
-      align-items: center;
       justify-content: space-between;
-      max-width: 900px;
-      margin: 0 auto;
-      padding: 0 2rem;
-      height: var(--header-height);
-      gap: 2rem;
+      align-items: center;
+      padding: 1rem 1.5rem;
+      border-bottom: 1px solid #e0e0e0;
     }
 
-    .logo-link {
+    .header-left {
       display: flex;
       align-items: center;
-      text-decoration: none;
-      flex-shrink: 0;
+      gap: 1rem;
     }
 
-    .site-name {
-      font-family: var(--font-ui);
+    .logo {
+      font-family: 'Inter', sans-serif;
       font-size: 20px;
-      font-weight: 600;
-      color: var(--color-text);
-      letter-spacing: -0.01em;
-    }
-
-    .topnav {
-      display: flex;
-      align-items: center;
-      gap: 0.25rem;
-    }
-
-    .topnav a {
-      font-family: var(--font-ui);
-      font-size: 14px;
       font-weight: 500;
-      color: var(--color-text-muted);
-      text-decoration: none;
-      padding: 0.3rem 0.65rem;
-      border-radius: 4px;
-      white-space: nowrap;
     }
 
-    .topnav a:hover { color: var(--color-text); background: var(--color-bg-code); }
-    .topnav a.active { color: var(--color-text); font-weight: 600; }
-    .topnav a.external { color: var(--color-text-faint); }
-
-    /* ── Sub-nav ── */
-
-    .subnav-bar {
-      border-bottom: 1px solid var(--color-border);
-      overflow-x: auto;
-      -webkit-overflow-scrolling: touch;
-      scrollbar-width: none;
-    }
-    .subnav-bar::-webkit-scrollbar { display: none; }
-    .subnav-bar:empty,
-    .subnav-bar.hidden { display: none; }
-
-    .subnav-inner {
+    .breadcrumb {
+      font-size: 14px;
+      color: #888;
       display: flex;
       align-items: center;
-      max-width: 900px;
-      margin: 0 auto;
-      padding: 0 2rem;
-      gap: 0.1rem;
-      height: var(--subnav-height);
+      gap: 0.5rem;
     }
 
-    .subnav-inner a {
-      font-family: var(--font-ui);
-      font-size: 13px;
-      color: var(--color-text-muted);
-      text-decoration: none;
-      padding: 0.25rem 0.6rem;
-      border-radius: 3px;
-      white-space: nowrap;
+    .breadcrumb a {
+      color: #666;
     }
 
-    .subnav-inner a:hover { color: var(--color-text); background: var(--color-bg-code); }
-    .subnav-inner a.active { color: var(--color-text); font-weight: 500; }
-
-    /* ── Content ── */
-
-    .content {
-      max-width: 680px;
-      margin: 0 auto;
-      padding: 2.5rem 2rem 4rem;
+    .breadcrumb a:hover {
+      color: #1a1a1a;
     }
 
-    .content > *:first-child { margin-top: 0; }
+    .breadcrumb .separator {
+      color: #ccc;
+    }
 
-    .content h1 { font-family: var(--font-ui); font-size: 28px; font-weight: 600; margin-bottom: 0.5rem; letter-spacing: -0.02em; }
-    .content h2 { font-family: var(--font-ui); font-size: 18px; font-weight: 600; margin-top: 2rem; margin-bottom: 1.25rem; }
-    .content h3 { font-family: var(--font-ui); font-size: 15px; font-weight: 600; margin-top: 1.5rem; margin-bottom: 0.75rem; }
-    .content p { margin-bottom: 1rem; }
-    .content a { color: var(--color-text-muted); }
-    .content a:hover { color: var(--color-text); }
-    .content ul, .content ol { margin-bottom: 1rem; padding-left: 1.5rem; }
-    .content li { margin-bottom: 0.4rem; }
+    .breadcrumb .current {
+      color: #1a1a1a;
+    }
 
-    .content table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; font-family: var(--font-ui); font-size: 13px; }
-    .content th, .content td { text-align: left; padding: 0.5rem 0.75rem; border-bottom: 1px solid var(--color-border); }
-    .content th { font-weight: 500; font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--color-text-muted); }
+    header nav {
+      font-size: 14px;
+      display: flex;
+      align-items: baseline;
+      gap: 1rem;
+    }
 
-    .content code { font-family: var(--font-mono); font-size: 14px; background: var(--color-bg-code); padding: 0.15em 0.4em; border-radius: 3px; }
-    .content pre { background: var(--color-bg-code); padding: 1rem 1.25rem; overflow-x: auto; margin: 1.5rem 0; font-size: 13px; border-radius: 4px; line-height: 1.5; }
-    .content pre code { background: none; padding: 0; border-radius: 0; }
+    header nav a {
+      color: #888;
+    }
 
-    .content hr { border: none; border-top: 1px solid var(--color-border); margin: 1.5rem 0; }
-    .content strong { font-weight: 500; }
-    .content em { font-style: italic; }
-    .content blockquote { border-left: 2px solid var(--color-border); padding-left: 1.25rem; margin: 1.5rem 0; color: var(--color-text-muted); font-style: italic; }
-    .content .lead { font-style: italic; color: var(--color-text-muted); margin-bottom: 2rem; }
-    .content .footer { font-size: 12px; color: var(--color-text-faint); font-style: italic; }
-
-    /* ── Mobile ── */
-
-    /* ── Language switch ── */
+    header nav a:hover {
+      color: #1a1a1a;
+    }
 
     .lang-switch {
-      font-family: var(--font-ui);
-      font-size: 13px;
-      color: var(--color-text-muted);
-      white-space: nowrap;
-      flex-shrink: 0;
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-size: 14px;
+      color: #888;
+    }
+
+    .lang-switch a {
+      font-size: 14px;
+      color: #888;
+    }
+
+    .lang-switch a:hover {
+      color: #1a1a1a;
     }
 
     .lang-switch .lang-active {
-      color: var(--color-text);
+      color: #1a1a1a;
       font-weight: 500;
     }
 
-    .lang-switch a.lang-link {
-      color: var(--color-text-muted);
-      text-decoration: none;
+    /* Main */
+    main {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 3rem 1.5rem;
     }
 
-    .lang-switch a.lang-link:hover { color: var(--color-text); }
+    /* Page header */
+    .page-header {
+      margin-bottom: 3rem;
+    }
 
-    /* ── Mobile ── */
+    .page-header h1 {
+      font-family: 'Inter', sans-serif;
+      font-size: 36px;
+      font-weight: 500;
+      letter-spacing: -0.02em;
+    }
 
-    @media (max-width: 640px) {
-      .header-inner { padding: 0 1.25rem; gap: 1rem; }
-      .topnav { gap: 0; }
-      .topnav a { padding: 0.3rem 0.5rem; font-size: 13px; }
-      .topnav a.external { display: none; }
-      .subnav-inner { padding: 0 1.25rem; }
-      .content { padding: 2rem 1.25rem 3rem; }
-      .content h1 { font-size: 24px; }
-      .content h2 { font-size: 16px; }
+    .page-header .subtitle {
+      font-size: 18px;
+      font-style: italic;
+      color: #555;
+      margin-top: 0.75rem;
+    }
+
+    /* Content sections */
+    .section {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+      padding: 2.5rem 0;
+      border-top: 1px solid #e0e0e0;
+    }
+
+    /* Mobile: hide label h2, show section-text h2 */
+    .section > h2 {
+      display: none;
+    }
+
+    .section-text h2 {
+      font-size: 20px;
+      font-weight: 500;
+      margin-bottom: 1rem;
+    }
+
+    .section-text > *:first-child {
+      margin-top: 0;
+    }
+
+    /* Hidden h2 is first-child on desktop, so target the visible first element */
+    .section-text > h2 + * {
+      margin-top: 0;
+    }
+
+    .section-text > h2 + p {
+      margin-top: 0;
+    }
+
+    .section-text p {
+      font-size: 16px;
+      line-height: 1.75;
+      color: #333;
+      margin-bottom: 1rem;
+    }
+
+    .section-text p:last-child {
+      margin-bottom: 0;
+    }
+
+    .section-text h3 {
+      font-size: 16px;
+      font-weight: 450;
+      color: #1a1a1a;
+      line-height: 1.75;
+      margin-top: 1.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .section-text h3:first-child,
+    .section-text > h2 + h3 {
+      margin-top: 0;
+    }
+
+    .section-text ul {
+      list-style: none;
+      margin-bottom: 1rem;
+    }
+
+    .section-text ul li {
+      font-size: 16px;
+      line-height: 1.65;
+      color: #333;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid #eee;
+    }
+
+    .section-text ul li:last-child {
+      border-bottom: none;
+    }
+
+    .section-text ol {
+      margin-bottom: 1rem;
+      padding-left: 1.5rem;
+    }
+
+    .section-text ol li {
+      font-size: 16px;
+      line-height: 1.65;
+      color: #333;
+      margin-bottom: 0.5rem;
+    }
+
+    .section-text code {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 14px;
+      background: #f5f5f5;
+      padding: 0.15em 0.4em;
+      border-radius: 2px;
+    }
+
+    .section-text pre {
+      background: #f5f5f5;
+      padding: 1rem 1.25rem;
+      overflow-x: auto;
+      margin: 1.5rem 0;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 13px;
+      line-height: 1.5;
+      border-radius: 2px;
+    }
+
+    .section-text pre code {
+      background: none;
+      padding: 0;
+    }
+
+    .section-text table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1.5rem 0;
+      font-size: 14px;
+    }
+
+    .section-text th,
+    .section-text td {
+      text-align: left;
+      padding: 0.5rem 0.75rem;
+      border-bottom: 1px solid #e0e0e0;
+    }
+
+    .section-text th {
+      font-weight: 500;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: #666;
+    }
+
+    .section-text blockquote {
+      border-left: 2px solid #e0e0e0;
+      padding-left: 1.25rem;
+      margin: 1.5rem 0;
+      color: #666;
+      font-style: italic;
+    }
+
+    .section-text a {
+      color: #666;
+    }
+
+    .section-text a:hover {
+      color: #1a1a1a;
+    }
+
+    /* TOC list styling */
+    .toc-list {
+      list-style: none;
+      padding-left: 0;
+    }
+
+    .toc-list li {
+      border-bottom: 1px solid #eee;
+    }
+
+    .toc-list li:last-child {
+      border-bottom: none;
+    }
+
+    .toc-list a {
+      display: block;
+      padding: 1rem 0;
+      color: #1a1a1a;
+    }
+
+    .toc-list li:first-child a {
+      padding-top: 0;
+    }
+
+    .toc-list a:hover {
+      background: #fafafa;
+      margin: 0 -1rem;
+      padding: 1rem;
+    }
+
+    .toc-list .title {
+      font-size: 16px;
+      font-weight: 500;
+      color: #1a1a1a;
+      margin-bottom: 0.25rem;
+    }
+
+    .toc-list .description {
+      font-size: 14px;
+      color: #666;
+      line-height: 1.5;
+    }
+
+    /* Book navigation */
+    .book-nav {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      gap: 1rem;
+      align-items: center;
+      padding: 2rem 0;
+      margin-top: 2rem;
+      border-top: 1px solid #e0e0e0;
+    }
+
+    .book-nav a {
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+      color: #666;
+    }
+
+    .book-nav a:hover {
+      color: #1a1a1a;
+    }
+
+    .book-nav .label {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: #888;
+    }
+
+    .book-nav .title {
+      font-size: 15px;
+      font-weight: 500;
+    }
+
+    .book-nav .prev {
+      text-align: left;
+    }
+
+    .book-nav .toc-center {
+      text-align: center;
+    }
+
+    .book-nav .toc-center a {
+      align-items: center;
+    }
+
+    .book-nav .next {
+      text-align: right;
+    }
+
+    /* Footer */
+    footer {
+      padding: 2rem 1.5rem;
+      max-width: 1100px;
+      margin: 0 auto;
+      border-top: 1px solid #e0e0e0;
+    }
+
+    footer .meta {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 12px;
+      color: #888;
+    }
+
+    footer .meta a {
+      color: #888;
+    }
+
+    footer .meta a:hover {
+      color: #333;
+    }
+
+    /* Desktop */
+    @media (min-width: 800px) {
+      header {
+        padding: 1.5rem 3rem;
+      }
+
+      main {
+        padding: 4rem 3rem;
+      }
+
+      .page-header h1 {
+        font-size: 48px;
+      }
+
+      .section {
+        grid-template-columns: 180px 1fr;
+        gap: 3rem;
+        padding: 3rem 0;
+        align-items: baseline;
+      }
+
+      .section > h2 {
+        display: block;
+        font-size: 18px;
+        font-weight: 500;
+        color: #1a1a1a;
+        line-height: 1.75;
+      }
+
+      .section-text h2 {
+        display: none;
+        position: absolute;
+        visibility: hidden;
+      }
+
+      .book-nav .title {
+        font-size: 16px;
+      }
+
+      footer {
+        padding: 2rem 3rem;
+      }
+    }
+
+    /* Mobile */
+    @media (max-width: 600px) {
+      .breadcrumb {
+        display: none;
+      }
+
+      .book-nav {
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: auto auto;
+      }
+
+      .book-nav .prev {
+        grid-column: 1;
+      }
+
+      .book-nav .next {
+        grid-column: 2;
+      }
+
+      .book-nav .toc-center {
+        grid-column: 1 / -1;
+        grid-row: 2;
+        margin-top: 1rem;
+        padding-top: 1rem;
+        border-top: 1px solid #eee;
+      }
     }
   </style>
 </head>
 <body>
-  <header class="header">
-    <div class="header-inner">
-      <a href="../index.html" class="logo-link">
-        <span class="site-name">οὐθείς</span>
-      </a>
-      <nav class="topnav">
-        <a href="../foundations/index.html" class="active">Foundations</a>
-        <a href="../design/index.html">Design</a>
-        <a href="../implementation/architecture.html">Implementation</a>
-        <a href="../installation/release-notes.html">Installation</a>
-        <a href="../workflows/index.html">Workflows</a>
-        <a href="https://github.com/outheis-labs/outheis-beta" class="external">GitHub ↗</a>
-      </nav>
-      <div class="lang-switch"><span class="lang-active">EN</span> · <a href="../de/foundations/02-semantic-foundations.html" class="lang-link">DE</a></div>
+
+  <header>
+    <div class="header-left">
+      <a href="../index.html" class="logo">οὐθείς</a>
+      <div class="breadcrumb">
+        <span class="separator">/</span>
+        <a href="../contents.html#foundations">Foundations</a>
+        <span class="separator">/</span>
+        <span class="current">Information and Semantics</span>
+      </div>
     </div>
+    <nav>
+      <a href="../contents.html#foundations">Contents</a>
+      <a href="https://github.com/outheis-labs/outheis-beta">GitHub ↗</a>
+      <span class="lang-switch"><span class="lang-active">EN</span> · <a href="../de/foundations/02-semantic-foundations.html">DE</a></span>
+    </nav>
   </header>
-  <div class="subnav-bar">
-    <div class="subnav-inner">
-      <a href="../foundations/index.html">Why outheis</a>
-      <a href="../foundations/01-design-principles.html">Design Principles</a>
-      <a href="../foundations/02-semantic-foundations.html" class="active">Information and Semantics</a>
-      <a href="../foundations/03-attention-as-architecture.html">Attention as Architecture</a>
-      <a href="../foundations/04-annotation-as-ground-truth.html">Annotation as Ground Truth</a>
-      <a href="../foundations/05-tags-as-scaffolding.html">Tags as Scaffolding</a>
+
+  <main>
+    <div class="page-header">
+      <h1>Information and Semantics</h1>
+      <p class="subtitle">Why information is not data — and what follows from that for a personal AI system.</p>
     </div>
-  </div>
-  <main class="content">
-    <h1 id="information-and-semantics">Information and Semantics</h1>
-<p><em>Why information is not data — and what follows from that for a personal AI system.</em></p>
-<hr />
-<h2 id="the-gap-shannon-left-open">The Gap Shannon Left Open</h2>
-<p>Sovereignty establishes who controls the system. But there is a prior question: what should a system do with what it learns about you?</p>
+
+    <section class="section" id="the-gap-shannon-left-open">
+      <h2>The Gap Shannon Left Open</h2>
+      <div class="section-text"><h2>The Gap Shannon Left Open</h2>
+        <p>Sovereignty establishes who controls the system. But there is a prior question: what should a system do with what it learns about you?</p>
 <p>In 1948, Claude Shannon published <em>A Mathematical Theory of Communication</em> — one of the most consequential papers in the history of science. He showed how to measure information as a statistical quantity: the more unexpected a message, the more information it carries. His entropy formula works with perfect precision for the engineering problems he cared about — noise, compression, channel capacity.</p>
 <p>Shannon was explicit about what he was not doing. "The semantic aspects of communication," he wrote, "are irrelevant to the engineering problem." He bracketed meaning deliberately. His theory tells you how to transmit data reliably. It says nothing about whether any of it matters, what it refers to, or whether it is true.</p>
 <p>This is not a flaw. It is a boundary. The flaw is treating it as a complete theory of information.</p>
 <p>Every AI system built on statistical pattern matching — including large language models — inherits this boundary. The underlying mathematics is Shannon's: predict the next token, minimize prediction error, maximize likelihood. Meaning is not in the model; it is projected by the reader. A system that is only statistical can accumulate data indefinitely without ever knowing anything.</p>
-<hr />
-<h2 id="the-question-of-meaning">The Question of Meaning</h2>
-<p>The decades following Shannon produced several attempts to extend information theory into the semantic domain.</p>
+      </div>
+    </section>
+
+    <section class="section" id="the-question-of-meaning">
+      <h2>The Question of Meaning</h2>
+      <div class="section-text"><h2>The Question of Meaning</h2>
+        <p>The decades following Shannon produced several attempts to extend information theory into the semantic domain.</p>
 <p><strong>Carnap and Bar-Hillel</strong> (1952) made the first formal attempt. Working within logic, they defined semantic information as the set of possible states of affairs a sentence rules out — the more it excludes, the more it says. This was elegant, but it exposed an immediate paradox: a contradiction rules out <em>everything</em>, and should therefore carry maximum information. Yet contradictions are false, and false statements are poor candidates for maximum information content. The theory gave no principled way to exclude them.</p>
 <p><strong>Fred Dretske</strong> (1981) approached the problem differently. In <em>Knowledge and the Flow of Information</em>, he defined information in terms of causal dependency: a signal carries information about a source when there is a lawful, reliable connection between them. Smoke carries information about fire not because of any convention, but because of the physical relationship between them. Information exists in the world; it is not assigned by convention. And knowledge is what happens when such a signal causes a belief: to <em>know</em> something is to hold a belief produced by a genuine information-carrying signal.</p>
 <p>This matters for any system that claims to manage knowledge. The question is not just whether data is stored, but whether stored representations are connected to anything real about the person the system is supposed to serve.</p>
 <p><strong>Gregory Bateson</strong> (1972) offered what may be the most compressed definition: information is "a difference that makes a difference." A difference in the world, and a difference in the observer — both are required. Data that produces no change in the system receiving it is not information in any meaningful sense. Relevance is not a property added to information after the fact; it is part of what makes something information at all.</p>
 <p><strong>Luciano Floridi</strong> (2004, 2011) brought these threads together in a formal theory. His definition: semantic information is <em>well-formed, meaningful, and truthful</em> data. The third condition — truthfulness — is the most contested and the most important. Floridi argues that a signal which misrepresents the world is not carrying information about the world; it is carrying noise that happens to look like information. He calls this the veridicality thesis.</p>
 <p>The debate continues. Scarantino and Piccinini (2010) argue that information requires no truth condition — that cognitive systems and engineering practice both use "information" in ways that permit falsehood. The disagreement is not merely academic: it determines what obligations a knowledge management system has toward accuracy.</p>
-<hr />
-<h2 id="what-this-means-for-outheis">What This Means for outheis</h2>
-<p>These distinctions are not abstract. Each one has direct consequences for how a personal AI system should be designed.</p>
+      </div>
+    </section>
+
+    <section class="section" id="what-this-means-for-outheis">
+      <h2>What This Means for outheis</h2>
+      <div class="section-text"><h2>What This Means for outheis</h2>
+        <p>These distinctions are not abstract. Each one has direct consequences for how a personal AI system should be designed.</p>
 <p><strong>The data/information gap</strong> is the difference between a system that logs everything and one that understands what is worth keeping. A conversation that occurred is a fact — a datum. That you consistently prefer morning appointments is <em>information</em> in Dretske's sense: a reliable pattern causally connected to your actual behavior. A system that only logs cannot distinguish them. outheis makes this distinction explicit: messages are logged, patterns are distilled, and the distillation process is not automatic but evaluative.</p>
 <p><strong>Bateson's relevance criterion</strong> is the design principle behind distillation. The question is not "what should we store?" but "what produces a difference in future behavior?" Skills replace long explanations not because they are shorter, but because they direct attention differently — they change what the agent does. An instruction that is never activated is not information; it is stored text. Distillation is not compression; it is a judgment about what makes a difference.</p>
 <p><strong>Floridi's veridicality principle</strong> explains why the pattern agent discards rather than accumulates. A memory system that tolerates false or outdated entries does not degrade gracefully — it becomes unreliable in proportion to the noise it contains. The question "is this still true?" is not a housekeeping nicety; it is constitutive of whether the entry is information at all. Forgetting, in outheis, is a form of epistemic hygiene.</p>
 <p><strong>The DIKW distinction</strong> (Ackoff, 1989) — data, information, knowledge, wisdom — explains why outheis separates memory, skills, and rules into distinct tiers. These are not technical categories invented for implementation convenience. Memory holds what is particular to you: events, preferences, patterns observed. Skills hold what generalizes: how to structure a day, how to interpret a request. Rules hold what is invariant: constraints that should not be violated regardless of context. The three tiers correspond to epistemically distinct kinds of things. Collapsing them into a single store would not be simpler; it would be confused.</p>
-<hr />
-<h2 id="a-second-frame-operating-systems">A Second Frame: Operating Systems</h2>
-<p>Alongside information theory, a different discipline developed complementary solutions to related problems — not philosophically, but through engineering under constraint.</p>
+      </div>
+    </section>
+
+    <section class="section" id="a-second-frame-operating-systems">
+      <h2>A Second Frame: Operating Systems</h2>
+      <div class="section-text"><h2>A Second Frame: Operating Systems</h2>
+        <p>Alongside information theory, a different discipline developed complementary solutions to related problems — not philosophically, but through engineering under constraint.</p>
 <p>Operating systems manage resources under scarcity: limited memory, limited processor time, multiple processes competing for both. The abstractions they developed over decades — demand paging, process isolation, virtual memory, scheduling — are answers to the question of how a system can behave coherently when it cannot hold everything at once.</p>
 <p>The parallel is direct. A language model's context window is a working memory with hard limits. The question of what to load, when, and in what form is exactly the question operating systems answer for processes. Skills loaded on demand when a topic arises correspond to pages swapped in from storage. The nightly pattern review corresponds to a low-priority background process running when the foreground is idle. The three memory tiers correspond to the storage hierarchy every operating system manages: fast and volatile at the top, slow and persistent at the bottom.</p>
 <p>This is not metaphor deployed for elegance. It is a set of tested abstractions for resource-constrained cognition, developed under constraints far more severe than a modern context window imposes. The solutions are worth borrowing because the problems are structurally similar.</p>
-<hr />
-<h2 id="further-reading">Further Reading</h2>
-<p><strong>On semantic information theory:</strong></p>
+      </div>
+    </section>
+
+    <section class="section" id="further-reading">
+      <h2>Further Reading</h2>
+      <div class="section-text"><h2>Further Reading</h2>
+        <p><strong>On semantic information theory:</strong></p>
 <ul>
 <li>Floridi, L. <em>The Philosophy of Information</em>. Oxford University Press, 2011. — The most comprehensive treatment; Chapters 4–7 cover the veridicality thesis and the logical theory of semantic information.</li>
 <li>Dretske, F. <em>Knowledge and the Flow of Information</em>. MIT Press, 1981. — The causal-nomological account; essential for understanding what it means for a system to genuinely <em>know</em> something.</li>
@@ -308,8 +582,30 @@
 <li>Ackoff, R. L. "From Data to Wisdom." <em>Journal of Applied Systems Analysis</em>, 16, 1989. — Four pages. The DIKW hierarchy in its original form, immediately readable.</li>
 <li>Polanyi, M. <em>The Tacit Dimension</em>. Doubleday, 1966. — The limit case: what no information system can fully capture, and why that matters.</li>
 </ul>
-    <hr>
-    <p class="footer">Open source under AGPL-3.0 · <a href="https://github.com/outheis-labs/outheis-beta">Code on GitHub</a></p>
+      </div>
+    </section>
+
+    <nav class="book-nav">
+      <div class="prev"><a href="../foundations/01-design-principles.html">
+          <span class="label">← Previous</span>
+          <span class="title">Design Principles</span>
+        </a></div>
+      <div class="toc-center"><a href="../contents.html#foundations">
+          <span class="label">Contents</span>
+          <span class="title">Foundations</span>
+        </a></div>
+      <div class="next"><a href="../foundations/03-attention-as-architecture.html">
+          <span class="label">Next →</span>
+          <span class="title">Attention as Architecture</span>
+        </a></div>
+    </nav>
   </main>
+
+  <footer>
+    <div class="meta">
+      open source · AGPL-3.0 · <a href="https://github.com/outheis-labs">github.com/outheis-labs</a>
+    </div>
+  </footer>
+
 </body>
 </html>

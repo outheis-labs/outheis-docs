@@ -2,6 +2,8 @@
 
 *The current state — what's built and how to use it.*
 
+---
+
 ## Documents
 
 ### [CLI Guide](guide.md)

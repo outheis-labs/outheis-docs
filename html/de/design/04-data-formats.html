@@ -12,265 +12,522 @@
   <style>
     @font-face {
       font-family: 'Inter';
-      src: url('../../assets/fonts/InterVariable.woff2') format('woff2'),
-           url('../../assets/fonts/InterVariable.ttf') format('truetype');
+      src: url('../../assets/fonts/InterVariable.woff2') format('woff2');
       font-weight: 100 900;
       font-style: normal;
       font-display: swap;
     }
     @font-face {
-      font-family: 'Inter';
-      src: url('../../assets/fonts/InterVariable-Italic.woff2') format('woff2');
-      font-weight: 100 900;
-      font-style: italic;
-      font-display: swap;
-    }
-    @font-face {
-      font-family: 'Inter var';
-      src: url('../../assets/fonts/InterVariable.woff2') format('woff2'),
-           url('../../assets/fonts/InterVariable.ttf') format('truetype');
-      font-weight: 100 900;
+      font-family: 'IBM Plex Sans';
+      src: url('../../assets/fonts/IBMPlexSans-Variable.woff2') format('woff2-variations');
+      font-weight: 100 700;
       font-style: normal;
       font-display: swap;
     }
     @font-face {
-      font-family: 'Inter var';
-      src: url('../../assets/fonts/InterVariable-Italic.woff2') format('woff2');
-      font-weight: 100 900;
-      font-style: italic;
+      font-family: 'IBM Plex Mono';
+      src: url('../../assets/fonts/IBMPlexMono-Regular.woff2') format('woff2');
+      font-weight: 400;
+      font-style: normal;
       font-display: swap;
     }
-  </style>
-  <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-    :root {
-      --font-body: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
-      --font-ui: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
-      --font-mono: SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-      --color-text: #1a1a1a;
-      --color-text-muted: #666;
-      --color-text-faint: #999;
-      --color-border: #e0e0e0;
-      --color-bg-code: #f5f5f5;
-      --header-height: 52px;
-      --subnav-height: 40px;
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
     }
 
-    @supports (font-variation-settings: normal) {
-      :root { --font-body: "Inter var", sans-serif; --font-ui: "Inter var", sans-serif; }
-    }
-
-    html, body {
-      width: 100%;
-      min-height: 100vh;
+    body {
+      font-family: 'IBM Plex Sans', -apple-system, sans-serif;
       background: #fff;
-      font-family: var(--font-body);
-      font-size: 15px;
-      line-height: 1.6;
-      color: var(--color-text);
+      color: #1a1a1a;
+      line-height: 1.65;
     }
 
-    /* ── Header ── */
-
-    .header {
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      background: #fff;
-      border-bottom: 1px solid var(--color-border);
+    a {
+      color: inherit;
+      text-decoration: none;
     }
 
-    .header-inner {
+    .greek {
+      font-family: 'Inter', sans-serif;
+    }
+
+    /* Header with breadcrumb */
+    header {
       display: flex;
-      align-items: center;
       justify-content: space-between;
-      max-width: 900px;
-      margin: 0 auto;
-      padding: 0 2rem;
-      height: var(--header-height);
-      gap: 2rem;
+      align-items: center;
+      padding: 1rem 1.5rem;
+      border-bottom: 1px solid #e0e0e0;
     }
 
-    .logo-link {
+    .header-left {
       display: flex;
       align-items: center;
-      text-decoration: none;
-      flex-shrink: 0;
+      gap: 1rem;
     }
 
-    .site-name {
-      font-family: var(--font-ui);
+    .logo {
+      font-family: 'Inter', sans-serif;
       font-size: 20px;
-      font-weight: 600;
-      color: var(--color-text);
-      letter-spacing: -0.01em;
-    }
-
-    .topnav {
-      display: flex;
-      align-items: center;
-      gap: 0.25rem;
-    }
-
-    .topnav a {
-      font-family: var(--font-ui);
-      font-size: 14px;
       font-weight: 500;
-      color: var(--color-text-muted);
-      text-decoration: none;
-      padding: 0.3rem 0.65rem;
-      border-radius: 4px;
-      white-space: nowrap;
     }
 
-    .topnav a:hover { color: var(--color-text); background: var(--color-bg-code); }
-    .topnav a.active { color: var(--color-text); font-weight: 600; }
-    .topnav a.external { color: var(--color-text-faint); }
-
-    /* ── Sub-nav ── */
-
-    .subnav-bar {
-      border-bottom: 1px solid var(--color-border);
-      overflow-x: auto;
-      -webkit-overflow-scrolling: touch;
-      scrollbar-width: none;
-    }
-    .subnav-bar::-webkit-scrollbar { display: none; }
-    .subnav-bar:empty,
-    .subnav-bar.hidden { display: none; }
-
-    .subnav-inner {
+    .breadcrumb {
+      font-size: 14px;
+      color: #888;
       display: flex;
       align-items: center;
-      max-width: 900px;
-      margin: 0 auto;
-      padding: 0 2rem;
-      gap: 0.1rem;
-      height: var(--subnav-height);
+      gap: 0.5rem;
     }
 
-    .subnav-inner a {
-      font-family: var(--font-ui);
-      font-size: 13px;
-      color: var(--color-text-muted);
-      text-decoration: none;
-      padding: 0.25rem 0.6rem;
-      border-radius: 3px;
-      white-space: nowrap;
+    .breadcrumb a {
+      color: #666;
     }
 
-    .subnav-inner a:hover { color: var(--color-text); background: var(--color-bg-code); }
-    .subnav-inner a.active { color: var(--color-text); font-weight: 500; }
-
-    /* ── Content ── */
-
-    .content {
-      max-width: 680px;
-      margin: 0 auto;
-      padding: 2.5rem 2rem 4rem;
+    .breadcrumb a:hover {
+      color: #1a1a1a;
     }
 
-    .content > *:first-child { margin-top: 0; }
+    .breadcrumb .separator {
+      color: #ccc;
+    }
 
-    .content h1 { font-family: var(--font-ui); font-size: 28px; font-weight: 600; margin-bottom: 0.5rem; letter-spacing: -0.02em; }
-    .content h2 { font-family: var(--font-ui); font-size: 18px; font-weight: 600; margin-top: 2rem; margin-bottom: 1.25rem; }
-    .content h3 { font-family: var(--font-ui); font-size: 15px; font-weight: 600; margin-top: 1.5rem; margin-bottom: 0.75rem; }
-    .content p { margin-bottom: 1rem; }
-    .content a { color: var(--color-text-muted); }
-    .content a:hover { color: var(--color-text); }
-    .content ul, .content ol { margin-bottom: 1rem; padding-left: 1.5rem; }
-    .content li { margin-bottom: 0.4rem; }
+    .breadcrumb .current {
+      color: #1a1a1a;
+    }
 
-    .content table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; font-family: var(--font-ui); font-size: 13px; }
-    .content th, .content td { text-align: left; padding: 0.5rem 0.75rem; border-bottom: 1px solid var(--color-border); }
-    .content th { font-weight: 500; font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--color-text-muted); }
+    header nav {
+      font-size: 14px;
+      display: flex;
+      align-items: baseline;
+      gap: 1rem;
+    }
 
-    .content code { font-family: var(--font-mono); font-size: 14px; background: var(--color-bg-code); padding: 0.15em 0.4em; border-radius: 3px; }
-    .content pre { background: var(--color-bg-code); padding: 1rem 1.25rem; overflow-x: auto; margin: 1.5rem 0; font-size: 13px; border-radius: 4px; line-height: 1.5; }
-    .content pre code { background: none; padding: 0; border-radius: 0; }
+    header nav a {
+      color: #888;
+    }
 
-    .content hr { border: none; border-top: 1px solid var(--color-border); margin: 1.5rem 0; }
-    .content strong { font-weight: 500; }
-    .content em { font-style: italic; }
-    .content blockquote { border-left: 2px solid var(--color-border); padding-left: 1.25rem; margin: 1.5rem 0; color: var(--color-text-muted); font-style: italic; }
-    .content .lead { font-style: italic; color: var(--color-text-muted); margin-bottom: 2rem; }
-    .content .footer { font-size: 12px; color: var(--color-text-faint); font-style: italic; }
-
-    /* ── Mobile ── */
-
-    /* ── Language switch ── */
+    header nav a:hover {
+      color: #1a1a1a;
+    }
 
     .lang-switch {
-      font-family: var(--font-ui);
-      font-size: 13px;
-      color: var(--color-text-muted);
-      white-space: nowrap;
-      flex-shrink: 0;
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-size: 14px;
+      color: #888;
+    }
+
+    .lang-switch a {
+      font-size: 14px;
+      color: #888;
+    }
+
+    .lang-switch a:hover {
+      color: #1a1a1a;
     }
 
     .lang-switch .lang-active {
-      color: var(--color-text);
+      color: #1a1a1a;
       font-weight: 500;
     }
 
-    .lang-switch a.lang-link {
-      color: var(--color-text-muted);
-      text-decoration: none;
+    /* Main */
+    main {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 3rem 1.5rem;
     }
 
-    .lang-switch a.lang-link:hover { color: var(--color-text); }
+    /* Page header */
+    .page-header {
+      margin-bottom: 3rem;
+    }
 
-    /* ── Mobile ── */
+    .page-header h1 {
+      font-family: 'Inter', sans-serif;
+      font-size: 36px;
+      font-weight: 500;
+      letter-spacing: -0.02em;
+    }
 
-    @media (max-width: 640px) {
-      .header-inner { padding: 0 1.25rem; gap: 1rem; }
-      .topnav { gap: 0; }
-      .topnav a { padding: 0.3rem 0.5rem; font-size: 13px; }
-      .topnav a.external { display: none; }
-      .subnav-inner { padding: 0 1.25rem; }
-      .content { padding: 2rem 1.25rem 3rem; }
-      .content h1 { font-size: 24px; }
-      .content h2 { font-size: 16px; }
+    .page-header .subtitle {
+      font-size: 18px;
+      font-style: italic;
+      color: #555;
+      margin-top: 0.75rem;
+    }
+
+    /* Content sections */
+    .section {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+      padding: 2.5rem 0;
+      border-top: 1px solid #e0e0e0;
+    }
+
+    /* Mobile: hide label h2, show section-text h2 */
+    .section > h2 {
+      display: none;
+    }
+
+    .section-text h2 {
+      font-size: 20px;
+      font-weight: 500;
+      margin-bottom: 1rem;
+    }
+
+    .section-text > *:first-child {
+      margin-top: 0;
+    }
+
+    /* Hidden h2 is first-child on desktop, so target the visible first element */
+    .section-text > h2 + * {
+      margin-top: 0;
+    }
+
+    .section-text > h2 + p {
+      margin-top: 0;
+    }
+
+    .section-text p {
+      font-size: 16px;
+      line-height: 1.75;
+      color: #333;
+      margin-bottom: 1rem;
+    }
+
+    .section-text p:last-child {
+      margin-bottom: 0;
+    }
+
+    .section-text h3 {
+      font-size: 16px;
+      font-weight: 450;
+      color: #1a1a1a;
+      line-height: 1.75;
+      margin-top: 1.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .section-text h3:first-child,
+    .section-text > h2 + h3 {
+      margin-top: 0;
+    }
+
+    .section-text ul {
+      list-style: none;
+      margin-bottom: 1rem;
+    }
+
+    .section-text ul li {
+      font-size: 16px;
+      line-height: 1.65;
+      color: #333;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid #eee;
+    }
+
+    .section-text ul li:last-child {
+      border-bottom: none;
+    }
+
+    .section-text ol {
+      margin-bottom: 1rem;
+      padding-left: 1.5rem;
+    }
+
+    .section-text ol li {
+      font-size: 16px;
+      line-height: 1.65;
+      color: #333;
+      margin-bottom: 0.5rem;
+    }
+
+    .section-text code {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 14px;
+      background: #f5f5f5;
+      padding: 0.15em 0.4em;
+      border-radius: 2px;
+    }
+
+    .section-text pre {
+      background: #f5f5f5;
+      padding: 1rem 1.25rem;
+      overflow-x: auto;
+      margin: 1.5rem 0;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 13px;
+      line-height: 1.5;
+      border-radius: 2px;
+    }
+
+    .section-text pre code {
+      background: none;
+      padding: 0;
+    }
+
+    .section-text table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1.5rem 0;
+      font-size: 14px;
+    }
+
+    .section-text th,
+    .section-text td {
+      text-align: left;
+      padding: 0.5rem 0.75rem;
+      border-bottom: 1px solid #e0e0e0;
+    }
+
+    .section-text th {
+      font-weight: 500;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: #666;
+    }
+
+    .section-text blockquote {
+      border-left: 2px solid #e0e0e0;
+      padding-left: 1.25rem;
+      margin: 1.5rem 0;
+      color: #666;
+      font-style: italic;
+    }
+
+    .section-text a {
+      color: #666;
+    }
+
+    .section-text a:hover {
+      color: #1a1a1a;
+    }
+
+    /* TOC list styling */
+    .toc-list {
+      list-style: none;
+      padding-left: 0;
+    }
+
+    .toc-list li {
+      border-bottom: 1px solid #eee;
+    }
+
+    .toc-list li:last-child {
+      border-bottom: none;
+    }
+
+    .toc-list a {
+      display: block;
+      padding: 1rem 0;
+      color: #1a1a1a;
+    }
+
+    .toc-list li:first-child a {
+      padding-top: 0;
+    }
+
+    .toc-list a:hover {
+      background: #fafafa;
+      margin: 0 -1rem;
+      padding: 1rem;
+    }
+
+    .toc-list .title {
+      font-size: 16px;
+      font-weight: 500;
+      color: #1a1a1a;
+      margin-bottom: 0.25rem;
+    }
+
+    .toc-list .description {
+      font-size: 14px;
+      color: #666;
+      line-height: 1.5;
+    }
+
+    /* Book navigation */
+    .book-nav {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      gap: 1rem;
+      align-items: center;
+      padding: 2rem 0;
+      margin-top: 2rem;
+      border-top: 1px solid #e0e0e0;
+    }
+
+    .book-nav a {
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+      color: #666;
+    }
+
+    .book-nav a:hover {
+      color: #1a1a1a;
+    }
+
+    .book-nav .label {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: #888;
+    }
+
+    .book-nav .title {
+      font-size: 15px;
+      font-weight: 500;
+    }
+
+    .book-nav .prev {
+      text-align: left;
+    }
+
+    .book-nav .toc-center {
+      text-align: center;
+    }
+
+    .book-nav .toc-center a {
+      align-items: center;
+    }
+
+    .book-nav .next {
+      text-align: right;
+    }
+
+    /* Footer */
+    footer {
+      padding: 2rem 1.5rem;
+      max-width: 1100px;
+      margin: 0 auto;
+      border-top: 1px solid #e0e0e0;
+    }
+
+    footer .meta {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 12px;
+      color: #888;
+    }
+
+    footer .meta a {
+      color: #888;
+    }
+
+    footer .meta a:hover {
+      color: #333;
+    }
+
+    /* Desktop */
+    @media (min-width: 800px) {
+      header {
+        padding: 1.5rem 3rem;
+      }
+
+      main {
+        padding: 4rem 3rem;
+      }
+
+      .page-header h1 {
+        font-size: 48px;
+      }
+
+      .section {
+        grid-template-columns: 180px 1fr;
+        gap: 3rem;
+        padding: 3rem 0;
+        align-items: baseline;
+      }
+
+      .section > h2 {
+        display: block;
+        font-size: 18px;
+        font-weight: 500;
+        color: #1a1a1a;
+        line-height: 1.75;
+      }
+
+      .section-text h2 {
+        display: none;
+        position: absolute;
+        visibility: hidden;
+      }
+
+      .book-nav .title {
+        font-size: 16px;
+      }
+
+      footer {
+        padding: 2rem 3rem;
+      }
+    }
+
+    /* Mobile */
+    @media (max-width: 600px) {
+      .breadcrumb {
+        display: none;
+      }
+
+      .book-nav {
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: auto auto;
+      }
+
+      .book-nav .prev {
+        grid-column: 1;
+      }
+
+      .book-nav .next {
+        grid-column: 2;
+      }
+
+      .book-nav .toc-center {
+        grid-column: 1 / -1;
+        grid-row: 2;
+        margin-top: 1rem;
+        padding-top: 1rem;
+        border-top: 1px solid #eee;
+      }
     }
   </style>
 </head>
 <body>
-  <header class="header">
-    <div class="header-inner">
-      <a href="../../index.html" class="logo-link">
-        <span class="site-name">οὐθείς</span>
-      </a>
-      <nav class="topnav">
-        <a href="../foundations/index.html">Grundlagen</a>
-        <a href="../design/index.html" class="active">Design</a>
-        <a href="../implementation/architecture.html">Implementierung</a>
-        <a href="../installation/release-notes.html">Installation</a>
-        <a href="../workflows/index.html">Workflows</a>
-        <a href="https://github.com/outheis-labs/outheis-beta" class="external">GitHub ↗</a>
-      </nav>
-      <div class="lang-switch"><a href="../../design/04-data-formats.html" class="lang-link">EN</a> · <span class="lang-active">DE</span></div>
+
+  <header>
+    <div class="header-left">
+      <a href="../../index.html" class="logo">οὐθείς</a>
+      <div class="breadcrumb">
+        <span class="separator">/</span>
+        <a href="../../contents.html#design">Design</a>
+        <span class="separator">/</span>
+        <span class="current">Datenformate</span>
+      </div>
     </div>
+    <nav>
+      <a href="../../contents.html#design">Contents</a>
+      <a href="https://github.com/outheis-labs/outheis-beta">GitHub ↗</a>
+      <span class="lang-switch"><a href="../../design/04-data-formats.html">EN</a> · <span class="lang-active">DE</span></span>
+    </nav>
   </header>
-  <div class="subnav-bar">
-    <div class="subnav-inner">
-      <a href="../design/index.html">Überblick</a>
-      <a href="../design/01-why-os-principles.html">OS-Prinzipien</a>
-      <a href="../design/02-systems-survey.html">Systemvergleich</a>
-      <a href="../design/03-architecture.html">Architektur</a>
-      <a href="../design/04-data-formats.html" class="active">Datenformate</a>
-      <a href="../design/05-related-work.html">Verwandte Ansätze</a>
-      <a href="../design/06-agent-prompts.html">Agenten-Prompts</a>
-      <a href="../design/07-hybrid-memory-stack.html">Hybrider Memory-Stack</a>
-      <a href="../design/08-quality-threshold.html">Qualitätsschwelle</a>
+
+  <main>
+    <div class="page-header">
+      <h1>Datenformate und Konventionen</h1>
+      
     </div>
-  </div>
-  <main class="content">
-    <h1 id="datenformate-und-konventionen">Datenformate und Konventionen</h1>
-<p>Klare Formate ermöglichen verlässliche Annahmen. Agents wissen, was sie vorfinden — ohne raten zu müssen.</p>
-<hr />
-<h2 id="kernprinzip-datenlokalitat">Kernprinzip: Datenlokalität</h2>
-<p><strong>Benutzerdaten existieren nur an zwei Orten:</strong></p>
+
+    <section class="section"><h2></h2><div class="section-text"><p>Klare Formate ermöglichen verlässliche Annahmen. Agents wissen, was sie vorfinden — ohne raten zu müssen.</p></div></section>
+
+    <section class="section" id="kernprinzip-datenlokalitat">
+      <h2>Kernprinzip: Datenlokalität</h2>
+      <div class="section-text"><h2>Kernprinzip: Datenlokalität</h2>
+        <p><strong>Benutzerdaten existieren nur an zwei Orten:</strong></p>
 <table>
 <thead>
 <tr>
@@ -293,9 +550,13 @@
 </tbody>
 </table>
 <p>Keine Benutzerdaten werden anderswo gespeichert. Das Entfernen dieser Verzeichnisse löscht alle Benutzerspuren.</p>
-<hr />
-<h2 id="verzeichnisstruktur">Verzeichnisstruktur</h2>
-<h3 id="systemverzeichnis">Systemverzeichnis</h3>
+      </div>
+    </section>
+
+    <section class="section" id="verzeichnisstruktur">
+      <h2>Verzeichnisstruktur</h2>
+      <div class="section-text"><h2>Verzeichnisstruktur</h2>
+        <h3 id="systemverzeichnis">Systemverzeichnis</h3>
 <pre><code>~/.outheis/                      # System directory
 ├── agents/                      # Agent implementations
 ├── transport/                   # Transport daemon
@@ -355,9 +616,13 @@
 }
 </code></pre>
 <p>Der erste Vault in der Liste ist der <strong>primäre Vault</strong> — enthält <code>Agenda/</code>.</p>
-<hr />
-<h2 id="vault-struktur">Vault-Struktur</h2>
-<h3 id="konventionen">Konventionen</h3>
+      </div>
+    </section>
+
+    <section class="section" id="vault-struktur">
+      <h2>Vault-Struktur</h2>
+      <div class="section-text"><h2>Vault-Struktur</h2>
+        <h3 id="konventionen">Konventionen</h3>
 <table>
 <thead>
 <tr>
@@ -404,9 +669,13 @@
 <p><strong>Struktur zur Abfragezeit</strong>: Hierarchien werden berechnet, nicht gespeichert</p>
 </li>
 </ul>
-<hr />
-<h2 id="dateitypen">Dateitypen</h2>
-<h3 id="primar-markdown-md">Primär: Markdown (.md)</h3>
+      </div>
+    </section>
+
+    <section class="section" id="dateitypen">
+      <h2>Dateitypen</h2>
+      <div class="section-text"><h2>Dateitypen</h2>
+        <h3 id="primar-markdown-md">Primär: Markdown (.md)</h3>
 <p>Das primäre Wissensformat. Menschenlesbar, maschinell verarbeitbar, selbstbeschreibend.</p>
 <h3 id="haufige-assets">Häufige Assets</h3>
 <p>Dateien, die häufig neben Markdown auftauchen oder darin verlinkt sind:</p>
@@ -478,9 +747,13 @@
 </tr>
 </tbody>
 </table>
-<hr />
-<h2 id="markdown-format">Markdown-Format</h2>
-<h3 id="frontmatter">Frontmatter</h3>
+      </div>
+    </section>
+
+    <section class="section" id="markdown-format">
+      <h2>Markdown-Format</h2>
+      <div class="section-text"><h2>Markdown-Format</h2>
+        <h3 id="frontmatter">Frontmatter</h3>
 <p>Optionales YAML-Frontmatter für explizite Metadaten:</p>
 <pre><code class="language-markdown">---
 title: Project Alpha Notes
@@ -627,9 +900,13 @@ Related: [[projects/alpha/README]]
 <p>Standard-Markdown-Links für externe Referenzen:</p>
 <pre><code class="language-markdown">Based on [this paper](https://example.com/paper.pdf).
 </code></pre>
-<hr />
-<h2 id="importierte-daten">Importierte Daten</h2>
-<p>Externe Daten (Kalender, E-Mail usw.) importiert der Action-Agent in <code>~/.outheis/human/imports/</code>. Diese Daten sind kanonisch — strukturierte Repräsentationen externer Quellen.</p>
+      </div>
+    </section>
+
+    <section class="section" id="importierte-daten">
+      <h2>Importierte Daten</h2>
+      <div class="section-text"><h2>Importierte Daten</h2>
+        <p>Externe Daten (Kalender, E-Mail usw.) importiert der Action-Agent in <code>~/.outheis/human/imports/</code>. Diese Daten sind kanonisch — strukturierte Repräsentationen externer Quellen.</p>
 <h3 id="verzeichnisstruktur_1">Verzeichnisstruktur</h3>
 <pre><code>~/.outheis/human/imports/
 ├── calendar/
@@ -701,9 +978,13 @@ Related: [[projects/alpha/README]]
   &quot;imported_at&quot;: &quot;2025-03-27T08:00:00Z&quot;
 }
 </code></pre>
-<hr />
-<h2 id="index">Index</h2>
-<p>Der Data-Agent pflegt einen Suchindex unter <code>~/.outheis/human/index.jsonl</code>:</p>
+      </div>
+    </section>
+
+    <section class="section" id="index">
+      <h2>Index</h2>
+      <div class="section-text"><h2>Index</h2>
+        <p>Der Data-Agent pflegt einen Suchindex unter <code>~/.outheis/human/index.jsonl</code>:</p>
 <pre><code class="language-json">{
   &quot;vault&quot;: &quot;~/Documents/MyVault&quot;,
   &quot;path&quot;: &quot;notes/project-alpha.md&quot;,
@@ -720,9 +1001,13 @@ Related: [[projects/alpha/README]]
 }
 </code></pre>
 <p>Der Index umfasst alle konfigurierten Vaults. Jeder Eintrag enthält das <code>vault</code>-Feld.</p>
-<hr />
-<h2 id="human-verzeichnis">Human-Verzeichnis</h2>
-<h3 id="struktur">Struktur</h3>
+      </div>
+    </section>
+
+    <section class="section" id="human-verzeichnis">
+      <h2>Human-Verzeichnis</h2>
+      <div class="section-text"><h2>Human-Verzeichnis</h2>
+        <h3 id="struktur">Struktur</h3>
 <pre><code>~/.outheis/human/
 ├── config.json                  # User configuration
 ├── insights.jsonl               # Pattern agent output
@@ -901,9 +1186,13 @@ Related: [[projects/alpha/README]]
 
 - Emails from boss: always show immediately
 </code></pre>
-<hr />
-<h2 id="textextraktion">Textextraktion</h2>
-<p>Für Nicht-Markdown-Dateien extrahieren agents Text wo möglich:</p>
+      </div>
+    </section>
+
+    <section class="section" id="textextraktion">
+      <h2>Textextraktion</h2>
+      <div class="section-text"><h2>Textextraktion</h2>
+        <p>Für Nicht-Markdown-Dateien extrahieren agents Text wo möglich:</p>
 <table>
 <thead>
 <tr>
@@ -935,33 +1224,49 @@ Related: [[projects/alpha/README]]
 </tbody>
 </table>
 <p>Extrahierter Text wird im Index gespeichert, nicht als separate Dateien.</p>
-<hr />
-<h2 id="binardateien">Binärdateien</h2>
-<p>Binärdateien (Bilder, PDFs, Office-Dokumente) werden:</p>
+      </div>
+    </section>
+
+    <section class="section" id="binardateien">
+      <h2>Binärdateien</h2>
+      <div class="section-text"><h2>Binärdateien</h2>
+        <p>Binärdateien (Bilder, PDFs, Office-Dokumente) werden:</p>
 <ol>
 <li><strong>Indiziert</strong> nach Metadaten (Größe, Typ, Änderungsdatum)</li>
 <li><strong>Textextrahiert</strong> wo möglich</li>
 <li><strong>Verlinkt</strong> über Referenzen in Markdown</li>
 <li><strong>Nicht verändert</strong> von outheis (aus Agentenperspektive nur Lesen)</li>
 </ol>
-<hr />
-<h2 id="git-repositories">Git-Repositories</h2>
-<p>Wenn ein Verzeichnis <code>.git/</code> enthält:</p>
+      </div>
+    </section>
+
+    <section class="section" id="git-repositories">
+      <h2>Git-Repositories</h2>
+      <div class="section-text"><h2>Git-Repositories</h2>
+        <p>Wenn ein Verzeichnis <code>.git/</code> enthält:</p>
 <ol>
 <li><strong>Erkannt</strong> als Git-Repository</li>
 <li><strong>Indiziert</strong> nach Metadaten (Remotes, Branches, aktuelle Commits)</li>
 <li><strong>Nicht verändert</strong> von outheis-Agenten</li>
 <li><strong>Action-Agent</strong> kann Git-Befehle ausführen, wenn angewiesen</li>
 </ol>
-<hr />
-<h2 id="zeitstempel">Zeitstempel</h2>
-<p>Alle Zeitstempel verwenden ISO 8601-Format in UTC:</p>
+      </div>
+    </section>
+
+    <section class="section" id="zeitstempel">
+      <h2>Zeitstempel</h2>
+      <div class="section-text"><h2>Zeitstempel</h2>
+        <p>Alle Zeitstempel verwenden ISO 8601-Format in UTC:</p>
 <pre><code>2025-03-27T10:00:00Z
 </code></pre>
 <p>Agents konvertieren zur Anzeige in die lokale Zeitzone basierend auf der Zeitzoneneinstellung in <code>human/config.json</code>.</p>
-<hr />
-<h2 id="dateinamen">Dateinamen</h2>
-<h3 id="konventionen_1">Konventionen</h3>
+      </div>
+    </section>
+
+    <section class="section" id="dateinamen">
+      <h2>Dateinamen</h2>
+      <div class="section-text"><h2>Dateinamen</h2>
+        <h3 id="konventionen_1">Konventionen</h3>
 <table>
 <thead>
 <tr>
@@ -999,12 +1304,20 @@ Related: [[projects/alpha/README]]
 </li>
 <li>Führenden <code>.</code> in Benutzerdateien (für System reserviert)</li>
 </ul>
-<hr />
-<h2 id="kodierung">Kodierung</h2>
-<p>Alle Textdateien verwenden UTF-8-Kodierung ohne BOM.</p>
-<hr />
-<h2 id="zusammenfassung">Zusammenfassung</h2>
-<table>
+      </div>
+    </section>
+
+    <section class="section" id="kodierung">
+      <h2>Kodierung</h2>
+      <div class="section-text"><h2>Kodierung</h2>
+        <p>Alle Textdateien verwenden UTF-8-Kodierung ohne BOM.</p>
+      </div>
+    </section>
+
+    <section class="section" id="zusammenfassung">
+      <h2>Zusammenfassung</h2>
+      <div class="section-text"><h2>Zusammenfassung</h2>
+        <table>
 <thead>
 <tr>
 <th>Datentyp</th>
@@ -1076,9 +1389,13 @@ Related: [[projects/alpha/README]]
 </tr>
 </tbody>
 </table>
-<hr />
-<h2 id="schema-versionierung">Schema-Versionierung</h2>
-<h3 id="das-problem">Das Problem</h3>
+      </div>
+    </section>
+
+    <section class="section" id="schema-versionierung">
+      <h2>Schema-Versionierung</h2>
+      <div class="section-text"><h2>Schema-Versionierung</h2>
+        <h3 id="das-problem">Das Problem</h3>
 <p>Datenstrukturen entwickeln sich weiter. Ohne Versionierung:</p>
 <ul>
 <li>Alte Daten werden nach Upgrades unlesbar</li>
@@ -1251,9 +1568,13 @@ outheis migrate --apply --quiet
 </tbody>
 </table>
 <p><em>Wird mit jeder Schema-Änderung aktualisiert.</em></p>
-<hr />
-<h2 id="theoretischer-hintergrund">Theoretischer Hintergrund</h2>
-<p>Die vault-Architektur implementiert Prinzipien der <em>prospektiven Informationsarchitektur</em>:</p>
+      </div>
+    </section>
+
+    <section class="section" id="theoretischer-hintergrund">
+      <h2>Theoretischer Hintergrund</h2>
+      <div class="section-text"><h2>Theoretischer Hintergrund</h2>
+        <p>Die vault-Architektur implementiert Prinzipien der <em>prospektiven Informationsarchitektur</em>:</p>
 <ul>
 <li>
 <p><strong>Selbstbeschreibende Objekte</strong>: Dateien tragen Bedeutung über Tags — nicht über Position</p>
@@ -1269,9 +1590,13 @@ outheis migrate --apply --quiet
 </li>
 </ul>
 <p>Siehe: <a href="https://github.com/outheis-labs/research-base/blob/main/temporalization-of-order/temporalization-of-order.md">Temporalization of Order</a> für theoretische Grundlagen.</p>
-<hr />
-<h2 id="randfalle">Randfälle</h2>
-<h3 id="symlinks">Symlinks</h3>
+      </div>
+    </section>
+
+    <section class="section" id="randfalle">
+      <h2>Randfälle</h2>
+      <div class="section-text"><h2>Randfälle</h2>
+        <h3 id="symlinks">Symlinks</h3>
 <table>
 <thead>
 <tr>
@@ -1344,9 +1669,13 @@ outheis migrate --apply --quiet
 <li>Wenn Konvertierung fehlschlägt: nur Metadaten indexieren, <strong>Benutzer benachrichtigen</strong></li>
 </ol>
 <p>Benachrichtigungspfad: Data-Agent → Dispatcher → Agenda-Agent (Persönlicher Modus) oder Relay (Domain-Expert-Modus) → Benutzer</p>
-<hr />
-<h2 id="domain-expert-modus-administratorrolle">Domain-Expert-Modus: Administratorrolle</h2>
-<p>Im Domain-Expert-Modus dient das <code>human/</code>-Verzeichnis einem anderen Zweck:</p>
+      </div>
+    </section>
+
+    <section class="section" id="domain-expert-modus-administratorrolle">
+      <h2>Domain-Expert-Modus: Administratorrolle</h2>
+      <div class="section-text"><h2>Domain-Expert-Modus: Administratorrolle</h2>
+        <p>Im Domain-Expert-Modus dient das <code>human/</code>-Verzeichnis einem anderen Zweck:</p>
 <table>
 <thead>
 <tr>
@@ -1391,9 +1720,13 @@ outheis migrate --apply --quiet
 <li>empfängt <strong>kein</strong> persönliches Filtern (kein Agenda)</li>
 </ul>
 <p>Mehrere Endbenutzer interagieren über Transport, aber nur der Administrator konfiguriert <code>human/</code>.</p>
-<hr />
-<h2 id="agenda-verzeichnis">Agenda-Verzeichnis</h2>
-<p>Der primäre vault enthält ein spezielles <code>Agenda/</code>-Verzeichnis — strukturierte Schnittstelle zwischen Benutzer und System.</p>
+      </div>
+    </section>
+
+    <section class="section" id="agenda-verzeichnis">
+      <h2>Agenda-Verzeichnis</h2>
+      <div class="section-text"><h2>Agenda-Verzeichnis</h2>
+        <p>Der primäre vault enthält ein spezielles <code>Agenda/</code>-Verzeichnis — strukturierte Schnittstelle zwischen Benutzer und System.</p>
 <h3 id="struktur_1">Struktur</h3>
 <pre><code>vault/Agenda/
 ├── Daily.md
@@ -1513,9 +1846,13 @@ Learned: #in-progress → #wip
 └── Exchange.md.prev
 </code></pre>
 <p>Vorherige Versionen werden im Systemverzeichnis gecacht, um Diffs zu berechnen.</p>
-<hr />
-<h2 id="zugriffsstrategien">Zugriffsstrategien</h2>
-<p>Ohne Datenbank erfordert schneller Zugriff clevere Strategien auf Basis von Klartext.</p>
+      </div>
+    </section>
+
+    <section class="section" id="zugriffsstrategien">
+      <h2>Zugriffsstrategien</h2>
+      <div class="section-text"><h2>Zugriffsstrategien</h2>
+        <p>Ohne Datenbank erfordert schneller Zugriff clevere Strategien auf Basis von Klartext.</p>
 <h3 id="index-als-primarer-nachschlageort">Index als primärer Nachschlageort</h3>
 <p>Der Index (<code>~/.outheis/human/index.jsonl</code>) ist der erste Zugangspunkt. Dateiinhalte werden nur bei Bedarf geladen.</p>
 <pre><code>Query
@@ -1650,8 +1987,30 @@ Search within archive
 Return results, unload archive
 </code></pre>
 <p>Kein dauerhafter Speichereinfluss. Bei Bedarf laden, nach Verwendung freigeben.</p>
-    <hr>
-    <p class="footer">Open source under AGPL-3.0 · <a href="https://github.com/outheis-labs/outheis-beta">Code on GitHub</a></p>
+      </div>
+    </section>
+
+    <nav class="book-nav">
+      <div class="prev"><a href="../../design/03-architecture.html">
+          <span class="label">← Zurück</span>
+          <span class="title">Architektur</span>
+        </a></div>
+      <div class="toc-center"><a href="../../contents.html#design">
+          <span class="label">Inhalt</span>
+          <span class="title">Design</span>
+        </a></div>
+      <div class="next"><a href="../../design/05-related-work.html">
+          <span class="label">Weiter →</span>
+          <span class="title">Verwandte Ansätze</span>
+        </a></div>
+    </nav>
   </main>
+
+  <footer>
+    <div class="meta">
+      open source · AGPL-3.0 · <a href="https://github.com/outheis-labs">github.com/outheis-labs</a>
+    </div>
+  </footer>
+
 </body>
 </html>

@@ -1,35 +1,58 @@
-# οὐθείς (outheis)
+# οὐθείς
 
-*Nobody — and everybody who refuses to be captured.*
+Any of your AI interactions represents you — queries, patterns, thinking. Over time, the puzzle completes. Not for you, but for the platform operators.
 
-Second brain multi-agent AI assistant, grounded in privacy and human-centricity. Engineered as infrastructure, not as a product. 
-
-Designed for both personal assistant (1:1) and domain expert (many:1) usage.
+**outheis takes a different position: cognitive sovereignty. It is the digital representation of the way you think — persistently on your machine, owned by you.**
 
 ---
 
-![outheis-slips (Original: Henri Fuseli - Blinded Polyphemus Checks the Sheep as they leave the Cave)](https://github.com/user-attachments/assets/ba35428e-b320-4be3-ae9a-6d4ec61a5962)
+## The reality
 
----
+The term *captured cognition* describes it well: your mental work, externalized through AI interaction, becomes raw material for systems that don't serve you.
 
-When Ulysses escapes the Cyclops, he calls himself οὐθείς — *nobody*. The Cyclops calls for help: "Nobody has blinded me!" No help comes. Ulysses slips away, clinging to the belly of the ram.
+Those assistants learn from you. The learning belongs to someone else. This isn't a rejection of AI assistance — it's a rejection of the extractive model that currently dominates.
 
-It's a trick, but also a stance: by refusing to be named, captured, pinned down, Ulysses remains free to act.
+## οὐθείς
 
-outheis carries this into AI interaction. The system knows you — but only locally, only under your control, only in service of your work. Your conversations, your notes, your patterns of thought should serve *you* — not be captured, profiled, monetized.
+When Polyphemus asks who blinded him, Odysseus answers: οὐθείς — nobody. The Cyclops calls for help: "Nobody has blinded me!" No help comes. Odysseus slips away, clinging to the belly of the ram.
 
-Five agents coordinate through messages. Your knowledge stays in a local vault. Nothing leaves without your intent.
+It's a trick, but also a stance: by refusing to be named, captured, pinned down, Odysseus remains free to act.
 
----
+outheis carries this into AI interaction. The system knows you — but only locally, only under your control, only in service of your work.
 
-## Documentation
+## What it is
 
-**[Installation](installation/)** — Public beta release. Requirements, setup, first steps, known gaps.
+A multi-agent AI assistant running locally. A second brain — private, human-centric, yours. Built as infrastructure, not as a product. Works as personal assistant (1:1) or domain expert (many:1).
 
-**[Foundations](foundations/)** — Why sovereignty matters. The problem with captured cognition.
+## Sovereignty
 
-**[Design](design/)** — OS principles applied to agents. Architecture specification, data formats, agent prompts.
+- Your data stays on your machine. *No cloud, no capture.*
+- The assistant learns from you. *The learning belongs to you.*
+- Append-only logs. *No hidden state.*
+- Markdown and JSON. *Portable, readable, no lock-in.*
 
-**[Implementation](implementation/)** — Current state. Architecture, agents, configuration, vault, tags, migration.
+## Architecture
 
-**[Workflows](workflows/)** — Practical guides. How to work with outheis day to day.
+Different agents, each responsible for a defined task. Proven operating system design principles: coordinated through messages, explicit capabilities, fault-isolated.
+
+<div class="agents-grid">
+  <div class="agent agent-ou"><div class="agent-name">ou</div><div class="agent-role">Relay Agent</div></div>
+  <div class="agent agent-zeno"><div class="agent-name">zeno</div><div class="agent-role">Data Agent</div></div>
+  <div class="agent agent-cato"><div class="agent-name">cato</div><div class="agent-role">Agenda Agent</div></div>
+  <div class="agent agent-hiro"><div class="agent-name">hiro</div><div class="agent-role">Action Agent</div></div>
+  <div class="agent agent-rumi"><div class="agent-name">rumi</div><div class="agent-role">Pattern Agent</div></div>
+</div>
+
+## Read more
+
+<ul class="links-list">
+  <li><a href="foundations/">Foundations</a></li>
+  <li><a href="design/">Design principles</a></li>
+  <li><a href="implementation/">Implementation</a></li>
+  <li><a href="installation/">Installation</a></li>
+  <li><a href="workflows/">Workflows</a></li>
+</ul>
+
+## About
+
+outheis is built by Markus Schatzl. If you're interested in the direction — as a user, collaborator, or investor — reach out: [technology.culture@proton.me](mailto:technology.culture@proton.me)

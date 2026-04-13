@@ -1,0 +1,799 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Skills · outheis</title>
+  <link rel="icon" type="image/png" href="../favicon-96x96.png" sizes="96x96">
+  <link rel="icon" type="image/svg+xml" href="../favicon.svg">
+  <link rel="shortcut icon" href="../favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="../apple-touch-icon.png">
+  <link rel="manifest" href="../site.webmanifest">
+  <style>
+    @font-face {
+      font-family: 'Inter';
+      src: url('../assets/fonts/InterVariable.woff2') format('woff2');
+      font-weight: 100 900;
+      font-style: normal;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'IBM Plex Sans';
+      src: url('../assets/fonts/IBMPlexSans-Variable.woff2') format('woff2-variations');
+      font-weight: 100 700;
+      font-style: normal;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'IBM Plex Mono';
+      src: url('../assets/fonts/IBMPlexMono-Regular.woff2') format('woff2');
+      font-weight: 400;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'IBM Plex Sans', -apple-system, sans-serif;
+      background: #fff;
+      color: #1a1a1a;
+      line-height: 1.65;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .greek {
+      font-family: 'Inter', sans-serif;
+    }
+
+    /* Header with breadcrumb */
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 1.5rem;
+      border-bottom: 1px solid #e0e0e0;
+    }
+
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .logo {
+      font-family: 'Inter', sans-serif;
+      font-size: 20px;
+      font-weight: 500;
+    }
+
+    .breadcrumb {
+      font-size: 14px;
+      color: #888;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .breadcrumb a {
+      color: #666;
+    }
+
+    .breadcrumb a:hover {
+      color: #1a1a1a;
+    }
+
+    .breadcrumb .separator {
+      color: #ccc;
+    }
+
+    .breadcrumb .current {
+      color: #1a1a1a;
+    }
+
+    header nav {
+      font-size: 14px;
+      display: flex;
+      align-items: baseline;
+      gap: 1rem;
+    }
+
+    header nav a {
+      color: #888;
+    }
+
+    header nav a:hover {
+      color: #1a1a1a;
+    }
+
+    .lang-switch {
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-size: 14px;
+      color: #888;
+    }
+
+    .lang-switch a {
+      font-size: 14px;
+      color: #888;
+    }
+
+    .lang-switch a:hover {
+      color: #1a1a1a;
+    }
+
+    .lang-switch .lang-active {
+      color: #1a1a1a;
+      font-weight: 500;
+    }
+
+    /* Main */
+    main {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 3rem 1.5rem;
+    }
+
+    /* Page header */
+    .page-header {
+      margin-bottom: 3rem;
+    }
+
+    .page-header h1 {
+      font-family: 'Inter', sans-serif;
+      font-size: 36px;
+      font-weight: 500;
+      letter-spacing: -0.02em;
+    }
+
+    .page-header .subtitle {
+      font-size: 18px;
+      font-style: italic;
+      color: #555;
+      margin-top: 0.75rem;
+    }
+
+    /* Content sections */
+    .section {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+      padding: 2.5rem 0;
+      border-top: 1px solid #e0e0e0;
+    }
+
+    /* Mobile: hide label h2, show section-text h2 */
+    .section > h2 {
+      display: none;
+    }
+
+    .section-text h2 {
+      font-size: 20px;
+      font-weight: 500;
+      margin-bottom: 1rem;
+    }
+
+    .section-text > *:first-child {
+      margin-top: 0;
+    }
+
+    /* Hidden h2 is first-child on desktop, so target the visible first element */
+    .section-text > h2 + * {
+      margin-top: 0;
+    }
+
+    .section-text > h2 + p {
+      margin-top: 0;
+    }
+
+    .section-text p {
+      font-size: 16px;
+      line-height: 1.75;
+      color: #333;
+      margin-bottom: 1rem;
+    }
+
+    .section-text p:last-child {
+      margin-bottom: 0;
+    }
+
+    .section-text h3 {
+      font-size: 16px;
+      font-weight: 450;
+      color: #1a1a1a;
+      line-height: 1.75;
+      margin-top: 1.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .section-text h3:first-child,
+    .section-text > h2 + h3 {
+      margin-top: 0;
+    }
+
+    .section-text ul {
+      list-style: none;
+      margin-bottom: 1rem;
+    }
+
+    .section-text ul li {
+      font-size: 16px;
+      line-height: 1.65;
+      color: #333;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid #eee;
+    }
+
+    .section-text ul li:last-child {
+      border-bottom: none;
+    }
+
+    .section-text ol {
+      margin-bottom: 1rem;
+      padding-left: 1.5rem;
+    }
+
+    .section-text ol li {
+      font-size: 16px;
+      line-height: 1.65;
+      color: #333;
+      margin-bottom: 0.5rem;
+    }
+
+    .section-text code {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 14px;
+      background: #f5f5f5;
+      padding: 0.15em 0.4em;
+      border-radius: 2px;
+    }
+
+    .section-text pre {
+      background: #f5f5f5;
+      padding: 1rem 1.25rem;
+      overflow-x: auto;
+      margin: 1.5rem 0;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 13px;
+      line-height: 1.5;
+      border-radius: 2px;
+    }
+
+    .section-text pre code {
+      background: none;
+      padding: 0;
+    }
+
+    .section-text table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1.5rem 0;
+      font-size: 14px;
+    }
+
+    .section-text th,
+    .section-text td {
+      text-align: left;
+      padding: 0.5rem 0.75rem;
+      border-bottom: 1px solid #e0e0e0;
+    }
+
+    .section-text th {
+      font-weight: 500;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: #666;
+    }
+
+    .section-text blockquote {
+      border-left: 2px solid #e0e0e0;
+      padding-left: 1.25rem;
+      margin: 1.5rem 0;
+      color: #666;
+      font-style: italic;
+    }
+
+    .section-text a {
+      color: #666;
+    }
+
+    .section-text a:hover {
+      color: #1a1a1a;
+    }
+
+    /* TOC list styling */
+    .toc-list {
+      list-style: none;
+      padding-left: 0;
+    }
+
+    .toc-list li {
+      border-bottom: 1px solid #eee;
+    }
+
+    .toc-list li:last-child {
+      border-bottom: none;
+    }
+
+    .toc-list a {
+      display: block;
+      padding: 1rem 0;
+      color: #1a1a1a;
+    }
+
+    .toc-list li:first-child a {
+      padding-top: 0;
+    }
+
+    .toc-list a:hover {
+      background: #fafafa;
+      margin: 0 -1rem;
+      padding: 1rem;
+    }
+
+    .toc-list .title {
+      font-size: 16px;
+      font-weight: 500;
+      color: #1a1a1a;
+      margin-bottom: 0.25rem;
+    }
+
+    .toc-list .description {
+      font-size: 14px;
+      color: #666;
+      line-height: 1.5;
+    }
+
+    /* Book navigation */
+    .book-nav {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      gap: 1rem;
+      align-items: center;
+      padding: 2rem 0;
+      margin-top: 2rem;
+      border-top: 1px solid #e0e0e0;
+    }
+
+    .book-nav a {
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+      color: #666;
+    }
+
+    .book-nav a:hover {
+      color: #1a1a1a;
+    }
+
+    .book-nav .label {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: #888;
+    }
+
+    .book-nav .title {
+      font-size: 15px;
+      font-weight: 500;
+    }
+
+    .book-nav .prev {
+      text-align: left;
+    }
+
+    .book-nav .toc-center {
+      text-align: center;
+    }
+
+    .book-nav .toc-center a {
+      align-items: center;
+    }
+
+    .book-nav .next {
+      text-align: right;
+    }
+
+    /* Footer */
+    footer {
+      padding: 2rem 1.5rem;
+      max-width: 1100px;
+      margin: 0 auto;
+      border-top: 1px solid #e0e0e0;
+    }
+
+    footer .meta {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 12px;
+      color: #888;
+    }
+
+    footer .meta a {
+      color: #888;
+    }
+
+    footer .meta a:hover {
+      color: #333;
+    }
+
+    /* Desktop */
+    @media (min-width: 800px) {
+      header {
+        padding: 1.5rem 3rem;
+      }
+
+      main {
+        padding: 4rem 3rem;
+      }
+
+      .page-header h1 {
+        font-size: 48px;
+      }
+
+      .section {
+        grid-template-columns: 180px 1fr;
+        gap: 3rem;
+        padding: 3rem 0;
+        align-items: baseline;
+      }
+
+      .section > h2 {
+        display: block;
+        font-size: 18px;
+        font-weight: 500;
+        color: #1a1a1a;
+        line-height: 1.75;
+      }
+
+      .section-text h2 {
+        display: none;
+        position: absolute;
+        visibility: hidden;
+      }
+
+      .book-nav .title {
+        font-size: 16px;
+      }
+
+      footer {
+        padding: 2rem 3rem;
+      }
+    }
+
+    /* Mobile */
+    @media (max-width: 600px) {
+      .breadcrumb {
+        display: none;
+      }
+
+      .book-nav {
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: auto auto;
+      }
+
+      .book-nav .prev {
+        grid-column: 1;
+      }
+
+      .book-nav .next {
+        grid-column: 2;
+      }
+
+      .book-nav .toc-center {
+        grid-column: 1 / -1;
+        grid-row: 2;
+        margin-top: 1rem;
+        padding-top: 1rem;
+        border-top: 1px solid #eee;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="header-left">
+      <a href="../index.html" class="logo">οὐθείς</a>
+      <div class="breadcrumb">
+        <span class="separator">/</span>
+        <a href="../contents.html#implementation">Implementation</a>
+        <span class="separator">/</span>
+        <span class="current">Skills</span>
+      </div>
+    </div>
+    <nav>
+      <a href="../contents.html#implementation">Contents</a>
+      <a href="https://github.com/outheis-labs/outheis-beta">GitHub ↗</a>
+      <span class="lang-switch"><span class="lang-active">EN</span> · <a href="../de/implementation/04-skills.html">DE</a></span>
+    </nav>
+  </header>
+
+  <main>
+    <div class="page-header">
+      <h1>Skills</h1>
+      <p class="subtitle">What agents know about how to act.</p>
+    </div>
+
+    <section class="section" id="overview">
+      <h2>Overview</h2>
+      <div class="section-text"><h2>Overview</h2>
+        <p>Skills are an agent's internal capabilities — strategies, methods, heuristics for accomplishing tasks. Unlike rules (external instructions), skills represent the agent's own knowledge about <em>how</em> to do things.</p>
+      </div>
+    </section>
+
+    <section class="section" id="the-three-stores">
+      <h2>The Three Stores</h2>
+      <div class="section-text"><h2>The Three Stores</h2>
+        <table>
+<thead>
+<tr>
+<th>Store</th>
+<th>What it contains</th>
+<th>Who writes</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>memory</strong></td>
+<td>Facts, observations, state</td>
+<td>Pattern Agent</td>
+<td>"User lives in Munich"</td>
+</tr>
+<tr>
+<td><strong>rules</strong></td>
+<td>Instructions, constraints</td>
+<td>User, Pattern Agent</td>
+<td>"Respond in German"</td>
+</tr>
+<tr>
+<td><strong>skills</strong></td>
+<td>Capabilities, strategies</td>
+<td>Agent itself, Pattern Agent</td>
+<td>"Date formats I recognize: ..."</td>
+</tr>
+</tbody>
+</table>
+      </div>
+    </section>
+
+    <section class="section" id="how-they-combine">
+      <h2>How They Combine</h2>
+      <div class="section-text"><h2>How They Combine</h2>
+        <p>When an agent processes a request:</p>
+<pre><code>Agent receives message
+    ↓
+Skills: &quot;How do I approach this?&quot;
+    ↓
+Rules: &quot;What constraints apply?&quot;
+    ↓
+Memory: &quot;What do I know about this user/context?&quot;
+    ↓
+Action
+</code></pre>
+      </div>
+    </section>
+
+    <section class="section" id="directory-structure">
+      <h2>Directory Structure</h2>
+      <div class="section-text"><h2>Directory Structure</h2>
+        <pre><code># System skills (in package, read-only)
+src/outheis/agents/skills/
+├── common.md       # Shared by all agents
+├── relay.md        # Relay-specific
+├── agenda.md       # Agenda-specific
+├── data.md         # Data-specific
+└── pattern.md      # Pattern-specific
+
+# User skills (learned, mutable)
+~/.outheis/human/skills/
+├── common.md       # Learned strategies (all agents)
+├── relay.md        # Relay refinements
+├── agenda.md       # Agenda refinements
+└── data.md         # Data refinements
+</code></pre>
+      </div>
+    </section>
+
+    <section class="section" id="system-skills">
+      <h2>System Skills</h2>
+      <div class="section-text"><h2>System Skills</h2>
+        <p>Base capabilities defined by the developer. Examples:</p>
+<p><strong>Agenda Agent:</strong></p>
+<ul>
+<li>Date format recognition</li>
+<li>Daily.md structure</li>
+<li>Inbox processing strategy</li>
+<li>Exchange.md usage</li>
+</ul>
+<p><strong>Data Agent:</strong></p>
+<ul>
+<li>File search strategies</li>
+<li>Tag interpretation</li>
+<li>JSON structure parsing</li>
+<li>Result ranking</li>
+</ul>
+<p><strong>Relay Agent:</strong></p>
+<ul>
+<li>Request routing</li>
+<li>Tool selection</li>
+<li>Migration handling</li>
+<li>Correction processing</li>
+</ul>
+<p><strong>Pattern Agent:</strong></p>
+<ul>
+<li>Memory extraction</li>
+<li>Rule promotion</li>
+<li>Conflict detection</li>
+<li>Self-evaluation</li>
+</ul>
+      </div>
+    </section>
+
+    <section class="section" id="user-skills-learned">
+      <h2>User Skills (Learned)</h2>
+      <div class="section-text"><h2>User Skills (Learned)</h2>
+        <p>Skills refined through use and correction. Written by:</p>
+<ol>
+<li><strong>Agent itself</strong> — when a strategy works consistently</li>
+<li><strong>Pattern Agent</strong> — when observing stable patterns</li>
+</ol>
+<p>Example evolution:</p>
+<pre><code class="language-markdown"># ~/.outheis/human/skills/agenda.md
+
+## Date Formats
+
+- User writes dates as DD.MM.YYYY, not MM/DD/YYYY
+- &quot;nächste Woche&quot; means Monday, not 7 days from now
+
+## Daily Structure
+
+- User prefers 🧘/🔴/🟠 emoji sections
+- No &quot;Evening&quot; section needed — user doesn't use it
+</code></pre>
+      </div>
+    </section>
+
+    <section class="section" id="skill-vs-rule">
+      <h2>Skill vs. Rule</h2>
+      <div class="section-text"><h2>Skill vs. Rule</h2>
+        <table>
+<thead>
+<tr>
+<th>Aspect</th>
+<th>Skill</th>
+<th>Rule</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Perspective</td>
+<td>"How I do this"</td>
+<td>"What I should observe"</td>
+</tr>
+<tr>
+<td>Origin</td>
+<td>Learned by agent</td>
+<td>Given by user/Pattern</td>
+</tr>
+<tr>
+<td>Scope</td>
+<td>Internal capability</td>
+<td>External constraint</td>
+</tr>
+<tr>
+<td>Example</td>
+<td>"I recognize dates like..."</td>
+<td>"Always respond in German"</td>
+</tr>
+</tbody>
+</table>
+<p>Rules constrain behavior from outside.
+Skills enable behavior from inside.</p>
+      </div>
+    </section>
+
+    <section class="section" id="loading-order">
+      <h2>Loading Order</h2>
+      <div class="section-text"><h2>Loading Order</h2>
+        <p>In the system prompt:</p>
+<ol>
+<li><strong>Skills</strong> (common + agent-specific)</li>
+<li><strong>Rules</strong> (common + agent-specific)</li>
+<li><strong>Memory context</strong> (user + feedback + context)</li>
+</ol>
+<p>System versions first, user versions extend/override.</p>
+      </div>
+    </section>
+
+    <section class="section" id="writing-skills">
+      <h2>Writing Skills</h2>
+      <div class="section-text"><h2>Writing Skills</h2>
+        <p>Skills should be:</p>
+<ul>
+<li>
+<p><strong>Concrete</strong>: Specific patterns, not vague principles</p>
+</li>
+<li>
+<p><strong>Actionable</strong>: Tell the agent what to do</p>
+</li>
+<li>
+<p><strong>Learnable</strong>: Can be refined through feedback</p>
+</li>
+</ul>
+<p>Good skill:</p>
+<pre><code class="language-markdown">## Date Recognition
+- &quot;morgen&quot; → tomorrow's date
+- &quot;nächsten Montag&quot; → next Monday (not today if today is Monday)
+- &quot;24.03.2026&quot; → parse as YYYY-MM-DD internally
+</code></pre>
+<p>Weak skill:</p>
+<pre><code class="language-markdown">## Dates
+- Understand dates properly
+- Be smart about date parsing
+</code></pre>
+      </div>
+    </section>
+
+    <section class="section" id="skill-refinement">
+      <h2>Skill Refinement</h2>
+      <div class="section-text"><h2>Skill Refinement</h2>
+        <p>When a user corrects an agent:</p>
+<ol>
+<li>Agent stores correction in memory (feedback)</li>
+<li>Pattern Agent observes repeated corrections</li>
+<li>If stable: promotes to user skill</li>
+<li>Skill now influences all future actions</li>
+</ol>
+<p>This creates a learning loop where corrections become permanent improvements.</p>
+<h3 id="distillation-triggers">Distillation Triggers</h3>
+<p>The Pattern Agent uses judgment, not fixed thresholds. But these conditions indicate a pattern is ready:</p>
+<ul>
+<li><strong>3+ similar observations</strong> → pattern detectable</li>
+<li><strong>Repeated corrections</strong> → principle extractable</li>
+<li><strong>Stable preference</strong> → ready for skill</li>
+</ul>
+<p>A strong preference stated clearly once may become a skill. Something mentioned casually many times may not. Explicit corrections always carry more weight than inferred patterns.</p>
+<h3 id="quality-criteria">Quality Criteria</h3>
+<p>A good skill:</p>
+<ul>
+<li><strong>Directs attention</strong> — tells the agent what to notice, not what to do</li>
+<li><strong>Generalizes</strong> — applies beyond the specific instance that prompted it</li>
+<li><strong>Replaces</strong> — makes one or more memory entries unnecessary</li>
+</ul>
+<p>If a skill doesn't replace anything, it may be too specific. If it doesn't direct attention, it may be a rule in disguise.</p>
+      </div>
+    </section>
+
+    <nav class="book-nav">
+      <div class="prev"><a href="../implementation/03-agenda.html">
+          <span class="label">← Previous</span>
+          <span class="title">Agenda</span>
+        </a></div>
+      <div class="toc-center"><a href="../contents.html#implementation">
+          <span class="label">Contents</span>
+          <span class="title">Implementation</span>
+        </a></div>
+      <div class="next"><a href="../implementation/05-alan.html">
+          <span class="label">Next →</span>
+          <span class="title">Code Agent</span>
+        </a></div>
+    </nav>
+  </main>
+
+  <footer>
+    <div class="meta">
+      open source · AGPL-3.0 · <a href="https://github.com/outheis-labs">github.com/outheis-labs</a>
+    </div>
+  </footer>
+
+</body>
+</html>

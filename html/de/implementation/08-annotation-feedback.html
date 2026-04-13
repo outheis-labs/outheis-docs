@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Annotations-Feedback-Schleife · outheis</title>
+  <link rel="icon" type="image/png" href="../../favicon-96x96.png" sizes="96x96">
+  <link rel="icon" type="image/svg+xml" href="../../favicon.svg">
+  <link rel="shortcut icon" href="../../favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="../../apple-touch-icon.png">
+  <link rel="manifest" href="../../site.webmanifest">
+  <style>
+    @font-face {
+      font-family: 'Inter';
+      src: url('../../assets/fonts/InterVariable.woff2') format('woff2');
+      font-weight: 100 900;
+      font-style: normal;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'IBM Plex Sans';
+      src: url('../../assets/fonts/IBMPlexSans-Variable.woff2') format('woff2-variations');
+      font-weight: 100 700;
+      font-style: normal;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'IBM Plex Mono';
+      src: url('../../assets/fonts/IBMPlexMono-Regular.woff2') format('woff2');
+      font-weight: 400;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'IBM Plex Sans', -apple-system, sans-serif;
+      background: #fff;
+      color: #1a1a1a;
+      line-height: 1.65;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .greek {
+      font-family: 'Inter', sans-serif;
+    }
+
+    /* Header with breadcrumb */
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 1.5rem;
+      border-bottom: 1px solid #e0e0e0;
+    }
+
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .logo {
+      font-family: 'Inter', sans-serif;
+      font-size: 20px;
+      font-weight: 500;
+    }
+
+    .breadcrumb {
+      font-size: 14px;
+      color: #888;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .breadcrumb a {
+      color: #666;
+    }
+
+    .breadcrumb a:hover {
+      color: #1a1a1a;
+    }
+
+    .breadcrumb .separator {
+      color: #ccc;
+    }
+
+    .breadcrumb .current {
+      color: #1a1a1a;
+    }
+
+    header nav {
+      font-size: 14px;
+      display: flex;
+      align-items: baseline;
+      gap: 1rem;
+    }
+
+    header nav a {
+      color: #888;
+    }
+
+    header nav a:hover {
+      color: #1a1a1a;
+    }
+
+    .lang-switch {
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-size: 14px;
+      color: #888;
+    }
+
+    .lang-switch a {
+      font-size: 14px;
+      color: #888;
+    }
+
+    .lang-switch a:hover {
+      color: #1a1a1a;
+    }
+
+    .lang-switch .lang-active {
+      color: #1a1a1a;
+      font-weight: 500;
+    }
+
+    /* Main */
+    main {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 3rem 1.5rem;
+    }
+
+    /* Page header */
+    .page-header {
+      margin-bottom: 3rem;
+    }
+
+    .page-header h1 {
+      font-family: 'Inter', sans-serif;
+      font-size: 36px;
+      font-weight: 500;
+      letter-spacing: -0.02em;
+    }
+
+    .page-header .subtitle {
+      font-size: 18px;
+      font-style: italic;
+      color: #555;
+      margin-top: 0.75rem;
+    }
+
+    /* Content sections */
+    .section {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+      padding: 2.5rem 0;
+      border-top: 1px solid #e0e0e0;
+    }
+
+    /* Mobile: hide label h2, show section-text h2 */
+    .section > h2 {
+      display: none;
+    }
+
+    .section-text h2 {
+      font-size: 20px;
+      font-weight: 500;
+      margin-bottom: 1rem;
+    }
+
+    .section-text > *:first-child {
+      margin-top: 0;
+    }
+
+    /* Hidden h2 is first-child on desktop, so target the visible first element */
+    .section-text > h2 + * {
+      margin-top: 0;
+    }
+
+    .section-text > h2 + p {
+      margin-top: 0;
+    }
+
+    .section-text p {
+      font-size: 16px;
+      line-height: 1.75;
+      color: #333;
+      margin-bottom: 1rem;
+    }
+
+    .section-text p:last-child {
+      margin-bottom: 0;
+    }
+
+    .section-text h3 {
+      font-size: 16px;
+      font-weight: 450;
+      color: #1a1a1a;
+      line-height: 1.75;
+      margin-top: 1.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .section-text h3:first-child,
+    .section-text > h2 + h3 {
+      margin-top: 0;
+    }
+
+    .section-text ul {
+      list-style: none;
+      margin-bottom: 1rem;
+    }
+
+    .section-text ul li {
+      font-size: 16px;
+      line-height: 1.65;
+      color: #333;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid #eee;
+    }
+
+    .section-text ul li:last-child {
+      border-bottom: none;
+    }
+
+    .section-text ol {
+      margin-bottom: 1rem;
+      padding-left: 1.5rem;
+    }
+
+    .section-text ol li {
+      font-size: 16px;
+      line-height: 1.65;
+      color: #333;
+      margin-bottom: 0.5rem;
+    }
+
+    .section-text code {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 14px;
+      background: #f5f5f5;
+      padding: 0.15em 0.4em;
+      border-radius: 2px;
+    }
+
+    .section-text pre {
+      background: #f5f5f5;
+      padding: 1rem 1.25rem;
+      overflow-x: auto;
+      margin: 1.5rem 0;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 13px;
+      line-height: 1.5;
+      border-radius: 2px;
+    }
+
+    .section-text pre code {
+      background: none;
+      padding: 0;
+    }
+
+    .section-text table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1.5rem 0;
+      font-size: 14px;
+    }
+
+    .section-text th,
+    .section-text td {
+      text-align: left;
+      padding: 0.5rem 0.75rem;
+      border-bottom: 1px solid #e0e0e0;
+    }
+
+    .section-text th {
+      font-weight: 500;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: #666;
+    }
+
+    .section-text blockquote {
+      border-left: 2px solid #e0e0e0;
+      padding-left: 1.25rem;
+      margin: 1.5rem 0;
+      color: #666;
+      font-style: italic;
+    }
+
+    .section-text a {
+      color: #666;
+    }
+
+    .section-text a:hover {
+      color: #1a1a1a;
+    }
+
+    /* TOC list styling */
+    .toc-list {
+      list-style: none;
+      padding-left: 0;
+    }
+
+    .toc-list li {
+      border-bottom: 1px solid #eee;
+    }
+
+    .toc-list li:last-child {
+      border-bottom: none;
+    }
+
+    .toc-list a {
+      display: block;
+      padding: 1rem 0;
+      color: #1a1a1a;
+    }
+
+    .toc-list li:first-child a {
+      padding-top: 0;
+    }
+
+    .toc-list a:hover {
+      background: #fafafa;
+      margin: 0 -1rem;
+      padding: 1rem;
+    }
+
+    .toc-list .title {
+      font-size: 16px;
+      font-weight: 500;
+      color: #1a1a1a;
+      margin-bottom: 0.25rem;
+    }
+
+    .toc-list .description {
+      font-size: 14px;
+      color: #666;
+      line-height: 1.5;
+    }
+
+    /* Book navigation */
+    .book-nav {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      gap: 1rem;
+      align-items: center;
+      padding: 2rem 0;
+      margin-top: 2rem;
+      border-top: 1px solid #e0e0e0;
+    }
+
+    .book-nav a {
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+      color: #666;
+    }
+
+    .book-nav a:hover {
+      color: #1a1a1a;
+    }
+
+    .book-nav .label {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: #888;
+    }
+
+    .book-nav .title {
+      font-size: 15px;
+      font-weight: 500;
+    }
+
+    .book-nav .prev {
+      text-align: left;
+    }
+
+    .book-nav .toc-center {
+      text-align: center;
+    }
+
+    .book-nav .toc-center a {
+      align-items: center;
+    }
+
+    .book-nav .next {
+      text-align: right;
+    }
+
+    /* Footer */
+    footer {
+      padding: 2rem 1.5rem;
+      max-width: 1100px;
+      margin: 0 auto;
+      border-top: 1px solid #e0e0e0;
+    }
+
+    footer .meta {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 12px;
+      color: #888;
+    }
+
+    footer .meta a {
+      color: #888;
+    }
+
+    footer .meta a:hover {
+      color: #333;
+    }
+
+    /* Desktop */
+    @media (min-width: 800px) {
+      header {
+        padding: 1.5rem 3rem;
+      }
+
+      main {
+        padding: 4rem 3rem;
+      }
+
+      .page-header h1 {
+        font-size: 48px;
+      }
+
+      .section {
+        grid-template-columns: 180px 1fr;
+        gap: 3rem;
+        padding: 3rem 0;
+        align-items: baseline;
+      }
+
+      .section > h2 {
+        display: block;
+        font-size: 18px;
+        font-weight: 500;
+        color: #1a1a1a;
+        line-height: 1.75;
+      }
+
+      .section-text h2 {
+        display: none;
+        position: absolute;
+        visibility: hidden;
+      }
+
+      .book-nav .title {
+        font-size: 16px;
+      }
+
+      footer {
+        padding: 2rem 3rem;
+      }
+    }
+
+    /* Mobile */
+    @media (max-width: 600px) {
+      .breadcrumb {
+        display: none;
+      }
+
+      .book-nav {
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: auto auto;
+      }
+
+      .book-nav .prev {
+        grid-column: 1;
+      }
+
+      .book-nav .next {
+        grid-column: 2;
+      }
+
+      .book-nav .toc-center {
+        grid-column: 1 / -1;
+        grid-row: 2;
+        margin-top: 1rem;
+        padding-top: 1rem;
+        border-top: 1px solid #eee;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="header-left">
+      <a href="../../index.html" class="logo">οὐθείς</a>
+      <div class="breadcrumb">
+        <span class="separator">/</span>
+        <a href="../../contents.html#implementation">Implementierung</a>
+        <span class="separator">/</span>
+        <span class="current">Annotations-Feedback</span>
+      </div>
+    </div>
+    <nav>
+      <a href="../../contents.html#implementation">Contents</a>
+      <a href="https://github.com/outheis-labs/outheis-beta">GitHub ↗</a>
+      <span class="lang-switch"><a href="../../implementation/08-annotation-feedback.html">EN</a> · <span class="lang-active">DE</span></span>
+    </nav>
+  </header>
+
+  <main>
+    <div class="page-header">
+      <h1>Annotations-Feedback-Schleife</h1>
+      <p class="subtitle">Wie `>`-Annotationen in den Memory-Stack geroutet werden — die aktuelle Lücke und die geplante Implementierung.</p>
+    </div>
+
+    <section class="section" id="was-annotationen-sind">
+      <h2>Was Annotationen sind</h2>
+      <div class="section-text"><h2>Was Annotationen sind</h2>
+        <p>Eine <code>&gt;</code>-Zeile unter einem Item in Agenda.md ist eine direkte Korrektur des Nutzers. Der agent (cato) verarbeitet sie: schreibt das Item neu, entfernt die Annotationszeile und fährt fort.</p>
+<p>Die Korrektur wurde umgesetzt. Das <em>Wissen</em>, das die Korrektur verursacht hat, wird nicht persistiert.</p>
+      </div>
+    </section>
+
+    <section class="section" id="drei-typen-drei-schichten">
+      <h2>Drei Typen, drei Schichten</h2>
+      <div class="section-text"><h2>Drei Typen, drei Schichten</h2>
+        <p>Annotationen tragen nicht alle dieselbe Art von Signal. Sie fallen in drei Kategorien, die jeweils einer Schicht des <a href="../design/07-hybrid-memory-stack.html">hybriden Memory-Stacks</a> entsprechen:</p>
+<p><strong>Faktische Korrektur</strong> — „das stimmt nicht — ich habe vorgestern mit ihnen gesprochen"
+→ Neue Information über die Welt, in der das System operiert
+→ Ziel: <strong>Memory</strong> (persistente Beobachtungen, als Einträge gespeichert)</p>
+<p><strong>Verhaltenskorrektur</strong> — „bezeichne einen Abstand von Tagen nicht als 'Wochen'"
+→ Eine Regel darüber, wie sich das System ausdrücken oder handeln soll
+→ Ziel: <strong>Rules</strong> (stabile Einschränkungen, in Markdown geschrieben)</p>
+<p><strong>Präferenz- / Strukturkorrektur</strong> — „der Cashflow-Abschnitt soll 3 Zeilen haben, nicht 20"
+→ Verdichtetes prozedurales Wissen darüber, wie gute Ausgabe aussieht
+→ Ziel: <strong>Skills</strong> (dichte Prinzipien, die die agent-Aufmerksamkeit lenken)</p>
+<p>Der Inhalt der Annotation selbst bestimmt den Typ. Klassifikation ist eine Aufgabe für den agent, nicht für den Code.</p>
+      </div>
+    </section>
+
+    <section class="section" id="die-fehlende-schleife">
+      <h2>Die fehlende Schleife</h2>
+      <div class="section-text"><h2>Die fehlende Schleife</h2>
+        <p>Die aktuelle Implementierung endet nach der Verarbeitung:</p>
+<pre><code>Mensch schreibt &gt; Korrektur
+    ↓
+cato schreibt Item korrekt neu         ✓
+cato entfernt die &gt; Zeile              ✓
+    ↓
+Faktischer Inhalt → Memory             ✗
+Verhaltensregel → Rules-Schicht        ✗
+Präferenz → Skills-Schicht             ✗
+    ↓
+rumi fördert stabile Muster → Rules    ✗
+</code></pre>
+<p>Jede Korrektur ist ein einmaliges Ereignis. Das System ist korrigierbar, nicht lernfähig. Derselbe Fehler kann beim nächsten Agenda-Lauf erneut auftreten, weil nichts in den Memory-Stack geschrieben wurde.</p>
+      </div>
+    </section>
+
+    <section class="section" id="geplante-implementierung">
+      <h2>Geplante Implementierung</h2>
+      <div class="section-text"><h2>Geplante Implementierung</h2>
+        <p>Eine vollständige Schleife würde signifikante Annotationen als Lern-Ereignisse neben Verarbeitungs-Ereignissen behandeln:</p>
+<ol>
+<li><strong>cato verarbeitet</strong> — Item neu schreiben, <code>&gt;</code>-Zeile entfernen (kein Unterschied zum aktuellen Verhalten)</li>
+<li><strong>cato klassifiziert</strong> — Annotationstyp bestimmen: faktisch, verhaltensbasiert oder Präferenz</li>
+<li><strong>cato schreibt Vorschlag</strong> — bei faktischem Inhalt: ein Memory-Vorschlag nach <code>Migration/Exchange.md</code>; bei Verhaltens-/Präferenzinhalt: ein <code>rule:agenda</code>- oder <code>skill</code>-Vorschlag, ebenfalls via Exchange.md</li>
+<li><strong>rumi verarbeitet</strong> — beim nächsten <code>memory_migrate</code>-Lauf verarbeitet rumi diese Vorschläge neben anderen Migrationsquellen</li>
+<li><strong>Nutzer prüft</strong> — der Vorschlag erscheint in Exchange.md mit demselben Accept/Reject-Mechanismus wie alle anderen Migrationen</li>
+</ol>
+<p>Das verbindet cato und rumi zu einer einzigen kohärenten Schleife. Heute gemachte Korrekturen werden zu Regeln, die denselben Fehler morgen verhindern. Der Memory-Stack wächst aus gelebtem Gebrauch, nicht nur aus expliziten Migrationssitzungen.</p>
+<h3 id="vorschlagsformat">Vorschlagsformat</h3>
+<p>Vorschläge, die cato schreibt, folgen dem bestehenden Exchange.md-Item-Format, sodass rumi und die Review-Oberfläche sie ohne Änderung verarbeiten können:</p>
+<pre><code class="language-markdown">*extracted: 2026-04-07 14:32*
+[faktisch] Letztes Telefonat mit Eltern vor 2 Tagen, nicht vor Wochen. [memory]
+- [ ] Accept
+- [ ] Reject
+</code></pre>
+<p>Die Typen <code>[rule:agenda]</code> und <code>[skill]</code> erweitern das bestehende Typ-Vokabular.</p>
+      </div>
+    </section>
+
+    <section class="section" id="status">
+      <h2>Status</h2>
+      <div class="section-text"><h2>Status</h2>
+        <ul>
+<li><code>&gt;</code>-Annotationsverarbeitung: <strong>implementiert</strong> (<code>agenda.py</code>)</li>
+<li>Klassifikation und Vorschlags-Schreiben: <strong>noch nicht implementiert</strong></li>
+<li>Exchange.md-Routing für cato-generierte Vorschläge: <strong>noch nicht implementiert</strong></li>
+</ul>
+      </div>
+    </section>
+
+    <nav class="book-nav">
+      <div class="prev"><a href="../../implementation/07-signal.html">
+          <span class="label">← Zurück</span>
+          <span class="title">Signal</span>
+        </a></div>
+      <div class="toc-center"><a href="../../contents.html#implementation">
+          <span class="label">Inhalt</span>
+          <span class="title">Implementierung</span>
+        </a></div>
+      <div class="next"><a href="../../implementation/09-vault.html">
+          <span class="label">Weiter →</span>
+          <span class="title">Vault</span>
+        </a></div>
+    </nav>
+  </main>
+
+  <footer>
+    <div class="meta">
+      open source · AGPL-3.0 · <a href="https://github.com/outheis-labs">github.com/outheis-labs</a>
+    </div>
+  </footer>
+
+</body>
+</html>

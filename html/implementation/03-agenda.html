@@ -1,0 +1,910 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Agenda · outheis</title>
+  <link rel="icon" type="image/png" href="../favicon-96x96.png" sizes="96x96">
+  <link rel="icon" type="image/svg+xml" href="../favicon.svg">
+  <link rel="shortcut icon" href="../favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="../apple-touch-icon.png">
+  <link rel="manifest" href="../site.webmanifest">
+  <style>
+    @font-face {
+      font-family: 'Inter';
+      src: url('../assets/fonts/InterVariable.woff2') format('woff2');
+      font-weight: 100 900;
+      font-style: normal;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'IBM Plex Sans';
+      src: url('../assets/fonts/IBMPlexSans-Variable.woff2') format('woff2-variations');
+      font-weight: 100 700;
+      font-style: normal;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'IBM Plex Mono';
+      src: url('../assets/fonts/IBMPlexMono-Regular.woff2') format('woff2');
+      font-weight: 400;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'IBM Plex Sans', -apple-system, sans-serif;
+      background: #fff;
+      color: #1a1a1a;
+      line-height: 1.65;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .greek {
+      font-family: 'Inter', sans-serif;
+    }
+
+    /* Header with breadcrumb */
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 1.5rem;
+      border-bottom: 1px solid #e0e0e0;
+    }
+
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .logo {
+      font-family: 'Inter', sans-serif;
+      font-size: 20px;
+      font-weight: 500;
+    }
+
+    .breadcrumb {
+      font-size: 14px;
+      color: #888;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .breadcrumb a {
+      color: #666;
+    }
+
+    .breadcrumb a:hover {
+      color: #1a1a1a;
+    }
+
+    .breadcrumb .separator {
+      color: #ccc;
+    }
+
+    .breadcrumb .current {
+      color: #1a1a1a;
+    }
+
+    header nav {
+      font-size: 14px;
+      display: flex;
+      align-items: baseline;
+      gap: 1rem;
+    }
+
+    header nav a {
+      color: #888;
+    }
+
+    header nav a:hover {
+      color: #1a1a1a;
+    }
+
+    .lang-switch {
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-size: 14px;
+      color: #888;
+    }
+
+    .lang-switch a {
+      font-size: 14px;
+      color: #888;
+    }
+
+    .lang-switch a:hover {
+      color: #1a1a1a;
+    }
+
+    .lang-switch .lang-active {
+      color: #1a1a1a;
+      font-weight: 500;
+    }
+
+    /* Main */
+    main {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 3rem 1.5rem;
+    }
+
+    /* Page header */
+    .page-header {
+      margin-bottom: 3rem;
+    }
+
+    .page-header h1 {
+      font-family: 'Inter', sans-serif;
+      font-size: 36px;
+      font-weight: 500;
+      letter-spacing: -0.02em;
+    }
+
+    .page-header .subtitle {
+      font-size: 18px;
+      font-style: italic;
+      color: #555;
+      margin-top: 0.75rem;
+    }
+
+    /* Content sections */
+    .section {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+      padding: 2.5rem 0;
+      border-top: 1px solid #e0e0e0;
+    }
+
+    /* Mobile: hide label h2, show section-text h2 */
+    .section > h2 {
+      display: none;
+    }
+
+    .section-text h2 {
+      font-size: 20px;
+      font-weight: 500;
+      margin-bottom: 1rem;
+    }
+
+    .section-text > *:first-child {
+      margin-top: 0;
+    }
+
+    /* Hidden h2 is first-child on desktop, so target the visible first element */
+    .section-text > h2 + * {
+      margin-top: 0;
+    }
+
+    .section-text > h2 + p {
+      margin-top: 0;
+    }
+
+    .section-text p {
+      font-size: 16px;
+      line-height: 1.75;
+      color: #333;
+      margin-bottom: 1rem;
+    }
+
+    .section-text p:last-child {
+      margin-bottom: 0;
+    }
+
+    .section-text h3 {
+      font-size: 16px;
+      font-weight: 450;
+      color: #1a1a1a;
+      line-height: 1.75;
+      margin-top: 1.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .section-text h3:first-child,
+    .section-text > h2 + h3 {
+      margin-top: 0;
+    }
+
+    .section-text ul {
+      list-style: none;
+      margin-bottom: 1rem;
+    }
+
+    .section-text ul li {
+      font-size: 16px;
+      line-height: 1.65;
+      color: #333;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid #eee;
+    }
+
+    .section-text ul li:last-child {
+      border-bottom: none;
+    }
+
+    .section-text ol {
+      margin-bottom: 1rem;
+      padding-left: 1.5rem;
+    }
+
+    .section-text ol li {
+      font-size: 16px;
+      line-height: 1.65;
+      color: #333;
+      margin-bottom: 0.5rem;
+    }
+
+    .section-text code {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 14px;
+      background: #f5f5f5;
+      padding: 0.15em 0.4em;
+      border-radius: 2px;
+    }
+
+    .section-text pre {
+      background: #f5f5f5;
+      padding: 1rem 1.25rem;
+      overflow-x: auto;
+      margin: 1.5rem 0;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 13px;
+      line-height: 1.5;
+      border-radius: 2px;
+    }
+
+    .section-text pre code {
+      background: none;
+      padding: 0;
+    }
+
+    .section-text table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1.5rem 0;
+      font-size: 14px;
+    }
+
+    .section-text th,
+    .section-text td {
+      text-align: left;
+      padding: 0.5rem 0.75rem;
+      border-bottom: 1px solid #e0e0e0;
+    }
+
+    .section-text th {
+      font-weight: 500;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: #666;
+    }
+
+    .section-text blockquote {
+      border-left: 2px solid #e0e0e0;
+      padding-left: 1.25rem;
+      margin: 1.5rem 0;
+      color: #666;
+      font-style: italic;
+    }
+
+    .section-text a {
+      color: #666;
+    }
+
+    .section-text a:hover {
+      color: #1a1a1a;
+    }
+
+    /* TOC list styling */
+    .toc-list {
+      list-style: none;
+      padding-left: 0;
+    }
+
+    .toc-list li {
+      border-bottom: 1px solid #eee;
+    }
+
+    .toc-list li:last-child {
+      border-bottom: none;
+    }
+
+    .toc-list a {
+      display: block;
+      padding: 1rem 0;
+      color: #1a1a1a;
+    }
+
+    .toc-list li:first-child a {
+      padding-top: 0;
+    }
+
+    .toc-list a:hover {
+      background: #fafafa;
+      margin: 0 -1rem;
+      padding: 1rem;
+    }
+
+    .toc-list .title {
+      font-size: 16px;
+      font-weight: 500;
+      color: #1a1a1a;
+      margin-bottom: 0.25rem;
+    }
+
+    .toc-list .description {
+      font-size: 14px;
+      color: #666;
+      line-height: 1.5;
+    }
+
+    /* Book navigation */
+    .book-nav {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      gap: 1rem;
+      align-items: center;
+      padding: 2rem 0;
+      margin-top: 2rem;
+      border-top: 1px solid #e0e0e0;
+    }
+
+    .book-nav a {
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+      color: #666;
+    }
+
+    .book-nav a:hover {
+      color: #1a1a1a;
+    }
+
+    .book-nav .label {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: #888;
+    }
+
+    .book-nav .title {
+      font-size: 15px;
+      font-weight: 500;
+    }
+
+    .book-nav .prev {
+      text-align: left;
+    }
+
+    .book-nav .toc-center {
+      text-align: center;
+    }
+
+    .book-nav .toc-center a {
+      align-items: center;
+    }
+
+    .book-nav .next {
+      text-align: right;
+    }
+
+    /* Footer */
+    footer {
+      padding: 2rem 1.5rem;
+      max-width: 1100px;
+      margin: 0 auto;
+      border-top: 1px solid #e0e0e0;
+    }
+
+    footer .meta {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 12px;
+      color: #888;
+    }
+
+    footer .meta a {
+      color: #888;
+    }
+
+    footer .meta a:hover {
+      color: #333;
+    }
+
+    /* Desktop */
+    @media (min-width: 800px) {
+      header {
+        padding: 1.5rem 3rem;
+      }
+
+      main {
+        padding: 4rem 3rem;
+      }
+
+      .page-header h1 {
+        font-size: 48px;
+      }
+
+      .section {
+        grid-template-columns: 180px 1fr;
+        gap: 3rem;
+        padding: 3rem 0;
+        align-items: baseline;
+      }
+
+      .section > h2 {
+        display: block;
+        font-size: 18px;
+        font-weight: 500;
+        color: #1a1a1a;
+        line-height: 1.75;
+      }
+
+      .section-text h2 {
+        display: none;
+        position: absolute;
+        visibility: hidden;
+      }
+
+      .book-nav .title {
+        font-size: 16px;
+      }
+
+      footer {
+        padding: 2rem 3rem;
+      }
+    }
+
+    /* Mobile */
+    @media (max-width: 600px) {
+      .breadcrumb {
+        display: none;
+      }
+
+      .book-nav {
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: auto auto;
+      }
+
+      .book-nav .prev {
+        grid-column: 1;
+      }
+
+      .book-nav .next {
+        grid-column: 2;
+      }
+
+      .book-nav .toc-center {
+        grid-column: 1 / -1;
+        grid-row: 2;
+        margin-top: 1rem;
+        padding-top: 1rem;
+        border-top: 1px solid #eee;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="header-left">
+      <a href="../index.html" class="logo">οὐθείς</a>
+      <div class="breadcrumb">
+        <span class="separator">/</span>
+        <a href="../contents.html#implementation">Implementation</a>
+        <span class="separator">/</span>
+        <span class="current">Agenda</span>
+      </div>
+    </div>
+    <nav>
+      <a href="../contents.html#implementation">Contents</a>
+      <a href="https://github.com/outheis-labs/outheis-beta">GitHub ↗</a>
+      <span class="lang-switch"><span class="lang-active">EN</span> · <a href="../de/implementation/03-agenda.html">DE</a></span>
+    </nav>
+  </header>
+
+  <main>
+    <div class="page-header">
+      <h1>Agenda</h1>
+      <p class="subtitle">Time management through three simple files.</p>
+    </div>
+
+    <section class="section" id="the-three-files">
+      <h2>The Three Files</h2>
+      <div class="section-text"><h2>The Three Files</h2>
+        <p>outheis manages your schedule through three Markdown files in your vault:</p>
+<pre><code>vault/Agenda/
+├── Agenda.md     # Today: schedule, tasks, notes
+├── Exchange.md   # Async dialogue: system ↔ user
+├── Shadow.md     # Chronological vault index (auto-generated)
+└── Backlog.md    # Priority-sorted view of Shadow.md (on-demand)
+</code></pre>
+<h3 id="agendamd">Agenda.md</h3>
+<p>Your day at a glance. The default template:</p>
+<pre><code class="language-markdown">⛅ [Weekday, DD.MM.YYYY]
+*Refresh: HH:MM*
+
+---
+## 🧘 Persönlich
+
+- [ ]
+
+---
+## 📅 Heute
+
+---
+## 🗓️ Diese Woche
+
+---
+## 💶 Cashflow
+</code></pre>
+<p>The structure is user-configurable via <code>DailyTemplate.md</code> in your vault. Once established, outheis preserves it exactly on each refresh — only the content changes, never the structure.</p>
+<p>outheis reads this file, understands your commitments, and can answer questions like "bin ich heute nachmittag frei?" or "was steht morgen an?"</p>
+<h3 id="exchangemd">Exchange.md</h3>
+<p>Asynchronous dialogue between you and outheis:</p>
+<pre><code class="language-markdown"># Exchange
+
+---
+
+## 2026-04-08T10:15:00 – Rückfrage
+
+Welcher Tag passt für das Meeting mit X?
+
+- [ ] Accept
+- [ ] Reject
+
+---
+</code></pre>
+<p>Write a <code>&gt;</code> reply directly below an open item, or check a box — cato processes it on the next run.</p>
+      </div>
+    </section>
+
+    <section class="section" id="hourly-review">
+      <h2>Hourly Review</h2>
+      <div class="section-text"><h2>Hourly Review</h2>
+        <p>At 55 minutes past each hour (configurable), the Agenda agent runs:</p>
+<h3 id="conditional-execution">Conditional Execution</h3>
+<p>Before processing, outheis checks file hashes:</p>
+<pre><code>~/.outheis/human/cache/agenda/hashes.json
+</code></pre>
+<p>If nothing changed since the last run, no LLM call is made. This saves API costs while maintaining responsiveness.</p>
+<p><strong>Exceptions:</strong> Morning (04:55) and evening (23:55) runs are unconditional to handle day transitions properly.</p>
+<h3 id="processing-steps">Processing Steps</h3>
+<ol>
+<li><strong>Hash check</strong> — Compare current files with stored hashes</li>
+<li><strong>Process Inbox</strong> — Parse items, move tasks to Daily, unclear → Exchange</li>
+<li><strong>Check Exchange</strong> — Look for your responses, extract learnings</li>
+<li><strong>Review Daily</strong> — Notice annotations, comments, completions</li>
+<li><strong>Update hashes</strong> — Store new file hashes for next comparison</li>
+<li><strong>Cache diffs</strong> — Save <code>.prev</code> versions for debugging</li>
+</ol>
+<h3 id="annotations">Annotations</h3>
+<p>A <code>&gt;</code> line written immediately below an item is a direct instruction to cato:</p>
+<pre><code class="language-markdown">#action-required #topic-justiz
+Email an Justizministerium senden
+&gt; erledigt, Antwort erwartet bis Freitag
+</code></pre>
+<p>cato classifies each annotation into one of three types:</p>
+<table>
+<thead>
+<tr>
+<th>Type</th>
+<th>Identified by</th>
+<th>Action</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Completion</strong></td>
+<td>erledigt, done, fertig, bestätigt, geklärt</td>
+<td>Remove item from Agenda.md</td>
+</tr>
+<tr>
+<td><strong>Postpone</strong></td>
+<td>vertagen, später, nächste Woche, [future date]</td>
+<td>Remove from Agenda.md, update date in Shadow.md</td>
+</tr>
+<tr>
+<td><strong>Correction</strong></td>
+<td>explanation, rephrasing, new context</td>
+<td>Rewrite item in place, keep it</td>
+</tr>
+</tbody>
+</table>
+<p>The <code>&gt;</code> line is always removed after processing. See <a href="annotation-feedback.html">Annotation Feedback Loop</a> for how annotations feed into long-term memory.</p>
+<h3 id="time-window">Time Window</h3>
+<p>By default, hourly reviews only run between 04:55 and 23:55. No reviews during night hours. Configurable in <code>config.json</code>:</p>
+<pre><code class="language-json">{
+  &quot;schedule&quot;: {
+    &quot;agenda_review&quot;: {
+      &quot;enabled&quot;: true,
+      &quot;time&quot;: [&quot;04:55&quot;, &quot;05:55&quot;, &quot;06:55&quot;, &quot;...&quot;, &quot;23:55&quot;]
+    }
+  }
+}
+</code></pre>
+      </div>
+    </section>
+
+    <section class="section" id="manual-refresh">
+      <h2>Manual Refresh</h2>
+      <div class="section-text"><h2>Manual Refresh</h2>
+        <p>You can trigger an immediate agenda update:</p>
+<ul>
+<li>"aktualisiere daily"</li>
+<li>"aktualisiere meine agenda"</li>
+<li>"update daily"</li>
+<li>"refresh agenda"</li>
+</ul>
+<p>This bypasses the hash check and runs a full review immediately. Useful after making many changes or before asking schedule questions.</p>
+      </div>
+    </section>
+
+    <section class="section" id="creating-the-structure">
+      <h2>Creating the Structure</h2>
+      <div class="section-text"><h2>Creating the Structure</h2>
+        <p>When outheis starts and the Agenda agent is enabled, it creates the directory automatically. You can also create manually:</p>
+<pre><code class="language-bash">mkdir -p ~/Documents/Vault/Agenda
+touch ~/Documents/Vault/Agenda/{Agenda,Exchange}.md
+</code></pre>
+      </div>
+    </section>
+
+    <section class="section" id="asking-about-your-schedule">
+      <h2>Asking About Your Schedule</h2>
+      <div class="section-text"><h2>Asking About Your Schedule</h2>
+        <p>Once set up, you can ask:</p>
+<ul>
+<li>"Was steht heute an?"</li>
+<li>"Bin ich morgen nachmittag frei?"</li>
+<li>"Wann ist mein nächster Termin mit X?"</li>
+<li>"Schreib auf: Meeting mit Y am Freitag 10 Uhr"</li>
+</ul>
+<p>outheis reads your Agenda files and responds naturally.</p>
+<h3 id="read-queries">Read Queries</h3>
+<p>When asked to show the agenda ("Agenda", "was steht heute an", "gib mir die Agenda"), cato returns the content of Daily.md verbatim — no reformatting, no summarizing. The file content is the answer. Relay passes it through directly without a second LLM call.</p>
+      </div>
+    </section>
+
+    <section class="section" id="integration-with-other-agents">
+      <h2>Integration with Other Agents</h2>
+      <div class="section-text"><h2>Integration with Other Agents</h2>
+        <p><strong>Relay (ou)</strong> routes schedule questions to Agenda. Read queries ("Agenda", "was steht heute") are routed directly to cato, which returns Agenda.md verbatim. Write/update queries go through the full tool loop.</p>
+<p><strong>Data Agent (zeno)</strong> can search your vault but doesn't write to Agenda files.</p>
+<p><strong>Action Agent (hiro)</strong> can execute tasks (send emails, create calendar events) but Agenda manages what's scheduled.</p>
+<p><strong>Pattern Agent (rumi)</strong> observes your scheduling patterns and may:</p>
+<ul>
+<li>
+<p>Create rules like "User prefers no meetings before 10:00"</p>
+</li>
+<li>
+<p>Notice recurring tasks and suggest automation</p>
+</li>
+<li>Write to Exchange.md when seed files need approval</li>
+</ul>
+      </div>
+    </section>
+
+    <section class="section" id="storage">
+      <h2>Storage</h2>
+      <div class="section-text"><h2>Storage</h2>
+        <pre><code>vault/Agenda/
+├── Agenda.md             # Your working file
+├── Exchange.md           # Async dialogue
+├── Shadow.md             # Chronological vault index (auto-generated)
+└── Backlog.md            # Priority-sorted Shadow view (on-demand)
+
+~/.outheis/human/cache/agenda/
+└── hashes.json           # SHA256 hashes for change detection
+</code></pre>
+<p>The cache is regenerable — delete it anytime and outheis will rebuild.</p>
+      </div>
+    </section>
+
+    <section class="section" id="shadowmd">
+      <h2>Shadow.md</h2>
+      <div class="section-text"><h2>Shadow.md</h2>
+        <p>A staging area for chronological entries detected across your vault.</p>
+<h3 id="purpose">Purpose</h3>
+<p>Your vault contains dates scattered across many files: project deadlines, birthdays in contact notes, recurring events in project docs. Shadow.md collects these automatically so Agenda can surface them at the right time.</p>
+<h3 id="how-it-works">How It Works</h3>
+<p>The Data Agent (zeno) runs a nightly scan at 03:30 (configurable):</p>
+<ol>
+<li><strong>Scan vault</strong> — Parse all files for date-relevant content</li>
+<li><strong>Detect patterns</strong> — Deadlines, birthdays, appointments, recurring events</li>
+<li><strong>Append new entries</strong> — Add to Shadow.md without overwriting existing content</li>
+<li><strong>Source tracking</strong> — Each entry links back to its origin file</li>
+</ol>
+<h3 id="format">Format</h3>
+<pre><code class="language-markdown"># Shadow
+
+*Chronological entries detected from vault. Auto-updated nightly.*
+
+---
+
+## Scan 2026-03-30 03:30
+
+- ⏰ **2026-04-15** Project Alpha deadline `← projects/alpha.md`
+- 🎂 **2026-05-12** Emma's birthday `← contacts/family.md`
+- 🔄 **every Monday** Team standup `← work/routines.md`
+- 📅 **2026-04-01** Tax filing deadline `← admin/taxes.md`
+
+## Scan 2026-03-29 03:30
+
+- ☐ **2026-03-31** Send quarterly report `← work/q1.md`
+</code></pre>
+<h3 id="icons">Icons</h3>
+<table>
+<thead>
+<tr>
+<th>Icon</th>
+<th>Type</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>⏰</td>
+<td>Deadline</td>
+<td>Project due dates</td>
+</tr>
+<tr>
+<td>🎂</td>
+<td>Birthday</td>
+<td>Contact birthdays</td>
+</tr>
+<tr>
+<td>📅</td>
+<td>Appointment</td>
+<td>Fixed calendar events</td>
+</tr>
+<tr>
+<td>🔄</td>
+<td>Recurring</td>
+<td>Weekly/monthly events</td>
+</tr>
+<tr>
+<td>☐</td>
+<td>Task</td>
+<td>Time-bound tasks</td>
+</tr>
+</tbody>
+</table>
+<h3 id="item-completeness">Item Completeness</h3>
+<p>For the Agenda agent to reliably schedule an item, every Shadow entry needs one of two anchors:</p>
+<table>
+<thead>
+<tr>
+<th>Anchor</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>#date-YYYY-MM-DD</code></td>
+<td>Temporal anchor — show this item in the agenda from this date onwards</td>
+</tr>
+<tr>
+<td>attention marker (e.g. <code>#action-required</code>)</td>
+<td>No date — permanently visible until explicitly decided</td>
+</tr>
+</tbody>
+</table>
+<p>Items without either anchor are semantically incomplete: the agent cannot know when, or whether, to surface them.</p>
+<p><strong>Reminder date vs. event date</strong> — <code>#date</code> controls <em>when the item appears</em>, not necessarily when the event occurs. For a birthday, both dates are the same. For "remind me on May 3rd about the event on June 30th", <code>#date-2026-05-03</code> is the trigger; June 30th belongs in the item text. When the two dates differ, the event date is plain text; <code>#date</code> is the agenda trigger.</p>
+<p><strong>Overdue items</strong> — if a <code>#date</code> is in the past and no decision has been recorded, the item stays visible. Overdue = must decide (complete, defer, or drop).</p>
+<p><strong>Tag names are yours to choose.</strong> <code>#action-required</code> is outheis's default; you can use <code>#attention</code>, <code>#priority</code>, <code>#open</code>, or any marker your rules file defines — as long as the agent knows which tag means "always show".</p>
+<h3 id="integration-with-daily">Integration with Daily</h3>
+<p>Agenda agent reads Shadow.md and can surface relevant entries in Daily.md. When you ask "was steht diese Woche an?", outheis checks both your explicit schedule and Shadow's detected dates.</p>
+<h3 id="configuration">Configuration</h3>
+<pre><code class="language-json">{
+  &quot;schedule&quot;: {
+    &quot;shadow_scan&quot;: {
+      &quot;enabled&quot;: true,
+      &quot;hour&quot;: 3,
+      &quot;minute&quot;: 30
+    }
+  }
+}
+</code></pre>
+<h3 id="manual-trigger">Manual Trigger</h3>
+<p>You can ask: "scanne den vault nach terminen" or "aktualisiere shadow" to run the scan immediately.</p>
+      </div>
+    </section>
+
+    <section class="section" id="configuration_1">
+      <h2>Configuration</h2>
+      <div class="section-text"><h2>Configuration</h2>
+        <p>In <code>config.json</code>:</p>
+<pre><code class="language-json">{
+  &quot;agents&quot;: {
+    &quot;agenda&quot;: {
+      &quot;name&quot;: &quot;cato&quot;,
+      &quot;model&quot;: &quot;capable&quot;,
+      &quot;enabled&quot;: true
+    }
+  },
+  &quot;schedule&quot;: {
+    &quot;agenda_review&quot;: {
+      &quot;enabled&quot;: true,
+      &quot;time&quot;: [&quot;04:55&quot;, &quot;05:55&quot;, &quot;06:55&quot;, &quot;07:55&quot;, &quot;08:55&quot;, &quot;09:55&quot;, &quot;10:55&quot;,
+               &quot;11:55&quot;, &quot;12:55&quot;, &quot;13:55&quot;, &quot;14:55&quot;, &quot;15:55&quot;, &quot;16:55&quot;, &quot;17:55&quot;,
+               &quot;18:55&quot;, &quot;19:55&quot;, &quot;20:55&quot;, &quot;21:55&quot;, &quot;22:55&quot;, &quot;23:55&quot;]
+    }
+  }
+}
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>Setting</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>enabled</code></td>
+<td>true</td>
+<td>Enable/disable Agenda agent</td>
+</tr>
+<tr>
+<td><code>time</code></td>
+<td>04:55–23:55 hourly</td>
+<td>List of times to run review</td>
+</tr>
+</tbody>
+</table>
+      </div>
+    </section>
+
+    <section class="section" id="best-practices">
+      <h2>Best Practices</h2>
+      <div class="section-text"><h2>Best Practices</h2>
+        <ol>
+<li><strong>Keep Agenda.md simple</strong> — 🧘 Personal + 📅 Today + 🗓️ This Week is enough</li>
+<li><strong>Annotate with <code>&gt;</code></strong> — Use <code>&gt; verschieben auf ...</code> or <code>&gt; erledigt</code> to instruct cato without editing the task itself</li>
+<li><strong>Answer Exchange when you can</strong> — No rush, but it helps outheis learn</li>
+<li><strong>Let outheis manage structure</strong> — Focus on content, not formatting</li>
+<li><strong>Use manual refresh sparingly</strong> — Hourly is usually sufficient</li>
+</ol>
+      </div>
+    </section>
+
+    <nav class="book-nav">
+      <div class="prev"><a href="../implementation/02-memory.html">
+          <span class="label">← Previous</span>
+          <span class="title">Memory & Rules</span>
+        </a></div>
+      <div class="toc-center"><a href="../contents.html#implementation">
+          <span class="label">Contents</span>
+          <span class="title">Implementation</span>
+        </a></div>
+      <div class="next"><a href="../implementation/04-skills.html">
+          <span class="label">Next →</span>
+          <span class="title">Skills</span>
+        </a></div>
+    </nav>
+  </main>
+
+  <footer>
+    <div class="meta">
+      open source · AGPL-3.0 · <a href="https://github.com/outheis-labs">github.com/outheis-labs</a>
+    </div>
+  </footer>
+
+</body>
+</html>

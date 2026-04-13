@@ -1,0 +1,987 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Web UI · outheis</title>
+  <link rel="icon" type="image/png" href="../favicon-96x96.png" sizes="96x96">
+  <link rel="icon" type="image/svg+xml" href="../favicon.svg">
+  <link rel="shortcut icon" href="../favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="../apple-touch-icon.png">
+  <link rel="manifest" href="../site.webmanifest">
+  <style>
+    @font-face {
+      font-family: 'Inter';
+      src: url('../assets/fonts/InterVariable.woff2') format('woff2');
+      font-weight: 100 900;
+      font-style: normal;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'IBM Plex Sans';
+      src: url('../assets/fonts/IBMPlexSans-Variable.woff2') format('woff2-variations');
+      font-weight: 100 700;
+      font-style: normal;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'IBM Plex Mono';
+      src: url('../assets/fonts/IBMPlexMono-Regular.woff2') format('woff2');
+      font-weight: 400;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'IBM Plex Sans', -apple-system, sans-serif;
+      background: #fff;
+      color: #1a1a1a;
+      line-height: 1.65;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .greek {
+      font-family: 'Inter', sans-serif;
+    }
+
+    /* Header with breadcrumb */
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 1.5rem;
+      border-bottom: 1px solid #e0e0e0;
+    }
+
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .logo {
+      font-family: 'Inter', sans-serif;
+      font-size: 20px;
+      font-weight: 500;
+    }
+
+    .breadcrumb {
+      font-size: 14px;
+      color: #888;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .breadcrumb a {
+      color: #666;
+    }
+
+    .breadcrumb a:hover {
+      color: #1a1a1a;
+    }
+
+    .breadcrumb .separator {
+      color: #ccc;
+    }
+
+    .breadcrumb .current {
+      color: #1a1a1a;
+    }
+
+    header nav {
+      font-size: 14px;
+      display: flex;
+      align-items: baseline;
+      gap: 1rem;
+    }
+
+    header nav a {
+      color: #888;
+    }
+
+    header nav a:hover {
+      color: #1a1a1a;
+    }
+
+    .lang-switch {
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-size: 14px;
+      color: #888;
+    }
+
+    .lang-switch a {
+      font-size: 14px;
+      color: #888;
+    }
+
+    .lang-switch a:hover {
+      color: #1a1a1a;
+    }
+
+    .lang-switch .lang-active {
+      color: #1a1a1a;
+      font-weight: 500;
+    }
+
+    /* Main */
+    main {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 3rem 1.5rem;
+    }
+
+    /* Page header */
+    .page-header {
+      margin-bottom: 3rem;
+    }
+
+    .page-header h1 {
+      font-family: 'Inter', sans-serif;
+      font-size: 36px;
+      font-weight: 500;
+      letter-spacing: -0.02em;
+    }
+
+    .page-header .subtitle {
+      font-size: 18px;
+      font-style: italic;
+      color: #555;
+      margin-top: 0.75rem;
+    }
+
+    /* Content sections */
+    .section {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+      padding: 2.5rem 0;
+      border-top: 1px solid #e0e0e0;
+    }
+
+    /* Mobile: hide label h2, show section-text h2 */
+    .section > h2 {
+      display: none;
+    }
+
+    .section-text h2 {
+      font-size: 20px;
+      font-weight: 500;
+      margin-bottom: 1rem;
+    }
+
+    .section-text > *:first-child {
+      margin-top: 0;
+    }
+
+    /* Hidden h2 is first-child on desktop, so target the visible first element */
+    .section-text > h2 + * {
+      margin-top: 0;
+    }
+
+    .section-text > h2 + p {
+      margin-top: 0;
+    }
+
+    .section-text p {
+      font-size: 16px;
+      line-height: 1.75;
+      color: #333;
+      margin-bottom: 1rem;
+    }
+
+    .section-text p:last-child {
+      margin-bottom: 0;
+    }
+
+    .section-text h3 {
+      font-size: 16px;
+      font-weight: 450;
+      color: #1a1a1a;
+      line-height: 1.75;
+      margin-top: 1.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .section-text h3:first-child,
+    .section-text > h2 + h3 {
+      margin-top: 0;
+    }
+
+    .section-text ul {
+      list-style: none;
+      margin-bottom: 1rem;
+    }
+
+    .section-text ul li {
+      font-size: 16px;
+      line-height: 1.65;
+      color: #333;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid #eee;
+    }
+
+    .section-text ul li:last-child {
+      border-bottom: none;
+    }
+
+    .section-text ol {
+      margin-bottom: 1rem;
+      padding-left: 1.5rem;
+    }
+
+    .section-text ol li {
+      font-size: 16px;
+      line-height: 1.65;
+      color: #333;
+      margin-bottom: 0.5rem;
+    }
+
+    .section-text code {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 14px;
+      background: #f5f5f5;
+      padding: 0.15em 0.4em;
+      border-radius: 2px;
+    }
+
+    .section-text pre {
+      background: #f5f5f5;
+      padding: 1rem 1.25rem;
+      overflow-x: auto;
+      margin: 1.5rem 0;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 13px;
+      line-height: 1.5;
+      border-radius: 2px;
+    }
+
+    .section-text pre code {
+      background: none;
+      padding: 0;
+    }
+
+    .section-text table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1.5rem 0;
+      font-size: 14px;
+    }
+
+    .section-text th,
+    .section-text td {
+      text-align: left;
+      padding: 0.5rem 0.75rem;
+      border-bottom: 1px solid #e0e0e0;
+    }
+
+    .section-text th {
+      font-weight: 500;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: #666;
+    }
+
+    .section-text blockquote {
+      border-left: 2px solid #e0e0e0;
+      padding-left: 1.25rem;
+      margin: 1.5rem 0;
+      color: #666;
+      font-style: italic;
+    }
+
+    .section-text a {
+      color: #666;
+    }
+
+    .section-text a:hover {
+      color: #1a1a1a;
+    }
+
+    /* TOC list styling */
+    .toc-list {
+      list-style: none;
+      padding-left: 0;
+    }
+
+    .toc-list li {
+      border-bottom: 1px solid #eee;
+    }
+
+    .toc-list li:last-child {
+      border-bottom: none;
+    }
+
+    .toc-list a {
+      display: block;
+      padding: 1rem 0;
+      color: #1a1a1a;
+    }
+
+    .toc-list li:first-child a {
+      padding-top: 0;
+    }
+
+    .toc-list a:hover {
+      background: #fafafa;
+      margin: 0 -1rem;
+      padding: 1rem;
+    }
+
+    .toc-list .title {
+      font-size: 16px;
+      font-weight: 500;
+      color: #1a1a1a;
+      margin-bottom: 0.25rem;
+    }
+
+    .toc-list .description {
+      font-size: 14px;
+      color: #666;
+      line-height: 1.5;
+    }
+
+    /* Book navigation */
+    .book-nav {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      gap: 1rem;
+      align-items: center;
+      padding: 2rem 0;
+      margin-top: 2rem;
+      border-top: 1px solid #e0e0e0;
+    }
+
+    .book-nav a {
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+      color: #666;
+    }
+
+    .book-nav a:hover {
+      color: #1a1a1a;
+    }
+
+    .book-nav .label {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: #888;
+    }
+
+    .book-nav .title {
+      font-size: 15px;
+      font-weight: 500;
+    }
+
+    .book-nav .prev {
+      text-align: left;
+    }
+
+    .book-nav .toc-center {
+      text-align: center;
+    }
+
+    .book-nav .toc-center a {
+      align-items: center;
+    }
+
+    .book-nav .next {
+      text-align: right;
+    }
+
+    /* Footer */
+    footer {
+      padding: 2rem 1.5rem;
+      max-width: 1100px;
+      margin: 0 auto;
+      border-top: 1px solid #e0e0e0;
+    }
+
+    footer .meta {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 12px;
+      color: #888;
+    }
+
+    footer .meta a {
+      color: #888;
+    }
+
+    footer .meta a:hover {
+      color: #333;
+    }
+
+    /* Desktop */
+    @media (min-width: 800px) {
+      header {
+        padding: 1.5rem 3rem;
+      }
+
+      main {
+        padding: 4rem 3rem;
+      }
+
+      .page-header h1 {
+        font-size: 48px;
+      }
+
+      .section {
+        grid-template-columns: 180px 1fr;
+        gap: 3rem;
+        padding: 3rem 0;
+        align-items: baseline;
+      }
+
+      .section > h2 {
+        display: block;
+        font-size: 18px;
+        font-weight: 500;
+        color: #1a1a1a;
+        line-height: 1.75;
+      }
+
+      .section-text h2 {
+        display: none;
+        position: absolute;
+        visibility: hidden;
+      }
+
+      .book-nav .title {
+        font-size: 16px;
+      }
+
+      footer {
+        padding: 2rem 3rem;
+      }
+    }
+
+    /* Mobile */
+    @media (max-width: 600px) {
+      .breadcrumb {
+        display: none;
+      }
+
+      .book-nav {
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: auto auto;
+      }
+
+      .book-nav .prev {
+        grid-column: 1;
+      }
+
+      .book-nav .next {
+        grid-column: 2;
+      }
+
+      .book-nav .toc-center {
+        grid-column: 1 / -1;
+        grid-row: 2;
+        margin-top: 1rem;
+        padding-top: 1rem;
+        border-top: 1px solid #eee;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="header-left">
+      <a href="../index.html" class="logo">οὐθείς</a>
+      <div class="breadcrumb">
+        <span class="separator">/</span>
+        <a href="../contents.html#implementation">Implementation</a>
+        <span class="separator">/</span>
+        <span class="current">Web UI</span>
+      </div>
+    </div>
+    <nav>
+      <a href="../contents.html#implementation">Contents</a>
+      <a href="https://github.com/outheis-labs/outheis-beta">GitHub ↗</a>
+      <span class="lang-switch"><span class="lang-active">EN</span> · <a href="../de/implementation/13-webui.html">DE</a></span>
+    </nav>
+  </header>
+
+  <main>
+    <div class="page-header">
+      <h1>Web UI</h1>
+      <p class="subtitle">Local administration interface for outheis.</p>
+    </div>
+
+    <section class="section" id="overview">
+      <h2>Overview</h2>
+      <div class="section-text"><h2>Overview</h2>
+        <p>The Web UI provides a browser-based interface for configuring and monitoring outheis. It runs on <code>localhost:8080</code> and is explicitly <strong>not</strong> designed for remote access — all user data stays local.</p>
+<pre><code>┌─────────────────────────────────────────────────────────────┐
+│ outheis                              [Overview] [Save]       │
+├─────────────┬───────────────────────────────────────────────┤
+│ System      │                                               │
+│  Overview   │  ┌─────────┐ ┌─────────┐ ┌─────────┐         │
+│  Config     │  │Dispatcher│ │ Agents │ │Messages │         │
+│  Messages   │  │ Running  │ │  5/6   │ │   42    │         │
+│  Scheduler  │  └─────────┘ └─────────┘ └─────────┘         │
+│             │                                               │
+│ Knowledge   │  Recent messages                              │
+│  Memory     │  ┌─────────────────────────────────────────┐ │
+│  Skills     │  │ 14:32  cato → relay  Daily updated      │ │
+│  Rules      │  │ 14:30  scheduler     agenda_review      │ │
+│  Patterns   │  │ 14:15  zeno → relay  Found 3 matches    │ │
+│             │  └─────────────────────────────────────────┘ │
+│ Vault       │                                               │
+│  Agenda     │                                               │
+│  Codebase   │                                               │
+│  Migration  │                                               │
+│  Tags       │                                               │
+└─────────────┴───────────────────────────────────────────────┘
+</code></pre>
+      </div>
+    </section>
+
+    <section class="section" id="starting-the-server">
+      <h2>Starting the Server</h2>
+      <div class="section-text"><h2>Starting the Server</h2>
+        <pre><code class="language-bash">cd outheis-minimal/webui
+pip install fastapi uvicorn
+python server.py
+</code></pre>
+<p>Opens at <code>http://localhost:8080</code>. The server watches <code>~/.outheis/human/</code> for changes.</p>
+      </div>
+    </section>
+
+    <section class="section" id="navigation">
+      <h2>Navigation</h2>
+      <div class="section-text"><h2>Navigation</h2>
+        <h3 id="system">System</h3>
+<table>
+<thead>
+<tr>
+<th>View</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Overview</strong></td>
+<td>Dashboard with dispatcher status, active agents, message count, recent messages</td>
+</tr>
+<tr>
+<td><strong>Configuration</strong></td>
+<td>Full config editor with tabs: General, Providers, Models, Agents, Signal</td>
+</tr>
+<tr>
+<td><strong>Messages</strong></td>
+<td>Live view of <code>messages.jsonl</code> with WebSocket updates</td>
+</tr>
+<tr>
+<td><strong>Scheduler</strong></td>
+<td>Manage scheduled tasks (agenda_review, shadow_scan, pattern_nightly)</td>
+</tr>
+</tbody>
+</table>
+<h3 id="knowledge">Knowledge</h3>
+<table>
+<thead>
+<tr>
+<th>View</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Memory</strong></td>
+<td>View/edit files in <code>~/.outheis/human/memory/</code></td>
+</tr>
+<tr>
+<td><strong>Skills</strong></td>
+<td>View/edit files in <code>~/.outheis/human/skills/</code></td>
+</tr>
+<tr>
+<td><strong>Rules</strong></td>
+<td>View/edit files in <code>~/.outheis/human/rules/</code></td>
+</tr>
+<tr>
+<td><strong>Patterns</strong></td>
+<td>View files in <code>~/.outheis/human/cache/patterns/</code> (read-only)</td>
+</tr>
+</tbody>
+</table>
+<h3 id="vault">Vault</h3>
+<table>
+<thead>
+<tr>
+<th>View</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Files</strong></td>
+<td>Full vault browser — all configured vaults, directory tree, edit and delete</td>
+</tr>
+<tr>
+<td><strong>Agenda</strong></td>
+<td>View/edit files in <code>vault/Agenda/</code> (Daily.md, Inbox.md, Exchange.md)</td>
+</tr>
+<tr>
+<td><strong>Codebase</strong></td>
+<td>View files in <code>vault/Codebase/</code> (alan's proposals)</td>
+</tr>
+<tr>
+<td><strong>Migration</strong></td>
+<td>Upload migration files (drop zone), view and edit files, manage Migration/ directory</td>
+</tr>
+<tr>
+<td><strong>Tags</strong></td>
+<td>Scan vault for #tags, list by namespace group, rename or delete tags across all files</td>
+</tr>
+</tbody>
+</table>
+      </div>
+    </section>
+
+    <section class="section" id="files-view">
+      <h2>Files View</h2>
+      <div class="section-text"><h2>Files View</h2>
+        <p>Full browser for all configured vault directories:</p>
+<ul>
+<li><strong>Directory tree</strong> on the left — all vaults as roots, directories collapsed by default, click to expand</li>
+<li><strong>File viewer/editor</strong> on the right — same rendered/source toggle as other file views</li>
+<li><strong>All file types</strong> visible in the tree:</li>
+<li>Text files (<code>.md</code>, <code>.txt</code>, <code>.json</code>, <code>.py</code>, …) — editable, Save button</li>
+<li>Image files (<code>.png</code>, <code>.jpg</code>, <code>.svg</code>, …) — rendered inline, Download button</li>
+<li>Binary files (<code>.pdf</code>, <code>.docx</code>, …) — Download button</li>
+<li><strong>Obsidian wikilinks</strong> — <code>![[image.jpg]]</code> and <code>![[image.jpg|WxH]]</code> are resolved and rendered as inline images</li>
+<li><strong>Delete</strong> — confirmation dialog, removes file from vault</li>
+</ul>
+      </div>
+    </section>
+
+    <section class="section" id="tags-view">
+      <h2>Tags View</h2>
+      <div class="section-text"><h2>Tags View</h2>
+        <p>The Tags view scans the vault for all <code>#tags</code> and presents them grouped by namespace prefix:</p>
+<ul>
+<li><strong>Scan button</strong> — queues a <code>tag_scan</code> dispatcher task (same async UX as the Scheduler)</li>
+<li>Results are cached; the scan button re-runs on demand</li>
+<li>Tags are grouped by namespace prefix (<code>#action-*</code>, <code>#date-*</code>, <code>#rank-*</code>, etc.), all collapsed by default</li>
+<li>Each group shows tag count and total occurrences across the vault</li>
+<li>
+<p>Per-tag: occurrence count, file count, rename input field, Delete button</p>
+</li>
+<li>
+<p><code>#outheis-*</code> tags are hidden (internal system use only)</p>
+</li>
+</ul>
+      </div>
+    </section>
+
+    <section class="section" id="configuration-editor">
+      <h2>Configuration Editor</h2>
+      <div class="section-text"><h2>Configuration Editor</h2>
+        <p>The Configuration view provides a complete editor for <code>~/.outheis/human/config.json</code>:</p>
+<h3 id="general-tab">General Tab</h3>
+<ul>
+<li>
+<p><strong>User profile</strong>: Name, email, phone, language, timezone</p>
+</li>
+<li>
+<p><strong>Vaults</strong>: List of vault directories (primary + secondary)</p>
+</li>
+</ul>
+<h3 id="providers-tab">Providers Tab</h3>
+<p>Three provider cards (Anthropic, OpenAI, Ollama):</p>
+<ul>
+<li>API key (password field, not stored in plain text in UI)</li>
+<li>Base URL (for custom endpoints or proxies)</li>
+<li>Status indicator (green dot when configured)</li>
+</ul>
+<h3 id="models-tab">Models Tab</h3>
+<p>Model alias mapping:</p>
+<pre><code>fast      → claude-haiku-4-5
+capable   → claude-sonnet-4-20250514
+reasoning → claude-opus-4-5
+</code></pre>
+<p>Add/remove aliases with provider selection.</p>
+<h3 id="agents-tab">Agents Tab</h3>
+<p>Per-agent configuration:</p>
+<table>
+<thead>
+<tr>
+<th>Agent</th>
+<th>Name</th>
+<th>Model</th>
+<th>Enabled</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>relay</td>
+<td>ou</td>
+<td>capable</td>
+<td>✓</td>
+</tr>
+<tr>
+<td>data</td>
+<td>zeno</td>
+<td>capable</td>
+<td>✓</td>
+</tr>
+<tr>
+<td>agenda</td>
+<td>cato</td>
+<td>capable</td>
+<td>✓</td>
+</tr>
+<tr>
+<td>action</td>
+<td>hiro</td>
+<td>capable</td>
+<td>☐</td>
+</tr>
+<tr>
+<td>pattern</td>
+<td>rumi</td>
+<td>capable</td>
+<td>✓</td>
+</tr>
+<tr>
+<td>code</td>
+<td>alan</td>
+<td>capable</td>
+<td>☐</td>
+</tr>
+</tbody>
+</table>
+<p>Each agent can use a different model alias (fast/capable/reasoning).</p>
+<h3 id="signal-tab">Signal Tab</h3>
+<p>Signal transport configuration:</p>
+<ul>
+<li>Enabled toggle</li>
+<li>Phone number (registered with signal-cli)</li>
+<li>
+<p>CLI path (default: <code>/usr/local/bin/signal-cli</code>)</p>
+</li>
+<li>
+<p>Whitelist (phone numbers allowed to interact)</p>
+</li>
+</ul>
+      </div>
+    </section>
+
+    <section class="section" id="scheduler">
+      <h2>Scheduler</h2>
+      <div class="section-text"><h2>Scheduler</h2>
+        <p>Manage scheduled tasks:</p>
+<pre><code>┌─ Task Type ─────────┬─ Times ──────────────┬─ Enabled ─┐
+│ agenda_review       │ 06:00 12:00 18:00 +  │    ✓      │
+│ shadow_scan         │ 03:30              +  │    ✓      │
+│ pattern_nightly     │ 04:00              +  │    ✓      │
+└─────────────────────┴──────────────────────┴───────────┘
+</code></pre>
+<ul>
+<li>
+<p><strong>+ button</strong>: Add another time (auto-increments by 1 hour)</p>
+</li>
+<li>
+<p><strong>× button</strong>: Remove a time (minimum one remains)</p>
+</li>
+<li>
+<p><strong>Checkbox</strong>: Enable/disable task</p>
+</li>
+<li>
+<p><strong>History tab</strong>: View past scheduler events from messages.jsonl</p>
+</li>
+</ul>
+      </div>
+    </section>
+
+    <section class="section" id="file-browser">
+      <h2>File Browser</h2>
+      <div class="section-text"><h2>File Browser</h2>
+        <p>Memory, Skills, Rules, Patterns, Agenda, and Codebase views share a file browser:</p>
+<pre><code>┌─ Files ───────┬─ Content ──────────────────────────────┐
+│ common.md  ✓  │  [Rendered] [Source]                   │
+│ relay.md      │                                        │
+│ data.md       │  # Common Skills                       │
+│               │                                        │
+│               │  ## Dates                              │
+│               │  Always use ISO format (YYYY-MM-DD)    │
+│               │                                        │
+└───────────────┴────────────────────────────────────────┘
+</code></pre>
+<ul>
+<li>
+<p><strong>Rendered</strong>: Markdown rendered as HTML (via marked.js)</p>
+</li>
+<li>
+<p><strong>Source</strong>: Raw text, editable (contenteditable)</p>
+</li>
+<li>
+<p><strong>Save</strong>: Writes changes back to disk</p>
+</li>
+</ul>
+      </div>
+    </section>
+
+    <section class="section" id="live-updates">
+      <h2>Live Updates</h2>
+      <div class="section-text"><h2>Live Updates</h2>
+        <p>The Messages view uses WebSocket for real-time updates:</p>
+<ol>
+<li>Server watches <code>messages.jsonl</code> for changes</li>
+<li>New lines are parsed and pushed to connected clients</li>
+<li>Messages appear instantly in the UI</li>
+</ol>
+<p>Connection status shown in the status bar:</p>
+<ul>
+<li><code>Connected</code> — WebSocket active</li>
+<li><code>Disconnected</code> — Reconnecting in 3 seconds</li>
+<li><code>Error</code> — Connection failed</li>
+</ul>
+      </div>
+    </section>
+
+    <section class="section" id="api-endpoints">
+      <h2>API Endpoints</h2>
+      <div class="section-text"><h2>API Endpoints</h2>
+        <p>The server exposes REST endpoints:</p>
+<h3 id="config">Config</h3>
+<ul>
+<li><code>GET /api/config</code> — Read config.json</li>
+<li><code>POST /api/config</code> — Write config.json</li>
+</ul>
+<h3 id="status">Status</h3>
+<ul>
+<li><code>GET /api/status</code> — Dispatcher running, PID, agent count, messages today</li>
+</ul>
+<h3 id="messages">Messages</h3>
+<ul>
+<li><code>GET /api/messages?limit=50</code> — Recent messages from messages.jsonl</li>
+</ul>
+<h3 id="files">Files</h3>
+<ul>
+<li>
+<p><code>GET /api/{type}</code> — List files (type: memory, skills, rules, patterns, agenda, codebase)</p>
+</li>
+<li>
+<p><code>GET /api/{type}/{filename}</code> — Read file content</p>
+</li>
+<li><code>PUT /api/{type}/{filename}</code> — Write file content</li>
+</ul>
+<h3 id="tags">Tags</h3>
+<ul>
+<li><code>GET /api/tags</code> — Tag scan results (cached, filtered, sorted lexically)</li>
+<li><code>POST /api/tags/scan</code> — Queue tag_scan dispatcher task, returns conversation_id</li>
+<li><code>POST /api/tags/rename</code> — Rename tag across all vault files</li>
+<li><code>POST /api/tags/delete</code> — Remove tag from all vault files</li>
+</ul>
+<h3 id="vault-files">Vault Files</h3>
+<ul>
+<li><code>GET /api/vault/tree</code> — Recursive tree of all configured vaults</li>
+<li><code>GET /api/vault/file?path=</code> — Read file (text/image/binary detection, wikilinks resolved for .md)</li>
+<li><code>PUT /api/vault/file</code> — Write file content</li>
+<li><code>DELETE /api/vault/file?path=</code> — Delete file</li>
+<li><code>GET /api/vault/raw?path=</code> — Serve raw file (used for inline images and downloads)</li>
+</ul>
+<h3 id="migration">Migration</h3>
+<ul>
+<li><code>GET /api/migration</code> — List files in vault/Migration/</li>
+<li><code>GET /api/migration/{filename}</code> — Read file content</li>
+<li><code>PUT /api/migration/{filename}</code> — Write file content</li>
+<li><code>POST /api/migration/create</code> — Create vault/Migration directory</li>
+<li><code>POST /api/migration/upload</code> — Upload file via multipart form</li>
+</ul>
+<h3 id="websocket">WebSocket</h3>
+<ul>
+<li><code>WS /ws</code> — Live message stream</li>
+</ul>
+      </div>
+    </section>
+
+    <section class="section" id="file-locations">
+      <h2>File Locations</h2>
+      <div class="section-text"><h2>File Locations</h2>
+        <pre><code>outheis-minimal/
+└── webui/
+    ├── server.py      # FastAPI backend
+    ├── index.html     # HTML structure
+    ├── style.css      # Lexend Deca, light/dark mode
+    ├── app.js         # View routing, WebSocket, forms
+    └── assets/
+        ├── logo.svg   # outheis labs logo
+        └── logo.png   # Fallback
+</code></pre>
+      </div>
+    </section>
+
+    <section class="section" id="design-decisions">
+      <h2>Design Decisions</h2>
+      <div class="section-text"><h2>Design Decisions</h2>
+        <h3 id="typography">Typography</h3>
+<p>Single font family (Lexend Deca) in two weights:</p>
+<ul>
+<li><strong>400</strong> — Body text, labels, inputs</li>
+<li><strong>500</strong> — Titles, emphasis, agent names</li>
+</ul>
+<h3 id="color-modes">Color Modes</h3>
+<p>CSS variables support automatic light/dark mode via <code>prefers-color-scheme</code>. The logo inverts in dark mode.</p>
+<h3 id="no-authentication">No Authentication</h3>
+<p>The UI is localhost-only by design. No login, no sessions. If you can reach port 8080, you have full access.</p>
+      </div>
+    </section>
+
+    <section class="section" id="dependencies">
+      <h2>Dependencies</h2>
+      <div class="section-text"><h2>Dependencies</h2>
+        <p>Server-side:</p>
+<ul>
+<li><code>fastapi</code> — Web framework</li>
+<li><code>uvicorn</code> — ASGI server</li>
+</ul>
+<p>Client-side:</p>
+<ul>
+<li><code>marked.js</code> — Markdown rendering (CDN)</li>
+<li>Lexend Deca — Typography (Google Fonts)</li>
+</ul>
+<p>No build step. No bundler. Plain files served directly.</p>
+      </div>
+    </section>
+
+    <nav class="book-nav">
+      <div class="prev"><a href="../implementation/12-migration.html">
+          <span class="label">← Previous</span>
+          <span class="title">Migration</span>
+        </a></div>
+      <div class="toc-center"><a href="../contents.html#implementation">
+          <span class="label">Contents</span>
+          <span class="title">Implementation</span>
+        </a></div>
+      <div class="next"><a href="../installation/01-release-notes.html">
+          <span class="label">Next →</span>
+          <span class="title">Release Notes</span>
+        </a></div>
+    </nav>
+  </main>
+
+  <footer>
+    <div class="meta">
+      open source · AGPL-3.0 · <a href="https://github.com/outheis-labs">github.com/outheis-labs</a>
+    </div>
+  </footer>
+
+</body>
+</html>

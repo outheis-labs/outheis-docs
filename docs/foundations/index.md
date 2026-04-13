@@ -21,13 +21,6 @@ This means:
 - **Explicit capabilities** — agents declare what they can access
 - **Portable formats** — Markdown and JSON, no lock-in
 
-## οὐθείς
-
-The name comes from Homer. When the Cyclops Polyphemus asks who blinded him, Odysseus answers: οὐθείς — *nobody*. The Cyclops calls for help: "Nobody has blinded me!" No help comes.
-
-It's a trick, but also a stance: by refusing to be named, captured, pinned down, Odysseus remains free to act.
-
-outheis carries this into AI interaction. The system knows you — but only locally, only under your control, only in service of your work.
 
 ## Not Anti-AI
 

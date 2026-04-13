@@ -1,0 +1,961 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Agenda · outheis</title>
+  <link rel="icon" type="image/png" href="../../favicon-96x96.png" sizes="96x96">
+  <link rel="icon" type="image/svg+xml" href="../../favicon.svg">
+  <link rel="shortcut icon" href="../../favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="../../apple-touch-icon.png">
+  <link rel="manifest" href="../../site.webmanifest">
+  <style>
+    @font-face {
+      font-family: 'Inter';
+      src: url('../../assets/fonts/InterVariable.woff2') format('woff2');
+      font-weight: 100 900;
+      font-style: normal;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'IBM Plex Sans';
+      src: url('../../assets/fonts/IBMPlexSans-Variable.woff2') format('woff2-variations');
+      font-weight: 100 700;
+      font-style: normal;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'IBM Plex Mono';
+      src: url('../../assets/fonts/IBMPlexMono-Regular.woff2') format('woff2');
+      font-weight: 400;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'IBM Plex Sans', -apple-system, sans-serif;
+      background: #fff;
+      color: #1a1a1a;
+      line-height: 1.65;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .greek {
+      font-family: 'Inter', sans-serif;
+    }
+
+    /* Header with breadcrumb */
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 1.5rem;
+      border-bottom: 1px solid #e0e0e0;
+    }
+
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .logo {
+      font-family: 'Inter', sans-serif;
+      font-size: 20px;
+      font-weight: 500;
+    }
+
+    .breadcrumb {
+      font-size: 14px;
+      color: #888;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .breadcrumb a {
+      color: #666;
+    }
+
+    .breadcrumb a:hover {
+      color: #1a1a1a;
+    }
+
+    .breadcrumb .separator {
+      color: #ccc;
+    }
+
+    .breadcrumb .current {
+      color: #1a1a1a;
+    }
+
+    header nav {
+      font-size: 14px;
+      display: flex;
+      align-items: baseline;
+      gap: 1rem;
+    }
+
+    header nav a {
+      color: #888;
+    }
+
+    header nav a:hover {
+      color: #1a1a1a;
+    }
+
+    .lang-switch {
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-size: 14px;
+      color: #888;
+    }
+
+    .lang-switch a {
+      font-size: 14px;
+      color: #888;
+    }
+
+    .lang-switch a:hover {
+      color: #1a1a1a;
+    }
+
+    .lang-switch .lang-active {
+      color: #1a1a1a;
+      font-weight: 500;
+    }
+
+    /* Main */
+    main {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 3rem 1.5rem;
+    }
+
+    /* Page header */
+    .page-header {
+      margin-bottom: 3rem;
+    }
+
+    .page-header h1 {
+      font-family: 'Inter', sans-serif;
+      font-size: 36px;
+      font-weight: 500;
+      letter-spacing: -0.02em;
+    }
+
+    .page-header .subtitle {
+      font-size: 18px;
+      font-style: italic;
+      color: #555;
+      margin-top: 0.75rem;
+    }
+
+    /* Content sections */
+    .section {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+      padding: 2.5rem 0;
+      border-top: 1px solid #e0e0e0;
+    }
+
+    /* Mobile: hide label h2, show section-text h2 */
+    .section > h2 {
+      display: none;
+    }
+
+    .section-text h2 {
+      font-size: 20px;
+      font-weight: 500;
+      margin-bottom: 1rem;
+    }
+
+    .section-text > *:first-child {
+      margin-top: 0;
+    }
+
+    /* Hidden h2 is first-child on desktop, so target the visible first element */
+    .section-text > h2 + * {
+      margin-top: 0;
+    }
+
+    .section-text > h2 + p {
+      margin-top: 0;
+    }
+
+    .section-text p {
+      font-size: 16px;
+      line-height: 1.75;
+      color: #333;
+      margin-bottom: 1rem;
+    }
+
+    .section-text p:last-child {
+      margin-bottom: 0;
+    }
+
+    .section-text h3 {
+      font-size: 16px;
+      font-weight: 450;
+      color: #1a1a1a;
+      line-height: 1.75;
+      margin-top: 1.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .section-text h3:first-child,
+    .section-text > h2 + h3 {
+      margin-top: 0;
+    }
+
+    .section-text ul {
+      list-style: none;
+      margin-bottom: 1rem;
+    }
+
+    .section-text ul li {
+      font-size: 16px;
+      line-height: 1.65;
+      color: #333;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid #eee;
+    }
+
+    .section-text ul li:last-child {
+      border-bottom: none;
+    }
+
+    .section-text ol {
+      margin-bottom: 1rem;
+      padding-left: 1.5rem;
+    }
+
+    .section-text ol li {
+      font-size: 16px;
+      line-height: 1.65;
+      color: #333;
+      margin-bottom: 0.5rem;
+    }
+
+    .section-text code {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 14px;
+      background: #f5f5f5;
+      padding: 0.15em 0.4em;
+      border-radius: 2px;
+    }
+
+    .section-text pre {
+      background: #f5f5f5;
+      padding: 1rem 1.25rem;
+      overflow-x: auto;
+      margin: 1.5rem 0;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 13px;
+      line-height: 1.5;
+      border-radius: 2px;
+    }
+
+    .section-text pre code {
+      background: none;
+      padding: 0;
+    }
+
+    .section-text table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1.5rem 0;
+      font-size: 14px;
+    }
+
+    .section-text th,
+    .section-text td {
+      text-align: left;
+      padding: 0.5rem 0.75rem;
+      border-bottom: 1px solid #e0e0e0;
+    }
+
+    .section-text th {
+      font-weight: 500;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: #666;
+    }
+
+    .section-text blockquote {
+      border-left: 2px solid #e0e0e0;
+      padding-left: 1.25rem;
+      margin: 1.5rem 0;
+      color: #666;
+      font-style: italic;
+    }
+
+    .section-text a {
+      color: #666;
+    }
+
+    .section-text a:hover {
+      color: #1a1a1a;
+    }
+
+    /* TOC list styling */
+    .toc-list {
+      list-style: none;
+      padding-left: 0;
+    }
+
+    .toc-list li {
+      border-bottom: 1px solid #eee;
+    }
+
+    .toc-list li:last-child {
+      border-bottom: none;
+    }
+
+    .toc-list a {
+      display: block;
+      padding: 1rem 0;
+      color: #1a1a1a;
+    }
+
+    .toc-list li:first-child a {
+      padding-top: 0;
+    }
+
+    .toc-list a:hover {
+      background: #fafafa;
+      margin: 0 -1rem;
+      padding: 1rem;
+    }
+
+    .toc-list .title {
+      font-size: 16px;
+      font-weight: 500;
+      color: #1a1a1a;
+      margin-bottom: 0.25rem;
+    }
+
+    .toc-list .description {
+      font-size: 14px;
+      color: #666;
+      line-height: 1.5;
+    }
+
+    /* Book navigation */
+    .book-nav {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      gap: 1rem;
+      align-items: center;
+      padding: 2rem 0;
+      margin-top: 2rem;
+      border-top: 1px solid #e0e0e0;
+    }
+
+    .book-nav a {
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+      color: #666;
+    }
+
+    .book-nav a:hover {
+      color: #1a1a1a;
+    }
+
+    .book-nav .label {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: #888;
+    }
+
+    .book-nav .title {
+      font-size: 15px;
+      font-weight: 500;
+    }
+
+    .book-nav .prev {
+      text-align: left;
+    }
+
+    .book-nav .toc-center {
+      text-align: center;
+    }
+
+    .book-nav .toc-center a {
+      align-items: center;
+    }
+
+    .book-nav .next {
+      text-align: right;
+    }
+
+    /* Footer */
+    footer {
+      padding: 2rem 1.5rem;
+      max-width: 1100px;
+      margin: 0 auto;
+      border-top: 1px solid #e0e0e0;
+    }
+
+    footer .meta {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 12px;
+      color: #888;
+    }
+
+    footer .meta a {
+      color: #888;
+    }
+
+    footer .meta a:hover {
+      color: #333;
+    }
+
+    /* Desktop */
+    @media (min-width: 800px) {
+      header {
+        padding: 1.5rem 3rem;
+      }
+
+      main {
+        padding: 4rem 3rem;
+      }
+
+      .page-header h1 {
+        font-size: 48px;
+      }
+
+      .section {
+        grid-template-columns: 180px 1fr;
+        gap: 3rem;
+        padding: 3rem 0;
+        align-items: baseline;
+      }
+
+      .section > h2 {
+        display: block;
+        font-size: 18px;
+        font-weight: 500;
+        color: #1a1a1a;
+        line-height: 1.75;
+      }
+
+      .section-text h2 {
+        display: none;
+        position: absolute;
+        visibility: hidden;
+      }
+
+      .book-nav .title {
+        font-size: 16px;
+      }
+
+      footer {
+        padding: 2rem 3rem;
+      }
+    }
+
+    /* Mobile */
+    @media (max-width: 600px) {
+      .breadcrumb {
+        display: none;
+      }
+
+      .book-nav {
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: auto auto;
+      }
+
+      .book-nav .prev {
+        grid-column: 1;
+      }
+
+      .book-nav .next {
+        grid-column: 2;
+      }
+
+      .book-nav .toc-center {
+        grid-column: 1 / -1;
+        grid-row: 2;
+        margin-top: 1rem;
+        padding-top: 1rem;
+        border-top: 1px solid #eee;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="header-left">
+      <a href="../../index.html" class="logo">οὐθείς</a>
+      <div class="breadcrumb">
+        <span class="separator">/</span>
+        <a href="../../contents.html#implementation">Implementierung</a>
+        <span class="separator">/</span>
+        <span class="current">Agenda</span>
+      </div>
+    </div>
+    <nav>
+      <a href="../../contents.html#implementation">Contents</a>
+      <a href="https://github.com/outheis-labs/outheis-beta">GitHub ↗</a>
+      <span class="lang-switch"><a href="../../implementation/03-agenda.html">EN</a> · <span class="lang-active">DE</span></span>
+    </nav>
+  </header>
+
+  <main>
+    <div class="page-header">
+      <h1>Agenda</h1>
+      <p class="subtitle">Zeitmanagement durch drei einfache Dateien.</p>
+    </div>
+
+    <section class="section" id="die-drei-dateien">
+      <h2>Die drei Dateien</h2>
+      <div class="section-text"><h2>Die drei Dateien</h2>
+        <p>outheis verwaltet deinen Zeitplan über drei Markdown-Dateien in deinem Vault:</p>
+<pre><code>vault/Agenda/
+├── Daily.md      # Heute: Zeitplan, Aufgaben, Notizen
+├── Inbox.md      # Schnellerfassung: Benutzer → System
+└── Exchange.md   # Asynchroner Dialog: System ↔ Benutzer
+</code></pre>
+<h3 id="dailymd">Daily.md</h3>
+<p>Dein Tag auf einen Blick. Die Standardvorlage:</p>
+<pre><code class="language-markdown">⛅ [Weekday, DD.MM.YYYY]
+*Refresh: HH:MM*
+
+---
+## 🧘 Persönlich
+
+- [ ]
+
+---
+## 📅 Heute
+
+---
+## 🗓️ Diese Woche
+
+---
+## 💶 Cashflow
+</code></pre>
+<p>Die Struktur ist benutzerkonfigurierbar. Sobald du dein bevorzugtes Layout etabliert hast, bewahrt outheis es bei jeder Aktualisierung genau — nur der Inhalt ändert sich, nie die Struktur.</p>
+<p>outheis liest diese Datei, versteht deine Verpflichtungen und beantwortet Fragen wie "bin ich heute nachmittag frei?" oder "was steht morgen an?".</p>
+<h3 id="inboxmd">Inbox.md</h3>
+<p>Schnellerfassung ohne Struktur. Wenn du einen Gedanken hast, aber nicht darüber nachdenken möchtest, wohin er gehört:</p>
+<pre><code class="language-markdown"># Inbox
+
+*Drop anything here. outheis processes it hourly.*
+
+---
+
+meeting mit X nächste woche, wichtig
+zahnarzt anrufen
+projekt alpha deadline verschoben auf april
+</code></pre>
+<p>outheis verarbeitet dies stündlich:</p>
+<ul>
+<li>Erkennt Aufgaben → verschiebt in Daily.md</li>
+<li>Unklare Einträge → fragt über Exchange.md</li>
+<li>Notizen → behält oder archiviert</li>
+</ul>
+<h3 id="exchangemd">Exchange.md</h3>
+<p>Asynchroner Dialog zwischen dir und outheis. Wird automatisch beim Start erstellt:</p>
+<pre><code class="language-markdown"># Exchange
+
+*Asynchronous communication between you and outheis. No pressure to respond immediately — outheis checks hourly and learns from your answers.*
+
+---
+
+## 2026-03-30T10:15:00 – Konflikt
+
+&gt; Am Freitag hast du:
+&gt; - 10:00 Team-Meeting
+&gt; - 10:00 Zahnarzt
+&gt; - 10:30 Client-Call
+&gt;
+&gt; Wie soll ich priorisieren?
+
+**Your response:**
+Zahnarzt ist wichtiger, Team-Meeting verschieben.
+
+---
+
+## 2026-03-30T14:00:00 – Rückfrage
+
+&gt; Du hast &quot;Meeting mit X nächste Woche&quot; erwähnt — welcher Tag passt?
+
+**Your response:**
+
+
+---
+</code></pre>
+<p><strong>Wichtig:</strong> Exchange.md ist für Fragen von outheis an dich. Schreibe deine Antworten unter "Your response:". outheis nimmt sie bei der nächsten stündlichen Überprüfung auf.</p>
+      </div>
+    </section>
+
+    <section class="section" id="stundliche-uberprufung">
+      <h2>Stündliche Überprüfung</h2>
+      <div class="section-text"><h2>Stündliche Überprüfung</h2>
+        <p>Um 55 Minuten nach jeder vollen Stunde (konfigurierbar) läuft der Agenda-Agent.</p>
+<h3 id="bedingte-ausfuhrung">Bedingte Ausführung</h3>
+<p>Vor der Verarbeitung prüft outheis Datei-Hashes:</p>
+<pre><code>~/.outheis/human/cache/agenda/hashes.json
+</code></pre>
+<p>Wenn sich seit dem letzten Lauf nichts geändert hat, wird kein LLM-Aufruf gemacht. Das spart API-Kosten bei gleichzeitiger Reaktionsfähigkeit.</p>
+<p><strong>Ausnahmen:</strong> Morgen- (04:55) und Abendläufe (23:55) sind unbedingt, um Tagesübergänge korrekt zu behandeln.</p>
+<h3 id="verarbeitungsschritte">Verarbeitungsschritte</h3>
+<ol>
+<li><strong>Hash-Prüfung</strong> — Aktuelle Dateien mit gespeicherten Hashes vergleichen</li>
+<li><strong>Inbox verarbeiten</strong> — Einträge parsen, Aufgaben nach Daily verschieben, Unklares → Exchange</li>
+<li><strong>Exchange prüfen</strong> — Nach deinen Antworten suchen, Lernfortschritte extrahieren</li>
+<li><strong>Daily überprüfen</strong> — Anmerkungen, Kommentare, Erledigungen bemerken</li>
+<li><strong>Hashes aktualisieren</strong> — Neue Datei-Hashes für nächsten Vergleich speichern</li>
+<li><strong>Diffs cachen</strong> — <code>.prev</code>-Versionen für Debugging speichern</li>
+</ol>
+<h3 id="anmerkungen">Anmerkungen</h3>
+<p>Zeilen, die unmittelbar nach einer Aufgabe mit <code>&gt;</code> beginnen, werden als Anweisungen verarbeitet:</p>
+<pre><code class="language-markdown">- [ ] Report schreiben
+&gt; verschieben auf nächste Woche
+</code></pre>
+<p>Unterstützte Aktionen:</p>
+<table>
+<thead>
+<tr>
+<th>Anmerkung</th>
+<th>Effekt</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>&gt; erledigt</code> oder <code>&gt; ✓</code></td>
+<td>Eintrag entfernen (als erledigt markieren)</td>
+</tr>
+<tr>
+<td><code>&gt; verschieben auf [Datum]</code></td>
+<td>Auf das angegebene Datum verschieben</td>
+</tr>
+<tr>
+<td><code>&gt; wiedervorlage am [Datum]</code></td>
+<td>Eintrag für dieses Datum einplanen</td>
+</tr>
+<tr>
+<td><code>&gt; nicht mehr wichtig</code></td>
+<td>Eintrag löschen</td>
+</tr>
+</tbody>
+</table>
+<p>Die <code>&gt;</code>-Zeile selbst wird nach der Verarbeitung immer entfernt.</p>
+<h3 id="zeitfenster">Zeitfenster</h3>
+<p>Stündliche Überprüfungen laufen standardmäßig nur zwischen 04:55 und 23:55. Keine Überprüfungen nachts (00:55–03:55). In <code>config.json</code> konfigurierbar:</p>
+<pre><code class="language-json">{
+  &quot;schedule&quot;: {
+    &quot;agenda_review&quot;: {
+      &quot;hourly_at_minute&quot;: 55,
+      &quot;start_hour&quot;: 4,
+      &quot;end_hour&quot;: 23
+    }
+  }
+}
+</code></pre>
+      </div>
+    </section>
+
+    <section class="section" id="manuelle-aktualisierung">
+      <h2>Manuelle Aktualisierung</h2>
+      <div class="section-text"><h2>Manuelle Aktualisierung</h2>
+        <p>Du kannst eine sofortige Agenda-Aktualisierung auslösen:</p>
+<ul>
+<li>"aktualisiere daily"</li>
+<li>"aktualisiere meine agenda"</li>
+<li>"update daily"</li>
+<li>"refresh agenda"</li>
+</ul>
+<p>Das umgeht die Hash-Prüfung und führt sofort eine vollständige Überprüfung durch. Nützlich nach vielen Änderungen oder vor Terminabfragen.</p>
+      </div>
+    </section>
+
+    <section class="section" id="struktur-erstellen">
+      <h2>Struktur erstellen</h2>
+      <div class="section-text"><h2>Struktur erstellen</h2>
+        <p>Wenn outheis startet und der Agenda-Agent aktiviert ist, erstellt er das Verzeichnis mit Vorlagen:</p>
+<pre><code class="language-bash">outheis start
+# Creates vault/Agenda/ with Daily.md, Inbox.md, Exchange.md
+</code></pre>
+<p>Vorlagen enthalten hilfreiche Struktur und Emoji-Abschnitte. Du kannst auch manuell erstellen:</p>
+<pre><code class="language-bash">mkdir -p ~/Documents/Vault/Agenda
+touch ~/Documents/Vault/Agenda/{Daily,Inbox,Exchange}.md
+</code></pre>
+      </div>
+    </section>
+
+    <section class="section" id="nach-deinem-zeitplan-fragen">
+      <h2>Nach deinem Zeitplan fragen</h2>
+      <div class="section-text"><h2>Nach deinem Zeitplan fragen</h2>
+        <p>Sobald eingerichtet, kannst du fragen:</p>
+<ul>
+<li>"Was steht heute an?"</li>
+<li>"Bin ich morgen nachmittag frei?"</li>
+<li>"Wann ist mein nächster Termin mit X?"</li>
+<li>"Schreib auf: Meeting mit Y am Freitag 10 Uhr"</li>
+</ul>
+<p>outheis liest deine Agenda-Dateien und antwortet natürlich.</p>
+<h3 id="leseabfragen">Leseabfragen</h3>
+<p>Wenn du die Agenda abrufst ("Agenda", "was steht heute an", "gib mir die Agenda"), gibt cato den Inhalt von Daily.md wörtlich zurück — keine Neuformatierung, keine Zusammenfassung. Der Dateiinhalt ist die Antwort. Relay leitet ihn direkt weiter ohne zweiten LLM-Aufruf.</p>
+      </div>
+    </section>
+
+    <section class="section" id="integration-mit-anderen-agenten">
+      <h2>Integration mit anderen Agenten</h2>
+      <div class="section-text"><h2>Integration mit anderen Agenten</h2>
+        <p><strong>Relay (ou)</strong> leitet Terminabfragen an Agenda weiter. Leseabfragen ("Agenda", "was steht heute") werden direkt an cato weitergeleitet, der Daily.md wörtlich zurückgibt. Schreib- und Aktualisierungsabfragen durchlaufen die vollständige Tool-Schleife.</p>
+<p><strong>Data-Agent (zeno)</strong> kann deinen Vault durchsuchen, schreibt aber nicht in Agenda-Dateien.</p>
+<p><strong>Action-Agent (hiro)</strong> kann Aufgaben ausführen (E-Mails senden, Kalendereinträge erstellen), aber Agenda verwaltet, was geplant ist.</p>
+<p><strong>Pattern-Agent (rumi)</strong> beobachtet deine Planungsmuster und kann:</p>
+<ul>
+<li>
+<p>Rules erstellen wie "Benutzer bevorzugt keine Meetings vor 10:00"</p>
+</li>
+<li>
+<p>Wiederkehrende Aufgaben bemerken und Automatisierung vorschlagen</p>
+</li>
+<li>In Exchange.md schreiben, wenn Seed-Dateien Genehmigung benötigen</li>
+</ul>
+      </div>
+    </section>
+
+    <section class="section" id="speicherung">
+      <h2>Speicherung</h2>
+      <div class="section-text"><h2>Speicherung</h2>
+        <pre><code>vault/Agenda/
+├── Daily.md              # Your working file
+├── Inbox.md              # Quick capture
+├── Exchange.md           # Async dialogue
+└── Shadow.md             # Chronological entries from vault (auto-generated)
+
+~/.outheis/human/cache/agenda/
+├── hashes.json           # SHA256 hashes for change detection
+├── Daily.md.prev         # Previous version for diff
+├── Inbox.md.prev
+└── Exchange.md.prev
+</code></pre>
+<p>Der Cache ist neu erstellbar — jederzeit löschen und outheis baut ihn neu auf.</p>
+      </div>
+    </section>
+
+    <section class="section" id="shadowmd">
+      <h2>Shadow.md</h2>
+      <div class="section-text"><h2>Shadow.md</h2>
+        <p>Ein Staging-Bereich für chronologische Einträge, die im Vault erkannt wurden.</p>
+<h3 id="zweck">Zweck</h3>
+<p>Dein Vault enthält Daten in vielen Dateien: Projektdeadlines, Geburtstage in Kontaktnotizen, wiederkehrende Ereignisse in Projektdokumenten. Shadow.md sammelt diese automatisch, damit Agenda sie zur richtigen Zeit anzeigen kann.</p>
+<h3 id="funktionsweise">Funktionsweise</h3>
+<p>Der Data-Agent (zeno) führt um 03:30 (konfigurierbar) einen nächtlichen Scan durch:</p>
+<ol>
+<li><strong>Vault scannen</strong> — Alle Dateien auf datumrelevante Inhalte durchsuchen</li>
+<li><strong>Muster erkennen</strong> — Deadlines, Geburtstage, Termine, wiederkehrende Ereignisse</li>
+<li><strong>Neue Einträge anhängen</strong> — Shadow.md ergänzen ohne bestehende Inhalte zu überschreiben</li>
+<li><strong>Quellverfolgung</strong> — Jeder Eintrag verweist auf seine Ursprungsdatei</li>
+</ol>
+<h3 id="format">Format</h3>
+<pre><code class="language-markdown"># Shadow
+
+*Chronological entries detected from vault. Auto-updated nightly.*
+
+---
+
+## Scan 2026-03-30 03:30
+
+- ⏰ **2026-04-15** Project Alpha deadline `← projects/alpha.md`
+- 🎂 **2026-05-12** Emma's birthday `← contacts/family.md`
+- 🔄 **every Monday** Team standup `← work/routines.md`
+- 📅 **2026-04-01** Tax filing deadline `← admin/taxes.md`
+
+## Scan 2026-03-29 03:30
+
+- ☐ **2026-03-31** Send quarterly report `← work/q1.md`
+</code></pre>
+<h3 id="icons">Icons</h3>
+<table>
+<thead>
+<tr>
+<th>Icon</th>
+<th>Typ</th>
+<th>Beispiel</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>⏰</td>
+<td>Deadline</td>
+<td>Projektfälligkeiten</td>
+</tr>
+<tr>
+<td>🎂</td>
+<td>Geburtstag</td>
+<td>Kontaktgeburtstage</td>
+</tr>
+<tr>
+<td>📅</td>
+<td>Termin</td>
+<td>Feste Kalendereinträge</td>
+</tr>
+<tr>
+<td>🔄</td>
+<td>Wiederkehrend</td>
+<td>Wöchentliche/monatliche Ereignisse</td>
+</tr>
+<tr>
+<td>☐</td>
+<td>Aufgabe</td>
+<td>Zeitgebundene Aufgaben</td>
+</tr>
+</tbody>
+</table>
+<h3 id="vollstandigkeit-von-eintragen">Vollständigkeit von Einträgen</h3>
+<p>Damit der Agenda-Agent einen Eintrag zuverlässig einplanen kann, braucht jeder Shadow-Eintrag einen von zwei Ankern:</p>
+<table>
+<thead>
+<tr>
+<th>Anker</th>
+<th>Bedeutung</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>#date-YYYY-MM-DD</code></td>
+<td>Zeitlicher Anker — zeige diesen Eintrag ab diesem Datum in der Agenda</td>
+</tr>
+<tr>
+<td>Aufmerksamkeitsmarker (z. B. <code>#action-required</code>)</td>
+<td>Kein Datum — dauerhaft sichtbar bis explizit entschieden</td>
+</tr>
+</tbody>
+</table>
+<p>Einträge ohne einen dieser Anker sind semantisch unvollständig: der Agent kann nicht wissen, wann oder ob er sie anzeigen soll.</p>
+<p><strong>Erinnerungsdatum vs. Ereignisdatum</strong> — <code>#date</code> steuert <em>wann der Eintrag erscheint</em>, nicht zwingend wann das Ereignis stattfindet. Bei einem Geburtstag fallen beide zusammen. Bei "erinnere mich am 3. Mai an die Veranstaltung am 30. Juni" ist <code>#date-2026-05-03</code> der Trigger; der 30. Juni gehört in den Eintragstext. Wenn beide Daten abweichen, steht das Ereignisdatum im Fließtext; <code>#date</code> ist der Agenda-Trigger.</p>
+<p><strong>Überfällige Einträge</strong> — liegt ein <code>#date</code> in der Vergangenheit und wurde keine Entscheidung festgehalten, bleibt der Eintrag sichtbar. Überfällig = muss entschieden werden (erledigen, verschieben oder streichen).</p>
+<p><strong>Tag-Namen wählst du selbst.</strong> <code>#action-required</code> ist der outheis-Standard; du kannst <code>#attention</code>, <code>#priority</code>, <code>#open</code> oder jeden anderen Marker verwenden, den deine Rules-Datei definiert — solange der Agent weiß, welches Tag "immer zeigen" bedeutet.</p>
+<h3 id="integration-mit-daily">Integration mit Daily</h3>
+<p>Der Agenda-Agent liest Shadow.md und zeigt relevante Einträge in Daily.md an. Wenn du fragst "was steht diese Woche an?", prüft outheis sowohl deinen expliziten Zeitplan als auch Shadows erkannte Daten.</p>
+<h3 id="konfiguration">Konfiguration</h3>
+<pre><code class="language-json">{
+  &quot;schedule&quot;: {
+    &quot;shadow_scan&quot;: {
+      &quot;enabled&quot;: true,
+      &quot;hour&quot;: 3,
+      &quot;minute&quot;: 30
+    }
+  }
+}
+</code></pre>
+<h3 id="manueller-ausloser">Manueller Auslöser</h3>
+<p>Du kannst fragen: "scanne den vault nach terminen" oder "aktualisiere shadow", um den Scan sofort auszuführen.</p>
+      </div>
+    </section>
+
+    <section class="section" id="konfiguration_1">
+      <h2>Konfiguration</h2>
+      <div class="section-text"><h2>Konfiguration</h2>
+        <p>In <code>config.json</code>:</p>
+<pre><code class="language-json">{
+  &quot;agents&quot;: {
+    &quot;agenda&quot;: {
+      &quot;name&quot;: &quot;cato&quot;,
+      &quot;model&quot;: &quot;capable&quot;,
+      &quot;enabled&quot;: true
+    }
+  },
+  &quot;schedule&quot;: {
+    &quot;agenda_review&quot;: {
+      &quot;enabled&quot;: true,
+      &quot;hourly_at_minute&quot;: 55,
+      &quot;start_hour&quot;: 4,
+      &quot;end_hour&quot;: 23
+    }
+  }
+}
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>Einstellung</th>
+<th>Standard</th>
+<th>Beschreibung</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>enabled</code></td>
+<td>true</td>
+<td>Agenda-Agent aktivieren/deaktivieren</td>
+</tr>
+<tr>
+<td><code>hourly_at_minute</code></td>
+<td>55</td>
+<td>Minute jeder Stunde für die Überprüfung</td>
+</tr>
+<tr>
+<td><code>start_hour</code></td>
+<td>4</td>
+<td>Erste Stunde des Tages zum Ausführen (einschließlich)</td>
+</tr>
+<tr>
+<td><code>end_hour</code></td>
+<td>23</td>
+<td>Letzte Stunde des Tages zum Ausführen (einschließlich)</td>
+</tr>
+</tbody>
+</table>
+      </div>
+    </section>
+
+    <section class="section" id="best-practices">
+      <h2>Best Practices</h2>
+      <div class="section-text"><h2>Best Practices</h2>
+        <ol>
+<li><strong>Daily.md einfach halten</strong> — 🧘 Morgen + 🔴 Zeitplan + 🟠 Aufgaben reicht</li>
+<li><strong>Inbox für Schnellerfassung nutzen</strong> — Nicht denken, einfach reinschreiben</li>
+<li><strong>Exchange beantworten wenn möglich</strong> — Kein Druck, aber es hilft outheis zu lernen</li>
+<li><strong>Mit <code>&gt;</code> kommentieren</strong> — <code>&gt; verschieben auf ...</code> oder <code>&gt; erledigt</code> verwenden, um outheis anzuweisen ohne die Aufgabe selbst zu bearbeiten</li>
+<li><strong>outheis die Struktur verwalten lassen</strong> — Auf den Inhalt konzentrieren, nicht die Formatierung</li>
+<li><strong>Manuelle Aktualisierung sparsam nutzen</strong> — Stündlich reicht meistens aus</li>
+</ol>
+      </div>
+    </section>
+
+    <nav class="book-nav">
+      <div class="prev"><a href="../../implementation/02-memory.html">
+          <span class="label">← Zurück</span>
+          <span class="title">Memory & Regeln</span>
+        </a></div>
+      <div class="toc-center"><a href="../../contents.html#implementation">
+          <span class="label">Inhalt</span>
+          <span class="title">Implementierung</span>
+        </a></div>
+      <div class="next"><a href="../../implementation/04-skills.html">
+          <span class="label">Weiter →</span>
+          <span class="title">Skills</span>
+        </a></div>
+    </nav>
+  </main>
+
+  <footer>
+    <div class="meta">
+      open source · AGPL-3.0 · <a href="https://github.com/outheis-labs">github.com/outheis-labs</a>
+    </div>
+  </footer>
+
+</body>
+</html>

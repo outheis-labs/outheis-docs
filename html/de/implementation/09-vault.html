@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vault · outheis</title>
+  <link rel="icon" type="image/png" href="../../favicon-96x96.png" sizes="96x96">
+  <link rel="icon" type="image/svg+xml" href="../../favicon.svg">
+  <link rel="shortcut icon" href="../../favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="../../apple-touch-icon.png">
+  <link rel="manifest" href="../../site.webmanifest">
+  <style>
+    @font-face {
+      font-family: 'Inter';
+      src: url('../../assets/fonts/InterVariable.woff2') format('woff2');
+      font-weight: 100 900;
+      font-style: normal;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'IBM Plex Sans';
+      src: url('../../assets/fonts/IBMPlexSans-Variable.woff2') format('woff2-variations');
+      font-weight: 100 700;
+      font-style: normal;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'IBM Plex Mono';
+      src: url('../../assets/fonts/IBMPlexMono-Regular.woff2') format('woff2');
+      font-weight: 400;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'IBM Plex Sans', -apple-system, sans-serif;
+      background: #fff;
+      color: #1a1a1a;
+      line-height: 1.65;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .greek {
+      font-family: 'Inter', sans-serif;
+    }
+
+    /* Header with breadcrumb */
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 1.5rem;
+      border-bottom: 1px solid #e0e0e0;
+    }
+
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .logo {
+      font-family: 'Inter', sans-serif;
+      font-size: 20px;
+      font-weight: 500;
+    }
+
+    .breadcrumb {
+      font-size: 14px;
+      color: #888;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .breadcrumb a {
+      color: #666;
+    }
+
+    .breadcrumb a:hover {
+      color: #1a1a1a;
+    }
+
+    .breadcrumb .separator {
+      color: #ccc;
+    }
+
+    .breadcrumb .current {
+      color: #1a1a1a;
+    }
+
+    header nav {
+      font-size: 14px;
+      display: flex;
+      align-items: baseline;
+      gap: 1rem;
+    }
+
+    header nav a {
+      color: #888;
+    }
+
+    header nav a:hover {
+      color: #1a1a1a;
+    }
+
+    .lang-switch {
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-size: 14px;
+      color: #888;
+    }
+
+    .lang-switch a {
+      font-size: 14px;
+      color: #888;
+    }
+
+    .lang-switch a:hover {
+      color: #1a1a1a;
+    }
+
+    .lang-switch .lang-active {
+      color: #1a1a1a;
+      font-weight: 500;
+    }
+
+    /* Main */
+    main {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 3rem 1.5rem;
+    }
+
+    /* Page header */
+    .page-header {
+      margin-bottom: 3rem;
+    }
+
+    .page-header h1 {
+      font-family: 'Inter', sans-serif;
+      font-size: 36px;
+      font-weight: 500;
+      letter-spacing: -0.02em;
+    }
+
+    .page-header .subtitle {
+      font-size: 18px;
+      font-style: italic;
+      color: #555;
+      margin-top: 0.75rem;
+    }
+
+    /* Content sections */
+    .section {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+      padding: 2.5rem 0;
+      border-top: 1px solid #e0e0e0;
+    }
+
+    /* Mobile: hide label h2, show section-text h2 */
+    .section > h2 {
+      display: none;
+    }
+
+    .section-text h2 {
+      font-size: 20px;
+      font-weight: 500;
+      margin-bottom: 1rem;
+    }
+
+    .section-text > *:first-child {
+      margin-top: 0;
+    }
+
+    /* Hidden h2 is first-child on desktop, so target the visible first element */
+    .section-text > h2 + * {
+      margin-top: 0;
+    }
+
+    .section-text > h2 + p {
+      margin-top: 0;
+    }
+
+    .section-text p {
+      font-size: 16px;
+      line-height: 1.75;
+      color: #333;
+      margin-bottom: 1rem;
+    }
+
+    .section-text p:last-child {
+      margin-bottom: 0;
+    }
+
+    .section-text h3 {
+      font-size: 16px;
+      font-weight: 450;
+      color: #1a1a1a;
+      line-height: 1.75;
+      margin-top: 1.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .section-text h3:first-child,
+    .section-text > h2 + h3 {
+      margin-top: 0;
+    }
+
+    .section-text ul {
+      list-style: none;
+      margin-bottom: 1rem;
+    }
+
+    .section-text ul li {
+      font-size: 16px;
+      line-height: 1.65;
+      color: #333;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid #eee;
+    }
+
+    .section-text ul li:last-child {
+      border-bottom: none;
+    }
+
+    .section-text ol {
+      margin-bottom: 1rem;
+      padding-left: 1.5rem;
+    }
+
+    .section-text ol li {
+      font-size: 16px;
+      line-height: 1.65;
+      color: #333;
+      margin-bottom: 0.5rem;
+    }
+
+    .section-text code {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 14px;
+      background: #f5f5f5;
+      padding: 0.15em 0.4em;
+      border-radius: 2px;
+    }
+
+    .section-text pre {
+      background: #f5f5f5;
+      padding: 1rem 1.25rem;
+      overflow-x: auto;
+      margin: 1.5rem 0;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 13px;
+      line-height: 1.5;
+      border-radius: 2px;
+    }
+
+    .section-text pre code {
+      background: none;
+      padding: 0;
+    }
+
+    .section-text table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1.5rem 0;
+      font-size: 14px;
+    }
+
+    .section-text th,
+    .section-text td {
+      text-align: left;
+      padding: 0.5rem 0.75rem;
+      border-bottom: 1px solid #e0e0e0;
+    }
+
+    .section-text th {
+      font-weight: 500;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: #666;
+    }
+
+    .section-text blockquote {
+      border-left: 2px solid #e0e0e0;
+      padding-left: 1.25rem;
+      margin: 1.5rem 0;
+      color: #666;
+      font-style: italic;
+    }
+
+    .section-text a {
+      color: #666;
+    }
+
+    .section-text a:hover {
+      color: #1a1a1a;
+    }
+
+    /* TOC list styling */
+    .toc-list {
+      list-style: none;
+      padding-left: 0;
+    }
+
+    .toc-list li {
+      border-bottom: 1px solid #eee;
+    }
+
+    .toc-list li:last-child {
+      border-bottom: none;
+    }
+
+    .toc-list a {
+      display: block;
+      padding: 1rem 0;
+      color: #1a1a1a;
+    }
+
+    .toc-list li:first-child a {
+      padding-top: 0;
+    }
+
+    .toc-list a:hover {
+      background: #fafafa;
+      margin: 0 -1rem;
+      padding: 1rem;
+    }
+
+    .toc-list .title {
+      font-size: 16px;
+      font-weight: 500;
+      color: #1a1a1a;
+      margin-bottom: 0.25rem;
+    }
+
+    .toc-list .description {
+      font-size: 14px;
+      color: #666;
+      line-height: 1.5;
+    }
+
+    /* Book navigation */
+    .book-nav {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      gap: 1rem;
+      align-items: center;
+      padding: 2rem 0;
+      margin-top: 2rem;
+      border-top: 1px solid #e0e0e0;
+    }
+
+    .book-nav a {
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+      color: #666;
+    }
+
+    .book-nav a:hover {
+      color: #1a1a1a;
+    }
+
+    .book-nav .label {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: #888;
+    }
+
+    .book-nav .title {
+      font-size: 15px;
+      font-weight: 500;
+    }
+
+    .book-nav .prev {
+      text-align: left;
+    }
+
+    .book-nav .toc-center {
+      text-align: center;
+    }
+
+    .book-nav .toc-center a {
+      align-items: center;
+    }
+
+    .book-nav .next {
+      text-align: right;
+    }
+
+    /* Footer */
+    footer {
+      padding: 2rem 1.5rem;
+      max-width: 1100px;
+      margin: 0 auto;
+      border-top: 1px solid #e0e0e0;
+    }
+
+    footer .meta {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 12px;
+      color: #888;
+    }
+
+    footer .meta a {
+      color: #888;
+    }
+
+    footer .meta a:hover {
+      color: #333;
+    }
+
+    /* Desktop */
+    @media (min-width: 800px) {
+      header {
+        padding: 1.5rem 3rem;
+      }
+
+      main {
+        padding: 4rem 3rem;
+      }
+
+      .page-header h1 {
+        font-size: 48px;
+      }
+
+      .section {
+        grid-template-columns: 180px 1fr;
+        gap: 3rem;
+        padding: 3rem 0;
+        align-items: baseline;
+      }
+
+      .section > h2 {
+        display: block;
+        font-size: 18px;
+        font-weight: 500;
+        color: #1a1a1a;
+        line-height: 1.75;
+      }
+
+      .section-text h2 {
+        display: none;
+        position: absolute;
+        visibility: hidden;
+      }
+
+      .book-nav .title {
+        font-size: 16px;
+      }
+
+      footer {
+        padding: 2rem 3rem;
+      }
+    }
+
+    /* Mobile */
+    @media (max-width: 600px) {
+      .breadcrumb {
+        display: none;
+      }
+
+      .book-nav {
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: auto auto;
+      }
+
+      .book-nav .prev {
+        grid-column: 1;
+      }
+
+      .book-nav .next {
+        grid-column: 2;
+      }
+
+      .book-nav .toc-center {
+        grid-column: 1 / -1;
+        grid-row: 2;
+        margin-top: 1rem;
+        padding-top: 1rem;
+        border-top: 1px solid #eee;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="header-left">
+      <a href="../../index.html" class="logo">οὐθείς</a>
+      <div class="breadcrumb">
+        <span class="separator">/</span>
+        <a href="../../contents.html#implementation">Implementierung</a>
+        <span class="separator">/</span>
+        <span class="current">Vault</span>
+      </div>
+    </div>
+    <nav>
+      <a href="../../contents.html#implementation">Contents</a>
+      <a href="https://github.com/outheis-labs/outheis-beta">GitHub ↗</a>
+      <span class="lang-switch"><a href="../../implementation/09-vault.html">EN</a> · <span class="lang-active">DE</span></span>
+    </nav>
+  </header>
+
+  <main>
+    <div class="page-header">
+      <h1>Vault</h1>
+      <p class="subtitle">Wie du dein Wissen strukturierst, damit outheis damit arbeiten kann.</p>
+    </div>
+
+    <section class="section" id="was-der-vault-ist">
+      <h2>Was der Vault ist</h2>
+      <div class="section-text"><h2>Was der Vault ist</h2>
+        <p>Der Vault ist ein Verzeichnis mit Markdown-Dateien — deine Notizen, Projekte, Dokumente, Zeitpläne. outheis liest ihn, besitzt ihn aber nicht. Du bringst die Struktur; outheis lernt, darin zu navigieren.</p>
+<p>Das einzige erforderliche Unterverzeichnis ist <code>Agenda/</code>, das outheis verwaltet:</p>
+<pre><code>vault/
+├── Agenda/
+│   ├── Daily.md      # Today — schedule, tasks, notes
+│   ├── Inbox.md      # Quick capture, unprocessed
+│   └── Exchange.md   # Async communication with outheis
+└── ... your files
+</code></pre>
+<p>Alles andere gehört dir.</p>
+      </div>
+    </section>
+
+    <section class="section" id="tags">
+      <h2>Tags</h2>
+      <div class="section-text"><h2>Tags</h2>
+        <p>outheis schreibt kein Tag-Schema vor. Es erlernt deines.</p>
+<p>Wenn du outheis zum ersten Mal startest, sind deine Vault-Tags unbekannt. Der Data-Agent kann deine Tag-Taxonomie scannen und extrahieren — aber nur wenn du fragst. Keine automatische Umstrukturierung, keine erfundenen Tags.</p>
+<p>Die eine Ausnahme: Datum-Tags. Wenn outheis eine Notiz erstellt oder kommentiert, kann es einen <code>#date-JJJJ-MM-TT</code>-Tag hinzufügen, um sie zeitlich zu verankern. Alles andere bleibt unberührt.</p>
+<h3 id="tag-systeme-variieren">Tag-Systeme variieren</h3>
+<p>Benutzer kommen mit verschiedenen Konventionen:</p>
+<pre><code>#todo #project #someday          ← flat, singular
+#work/client/project             ← hierarchical with /
+#action-required #status-active  ← namespaced with -
+</code></pre>
+<p>All das funktioniert. outheis kartiert das Gefundene und arbeitet innerhalb dieser Struktur.</p>
+<h3 id="das-facettierte-namensraum-muster">Das facettierte Namensraum-Muster</h3>
+<p>Eine besonders effektive Konvention für persönliches Wissensmanagement verwendet einen <code>Kategorie-Wert</code>-Namensraum mit Bindestrichen:</p>
+<pre><code>#action-required   #action-waiting   #action-now
+#status-active     #status-completed #status-linger
+#rank-urgent       #rank-high        #rank-low
+#unit-work         #unit-self        #unit-family
+#topic-design      #topic-admin
+#size-S            #size-M           #size-L
+#recurring
+</code></pre>
+<p>Jeder Tag trägt zwei Informationen: welche Dimension er beschreibt (<code>action</code>, <code>status</code>, <code>rank</code>) und welchen Wert er enthält (<code>required</code>, <code>active</code>, <code>urgent</code>). Das macht Dateien entlang mehrerer Achsen abfragbar ohne verschachtelte Ordner oder komplexe Metadaten.</p>
+<p>Die zeitliche Dimension dieses Musters — wie zeitverankerte Tags mit wiederkehrender Struktur interagieren — wird in der <a href="https://github.com/outheis-labs/research-base/tree/main/temporalization-of-order">research-base</a> untersucht.</p>
+<h3 id="datum-tags">Datum-Tags</h3>
+<p>Datum-Tags (<code>#date-2026-03-24</code>) sind eine Kategorie, die outheis selbst erzeugen kann. Beim Erstellen von Notizen oder Erfassen von Informationen fügt der Data-Agent einen Datum-Tag hinzu, um den Eintrag zeitlich zu verankern. Alle anderen Tags gehören dem Benutzer.</p>
+<h3 id="interne-tags">Interne Tags</h3>
+<p>outheis verwendet den <code>#outheis-</code>-Namensraum für seine eigene interne Zustandsverfolgung. Diese Tags werden dem Benutzer in der WebUI nie angezeigt und dienen nur Agenten-Operationen — Markierung verarbeiteter Einträge, Archivierungskandidaten, Zustandsmarker.</p>
+<p>Beispiele: <code>#outheis-state-done</code>, <code>#outheis-state-pending</code>, <code>#outheis-archive</code></p>
+<p><code>#outheis-*</code>-Tags sind immer auf Englisch. Sie werden sparsam und nur dann erstellt, wenn sie einer zukünftigen Agenten-Operation echten Mehrwert bieten.</p>
+<h3 id="tag-analyse">Tag-Analyse</h3>
+<p>outheis erlernt dein Tag-System auf Anfrage, nicht automatisch. Zum Starten:</p>
+<pre><code>analyze tags
+</code></pre>
+<p>Der Data-Agent scannt den Vault, extrahiert die Tag-Taxonomie und reflektiert sie zurück. Du bestätigst oder korrigierst die Interpretation. Von diesem Punkt an funktionieren Suche und Tagesplanung innerhalb deines etablierten Systems.</p>
+<p>Wenn der Data-Agent später Inkonsistenzen oder mögliche Vereinfachungen bemerkt — eine Kategorie mit nur einem Wert, zwei Tags die immer gemeinsam auftauchen, ein Benennungsmuster das vereinheitlicht werden könnte — bringt er das direkt im Gespräch auf. Ohne deine Zustimmung werden keine Änderungen gemacht.</p>
+      </div>
+    </section>
+
+    <section class="section" id="dailymd">
+      <h2>Daily.md</h2>
+      <div class="section-text"><h2>Daily.md</h2>
+        <p>Daily.md wird täglich frisch vom Agenda-Agenten erstellt. Die Standardstruktur:</p>
+<pre><code class="language-markdown"># [Weekday], [Date]
+
+## Morning
+
+## Schedule
+
+## Tasks
+
+## Notes
+
+## Evening
+</code></pre>
+<p>Der Agenda-Agent füllt dies aus deinem Vault: geplante Termine, wiederkehrende Einträge, heute fällige Aufgaben, Einträge aus Inbox.md. Wenn dein Vault einen Terminplan, einen wiederkehrenden Zeitplan oder datum-markierte Einträge enthält, erscheinen sie hier automatisch.</p>
+<p>Du kannst die Vorlage ändern. Gib deine bevorzugte Struktur in <code>rules/agenda.md</code> an:</p>
+<pre><code class="language-markdown">Daily.md should use these sections: [your sections here]
+</code></pre>
+      </div>
+    </section>
+
+    <section class="section" id="inboxmd">
+      <h2>Inbox.md</h2>
+      <div class="section-text"><h2>Inbox.md</h2>
+        <p>Schnellerfassung ohne Reibung. Schreibe alles — getippt, diktiert, beliebiges Format. Der Agenda-Agent verarbeitet Inbox-Einträge bei der stündlichen Überprüfung: verschiebt sie nach Daily.md, erstellt Vault-Notizen oder fragt in Exchange.md nach, wenn etwas Klärung benötigt.</p>
+<p>Format ist frei. Eine Zeile pro Eintrag reicht.</p>
+      </div>
+    </section>
+
+    <section class="section" id="exchangemd">
+      <h2>Exchange.md</h2>
+      <div class="section-text"><h2>Exchange.md</h2>
+        <p>Asynchrone Kommunikation zwischen dir und outheis. Fragen, die keine sofortige Antwort benötigen, Vorschläge die Überprüfung brauchen, Informationen die auf deine Eingabe warten.</p>
+<p>outheis schreibt hier, wenn es etwas von dir braucht. Du antwortest, wenn du Zeit hast. Keine Benachrichtigungen, kein Druck.</p>
+      </div>
+    </section>
+
+    <nav class="book-nav">
+      <div class="prev"><a href="../../implementation/08-annotation-feedback.html">
+          <span class="label">← Zurück</span>
+          <span class="title">Annotations-Feedback</span>
+        </a></div>
+      <div class="toc-center"><a href="../../contents.html#implementation">
+          <span class="label">Inhalt</span>
+          <span class="title">Implementierung</span>
+        </a></div>
+      <div class="next"><a href="../../implementation/10-config.html">
+          <span class="label">Weiter →</span>
+          <span class="title">Konfiguration</span>
+        </a></div>
+    </nav>
+  </main>
+
+  <footer>
+    <div class="meta">
+      open source · AGPL-3.0 · <a href="https://github.com/outheis-labs">github.com/outheis-labs</a>
+    </div>
+  </footer>
+
+</body>
+</html>

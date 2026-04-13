@@ -1,0 +1,278 @@
+
+# Guide
+
+*Getting started with outheis.*
+
+---
+
+## Requirements
+
+- Python 3.11+
+- An Anthropic API key
+- A vault directory — a folder of Markdown files (Obsidian works directly)
+
+Optional — required only if you configure a local model via Ollama:
+
+- [Ollama](https://ollama.com) installed and running
+- `pip install openai` (outheis uses the OpenAI-compatible Ollama API)
+
+Optional for messaging via Signal:
+
+- A registered Signal account for the bot phone number
+- `signal-cli` installed and configured
+
+## Quickstart
+
+The fastest path to a working setup is an Anthropic API key. No additional dependencies — outheis works out of the box with Claude as the only model provider.
+
+Local models via Ollama are optional and require extra setup (see below).
+
+## Installation
+
+Modern pip enforces virtual environments. Create one first:
+
+```bash
+git clone https://github.com/outheis-labs/outheis-minimal.git
+cd outheis-minimal
+python3 -m venv .venv
+source .venv/bin/activate   # Windows: .venv\Scripts\activate
+pip install -e .
+```
+
+The `outheis` command is only available while the venv is active. Add `source /path/to/outheis-minimal/.venv/bin/activate` to your shell profile if you want it always available.
+
+For voice transcription via Signal, install the optional dependency:
+
+```bash
+pip install -e ".[signal]"
+```
+
+## Setup
+
+```bash
+outheis init
+```
+
+This creates `~/.outheis/human/config.json` with defaults. Edit it:
+
+```bash
+$EDITOR ~/.outheis/human/config.json
+```
+
+Minimal required configuration:
+
+```json
+{
+  "human": {
+    "name": "Your Name",
+    "language": "en",
+    "timezone": "Europe/Berlin",
+    "vault": ["~/Documents/Vault"]
+  },
+  "llm": {
+    "providers": {
+      "anthropic": {
+        "api_key": "sk-ant-..."
+      }
+    },
+    "models": {
+      "fast":    {"provider": "anthropic", "name": "claude-haiku-4-5"},
+      "capable": {"provider": "anthropic", "name": "claude-sonnet-4-20250514"}
+    }
+  }
+}
+```
+
+The `vault` array accepts multiple paths. outheis monitors all of them.
+
+## Starting the Dispatcher
+
+```bash
+outheis start        # Background daemon
+outheis start -f     # Foreground (useful for first run / debugging)
+outheis status       # Check PID, uptime, agent status
+outheis stop         # Stop daemon
+```
+
+## Web UI
+
+Once the dispatcher is running, the Web UI is available at:
+
+```
+http://127.0.0.1:8080
+```
+
+It provides:
+
+- Live message feed (conversations with agents)
+- Memory, Rules, and Skills viewer and editor
+- Scheduler status and manual task triggers
+- Vault file browser
+
+The Web UI port and host are configurable in `config.json` under `"webui": {"host": "127.0.0.1", "port": 8080}`.
+
+### Remote access via SSH
+
+The Web UI binds to localhost only. To access it from another machine, use SSH port forwarding:
+
+```bash
+ssh -L 8080:localhost:8080 user@your-server
+```
+
+Then open `http://localhost:8080` in your local browser. The tunnel stays open as long as the SSH connection is active.
+
+## Vault Setup
+
+Your vault is your primary knowledge store. outheis reads from it, writes to it (via cato and the Web UI), and learns from it over time. Structure is flexible — any Markdown files work. The recommended Agenda layout:
+
+```
+vault/
+└── Agenda/
+    ├── Agenda.md     # Today's schedule — written by cato
+    ├── Inbox.md      # Your quick capture — processed hourly
+    └── Exchange.md   # Async back-and-forth with cato
+```
+
+Create the `Agenda/` directory and empty files. cato generates `Agenda.md` on first run.
+
+## CLI Commands
+
+### Daemon Control
+
+```bash
+outheis start       # Start dispatcher (background)
+outheis start -f    # Start in foreground
+outheis start -fv   # Foreground + verbose (shows tool calls)
+outheis stop        # Stop dispatcher
+outheis status      # Show status, PID, uptime
+```
+
+### Messaging
+
+```bash
+outheis send "Hello"              # Single message
+outheis send "@zeno find notes"   # Direct to Data agent
+outheis chat                      # Interactive mode (with history)
+```
+
+### Memory
+
+```bash
+outheis memory              # Show all memories
+outheis memory --type user  # Show only user facts
+```
+
+### Rules
+
+```bash
+outheis rules         # Show all rules (system + user)
+outheis rules relay   # Show relay agent rules
+```
+
+## Talking to outheis
+
+Just talk naturally. Relay decides when to use tools:
+
+| You say | What happens |
+|---------|--------------|
+| "hi" | Direct response |
+| "was steht heute an?" | Uses check_agenda tool → Agenda agent |
+| "wo wohne ich?" | Uses search_vault tool → Data agent |
+| "! ich bin 54" | Saves to Memory (explicit marker) |
+
+### Explicit Agent Mentions
+
+Use `@name` for direct delegation:
+
+| Mention | Agent | Use for |
+|---------|-------|---------|
+| @zeno | Data | Search vault explicitly |
+| @cato | Agenda | Schedule queries |
+| @hiro | Action | External actions (future) |
+
+## Vault
+
+Your vault is a directory of Markdown files:
+
+```markdown
+---
+title: Project Alpha
+tags: [active, client-work]
+created: 2025-01-15
+---
+# Project Alpha
+
+Status update...
+```
+
+### Recommended Structure
+
+```
+vault/
+├── Agenda/
+│   ├── Agenda.md     # Today's schedule
+│   ├── Inbox.md      # Unprocessed items
+│   └── Exchange.md   # External sync
+├── projects/
+├── notes/
+└── references/
+```
+
+## Configuration
+
+`~/.outheis/human/config.json`:
+
+```json
+{
+  "user": {
+    "name": "string",
+    "language": "en|de|...",
+    "timezone": "Region/City",
+    "vault": ["~/path/to/vault"]
+  },
+  "llm": {
+    "provider": "anthropic"
+  }
+}
+```
+
+## Troubleshooting
+
+### "Dispatcher not running"
+
+```bash
+outheis status   # Check if running
+outheis start    # Start it
+```
+
+### Stale PID file
+
+```bash
+rm ~/.outheis/.dispatcher.pid
+outheis start
+```
+
+### No API key
+
+```bash
+export ANTHROPIC_API_KEY="sk-ant-..."
+# Or add to ~/.bashrc / ~/.zshrc
+```
+
+### "openai package not installed" (Ollama models)
+
+If you configure a model with `"provider": "ollama"`, outheis uses the OpenAI-compatible Ollama API and requires the `openai` Python package:
+
+```bash
+pip install openai
+```
+
+Also make sure Ollama itself is running (`ollama serve`) and the model is pulled (`ollama pull <model>`).
+
+### macOS: Daemon won't start in background
+
+Use foreground mode:
+
+```bash
+outheis start -f &
+```

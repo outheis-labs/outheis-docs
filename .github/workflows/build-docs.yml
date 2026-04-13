@@ -1,0 +1,42 @@
+name: Build Documentation
+
+on:
+  push:
+    branches: [main, feature/optimize-html]
+    paths:
+      - 'docs/**'
+      - 'docs-de/**'
+      - 'templates/**'
+      - 'scripts/**'
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      
+      - name: Install dependencies
+        run: |
+          pip install markdown
+      
+      - name: Generate contents.md
+        run: python scripts/generate-contents.py
+      
+      - name: Build HTML
+        run: python scripts/build-site.py
+      
+      - name: Commit and push if changed
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add docs/contents.md docs-de/contents.md html/
+          git diff --staged --quiet || git commit -m "Auto-generate contents and build HTML"
+          git push

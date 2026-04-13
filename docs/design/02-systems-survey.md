@@ -1,6 +1,6 @@
-# Systems Survey: Operating Systems and Applicable Concepts
+# Systems Survey
 
-This document surveys operating systems and architectural patterns relevant to multi-agent AI system design.
+*Operating systems and architectural patterns relevant to multi-agent AI system design.*
 
 ---
 

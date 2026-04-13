@@ -1,6 +1,3 @@
----
-title: Workflows
----
 
 # Workflows
 

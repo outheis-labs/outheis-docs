@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Communicating with outheis · outheis</title>
+  <link rel="icon" type="image/png" href="../favicon-96x96.png" sizes="96x96">
+  <link rel="icon" type="image/svg+xml" href="../favicon.svg">
+  <link rel="shortcut icon" href="../favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="../apple-touch-icon.png">
+  <link rel="manifest" href="../site.webmanifest">
+  <style>
+    @font-face {
+      font-family: 'Inter';
+      src: url('../assets/fonts/InterVariable.woff2') format('woff2');
+      font-weight: 100 900;
+      font-style: normal;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'IBM Plex Sans';
+      src: url('../assets/fonts/IBMPlexSans-Variable.woff2') format('woff2-variations');
+      font-weight: 100 700;
+      font-style: normal;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'IBM Plex Mono';
+      src: url('../assets/fonts/IBMPlexMono-Regular.woff2') format('woff2');
+      font-weight: 400;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'IBM Plex Sans', -apple-system, sans-serif;
+      background: #fff;
+      color: #1a1a1a;
+      line-height: 1.65;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .greek {
+      font-family: 'Inter', sans-serif;
+    }
+
+    /* Header with breadcrumb */
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 1.5rem;
+      border-bottom: 1px solid #e0e0e0;
+    }
+
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .logo {
+      font-family: 'Inter', sans-serif;
+      font-size: 20px;
+      font-weight: 500;
+    }
+
+    .breadcrumb {
+      font-size: 14px;
+      color: #888;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .breadcrumb a {
+      color: #666;
+    }
+
+    .breadcrumb a:hover {
+      color: #1a1a1a;
+    }
+
+    .breadcrumb .separator {
+      color: #ccc;
+    }
+
+    .breadcrumb .current {
+      color: #1a1a1a;
+    }
+
+    header nav {
+      font-size: 14px;
+      display: flex;
+      align-items: baseline;
+      gap: 1rem;
+    }
+
+    header nav a {
+      color: #888;
+    }
+
+    header nav a:hover {
+      color: #1a1a1a;
+    }
+
+    .lang-switch {
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-size: 14px;
+      color: #888;
+    }
+
+    .lang-switch a {
+      font-size: 14px;
+      color: #888;
+    }
+
+    .lang-switch a:hover {
+      color: #1a1a1a;
+    }
+
+    .lang-switch .lang-active {
+      color: #1a1a1a;
+      font-weight: 500;
+    }
+
+    /* Main */
+    main {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 3rem 1.5rem;
+    }
+
+    /* Page header */
+    .page-header {
+      margin-bottom: 3rem;
+    }
+
+    .page-header h1 {
+      font-family: 'Inter', sans-serif;
+      font-size: 36px;
+      font-weight: 500;
+      letter-spacing: -0.02em;
+    }
+
+    .page-header .subtitle {
+      font-size: 18px;
+      font-style: italic;
+      color: #555;
+      margin-top: 0.75rem;
+    }
+
+    /* Content sections */
+    .section {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+      padding: 2.5rem 0;
+      border-top: 1px solid #e0e0e0;
+    }
+
+    /* Mobile: hide label h2, show section-text h2 */
+    .section > h2 {
+      display: none;
+    }
+
+    .section-text h2 {
+      font-size: 20px;
+      font-weight: 500;
+      margin-bottom: 1rem;
+    }
+
+    .section-text > *:first-child {
+      margin-top: 0;
+    }
+
+    /* Hidden h2 is first-child on desktop, so target the visible first element */
+    .section-text > h2 + * {
+      margin-top: 0;
+    }
+
+    .section-text > h2 + p {
+      margin-top: 0;
+    }
+
+    .section-text p {
+      font-size: 16px;
+      line-height: 1.75;
+      color: #333;
+      margin-bottom: 1rem;
+    }
+
+    .section-text p:last-child {
+      margin-bottom: 0;
+    }
+
+    .section-text h3 {
+      font-size: 16px;
+      font-weight: 450;
+      color: #1a1a1a;
+      line-height: 1.75;
+      margin-top: 1.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .section-text h3:first-child,
+    .section-text > h2 + h3 {
+      margin-top: 0;
+    }
+
+    .section-text ul {
+      list-style: none;
+      margin-bottom: 1rem;
+    }
+
+    .section-text ul li {
+      font-size: 16px;
+      line-height: 1.65;
+      color: #333;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid #eee;
+    }
+
+    .section-text ul li:last-child {
+      border-bottom: none;
+    }
+
+    .section-text ol {
+      margin-bottom: 1rem;
+      padding-left: 1.5rem;
+    }
+
+    .section-text ol li {
+      font-size: 16px;
+      line-height: 1.65;
+      color: #333;
+      margin-bottom: 0.5rem;
+    }
+
+    .section-text code {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 14px;
+      background: #f5f5f5;
+      padding: 0.15em 0.4em;
+      border-radius: 2px;
+    }
+
+    .section-text pre {
+      background: #f5f5f5;
+      padding: 1rem 1.25rem;
+      overflow-x: auto;
+      margin: 1.5rem 0;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 13px;
+      line-height: 1.5;
+      border-radius: 2px;
+    }
+
+    .section-text pre code {
+      background: none;
+      padding: 0;
+    }
+
+    .section-text table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1.5rem 0;
+      font-size: 14px;
+    }
+
+    .section-text th,
+    .section-text td {
+      text-align: left;
+      padding: 0.5rem 0.75rem;
+      border-bottom: 1px solid #e0e0e0;
+    }
+
+    .section-text th {
+      font-weight: 500;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: #666;
+    }
+
+    .section-text blockquote {
+      border-left: 2px solid #e0e0e0;
+      padding-left: 1.25rem;
+      margin: 1.5rem 0;
+      color: #666;
+      font-style: italic;
+    }
+
+    .section-text a {
+      color: #666;
+    }
+
+    .section-text a:hover {
+      color: #1a1a1a;
+    }
+
+    /* TOC list styling */
+    .toc-list {
+      list-style: none;
+      padding-left: 0;
+    }
+
+    .toc-list li {
+      border-bottom: 1px solid #eee;
+    }
+
+    .toc-list li:last-child {
+      border-bottom: none;
+    }
+
+    .toc-list a {
+      display: block;
+      padding: 1rem 0;
+      color: #1a1a1a;
+    }
+
+    .toc-list li:first-child a {
+      padding-top: 0;
+    }
+
+    .toc-list a:hover {
+      background: #fafafa;
+      margin: 0 -1rem;
+      padding: 1rem;
+    }
+
+    .toc-list .title {
+      font-size: 16px;
+      font-weight: 500;
+      color: #1a1a1a;
+      margin-bottom: 0.25rem;
+    }
+
+    .toc-list .description {
+      font-size: 14px;
+      color: #666;
+      line-height: 1.5;
+    }
+
+    /* Book navigation */
+    .book-nav {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      gap: 1rem;
+      align-items: center;
+      padding: 2rem 0;
+      margin-top: 2rem;
+      border-top: 1px solid #e0e0e0;
+    }
+
+    .book-nav a {
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+      color: #666;
+    }
+
+    .book-nav a:hover {
+      color: #1a1a1a;
+    }
+
+    .book-nav .label {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: #888;
+    }
+
+    .book-nav .title {
+      font-size: 15px;
+      font-weight: 500;
+    }
+
+    .book-nav .prev {
+      text-align: left;
+    }
+
+    .book-nav .toc-center {
+      text-align: center;
+    }
+
+    .book-nav .toc-center a {
+      align-items: center;
+    }
+
+    .book-nav .next {
+      text-align: right;
+    }
+
+    /* Footer */
+    footer {
+      padding: 2rem 1.5rem;
+      max-width: 1100px;
+      margin: 0 auto;
+      border-top: 1px solid #e0e0e0;
+    }
+
+    footer .meta {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 12px;
+      color: #888;
+    }
+
+    footer .meta a {
+      color: #888;
+    }
+
+    footer .meta a:hover {
+      color: #333;
+    }
+
+    /* Desktop */
+    @media (min-width: 800px) {
+      header {
+        padding: 1.5rem 3rem;
+      }
+
+      main {
+        padding: 4rem 3rem;
+      }
+
+      .page-header h1 {
+        font-size: 48px;
+      }
+
+      .section {
+        grid-template-columns: 180px 1fr;
+        gap: 3rem;
+        padding: 3rem 0;
+        align-items: baseline;
+      }
+
+      .section > h2 {
+        display: block;
+        font-size: 18px;
+        font-weight: 500;
+        color: #1a1a1a;
+        line-height: 1.75;
+      }
+
+      .section-text h2 {
+        display: none;
+        position: absolute;
+        visibility: hidden;
+      }
+
+      .book-nav .title {
+        font-size: 16px;
+      }
+
+      footer {
+        padding: 2rem 3rem;
+      }
+    }
+
+    /* Mobile */
+    @media (max-width: 600px) {
+      .breadcrumb {
+        display: none;
+      }
+
+      .book-nav {
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: auto auto;
+      }
+
+      .book-nav .prev {
+        grid-column: 1;
+      }
+
+      .book-nav .next {
+        grid-column: 2;
+      }
+
+      .book-nav .toc-center {
+        grid-column: 1 / -1;
+        grid-row: 2;
+        margin-top: 1rem;
+        padding-top: 1rem;
+        border-top: 1px solid #eee;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="header-left">
+      <a href="../index.html" class="logo">οὐθείς</a>
+      
+    </div>
+    <nav>
+      <a href="../contents.html">Contents</a>
+      <a href="https://github.com/outheis-labs/outheis-beta">GitHub ↗</a>
+      <span class="lang-switch"><span class="lang-active">EN</span> · <a href="../de/installation/05-communication.html">DE</a></span>
+    </nav>
+  </header>
+
+  <main>
+    <div class="page-header">
+      <h1>Communicating with outheis</h1>
+      
+    </div>
+
+    <section class="section"><h2></h2><div class="section-text"><p>outheis can be reached through three channels. All channels connect to the same dispatcher and agents — the difference is where you type and how you receive responses.</p></div></section>
+
+    <section class="section" id="web-ui">
+      <h2>Web UI</h2>
+      <div class="section-text"><h2>Web UI</h2>
+        <p>A browser-based interface served locally by the dispatcher. No separate server needed — the Web UI is built into the daemon and starts automatically with it.</p>
+<p><strong>Access:</strong> <code>http://127.0.0.1:8080</code> (while dispatcher is running)</p>
+<p><strong>What it provides:</strong>
+- Live message feed showing all agent conversations in real time
+- Prompt input — send messages to the relay agent directly from the browser
+- Configuration editor (models, agents, providers, scheduler)
+- Memory, Rules, Skills viewer and editor
+- Vault file browser — browse, edit, and delete files across all configured vaults
+- Tags view — scan for <code>#tags</code>, rename or remove them across the vault
+- Scheduler — manage recurring tasks, view history</p>
+<p><strong>Configuration:</strong> Enabled by default. Port and host can be changed in <code>config.json</code>:</p>
+<pre><code class="language-json">&quot;webui&quot;: { &quot;host&quot;: &quot;127.0.0.1&quot;, &quot;port&quot;: 8080 }
+</code></pre>
+<p><strong>Remote access:</strong> The UI binds to localhost only. To reach it from another machine, use SSH port forwarding:</p>
+<pre><code class="language-bash">ssh -L 8080:localhost:8080 user@your-server
+</code></pre>
+<p>Then open <code>http://localhost:8080</code> in your local browser. The tunnel stays active as long as the SSH connection is open.</p>
+<p>For a full description of all views and API endpoints, see <a href="../implementation/webui.md">Web UI</a>.</p>
+      </div>
+    </section>
+
+    <section class="section" id="cli">
+      <h2>CLI</h2>
+      <div class="section-text"><h2>CLI</h2>
+        <p>Command-line interface for sending messages and managing the daemon. Available as <code>outheis</code> after installation.</p>
+<p><strong>Setup:</strong> Available after <code>pip install -e .</code> with the venv active.</p>
+<p><strong>Sending messages:</strong></p>
+<pre><code class="language-bash">outheis send &quot;What's on my agenda today?&quot;
+outheis send &quot;@zeno find notes about project alpha&quot;
+outheis chat                                        # interactive mode with history
+</code></pre>
+<p>The relay agent handles all messages and routes to the right agent automatically. Use <code>@name</code> to address an agent directly (<code>@zeno</code>, <code>@cato</code>, <code>@alan</code>, …).</p>
+<p><strong>Daemon control:</strong></p>
+<pre><code class="language-bash">outheis start         # start in background
+outheis start -f      # start in foreground
+outheis start -fv     # foreground + verbose (shows tool calls)
+outheis stop          # stop daemon
+outheis status        # show PID, uptime, agent status
+</code></pre>
+<p><strong>Inspecting memory and rules:</strong></p>
+<pre><code class="language-bash">outheis memory              # show all stored memories
+outheis memory --type user  # show only user facts
+outheis rules               # show all rules (system + user)
+outheis rules relay         # show rules for a specific agent
+</code></pre>
+      </div>
+    </section>
+
+    <section class="section" id="signal">
+      <h2>Signal</h2>
+      <div class="section-text"><h2>Signal</h2>
+        <p>Receive and send messages via the Signal messenger app. The bot runs as a separate process alongside the daemon — it listens for incoming Signal messages, routes them to the relay agent, and sends responses back. Voice messages are transcribed automatically if <code>faster-whisper</code> is installed.</p>
+<p><strong>When to use:</strong> The primary channel for interacting with outheis from a phone without opening a browser or terminal.</p>
+<h3 id="what-you-need">What you need</h3>
+<p>A dedicated SIM card with a phone number that is not already registered on Signal. This number becomes the bot's identity — it should not be your personal number. A prepaid SIM works fine; the number only needs to be reachable by SMS or voice call once during registration.</p>
+<h3 id="1-install-signal-cli">1. Install signal-cli</h3>
+<p>signal-cli requires Java 17+. Install it first if needed (<code>java -version</code> to check).</p>
+<p><strong>macOS (Homebrew):</strong></p>
+<pre><code class="language-bash">brew install signal-cli
+</code></pre>
+<p><strong>Linux / manual:</strong></p>
+<p>Download the latest release from <a href="https://github.com/AsamK/signal-cli/releases">github.com/AsamK/signal-cli/releases</a>. Extract and place the <code>signal-cli</code> binary somewhere on your <code>$PATH</code> (e.g. <code>/usr/local/bin/signal-cli</code>).</p>
+<p>Verify:</p>
+<pre><code class="language-bash">signal-cli --version
+</code></pre>
+<h3 id="2-register-the-bot-number">2. Register the bot number</h3>
+<p>Replace <code>+49...</code> with the bot's phone number in international format throughout.</p>
+<pre><code class="language-bash">signal-cli -a +49... register
+</code></pre>
+<p>Signal sends a verification code to the number via SMS. If SMS is not available, request a voice call instead:</p>
+<pre><code class="language-bash">signal-cli -a +49... register --voice
+</code></pre>
+<p>Confirm with the received code:</p>
+<pre><code class="language-bash">signal-cli -a +49... verify 123-456
+</code></pre>
+<p>The account is now registered. signal-cli stores credentials under <code>~/.local/share/signal-cli/</code>.</p>
+<h3 id="3-trust-your-own-number">3. Trust your own number</h3>
+<p>Before the bot can exchange messages with your personal Signal account, you need to trust the safety number once:</p>
+<pre><code class="language-bash">signal-cli -a +49... trust -v &lt;safety-number&gt; +49YOUR_PERSONAL_NUMBER
+</code></pre>
+<p>To get the safety number:</p>
+<pre><code class="language-bash">signal-cli -a +49... listIdentities
+</code></pre>
+<p>Alternatively, send a test message first — signal-cli will print an untrusted identity warning with the safety number included, which you can then use to run the trust command.</p>
+<h3 id="4-configure-outheis">4. Configure outheis</h3>
+<p>Add the Signal section to <code>~/.outheis/human/config.json</code>:</p>
+<pre><code class="language-json">&quot;signal&quot;: {
+  &quot;enabled&quot;: true,
+  &quot;bot_name&quot;: &quot;Ou&quot;,
+  &quot;bot_phone&quot;: &quot;+49...&quot;,
+  &quot;allowed&quot;: []
+}
+</code></pre>
+<p>Set <code>bot_phone</code> to the registered bot number. <code>bot_name</code> is the display name Signal contacts will see. <code>allowed</code> is a whitelist of phone numbers permitted to interact with the bot — an empty list means only <code>human.phone</code> (from the <code>human</code> section) can send messages.</p>
+<p>Make sure <code>human.phone</code> in the config is set to your personal number:</p>
+<pre><code class="language-json">&quot;human&quot;: {
+  &quot;phone&quot;: &quot;+49YOUR_PERSONAL_NUMBER&quot;,
+  ...
+}
+</code></pre>
+<h3 id="5-optional-voice-transcription">5. Optional: voice transcription</h3>
+<p>To transcribe incoming voice messages before forwarding them to the relay agent:</p>
+<pre><code class="language-bash">pip install -e &quot;.[signal]&quot;
+</code></pre>
+<p>This installs <code>faster-whisper</code>. Without it the transport still works; voice messages are silently skipped.</p>
+<h3 id="6-run">6. Run</h3>
+<pre><code class="language-bash">outheis signal        # foreground
+outheis signal -v     # verbose (shows tool calls)
+</code></pre>
+<p>Signal transport and the main daemon run independently. Start the daemon first (<code>outheis start</code>), then the Signal transport in a separate terminal or as a background process.</p>
+<p>For details on the internal architecture, see <a href="../implementation/signal.md">Signal</a>.</p>
+      </div>
+    </section>
+
+    <nav class="book-nav">
+      <div class="prev"></div>
+      <div class="toc-center"><a href="../contents.html#">
+          <span class="label">Contents</span>
+          <span class="title"></span>
+        </a></div>
+      <div class="next"></div>
+    </nav>
+  </main>
+
+  <footer>
+    <div class="meta">
+      open source · AGPL-3.0 · <a href="https://github.com/outheis-labs">github.com/outheis-labs</a>
+    </div>
+  </footer>
+
+</body>
+</html>

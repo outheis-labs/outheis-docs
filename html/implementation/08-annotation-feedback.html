@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Annotation Feedback Loop · outheis</title>
+  <link rel="icon" type="image/png" href="../favicon-96x96.png" sizes="96x96">
+  <link rel="icon" type="image/svg+xml" href="../favicon.svg">
+  <link rel="shortcut icon" href="../favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="../apple-touch-icon.png">
+  <link rel="manifest" href="../site.webmanifest">
+  <style>
+    @font-face {
+      font-family: 'Inter';
+      src: url('../assets/fonts/InterVariable.woff2') format('woff2');
+      font-weight: 100 900;
+      font-style: normal;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'IBM Plex Sans';
+      src: url('../assets/fonts/IBMPlexSans-Variable.woff2') format('woff2-variations');
+      font-weight: 100 700;
+      font-style: normal;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'IBM Plex Mono';
+      src: url('../assets/fonts/IBMPlexMono-Regular.woff2') format('woff2');
+      font-weight: 400;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'IBM Plex Sans', -apple-system, sans-serif;
+      background: #fff;
+      color: #1a1a1a;
+      line-height: 1.65;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .greek {
+      font-family: 'Inter', sans-serif;
+    }
+
+    /* Header with breadcrumb */
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 1.5rem;
+      border-bottom: 1px solid #e0e0e0;
+    }
+
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .logo {
+      font-family: 'Inter', sans-serif;
+      font-size: 20px;
+      font-weight: 500;
+    }
+
+    .breadcrumb {
+      font-size: 14px;
+      color: #888;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .breadcrumb a {
+      color: #666;
+    }
+
+    .breadcrumb a:hover {
+      color: #1a1a1a;
+    }
+
+    .breadcrumb .separator {
+      color: #ccc;
+    }
+
+    .breadcrumb .current {
+      color: #1a1a1a;
+    }
+
+    header nav {
+      font-size: 14px;
+      display: flex;
+      align-items: baseline;
+      gap: 1rem;
+    }
+
+    header nav a {
+      color: #888;
+    }
+
+    header nav a:hover {
+      color: #1a1a1a;
+    }
+
+    .lang-switch {
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-size: 14px;
+      color: #888;
+    }
+
+    .lang-switch a {
+      font-size: 14px;
+      color: #888;
+    }
+
+    .lang-switch a:hover {
+      color: #1a1a1a;
+    }
+
+    .lang-switch .lang-active {
+      color: #1a1a1a;
+      font-weight: 500;
+    }
+
+    /* Main */
+    main {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 3rem 1.5rem;
+    }
+
+    /* Page header */
+    .page-header {
+      margin-bottom: 3rem;
+    }
+
+    .page-header h1 {
+      font-family: 'Inter', sans-serif;
+      font-size: 36px;
+      font-weight: 500;
+      letter-spacing: -0.02em;
+    }
+
+    .page-header .subtitle {
+      font-size: 18px;
+      font-style: italic;
+      color: #555;
+      margin-top: 0.75rem;
+    }
+
+    /* Content sections */
+    .section {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+      padding: 2.5rem 0;
+      border-top: 1px solid #e0e0e0;
+    }
+
+    /* Mobile: hide label h2, show section-text h2 */
+    .section > h2 {
+      display: none;
+    }
+
+    .section-text h2 {
+      font-size: 20px;
+      font-weight: 500;
+      margin-bottom: 1rem;
+    }
+
+    .section-text > *:first-child {
+      margin-top: 0;
+    }
+
+    /* Hidden h2 is first-child on desktop, so target the visible first element */
+    .section-text > h2 + * {
+      margin-top: 0;
+    }
+
+    .section-text > h2 + p {
+      margin-top: 0;
+    }
+
+    .section-text p {
+      font-size: 16px;
+      line-height: 1.75;
+      color: #333;
+      margin-bottom: 1rem;
+    }
+
+    .section-text p:last-child {
+      margin-bottom: 0;
+    }
+
+    .section-text h3 {
+      font-size: 16px;
+      font-weight: 450;
+      color: #1a1a1a;
+      line-height: 1.75;
+      margin-top: 1.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .section-text h3:first-child,
+    .section-text > h2 + h3 {
+      margin-top: 0;
+    }
+
+    .section-text ul {
+      list-style: none;
+      margin-bottom: 1rem;
+    }
+
+    .section-text ul li {
+      font-size: 16px;
+      line-height: 1.65;
+      color: #333;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid #eee;
+    }
+
+    .section-text ul li:last-child {
+      border-bottom: none;
+    }
+
+    .section-text ol {
+      margin-bottom: 1rem;
+      padding-left: 1.5rem;
+    }
+
+    .section-text ol li {
+      font-size: 16px;
+      line-height: 1.65;
+      color: #333;
+      margin-bottom: 0.5rem;
+    }
+
+    .section-text code {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 14px;
+      background: #f5f5f5;
+      padding: 0.15em 0.4em;
+      border-radius: 2px;
+    }
+
+    .section-text pre {
+      background: #f5f5f5;
+      padding: 1rem 1.25rem;
+      overflow-x: auto;
+      margin: 1.5rem 0;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 13px;
+      line-height: 1.5;
+      border-radius: 2px;
+    }
+
+    .section-text pre code {
+      background: none;
+      padding: 0;
+    }
+
+    .section-text table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1.5rem 0;
+      font-size: 14px;
+    }
+
+    .section-text th,
+    .section-text td {
+      text-align: left;
+      padding: 0.5rem 0.75rem;
+      border-bottom: 1px solid #e0e0e0;
+    }
+
+    .section-text th {
+      font-weight: 500;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: #666;
+    }
+
+    .section-text blockquote {
+      border-left: 2px solid #e0e0e0;
+      padding-left: 1.25rem;
+      margin: 1.5rem 0;
+      color: #666;
+      font-style: italic;
+    }
+
+    .section-text a {
+      color: #666;
+    }
+
+    .section-text a:hover {
+      color: #1a1a1a;
+    }
+
+    /* TOC list styling */
+    .toc-list {
+      list-style: none;
+      padding-left: 0;
+    }
+
+    .toc-list li {
+      border-bottom: 1px solid #eee;
+    }
+
+    .toc-list li:last-child {
+      border-bottom: none;
+    }
+
+    .toc-list a {
+      display: block;
+      padding: 1rem 0;
+      color: #1a1a1a;
+    }
+
+    .toc-list li:first-child a {
+      padding-top: 0;
+    }
+
+    .toc-list a:hover {
+      background: #fafafa;
+      margin: 0 -1rem;
+      padding: 1rem;
+    }
+
+    .toc-list .title {
+      font-size: 16px;
+      font-weight: 500;
+      color: #1a1a1a;
+      margin-bottom: 0.25rem;
+    }
+
+    .toc-list .description {
+      font-size: 14px;
+      color: #666;
+      line-height: 1.5;
+    }
+
+    /* Book navigation */
+    .book-nav {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      gap: 1rem;
+      align-items: center;
+      padding: 2rem 0;
+      margin-top: 2rem;
+      border-top: 1px solid #e0e0e0;
+    }
+
+    .book-nav a {
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+      color: #666;
+    }
+
+    .book-nav a:hover {
+      color: #1a1a1a;
+    }
+
+    .book-nav .label {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: #888;
+    }
+
+    .book-nav .title {
+      font-size: 15px;
+      font-weight: 500;
+    }
+
+    .book-nav .prev {
+      text-align: left;
+    }
+
+    .book-nav .toc-center {
+      text-align: center;
+    }
+
+    .book-nav .toc-center a {
+      align-items: center;
+    }
+
+    .book-nav .next {
+      text-align: right;
+    }
+
+    /* Footer */
+    footer {
+      padding: 2rem 1.5rem;
+      max-width: 1100px;
+      margin: 0 auto;
+      border-top: 1px solid #e0e0e0;
+    }
+
+    footer .meta {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 12px;
+      color: #888;
+    }
+
+    footer .meta a {
+      color: #888;
+    }
+
+    footer .meta a:hover {
+      color: #333;
+    }
+
+    /* Desktop */
+    @media (min-width: 800px) {
+      header {
+        padding: 1.5rem 3rem;
+      }
+
+      main {
+        padding: 4rem 3rem;
+      }
+
+      .page-header h1 {
+        font-size: 48px;
+      }
+
+      .section {
+        grid-template-columns: 180px 1fr;
+        gap: 3rem;
+        padding: 3rem 0;
+        align-items: baseline;
+      }
+
+      .section > h2 {
+        display: block;
+        font-size: 18px;
+        font-weight: 500;
+        color: #1a1a1a;
+        line-height: 1.75;
+      }
+
+      .section-text h2 {
+        display: none;
+        position: absolute;
+        visibility: hidden;
+      }
+
+      .book-nav .title {
+        font-size: 16px;
+      }
+
+      footer {
+        padding: 2rem 3rem;
+      }
+    }
+
+    /* Mobile */
+    @media (max-width: 600px) {
+      .breadcrumb {
+        display: none;
+      }
+
+      .book-nav {
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: auto auto;
+      }
+
+      .book-nav .prev {
+        grid-column: 1;
+      }
+
+      .book-nav .next {
+        grid-column: 2;
+      }
+
+      .book-nav .toc-center {
+        grid-column: 1 / -1;
+        grid-row: 2;
+        margin-top: 1rem;
+        padding-top: 1rem;
+        border-top: 1px solid #eee;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="header-left">
+      <a href="../index.html" class="logo">οὐθείς</a>
+      <div class="breadcrumb">
+        <span class="separator">/</span>
+        <a href="../contents.html#implementation">Implementation</a>
+        <span class="separator">/</span>
+        <span class="current">Annotation Feedback</span>
+      </div>
+    </div>
+    <nav>
+      <a href="../contents.html#implementation">Contents</a>
+      <a href="https://github.com/outheis-labs/outheis-beta">GitHub ↗</a>
+      <span class="lang-switch"><span class="lang-active">EN</span> · <a href="../de/implementation/08-annotation-feedback.html">DE</a></span>
+    </nav>
+  </header>
+
+  <main>
+    <div class="page-header">
+      <h1>Annotation Feedback Loop</h1>
+      <p class="subtitle">How `>` annotations route into the memory stack — the current gap and the planned implementation.</p>
+    </div>
+
+    <section class="section" id="what-annotations-are">
+      <h2>What Annotations Are</h2>
+      <div class="section-text"><h2>What Annotations Are</h2>
+        <p>A <code>&gt;</code> line written beneath an item in Agenda.md is a direct correction from the user. The agent (cato) processes it: rewrites the item, removes the annotation line, and moves on.</p>
+<p>The correction is acted on. The <em>knowledge</em> that caused the correction is not persisted.</p>
+      </div>
+    </section>
+
+    <section class="section" id="three-types-three-layers">
+      <h2>Three Types, Three Layers</h2>
+      <div class="section-text"><h2>Three Types, Three Layers</h2>
+        <p>Annotations are not all the same kind of signal. They fall into three categories, each corresponding to a layer of the <a href="../design/07-hybrid-memory-stack.html">hybrid memory stack</a>:</p>
+<p><strong>Factual correction</strong> — "that's wrong — I called them two days ago"
+→ New information about the world the system operates in
+→ Target: <strong>Memory</strong> (persistent observations, stored as entries)</p>
+<p><strong>Behavioral correction</strong> — "don't describe a gap of days as 'weeks'"
+→ A rule about how the system should express itself or act
+→ Target: <strong>Rules</strong> (stable constraints, written in Markdown)</p>
+<p><strong>Preference / structural correction</strong> — "the cashflow section should be 3 lines, not 20"
+→ Condensed procedural knowledge about what good output looks like
+→ Target: <strong>Skills</strong> (dense principles directing agent attention)</p>
+<p>The content of the annotation itself determines the type. Classification is a task for the agent, not the code.</p>
+      </div>
+    </section>
+
+    <section class="section" id="the-missing-loop">
+      <h2>The Missing Loop</h2>
+      <div class="section-text"><h2>The Missing Loop</h2>
+        <p>The current implementation stops after processing:</p>
+<pre><code>Human writes &gt; correction
+    ↓
+cato rewrites the item correctly       ✓
+cato removes the &gt; line                ✓
+    ↓
+Factual content → Memory               ✗
+Behavioral rule → Rules layer          ✗
+Preference → Skills layer              ✗
+    ↓
+rumi promotes stable patterns → Rules  ✗
+</code></pre>
+<p>Every correction is a one-shot event. The system is correctable, not learnable. The same error can recur on the next Agenda run because nothing was written to the memory stack.</p>
+      </div>
+    </section>
+
+    <section class="section" id="planned-implementation">
+      <h2>Planned Implementation</h2>
+      <div class="section-text"><h2>Planned Implementation</h2>
+        <p>A complete loop would treat significant annotations as learning events alongside processing events:</p>
+<ol>
+<li><strong>cato processes</strong> — rewrite item, remove <code>&gt;</code> line (no change from current behavior)</li>
+<li><strong>cato classifies</strong> — identify annotation type: factual, behavioral, or preference</li>
+<li><strong>cato writes proposal</strong> — for factual content: a Memory proposal to <code>Migration/Exchange.md</code>; for behavioral/preference: a <code>rule:agenda</code> or <code>skill</code> proposal, also via Exchange.md</li>
+<li><strong>rumi picks up</strong> — on the next <code>memory_migrate</code> run, rumi processes these proposals alongside other migration sources</li>
+<li><strong>user reviews</strong> — the proposal appears in Exchange.md with the same Accept/Reject mechanism as all other migrations</li>
+</ol>
+<p>This connects cato and rumi into a single coherent loop. Corrections made today become rules that prevent the same error tomorrow. The memory stack grows from lived use, not only from explicit migration sessions.</p>
+<h3 id="proposal-format">Proposal format</h3>
+<p>Proposals written by cato follow the existing Exchange.md item format, so rumi and the review UI handle them without modification:</p>
+<pre><code class="language-markdown">*extracted: 2026-04-07 14:32*
+[factual] Last call with parents was 2 days ago, not weeks. [memory]
+- [ ] Accept
+- [ ] Reject
+</code></pre>
+<p>The <code>[rule:agenda]</code> and <code>[skill]</code> types extend the existing type vocabulary.</p>
+      </div>
+    </section>
+
+    <section class="section" id="implementation">
+      <h2>Implementation</h2>
+      <div class="section-text"><h2>Implementation</h2>
+        <p>Implemented in <code>agenda.py</code> on branch <code>annotation-loop</code> (2026-04-08).</p>
+<h3 id="propose_memory-tool">propose_memory tool</h3>
+<p>cato has a new tool <code>propose_memory(content, type)</code> that appends a proposal to
+<code>Migration/Exchange.md</code> in the same <code>---</code> separated, checkbox format that
+rumi's Phase A parser already reads:</p>
+<pre><code class="language-markdown">---
+*from annotation: 2026-04-08 09:15*
+Email an Justizministerium gesendet, Antwort erwartet bis Freitag. [user]
+- [ ] Accept
+- [ ] Reject
+---
+</code></pre>
+<p>The <code>[type]</code> tag uses the existing vocabulary: <code>user</code>, <code>rule:agenda</code>, <code>skill</code>.</p>
+<h3 id="when-cato-proposes">When cato proposes</h3>
+<table>
+<thead>
+<tr>
+<th>Annotation type</th>
+<th>Trigger</th>
+<th>Memory type</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Correction / clarification</td>
+<td>Always</td>
+<td><code>user</code></td>
+</tr>
+<tr>
+<td>Behavioral instruction (<code>immer</code>, <code>grundsätzlich</code>, <code>nie</code>, <code>ab jetzt</code>, <code>always</code>, <code>never</code>)</td>
+<td>Always</td>
+<td><code>rule:agenda</code></td>
+</tr>
+<tr>
+<td>Completion with meaningful context</td>
+<td>When outcome contains a fact</td>
+<td><code>user</code></td>
+</tr>
+<tr>
+<td>Trivial completion (<code>erledigt</code>, <code>done</code>)</td>
+<td>Never</td>
+<td>—</td>
+</tr>
+<tr>
+<td>Postpone</td>
+<td>Never</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<h3 id="data-flow">Data flow</h3>
+<pre><code>User annotates Agenda.md with &gt; line
+    ↓
+cato processes annotation (rewrite / remove / update Shadow.md)
+    ↓
+cato calls propose_memory if annotation reveals something worth keeping
+    ↓
+Proposal written to Migration/Exchange.md (same format as all migration proposals)
+    ↓
+Next memory_migrate run — rumi Phase A reads and processes
+    ↓
+User accepts or rejects in Exchange.md
+    ↓
+Accepted → stored in memory / rules / skills
+</code></pre>
+<h3 id="rumi-no-changes-needed">rumi — no changes needed</h3>
+<p>rumi's Phase A already processes <code>Migration/Exchange.md</code> in this format.
+cato-generated proposals flow through the same review pipeline as explicit
+migration sessions.</p>
+      </div>
+    </section>
+
+    <section class="section" id="status">
+      <h2>Status</h2>
+      <div class="section-text"><h2>Status</h2>
+        <ul>
+<li><code>&gt;</code> annotation processing: <strong>implemented</strong> (<code>agenda.py</code>)</li>
+<li><code>propose_memory</code> tool + system prompt: <strong>implemented</strong> (<code>annotation-loop</code> branch)</li>
+<li>rumi Phase A pickup: <strong>works without changes</strong> — format is identical</li>
+</ul>
+      </div>
+    </section>
+
+    <nav class="book-nav">
+      <div class="prev"><a href="../implementation/07-signal.html">
+          <span class="label">← Previous</span>
+          <span class="title">Signal</span>
+        </a></div>
+      <div class="toc-center"><a href="../contents.html#implementation">
+          <span class="label">Contents</span>
+          <span class="title">Implementation</span>
+        </a></div>
+      <div class="next"><a href="../implementation/09-vault.html">
+          <span class="label">Next →</span>
+          <span class="title">Vault</span>
+        </a></div>
+    </nav>
+  </main>
+
+  <footer>
+    <div class="meta">
+      open source · AGPL-3.0 · <a href="https://github.com/outheis-labs">github.com/outheis-labs</a>
+    </div>
+  </footer>
+
+</body>
+</html>

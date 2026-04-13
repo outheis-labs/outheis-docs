@@ -1,8 +1,12 @@
 # Attention as Architecture
 
+*Learned attention mechanisms can replace complex sequential processing*
+
+---
+
 ## The Structural Analogy
 
-The transformer architecture's central insight — that learned attention mechanisms can replace complex sequential processing — applies directly to how outheis is structured. This isn't metaphor. It's the same principle operating at a different level of abstraction.
+The LLM transformer architecture's central insight — that learned attention mechanisms can replace complex sequential processing — applies directly to how outheis is structured. This isn't metaphor. It's the same principle operating at a different level of abstraction.
 
 | LLM Concept | outheis Equivalent |
 |---|---|

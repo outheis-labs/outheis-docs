@@ -1,36 +1,58 @@
-# οὐθείς (outheis)
+# οὐθείς
 
-*Niemand — und jeder, der sich weigert, vereinnahmt zu werden.*
+Jede deiner KI-Interaktionen repräsentiert dich — Anfragen, Muster, Denkweisen. Mit der Zeit vervollständigt sich das Puzzle. Nicht für dich, sondern für die Plattformbetreiber.
 
----
-
-Persönlicher KI-Assistent (Second Brain), der Privatspähre als zentralen Wert betrachtet und von Grund auf menschzentriert gedacht ist. Entwickelt wie Infrastruktur, nicht wie ein Produkt.
-
-Sowohl als persönlicher Assistent (1:1) als auch im Domänenexperten-Modus (many:1) verwendbar.
-
----
-![outheis-slips (Original: Henri Fuseli - Blinded Polyphemus Checks the Sheep as they leave the Cave)](https://github.com/user-attachments/assets/ba35428e-b320-4be3-ae9a-6d4ec61a5962)
+**outheis stellt eine andere Perspektive in den Mittelpunkt: kognitive Souveränität. Es ist die digitale Repräsentation deiner Art zu denken — auf deinem Rechner, unter deiner Kontrolle.**
 
 ---
 
-Als Odysseus dem Zyklopen entkommt, nennt er sich οὐθείς — *niemand*. Der Zyklop ruft: "Niemand hat mich geblendet!". Deshalb kommt ihm keiner zu Hilfe. Odysseus gelingt es, am Bauch eines Widders zu entkommen. 
+## Die Realität
 
-Das ist ein Trick, aber auch eine Haltung: Indem Odysseus sich weigert, benannt, erfasst oder festgelegt zu werden, behält er seine Handlungsfreiheit.
+Der Begriff *captured cognition* (vereinnahmte Kognition) beschreibt es gut: Deine mentale Arbeit, externalisiert durch KI-Interaktion, wird zum Rohmaterial für Systeme, die dir nicht dienen.
 
-outheis trägt diese Idee in die Interaktion mit KI. Das System kennt dich — aber ausschließlich lokal, unter deiner Kontrolle, es ist nur deiner Arbeit verpflichtet. Deine Unterhaltungen, Notizen, deine Denkmuster sind dort, um dir zu helfen — nicht um erfasst, profiliert, monetarisiert zu werden.
+Diese Assistenten lernen von dir. Das Gelernte gehört jemand anderem. Das ist keine Ablehnung von KI generell — es ist eine Ablehnung des extraktiven Modells, das derzeit dominiert.
 
-Fünf Agenten koordinieren sich über Nachrichten. Dein Wissen bleibt in einem lokalen Vault. Nichts verlässt das System ohne deine Absicht.
+## οὐθείς
 
----
+Als Polyphem fragt, wer ihn geblendet hat, antwortet Odysseus: οὐθείς — niemand. Der Zyklop ruft um Hilfe: "Niemand hat mich geblendet!" Hilfe bleibt aus. Odysseus entkommt, am Bauch des Widders festgeklammert.
 
-## Dokumentation
+Es ist ein Trick, aber auch eine Haltung: Indem er sich weigert, benannt, erfasst, festgelegt zu werden, bleibt Odysseus handlungsfähig.
 
-**[Installation](installation/)** — Public Beta-Version. Anforderungen, Einrichtung, erste Schritte, bekannte Lücken.
+outheis trägt diese Idee in die KI-Interaktion. Das System kennt dich — aber nur lokal, nur unter deiner Kontrolle, nur im Dienst deiner Arbeit.
 
-**[Grundlagen](foundations/)** — Warum Souveränität wichtig ist. Das Problem der vereinnahmten Kognition.
+## Das System
 
-**[Design](design/)** — OS-Prinzipien auf agents angewendet. Architekturspezifikation, Datenformate, agent-Prompts.
+Ein lokal laufender Multi-Agenten-KI-Assistent. Ein zweites Gehirn — privat, menschzentriert, deins. Gebaut als Infrastruktur, nicht als Produkt. Funktioniert als persönlicher Assistent (1:1) oder Domänenexperte (n:1).
 
-**[Implementierung](implementation/)** — Aktueller Stand. Architektur, agents, Konfiguration, vault, Tags, Migration.
+## Souveränität
 
-**[Workflows](workflows/)** — Praktische Anleitungen. Wie man täglich mit outheis arbeitet.
+- Deine Daten bleiben auf deinem Rechner. *Keine Cloud, keine Erfassung.*
+- Der Assistent lernt von dir. *Das Gelernte gehört dir.*
+- Append-only Logs. *Keine versteckten Zustände.*
+- Markdown und JSON. *Portabel, lesbar, kein Lock-in.*
+
+## Architektur
+
+Unterschiedliche Agenten, jeder verantwortlich für eine definierte Aufgabe. Bewährte Betriebssystem-Designprinzipien: Microkernel-angelehnter Dispatcher, Koordination via Messages, abgegrenzte Aufgabenkorridore, Fehlerisolation.
+
+<div class="agents-grid">
+  <div class="agent agent-ou"><div class="agent-name">ou</div><div class="agent-role">Relay Agent</div></div>
+  <div class="agent agent-zeno"><div class="agent-name">zeno</div><div class="agent-role">Data Agent</div></div>
+  <div class="agent agent-cato"><div class="agent-name">cato</div><div class="agent-role">Agenda Agent</div></div>
+  <div class="agent agent-hiro"><div class="agent-name">hiro</div><div class="agent-role">Action Agent</div></div>
+  <div class="agent agent-rumi"><div class="agent-name">rumi</div><div class="agent-role">Pattern Agent</div></div>
+</div>
+
+## Weiterlesen
+
+<ul class="links-list">
+  <li><a href="foundations/">Grundlagen</a></li>
+  <li><a href="design/">Designprinzipien</a></li>
+  <li><a href="implementation/">Implementierung</a></li>
+  <li><a href="installation/">Installation</a></li>
+  <li><a href="workflows/">Workflows</a></li>
+</ul>
+
+## Über das Projekt
+
+outheis wird von Markus Schatzl entwickelt. Bei Interesse — als Nutzer, Mitarbeiter oder Investor — gerne melden: [technology.culture@proton.me](mailto:technology.culture@proton.me)

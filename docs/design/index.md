@@ -2,9 +2,11 @@
 
 *Technical foundations — the conceptual architecture before code.*
 
-These documents capture the design rationale, not the implementation. They explain *why* outheis works the way it does, drawing from operating system research and distributed systems theory.
+---
 
 ## Documents
+
+These documents capture the design rationale, not the implementation. They explain *why* outheis works the way it does, drawing from operating system research and distributed systems theory.
 
 ### [Why OS Principles](01-why-os-principles.html)
 

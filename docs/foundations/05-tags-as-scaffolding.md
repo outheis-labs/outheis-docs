@@ -1,5 +1,9 @@
 # Tags as Scaffolding: A Deprecation Path
 
+*Full free text analysis is not yet feasible due to general limitations of current models, but will be the long-term path to AI interaction.*
+
+---
+
 ## The Problem with Full Text Comprehension — Today
 
 A personal AI system that understands the user deeply would ideally derive everything from free text. It would read a note, infer its urgency, its category, its relationship to ongoing projects — without any explicit markup. The user writes naturally; the system understands.
