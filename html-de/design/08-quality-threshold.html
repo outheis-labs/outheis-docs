@@ -1,0 +1,697 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Die Qualitätsschwelle: Warum Fähigkeit nicht linear skaliert · outheis</title>
+  <link rel="icon" type="image/png" href="../favicon-96x96.png" sizes="96x96">
+  <link rel="icon" type="image/svg+xml" href="../favicon.svg">
+  <link rel="shortcut icon" href="../favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="../apple-touch-icon.png">
+  <link rel="manifest" href="../site.webmanifest">
+  <style>
+    @font-face {
+      font-family: 'Inter';
+      src: url('../assets/fonts/InterVariable.woff2') format('woff2');
+      font-weight: 100 900;
+      font-style: normal;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'IBM Plex Sans';
+      src: url('../assets/fonts/IBMPlexSans-Variable.woff2') format('woff2-variations');
+      font-weight: 100 700;
+      font-style: normal;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'IBM Plex Mono';
+      src: url('../assets/fonts/IBMPlexMono-Regular.woff2') format('woff2');
+      font-weight: 400;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'IBM Plex Sans', -apple-system, sans-serif;
+      background: #fff;
+      color: #1a1a1a;
+      line-height: 1.65;
+      -webkit-text-size-adjust: 100%;
+      text-size-adjust: 100%;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .greek {
+      font-family: 'Inter', sans-serif;
+    }
+
+    /* Header with breadcrumb */
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 1.5rem;
+      border-bottom: 1px solid #e0e0e0;
+      position: sticky;
+      top: 0;
+      background: #fff;
+      z-index: 100;
+    }
+
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .logo {
+      font-family: 'Inter', sans-serif;
+      font-size: 20px;
+      font-weight: 500;
+    }
+
+    .breadcrumb {
+      font-size: 14px;
+      color: #888;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .breadcrumb a {
+      color: #666;
+    }
+
+    .breadcrumb a:hover {
+      color: #1a1a1a;
+    }
+
+    .breadcrumb .separator {
+      color: #ccc;
+    }
+
+    .breadcrumb .current {
+      color: #1a1a1a;
+    }
+
+    header nav {
+      font-size: 14px;
+      display: flex;
+      align-items: baseline;
+      gap: 1rem;
+    }
+
+    header nav a {
+      color: #888;
+    }
+
+    header nav a:hover {
+      color: #1a1a1a;
+    }
+
+    .lang-switch {
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-size: 14px;
+      color: #888;
+    }
+
+    .lang-switch a {
+      font-size: 14px;
+      color: #888;
+    }
+
+    .lang-switch a:hover {
+      color: #1a1a1a;
+    }
+
+    .lang-switch .lang-active {
+      color: #1a1a1a;
+      font-weight: 500;
+    }
+
+    /* Main */
+    main {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 3rem 1.5rem;
+    }
+
+    /* Page header */
+    .page-header {
+      margin-bottom: 3rem;
+    }
+
+    .page-header h1 {
+      font-family: 'Inter', sans-serif;
+      font-size: 36px;
+      font-weight: 500;
+      letter-spacing: -0.02em;
+    }
+
+    .page-header .subtitle {
+      font-size: 18px;
+      font-style: italic;
+      color: #555;
+      margin-top: 0.75rem;
+    }
+
+    /* Content sections */
+    .section {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+      padding: 2.5rem 0;
+      border-top: 1px solid #e0e0e0;
+    }
+
+    /* Mobile: hide label h2, show section-text h2 */
+    .section > h2 {
+      display: none;
+    }
+
+    .section-text h2 {
+      font-size: 20px;
+      font-weight: 500;
+      margin-bottom: 1rem;
+    }
+
+    .section-text > *:first-child {
+      margin-top: 0;
+    }
+
+    /* Hidden h2 is first-child on desktop, so target the visible first element */
+    .section-text > h2 + * {
+      margin-top: 0;
+    }
+
+    .section-text > h2 + p {
+      margin-top: 0;
+    }
+
+    .section-text p {
+      font-size: 16px;
+      line-height: 1.75;
+      color: #333;
+      margin-bottom: 1rem;
+    }
+
+    .section-text p:last-child {
+      margin-bottom: 0;
+    }
+
+    .section-text h3 {
+      font-size: 16px;
+      font-weight: 450;
+      color: #1a1a1a;
+      line-height: 1.75;
+      margin-top: 1.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .section-text h3:first-child,
+    .section-text > h2 + h3 {
+      margin-top: 0;
+    }
+
+    .section-text ul {
+      list-style: none;
+      margin-bottom: 1rem;
+    }
+
+    .section-text ul li {
+      font-size: 16px;
+      line-height: 1.65;
+      color: #333;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid #eee;
+    }
+
+    .section-text ul li:last-child {
+      border-bottom: none;
+    }
+
+    .section-text ol {
+      margin-bottom: 1rem;
+      padding-left: 1.5rem;
+    }
+
+    .section-text ol li {
+      font-size: 16px;
+      line-height: 1.65;
+      color: #333;
+      margin-bottom: 0.5rem;
+    }
+
+    .section-text code {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 14px;
+      background: #f5f5f5;
+      padding: 0.15em 0.4em;
+      border-radius: 2px;
+    }
+
+    .section-text pre {
+      background: #f5f5f5;
+      padding: 1rem 1.25rem;
+      overflow-x: auto;
+      margin: 1.5rem 0;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 14px;
+      line-height: 1.5;
+      border-radius: 2px;
+    }
+
+    .section-text pre code {
+      background: none;
+      padding: 0;
+    }
+
+    .section-text table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1.5rem 0;
+      font-size: 14px;
+    }
+
+    .section-text th,
+    .section-text td {
+      text-align: left;
+      padding: 0.5rem 0.75rem;
+      border-bottom: 1px solid #e0e0e0;
+    }
+
+    .section-text th {
+      font-weight: 500;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: #666;
+    }
+
+    .section-text blockquote {
+      border-left: 2px solid #e0e0e0;
+      padding-left: 1.25rem;
+      margin: 1.5rem 0;
+      color: #666;
+      font-style: italic;
+    }
+
+    .section-text a {
+      color: #666;
+    }
+
+    .section-text a:hover {
+      color: #1a1a1a;
+    }
+
+    /* TOC list styling */
+    .toc-list {
+      list-style: none;
+      padding-left: 0;
+    }
+
+    .toc-list li {
+      border-bottom: 1px solid #eee;
+    }
+
+    .toc-list li:last-child {
+      border-bottom: none;
+    }
+
+    .toc-list a {
+      display: block;
+      padding: 1rem 0;
+      color: #1a1a1a;
+    }
+
+    .toc-list li:first-child a {
+      padding-top: 0;
+    }
+
+    .toc-list a:hover {
+      background: #fafafa;
+      margin: 0 -1rem;
+      padding: 1rem;
+    }
+
+    .toc-list .title {
+      font-size: 16px;
+      font-weight: 500;
+      color: #1a1a1a;
+      margin-bottom: 0.25rem;
+    }
+
+    .toc-list .description {
+      font-size: 14px;
+      color: #666;
+      line-height: 1.5;
+    }
+
+    /* Book navigation */
+    .book-nav {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      gap: 1rem;
+      align-items: center;
+      padding: 2rem 0;
+      margin-top: 2rem;
+      border-top: 1px solid #e0e0e0;
+    }
+
+    .book-nav a {
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+      color: #666;
+    }
+
+    .book-nav a:hover {
+      color: #1a1a1a;
+    }
+
+    .book-nav .label {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: #888;
+    }
+
+    .book-nav .title {
+      font-size: 15px;
+      font-weight: 500;
+    }
+
+    .book-nav .prev {
+      text-align: left;
+    }
+
+    .book-nav .toc-center {
+      text-align: center;
+    }
+
+    .book-nav .toc-center a {
+      align-items: center;
+    }
+
+    .book-nav .next {
+      text-align: right;
+    }
+
+    /* Heading navigation arrows */
+    .nav-arrows {
+      position: fixed;
+      right: 1.5rem;
+      bottom: 2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+      z-index: 200;
+    }
+
+    .nav-arrow {
+      display: block;
+      font-size: 18px;
+      color: #ccc;
+      cursor: pointer;
+      line-height: 1;
+      user-select: none;
+      transition: color 0.15s;
+    }
+
+    .nav-arrow:hover { color: #1a1a1a; }
+
+    /* Footer */
+    footer {
+      padding: 2rem 1.5rem;
+      max-width: 1100px;
+      margin: 0 auto;
+      border-top: 1px solid #e0e0e0;
+    }
+
+    footer .meta {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 12px;
+      color: #888;
+    }
+
+    footer .meta a {
+      color: #888;
+    }
+
+    footer .meta a:hover {
+      color: #333;
+    }
+
+    /* Desktop */
+    @media (min-width: 800px) {
+      header {
+        padding: 1.5rem 3rem;
+      }
+
+      main {
+        padding: 4rem 3rem;
+      }
+
+      .page-header h1 {
+        font-size: 48px;
+      }
+
+      .section {
+        grid-template-columns: 180px 1fr;
+        gap: 3rem;
+        padding: 3rem 0;
+        align-items: baseline;
+      }
+
+      .section > h2 {
+        display: block;
+        font-size: 18px;
+        font-weight: 500;
+        color: #1a1a1a;
+        line-height: 1.75;
+      }
+
+      .section-text h2 {
+        display: none;
+        position: absolute;
+        visibility: hidden;
+      }
+
+      .book-nav .title {
+        font-size: 16px;
+      }
+
+      footer {
+        padding: 2rem 3rem;
+      }
+    }
+
+    /* Mobile */
+    @media (max-width: 600px) {
+      .breadcrumb {
+        display: none;
+      }
+
+      .book-nav {
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: auto auto;
+        align-items: start;
+      }
+
+      .book-nav .prev {
+        grid-column: 1;
+      }
+
+      .book-nav .next {
+        grid-column: 2;
+      }
+
+      .book-nav .toc-center {
+        grid-column: 1 / -1;
+        grid-row: 2;
+        margin-top: 1rem;
+        padding-top: 1rem;
+        border-top: 1px solid #eee;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="header-left">
+      <a href="../index.html" class="logo">οὐθείς</a>
+      <div class="breadcrumb">
+        <span class="separator">/</span>
+        <a href="../contents.html#design">Design</a>
+        <span class="separator">/</span>
+        <span class="current">Qualitätsschwelle</span>
+      </div>
+    </div>
+    <nav>
+      <a href="../contents.html#design">Contents</a>
+      <a href="https://github.com/outheis-labs/outheis-beta">GitHub ↗</a>
+      <span class="lang-switch"></span>
+    </nav>
+  </header>
+
+  <main>
+    <div class="page-header">
+      <h1>Die Qualitätsschwelle: Warum Fähigkeit nicht linear skaliert</h1>
+      <p class="subtitle">Über emergente Fähigkeiten, die Grenzen von Parallelismus und das minimale tragfähige Modell.</p>
+    </div>
+
+    <section class="section" id="die-intuition-die-versagt">
+      <h2>Die Intuition, die versagt</h2>
+      <div class="section-text"><h2>Die Intuition, die versagt</h2>
+        <p>Wenn ein Modell für eine Aufgabe zu klein ist, liegt der Instinkt nahe zu kompensieren: mehr Modelle einsetzen, mehr Durchläufe, mehr Struktur. Wenn ein einzelnes 3B-Modell keinen zuverlässigen Tool-Call erzeugt — vielleicht können drei davon, die abstimmen und sich gegenseitig prüfen, die Zuverlässigkeit eines einzelnen fähigen Modells annähern.</p>
+<p>Diese Intuition ist falsch. Sie scheitert nicht aus technischen Gründen, sondern aus Gründen, die in der Natur sprachlicher Modelle selbst liegen. Um zu verstehen warum, muss man sich ansehen, was „Fähigkeit" auf diesen Ebenen eigentlich bedeutet.</p>
+      </div>
+    </section>
+
+    <section class="section" id="emergente-fahigkeiten-und-der-schwelleneffekt">
+      <h2>Emergente Fähigkeiten und der Schwelleneffekt</h2>
+      <div class="section-text"><h2>Emergente Fähigkeiten und der Schwelleneffekt</h2>
+        <p>Große Sprachmodelle skalieren nicht glatt. Bestimmte Fähigkeiten sind auf kleiner Skala nicht vorhanden und treten bei wachsender Größe abrupt auf — nicht als allmähliche Verbesserung, sondern als Phasenübergang.</p>
+<p>Wei et al. (2022) haben dies über ein breites Spektrum von Aufgaben dokumentiert: arithmetisches Few-Shot-Lernen, logisches Schließen, mehrstufige Schlussfolgerungen, Instruktionsbefolgung. Auf kleiner Skala ist die Leistung nahe dem Zufallswert. An einer Schwelle — für jede Fähigkeit unterschiedlich, typischerweise im Bereich von 10–100 Milliarden Parametern — springt die Leistung diskontinuierlich. Die Modelle werden nicht schrittweise besser; sie beherrschen diese Aufgaben gar nicht, und dann plötzlich doch.</p>
+<p>Die relevante Schwelle für outheis ist <strong>strukturiertes Tool-Dispatch</strong>: aus einer natürlichsprachlichen Anfrage einen gültigen JSON-Tool-Call mit korrekten Argumentnamen und -typen erzeugen. Das ist kein Muster-Matching gegen Trainingsbeispiele. Es setzt voraus:</p>
+<ol>
+<li>Die Anfrage semantisch verstehen</li>
+<li>Das passende Tool für die Absicht identifizieren</li>
+<li>Die korrekten Argumente aus dem Kontext extrahieren</li>
+<li>Syntaktisch valide strukturierte Ausgabe erzeugen</li>
+</ol>
+<p>Modelle unterhalb der Schwelle scheitern bei Schritt 1 oder 3. Sie produzieren plausibel klingende Ausgabe — oft strukturell valides JSON — aber mit falschen Tool-Namen, halluzinierten Argumenten oder kompletten Nicht-Sequiturs. Die Fehler sind keine sanften Degradierungen; sie sind Kategorienirrtümer.</p>
+      </div>
+    </section>
+
+    <section class="section" id="warum-parallelismus-nicht-hilft">
+      <h2>Warum Parallelismus nicht hilft</h2>
+      <div class="section-text"><h2>Warum Parallelismus nicht hilft</h2>
+        <p>Wenn eine Fähigkeit unterhalb der Schwelle fehlt, erzeugt mehr unterhalb-der-Schwelle-Modelle sie nicht. Das ist kein Ressourcenargument. Es ist ein Argument über die Natur dessen, was fehlt.</p>
+<p>Stell dir vor, drei 3B-Modelle „stimmen" über einen Tool-Call ab. Jedes erzeugt seinen besten Vorschlag. Abstimmen erfordert, Ausgaben zu vergleichen und eine Mehrheit zu finden — aber wenn keine der Ausgaben korrekt ist, gibt die Mehrheitsentscheidung den häufigsten Fehler zurück, kein richtiges Ergebnis. Schlimmer: Die Fehler ähnlicher kleiner Modelle sind korreliert. Sie scheitern auf dieselbe Weise, weil sie dieselben Beschränkungen haben. Ensemble-Methoden profitieren von <em>verschiedenartigen</em> Fehlern, nicht von <em>identischen</em>.</p>
+<p>Mehr Durchläufe helfen auch nicht. Ein Modell, das im ersten Durchlauf das richtige Argument nicht aus der Anfrage ableiten kann, wird es im dritten auch nicht. Die Fähigkeit liegt nicht im Durchlauf; sie müsste in den Gewichten liegen — und die Gewichte haben sie nicht.</p>
+<p>Die technische Parallele: Man kann ein Feature nicht implementieren, indem man fehlerhaften Code schneller ausführt. Der Fehler muss behoben werden. Bei Sprachmodellen gibt es unterhalb der Schwelle kein Äquivalent zu „den Fehler beheben" ohne Neutraining. Das Modell ist, was es ist.</p>
+      </div>
+    </section>
+
+    <section class="section" id="das-strukturelle-argument">
+      <h2>Das strukturelle Argument</h2>
+      <div class="section-text"><h2>Das strukturelle Argument</h2>
+        <p>Es gibt einen tieferen Grund, warum die Schwelle nicht umgangen werden kann. Transformer-Modelle verarbeiten eine Anfrage in einem einzigen Vorwärtsdurchlauf durch alle Schichten. Jede Schicht verfeinert die Repräsentation der Anfrage und baut zunehmend abstrakte Merkmale auf. Die letzte Schicht erzeugt die Ausgabeverteilung.</p>
+<p>Die Fähigkeit, einer komplexen Instruktion zu folgen, hängt davon ab, genügend Schichten, Köpfe und Parameter zu haben, um die notwendigen intermediären Abstraktionen zu repräsentieren. Ein kleines Modell hat keine degradierte Version dieser Fähigkeit; es hat eine andere Architektur, die eine niedrigere Decke erreicht. Man kann es öfter laufen lassen, aber die Decke bewegt sich nicht.</p>
+<p>Größere Modelle haben auch mehr Kapazität, um zu repräsentieren, was nicht gesagt wird — Schlussfolgerungen aus Kontext, Disambiguierung, Erkennung unstated Absicht. Genau das ist es, was Tool-Dispatch erfordert: „prüf meine Agenda" muss zu einem <code>agenda_query</code>-Call aufgelöst werden, nicht zu einem <code>file_read</code> oder <code>memory_lookup</code>. Die Auflösung erfordert kontextuelle Schlussfolgerung, die ein kleines Modell nicht zuverlässig leisten kann.</p>
+      </div>
+    </section>
+
+    <section class="section" id="die-praktische-schwelle-fur-outheis">
+      <h2>Die praktische Schwelle für outheis</h2>
+      <div class="section-text"><h2>Die praktische Schwelle für outheis</h2>
+        <p>Empirisch hält die 7B-Grenze für Instruktionsbefolgung in outheis' Kontext zuverlässig. Darunter:</p>
+<ul>
+<li>Tool-Call-Syntax ist korrekt; Tool-Auswahl ist falsch</li>
+<li>Argumente klingen plausibel, entsprechen aber nicht den tatsächlichen Parametern</li>
+<li>Mehrstufiges Reasoning (welches Tool, dann welche Argumente) bricht zusammen</li>
+</ul>
+<p>Bei 7B mit Instruction-Tuning ist die Schwelle für Routing-Klassen-Aufgaben (relay) überschritten. Bei 12–14B hält sie für Tool-Use-Agenten (zeno, cato), wenn überprüft. Unter 7B erzeugt kein Maß an Prompt-Engineering, Wiederholung oder strukturellem Scaffolding zuverlässige Ergebnisse — weil die Fähigkeit, die das Scaffolding voraussetzt, nicht vorhanden ist.</p>
+<p>Das bedeutet: Die relevante Frage bei der Modellauswahl ist nicht „wie klein kann ich gehen?", sondern „hat dieses Modell die Schwelle für die Aufgabe überschritten?". Es ist eine binäre Entscheidung, kein Gradient. Tests bestätigen das: <code>test_ollama_tool_use.py</code> liefert ✓ oder ✗, kein Score. Ein ✗-Modell kann nicht mit mehr Sorgfalt provisorisch verwendet werden.</p>
+      </div>
+    </section>
+
+    <section class="section" id="was-das-fur-das-outheis-design-bedeutet">
+      <h2>Was das für das outheis-Design bedeutet</h2>
+      <div class="section-text"><h2>Was das für das outheis-Design bedeutet</h2>
+        <p><strong>Ein fähiger Agent schlägt viele schwache.</strong> outheis ist um eine kleine Anzahl spezialisierter Agenten aufgebaut, jeder mit einem fokussierten Tool-Set und einem Modell, das die relevante Fähigkeitsschwelle überschritten hat. Das ist kein Zugeständnis an praktische Grenzen; es ist eine strukturelle Eigenschaft dieser Systeme.</p>
+<p><strong>Die Grenze ist eine Qualitätsschwelle, keine Ressourcenschwelle.</strong> Die Entscheidung, eine Mindestmodellgröße zu fordern, betrifft nicht laufende Kosten oder Latenz. Es geht darum, ob die von der Aufgabe geforderte Fähigkeit im Modell überhaupt vorhanden ist. Ein Modell, das den Tool-Use-Test nicht besteht, ist nicht eine langsamere oder günstigere Version eines Modells das ihn besteht; es ist eine andere Kategorie von Werkzeug.</p>
+<p><strong>Verifikation ist vor dem Einsatz obligatorisch.</strong> Weil Fähigkeit schwellenbasiert ist und nicht allein aus der Parameterzahl ableitbar (verschiedene Architekturen, verschiedene Trainingsregimes, verschiedenes Fine-tuning), ist empirisches Testen erforderlich. Die Parameterzahl ist eine Heuristik für den Startpunkt; das Testergebnis ist die Grundwahrheit.</p>
+<p><strong>Deaktivieren statt degradieren.</strong> Wenn kein Modell jenseits der Schwelle für eine Agentenrolle verfügbar ist, ist die richtige Reaktion, die geplanten Aufgaben dieses Agenten zu deaktivieren — nicht sie mit einem Modell unterhalb der Schwelle auszuführen. Ein nächtlicher Pattern-Inference-Lauf, der halluzinierte Erinnerungen erzeugt, ist schlimmer als kein Lauf: Er injiziert falsche Daten in die Wissensbasis. Ein fehlgeschlagener Lauf lässt das System unverändert. Ein degradierter Lauf korrumpiert es.</p>
+      </div>
+    </section>
+
+    <section class="section" id="weiterfuhrende-literatur">
+      <h2>Weiterführende Literatur</h2>
+      <div class="section-text"><h2>Weiterführende Literatur</h2>
+        <ul>
+<li>Wei, J. et al. „Emergent Abilities of Large Language Models." <em>Transactions on Machine Learning Research</em>, 2022.</li>
+<li>Kaplan, J. et al. „Scaling Laws for Neural Language Models." <em>arXiv</em>, 2020.</li>
+<li>Schaeffer, R. et al. „Are Emergent Abilities of Large Language Models a Mirage?" <em>NeurIPS</em>, 2023.</li>
+<li>Srivastava, A. et al. „Beyond the Imitation Game." <em>Transactions on Machine Learning Research</em>, 2023.</li>
+</ul>
+      </div>
+    </section>
+
+    <nav class="book-nav">
+      <div class="prev"><a href="../design/07-hybrid-memory-stack.html">
+          <span class="label">← Zurück</span>
+          <span class="title">Hybrider Memory-Stack</span>
+        </a></div>
+      <div class="toc-center"><a href="../contents.html#design">
+          <span class="label">Inhalt</span>
+          <span class="title">Design</span>
+        </a></div>
+      <div class="next"><a href="../implementation/01-architecture.html">
+          <span class="label">Weiter →</span>
+          <span class="title">Aktueller Stand</span>
+        </a></div>
+    </nav>
+  </main>
+
+  <div class="nav-arrows">
+    <span class="nav-arrow" id="nav-up">↑</span>
+    <span class="nav-arrow" id="nav-down">↓</span>
+  </div>
+
+  <footer>
+    <div class="meta">
+      open source · AGPL-3.0 · <a href="https://github.com/outheis-labs">github.com/outheis-labs</a>
+    </div>
+  </footer>
+
+  <script>
+    (function () {
+      const GAP = 8;
+      function headerH() { var h = document.querySelector('header'); return h ? h.offsetHeight : 60; }
+      function docTop(el) { var t = 0, n = el; while (n) { t += n.offsetTop; n = n.offsetParent; } return t; }
+      function hs() { return Array.from(document.querySelectorAll('h2')).filter(function(h) { return h.offsetHeight > 0; }); }
+
+      function makeHandler(el, single, dbl) {
+        var clicks = 0, timer;
+        el.addEventListener('click', function () {
+          clicks++;
+          clearTimeout(timer);
+          timer = setTimeout(function () { (clicks >= 2 ? dbl : single)(); clicks = 0; }, 250);
+        });
+      }
+
+      makeHandler(document.getElementById('nav-up'),
+        function () {
+          var off = headerH() + GAP, y = Math.round(window.scrollY);
+          var prev = hs().filter(function(h) { return docTop(h) < y + off - 2; }).pop();
+          window.scrollTo({ top: prev ? docTop(prev) - off : 0, behavior: 'smooth' });
+        },
+        function () { window.scrollTo({ top: 0, behavior: 'smooth' }); }
+      );
+
+      makeHandler(document.getElementById('nav-down'),
+        function () {
+          var off = headerH() + GAP, y = Math.round(window.scrollY);
+          var next = hs().find(function(h) { return docTop(h) > y + off + 2; });
+          window.scrollTo({ top: next ? docTop(next) - off : document.body.scrollHeight, behavior: 'smooth' });
+        },
+        function () { window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' }); }
+      );
+    })();
+  </script>
+</body>
+</html>

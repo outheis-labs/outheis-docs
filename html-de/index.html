@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>οὐθείς · outheis</title>
+  <meta name="description" content="Multi-agent AI assistant. Your cognitive infrastructure belongs to you.">
+  <link rel="icon" type="image/png" href="favicon-96x96.png" sizes="96x96">
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="shortcut icon" href="favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+  <link rel="manifest" href="site.webmanifest">
+  <style>
+    @font-face {
+      font-family: 'Inter';
+      src: url('assets/fonts/InterVariable.woff2') format('woff2');
+      font-weight: 100 900;
+      font-style: normal;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'IBM Plex Sans';
+      src: url('assets/fonts/IBMPlexSans-Variable.woff2') format('woff2-variations');
+      font-weight: 100 700;
+      font-style: normal;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'IBM Plex Mono';
+      src: url('assets/fonts/IBMPlexMono-Regular.woff2') format('woff2');
+      font-weight: 400;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'IBM Plex Sans', -apple-system, sans-serif;
+      background: #fff;
+      color: #1a1a1a;
+      line-height: 1.65;
+      -webkit-text-size-adjust: 100%;
+      text-size-adjust: 100%;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .greek {
+      font-family: 'Inter', sans-serif;
+    }
+
+    /* Header / Nav */
+    header {
+      padding: 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #eee;
+      position: sticky;
+      top: 0;
+      background: #fff;
+      z-index: 100;
+    }
+
+    .logo {
+      font-family: 'Inter', sans-serif;
+      font-size: 18px;
+      font-weight: 500;
+    }
+
+    nav {
+      display: flex;
+      align-items: baseline;
+      gap: 1.5rem;
+    }
+
+    nav a {
+      font-size: 14px;
+      color: #555;
+      transition: color 0.15s;
+    }
+
+    nav a:hover {
+      color: #000;
+    }
+
+    .lang-switch {
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-size: 14px;
+      color: #888;
+    }
+
+    .lang-switch a {
+      font-size: 14px;
+      color: #888;
+    }
+
+    .lang-switch a:hover {
+      color: #1a1a1a;
+    }
+
+    .lang-switch .lang-active {
+      color: #1a1a1a;
+      font-weight: 500;
+    }
+
+    /* Main */
+    main {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 4rem 1.5rem;
+    }
+
+    /* Hero section */
+    .hero {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 2.5rem;
+      margin-bottom: 4rem;
+    }
+
+    .hero-text h1 {
+      font-family: 'Inter', sans-serif;
+      font-size: 48px;
+      font-weight: 500;
+      letter-spacing: -0.03em;
+      margin-bottom: 0.5rem;
+    }
+
+    .hero-text .subtitle {
+      font-size: 20px;
+      color: #666;
+      margin-bottom: 1.5rem;
+    }
+
+    .hero-text .lead {
+      font-size: 17px;
+      line-height: 1.75;
+      color: #333;
+      max-width: 540px;
+    }
+
+    .hero-text .lead strong {
+      font-weight: 500;
+    }
+
+    .hero-image {
+      width: 100%;
+      max-width: 480px;
+    }
+
+    .hero-image img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    /* Divider */
+    hr {
+      border: none;
+      border-top: 1px solid #eee;
+      margin: 3rem 0;
+    }
+
+    /* Content sections */
+    .section {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 2rem;
+      padding: 2.5rem 0;
+      border-top: 1px solid #e0e0e0;
+    }
+    
+    .section:last-of-type {
+      border-bottom: 1px solid #e0e0e0;
+    }
+    
+    /* Mobile: hide label h2, show content h2 */
+    .section > h2 {
+      display: none;
+    }
+
+    .section-text h2 {
+      font-size: 24px;
+      font-weight: 500;
+      margin-bottom: 1rem;
+    }
+
+    .section-text p {
+      font-size: 16px;
+      line-height: 1.75;
+      color: #333;
+      margin-bottom: 1rem;
+      max-width: 600px;
+    }
+
+    .section-text ul {
+      list-style: none;
+      margin-top: 1rem;
+    }
+
+    .section-text ul li {
+      font-size: 16px;
+      line-height: 1.65;
+      color: #333;
+      padding: 0.6rem 0;
+      border-bottom: 1px solid #eee;
+    }
+    
+    .section-text ul li:first-child {
+      padding-top: 0;
+    }
+
+    .section-text ul li:last-child {
+      border-bottom: none;
+    }
+
+    .section-text ul li em {
+      font-style: normal;
+      color: #777;
+    }
+
+    /* Quote */
+    blockquote {
+      font-size: 22px;
+      line-height: 1.5;
+      color: #1a1a1a;
+      border-left: 3px solid #ddd;
+      padding-left: 1.25rem;
+      margin: 0 0 2rem 0;
+      max-width: 500px;
+    }
+
+    blockquote cite {
+      display: block;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 12px;
+      color: #888;
+      font-style: normal;
+      margin-top: 0.75rem;
+    }
+
+    /* Agents */
+    .agents-grid {
+      display: flex;
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+
+    .agent {
+      padding: 0.75rem 1rem;
+      text-align: center;
+      flex: 1;
+      border-radius: 2px;
+    }
+
+    .agent-ou { background: #218380; }
+    .agent-zeno { background: #97EAD2; }
+    .agent-cato { background: #FF2E00; }
+    .agent-hiro { background: #FFB400; }
+    .agent-rumi { background: #460A46; }
+
+    .agent-name {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 14px;
+      font-weight: 600;
+      color: #fff;
+    }
+    
+    .agent-zeno .agent-name,
+    .agent-hiro .agent-name {
+      color: #1a1a1a;
+    }
+
+    .agent-role {
+      font-size: 11px;
+      color: rgba(255,255,255,0.8);
+      margin-top: 0.15rem;
+    }
+    
+    .agent-zeno .agent-role,
+    .agent-hiro .agent-role {
+      color: rgba(0,0,0,0.6);
+    }
+
+    /* Links list */
+    .links-list {
+      list-style: none;
+      margin-top: 0;
+    }
+
+    .links-list li {
+      border-bottom: 1px solid #eee;
+    }
+
+    .links-list li:last-child {
+      border-bottom: none;
+    }
+
+    .links-list li:first-child a {
+      padding-top: 0;
+    }
+
+    .links-list a {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.75rem 0;
+      font-size: 16px;
+      color: #1a1a1a;
+    }
+
+    .links-list a::after {
+      content: '→';
+      color: #bbb;
+    }
+
+    .links-list a:hover {
+      color: #555;
+    }
+
+    /* Footer */
+    footer {
+      padding: 2rem 1.5rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 2rem;
+      justify-content: space-between;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    footer .meta {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 12px;
+      color: #888;
+    }
+
+    footer .meta a {
+      color: #888;
+    }
+
+    footer .meta a:hover {
+      color: #333;
+    }
+
+    /* Heading navigation arrows */
+    .nav-arrows {
+      position: fixed;
+      right: 1.5rem;
+      bottom: 2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+      z-index: 200;
+    }
+
+    .nav-arrow {
+      display: block;
+      font-size: 18px;
+      color: #ccc;
+      cursor: pointer;
+      line-height: 1;
+      user-select: none;
+      transition: color 0.15s;
+    }
+
+    .nav-arrow:hover { color: #1a1a1a; }
+
+    /* Desktop */
+    @media (min-width: 800px) {
+      header {
+        padding: 1.5rem 3rem;
+      }
+
+      main {
+        padding: 5rem 3rem;
+      }
+
+      .hero {
+        grid-template-columns: 1fr 1fr;
+        align-items: start;
+        gap: 4rem;
+      }
+
+      .hero-text h1 {
+        font-size: 56px;
+      }
+
+      .hero-image {
+        order: 2;
+        max-width: 100%;
+      }
+
+      .section {
+        grid-template-columns: 180px 1fr;
+        gap: 3rem;
+        padding: 3rem 0;
+        align-items: start;
+      }
+
+      .section > h2 {
+        display: block;
+        font-size: 18px;
+        font-weight: 500;
+        color: #1a1a1a;
+        letter-spacing: normal;
+        text-transform: none;
+        line-height: 1.65;
+        padding-top: 0;
+      }
+
+      .section-text h2 {
+        display: none;
+      }
+      
+      .section-text > p:first-child,
+      .section-text > ul:first-child,
+      .section-text > blockquote:first-child {
+        margin-top: 0;
+      }
+      
+      .section-text ul {
+        margin-top: 0;
+      }
+      
+      .section-text ul li:first-child {
+        padding-top: 0;
+      }
+
+      #read-more { display: none; }
+
+      footer {
+        padding: 2rem 3rem;
+      }
+    }
+
+    @media (min-width: 1000px) {
+      .hero-text h1 {
+        font-size: 64px;
+      }
+    }
+
+    /* Mobile nav */
+    @media (max-width: 600px) {
+      nav {
+        gap: 1rem;
+      }
+
+      nav a {
+        font-size: 13px;
+      }
+
+      .hero-text h1 {
+        font-size: 36px;
+      }
+
+      .hero-text .subtitle {
+        font-size: 16px;
+      }
+
+      .agents-grid {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <a href="index.html" class="logo">οὐθείς</a>
+    <nav>
+      <a href="contents.html">Contents</a>
+      <a href="https://github.com/outheis-labs/outheis-beta">GitHub ↗</a>
+      <span class="lang-switch"></span>
+    </nav>
+  </header>
+
+  <main>
+
+    <section class="hero">
+      <div class="hero-text">
+        <h1>οὐθείς</h1>
+        <p class="subtitle">Multi-agent AI assistant</p>
+        <p class="lead">
+          Jede deiner KI-Interaktionen repräsentiert dich — Anfragen, Muster, Denkweisen. Mit der Zeit vervollständigt sich das Puzzle. Nicht für dich, sondern für die Plattformbetreiber.<br><br><strong>outheis stellt eine andere Perspektive in den Mittelpunkt: kognitive Souveränität. Es ist die digitale Repräsentation deiner Art zu denken — auf deinem Rechner, unter deiner Kontrolle.</strong>
+        </p>
+      </div>
+      <div class="hero-image">
+        <img src="assets/hero-fuseli.jpg" 
+             alt="Polyphemus checks the sheep — Henri Fuseli">
+      </div>
+    </section>
+
+    <section class="section" id="die-realitat">
+      <h2>Die Realität</h2>
+      <div class="section-text"><h2>Die Realität</h2>
+        <p>Der Begriff <em>captured cognition</em> (vereinnahmte Kognition) beschreibt es gut: Deine mentale Arbeit, externalisiert durch KI-Interaktion, wird zum Rohmaterial für Systeme, die dir nicht dienen.</p>
+<p>Diese Assistenten lernen von dir. Das Gelernte gehört jemand anderem. Das ist keine Ablehnung von KI generell — es ist eine Ablehnung des extraktiven Modells, das derzeit dominiert.</p>
+      </div>
+    </section>
+
+    <section class="section" id="_1">
+      <h2><span class="greek">οὐθείς</span></h2>
+      <div class="section-text"><h2><span class="greek">οὐθείς</span></h2>
+        <p>Als Polyphem fragt, wer ihn geblendet hat, antwortet Odysseus: <span class="greek">οὐθείς</span> — niemand. Der Zyklop ruft um Hilfe: "Niemand hat mich geblendet!" Hilfe bleibt aus. Odysseus entkommt, am Bauch des Widders festgeklammert.</p>
+<p>Es ist ein Trick, aber auch eine Haltung: Indem er sich weigert, benannt, erfasst, festgelegt zu werden, bleibt Odysseus handlungsfähig.</p>
+<p>outheis trägt diese Idee in die KI-Interaktion. Das System kennt dich — aber nur lokal, nur unter deiner Kontrolle, nur im Dienst deiner Arbeit.</p>
+      </div>
+    </section>
+
+    <section class="section" id="das-system">
+      <h2>Das System</h2>
+      <div class="section-text"><h2>Das System</h2>
+        <p>Ein lokal laufender Multi-Agenten-KI-Assistent. Ein zweites Gehirn — privat, menschzentriert, deins. Gebaut als Infrastruktur, nicht als Produkt. Funktioniert als persönlicher Assistent (1:1) oder Domänenexperte (n:1).</p>
+      </div>
+    </section>
+
+    <section class="section" id="souveranitat">
+      <h2>Souveränität</h2>
+      <div class="section-text"><h2>Souveränität</h2>
+        <ul>
+<li>Deine Daten bleiben auf deinem Rechner. <em>Keine Cloud, keine Erfassung.</em></li>
+<li>Der Assistent lernt von dir. <em>Das Gelernte gehört dir.</em></li>
+<li>Append-only Logs. <em>Keine versteckten Zustände.</em></li>
+<li>Markdown und JSON. <em>Portabel, lesbar, kein Lock-in.</em></li>
+</ul>
+      </div>
+    </section>
+
+    <section class="section" id="architektur">
+      <h2>Architektur</h2>
+      <div class="section-text"><h2>Architektur</h2>
+        <p>Unterschiedliche Agenten, jeder verantwortlich für eine definierte Aufgabe. Nach außen wie eine einzige Instanz. Bewährte Betriebssystem-Designprinzipien: Microkernel-angelehnter Dispatcher, Koordination via Messages, abgegrenzte Aufgabenkorridore, Fehlerisolation.</p>
+<div class="agents-grid">
+  <div class="agent agent-ou"><div class="agent-name">ou</div><div class="agent-role">Relay Agent</div></div>
+  <div class="agent agent-zeno"><div class="agent-name">zeno</div><div class="agent-role">Data Agent</div></div>
+  <div class="agent agent-cato"><div class="agent-name">cato</div><div class="agent-role">Agenda Agent</div></div>
+  <div class="agent agent-hiro"><div class="agent-name">hiro</div><div class="agent-role">Action Agent</div></div>
+  <div class="agent agent-rumi"><div class="agent-name">rumi</div><div class="agent-role">Pattern Agent</div></div>
+</div>
+      </div>
+    </section>
+
+    <section class="section" id="weiterlesen">
+      <h2>Weiterlesen</h2>
+      <div class="section-text"><h2>Weiterlesen</h2>
+        <ul class="links-list">
+  <li><a href="foundations/">Grundlagen</a></li>
+  <li><a href="design/">Designprinzipien</a></li>
+  <li><a href="implementation/">Implementierung</a></li>
+  <li><a href="installation/">Installation</a></li>
+  <li><a href="workflows/">Workflows</a></li>
+</ul>
+      </div>
+    </section>
+
+    <section class="section" id="uber-das-projekt">
+      <h2>Über das Projekt</h2>
+      <div class="section-text"><h2>Über das Projekt</h2>
+        <p>outheis wird von Markus Schatzl entwickelt. Bei Interesse — als Nutzer, Mitarbeiter oder philantropischer Investor — gerne melden: <a href="mailto:technology.culture@proton.me">technology.culture@proton.me</a></p>
+      </div>
+    </section>
+
+  </main>
+
+  <div class="nav-arrows">
+    <span class="nav-arrow" id="nav-up">↑</span>
+    <span class="nav-arrow" id="nav-down">↓</span>
+  </div>
+
+  <footer>
+    <div class="meta">
+      open source · AGPL-3.0<br>
+      <a href="https://github.com/outheis-labs">github.com/outheis-labs</a>
+    </div>
+    <div class="meta">
+      <a href="https://outheis-labs.com">outheis-labs.com</a>
+    </div>
+  </footer>
+
+  <script>
+    (function () {
+      const GAP = 8;
+      function headerH() { var h = document.querySelector('header'); return h ? h.offsetHeight : 60; }
+      function docTop(el) { var t = 0, n = el; while (n) { t += n.offsetTop; n = n.offsetParent; } return t; }
+      function hs() { return Array.from(document.querySelectorAll('h2')).filter(function(h) { return h.offsetHeight > 0; }); }
+
+      function makeHandler(el, single, dbl) {
+        var clicks = 0, timer;
+        el.addEventListener('click', function () {
+          clicks++;
+          clearTimeout(timer);
+          timer = setTimeout(function () { (clicks >= 2 ? dbl : single)(); clicks = 0; }, 250);
+        });
+      }
+
+      makeHandler(document.getElementById('nav-up'),
+        function () {
+          var off = headerH() + GAP, y = Math.round(window.scrollY);
+          var prev = hs().filter(function(h) { return docTop(h) < y + off - 2; }).pop();
+          window.scrollTo({ top: prev ? docTop(prev) - off : 0, behavior: 'smooth' });
+        },
+        function () { window.scrollTo({ top: 0, behavior: 'smooth' }); }
+      );
+
+      makeHandler(document.getElementById('nav-down'),
+        function () {
+          var off = headerH() + GAP, y = Math.round(window.scrollY);
+          var next = hs().find(function(h) { return docTop(h) > y + off + 2; });
+          window.scrollTo({ top: next ? docTop(next) - off : document.body.scrollHeight, behavior: 'smooth' });
+        },
+        function () { window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' }); }
+      );
+    })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,868 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Skills · outheis</title>
+  <link rel="icon" type="image/png" href="../favicon-96x96.png" sizes="96x96">
+  <link rel="icon" type="image/svg+xml" href="../favicon.svg">
+  <link rel="shortcut icon" href="../favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="../apple-touch-icon.png">
+  <link rel="manifest" href="../site.webmanifest">
+  <style>
+    @font-face {
+      font-family: 'Inter';
+      src: url('../assets/fonts/InterVariable.woff2') format('woff2');
+      font-weight: 100 900;
+      font-style: normal;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'IBM Plex Sans';
+      src: url('../assets/fonts/IBMPlexSans-Variable.woff2') format('woff2-variations');
+      font-weight: 100 700;
+      font-style: normal;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'IBM Plex Mono';
+      src: url('../assets/fonts/IBMPlexMono-Regular.woff2') format('woff2');
+      font-weight: 400;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'IBM Plex Sans', -apple-system, sans-serif;
+      background: #fff;
+      color: #1a1a1a;
+      line-height: 1.65;
+      -webkit-text-size-adjust: 100%;
+      text-size-adjust: 100%;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .greek {
+      font-family: 'Inter', sans-serif;
+    }
+
+    /* Header with breadcrumb */
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 1.5rem;
+      border-bottom: 1px solid #e0e0e0;
+      position: sticky;
+      top: 0;
+      background: #fff;
+      z-index: 100;
+    }
+
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .logo {
+      font-family: 'Inter', sans-serif;
+      font-size: 20px;
+      font-weight: 500;
+    }
+
+    .breadcrumb {
+      font-size: 14px;
+      color: #888;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .breadcrumb a {
+      color: #666;
+    }
+
+    .breadcrumb a:hover {
+      color: #1a1a1a;
+    }
+
+    .breadcrumb .separator {
+      color: #ccc;
+    }
+
+    .breadcrumb .current {
+      color: #1a1a1a;
+    }
+
+    header nav {
+      font-size: 14px;
+      display: flex;
+      align-items: baseline;
+      gap: 1rem;
+    }
+
+    header nav a {
+      color: #888;
+    }
+
+    header nav a:hover {
+      color: #1a1a1a;
+    }
+
+    .lang-switch {
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-size: 14px;
+      color: #888;
+    }
+
+    .lang-switch a {
+      font-size: 14px;
+      color: #888;
+    }
+
+    .lang-switch a:hover {
+      color: #1a1a1a;
+    }
+
+    .lang-switch .lang-active {
+      color: #1a1a1a;
+      font-weight: 500;
+    }
+
+    /* Main */
+    main {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 3rem 1.5rem;
+    }
+
+    /* Page header */
+    .page-header {
+      margin-bottom: 3rem;
+    }
+
+    .page-header h1 {
+      font-family: 'Inter', sans-serif;
+      font-size: 36px;
+      font-weight: 500;
+      letter-spacing: -0.02em;
+    }
+
+    .page-header .subtitle {
+      font-size: 18px;
+      font-style: italic;
+      color: #555;
+      margin-top: 0.75rem;
+    }
+
+    /* Content sections */
+    .section {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+      padding: 2.5rem 0;
+      border-top: 1px solid #e0e0e0;
+    }
+
+    /* Mobile: hide label h2, show section-text h2 */
+    .section > h2 {
+      display: none;
+    }
+
+    .section-text h2 {
+      font-size: 20px;
+      font-weight: 500;
+      margin-bottom: 1rem;
+    }
+
+    .section-text > *:first-child {
+      margin-top: 0;
+    }
+
+    /* Hidden h2 is first-child on desktop, so target the visible first element */
+    .section-text > h2 + * {
+      margin-top: 0;
+    }
+
+    .section-text > h2 + p {
+      margin-top: 0;
+    }
+
+    .section-text p {
+      font-size: 16px;
+      line-height: 1.75;
+      color: #333;
+      margin-bottom: 1rem;
+    }
+
+    .section-text p:last-child {
+      margin-bottom: 0;
+    }
+
+    .section-text h3 {
+      font-size: 16px;
+      font-weight: 450;
+      color: #1a1a1a;
+      line-height: 1.75;
+      margin-top: 1.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .section-text h3:first-child,
+    .section-text > h2 + h3 {
+      margin-top: 0;
+    }
+
+    .section-text ul {
+      list-style: none;
+      margin-bottom: 1rem;
+    }
+
+    .section-text ul li {
+      font-size: 16px;
+      line-height: 1.65;
+      color: #333;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid #eee;
+    }
+
+    .section-text ul li:last-child {
+      border-bottom: none;
+    }
+
+    .section-text ol {
+      margin-bottom: 1rem;
+      padding-left: 1.5rem;
+    }
+
+    .section-text ol li {
+      font-size: 16px;
+      line-height: 1.65;
+      color: #333;
+      margin-bottom: 0.5rem;
+    }
+
+    .section-text code {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 14px;
+      background: #f5f5f5;
+      padding: 0.15em 0.4em;
+      border-radius: 2px;
+    }
+
+    .section-text pre {
+      background: #f5f5f5;
+      padding: 1rem 1.25rem;
+      overflow-x: auto;
+      margin: 1.5rem 0;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 14px;
+      line-height: 1.5;
+      border-radius: 2px;
+    }
+
+    .section-text pre code {
+      background: none;
+      padding: 0;
+    }
+
+    .section-text table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1.5rem 0;
+      font-size: 14px;
+    }
+
+    .section-text th,
+    .section-text td {
+      text-align: left;
+      padding: 0.5rem 0.75rem;
+      border-bottom: 1px solid #e0e0e0;
+    }
+
+    .section-text th {
+      font-weight: 500;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: #666;
+    }
+
+    .section-text blockquote {
+      border-left: 2px solid #e0e0e0;
+      padding-left: 1.25rem;
+      margin: 1.5rem 0;
+      color: #666;
+      font-style: italic;
+    }
+
+    .section-text a {
+      color: #666;
+    }
+
+    .section-text a:hover {
+      color: #1a1a1a;
+    }
+
+    /* TOC list styling */
+    .toc-list {
+      list-style: none;
+      padding-left: 0;
+    }
+
+    .toc-list li {
+      border-bottom: 1px solid #eee;
+    }
+
+    .toc-list li:last-child {
+      border-bottom: none;
+    }
+
+    .toc-list a {
+      display: block;
+      padding: 1rem 0;
+      color: #1a1a1a;
+    }
+
+    .toc-list li:first-child a {
+      padding-top: 0;
+    }
+
+    .toc-list a:hover {
+      background: #fafafa;
+      margin: 0 -1rem;
+      padding: 1rem;
+    }
+
+    .toc-list .title {
+      font-size: 16px;
+      font-weight: 500;
+      color: #1a1a1a;
+      margin-bottom: 0.25rem;
+    }
+
+    .toc-list .description {
+      font-size: 14px;
+      color: #666;
+      line-height: 1.5;
+    }
+
+    /* Book navigation */
+    .book-nav {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      gap: 1rem;
+      align-items: center;
+      padding: 2rem 0;
+      margin-top: 2rem;
+      border-top: 1px solid #e0e0e0;
+    }
+
+    .book-nav a {
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+      color: #666;
+    }
+
+    .book-nav a:hover {
+      color: #1a1a1a;
+    }
+
+    .book-nav .label {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: #888;
+    }
+
+    .book-nav .title {
+      font-size: 15px;
+      font-weight: 500;
+    }
+
+    .book-nav .prev {
+      text-align: left;
+    }
+
+    .book-nav .toc-center {
+      text-align: center;
+    }
+
+    .book-nav .toc-center a {
+      align-items: center;
+    }
+
+    .book-nav .next {
+      text-align: right;
+    }
+
+    /* Heading navigation arrows */
+    .nav-arrows {
+      position: fixed;
+      right: 1.5rem;
+      bottom: 2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+      z-index: 200;
+    }
+
+    .nav-arrow {
+      display: block;
+      font-size: 18px;
+      color: #ccc;
+      cursor: pointer;
+      line-height: 1;
+      user-select: none;
+      transition: color 0.15s;
+    }
+
+    .nav-arrow:hover { color: #1a1a1a; }
+
+    /* Footer */
+    footer {
+      padding: 2rem 1.5rem;
+      max-width: 1100px;
+      margin: 0 auto;
+      border-top: 1px solid #e0e0e0;
+    }
+
+    footer .meta {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 12px;
+      color: #888;
+    }
+
+    footer .meta a {
+      color: #888;
+    }
+
+    footer .meta a:hover {
+      color: #333;
+    }
+
+    /* Desktop */
+    @media (min-width: 800px) {
+      header {
+        padding: 1.5rem 3rem;
+      }
+
+      main {
+        padding: 4rem 3rem;
+      }
+
+      .page-header h1 {
+        font-size: 48px;
+      }
+
+      .section {
+        grid-template-columns: 180px 1fr;
+        gap: 3rem;
+        padding: 3rem 0;
+        align-items: baseline;
+      }
+
+      .section > h2 {
+        display: block;
+        font-size: 18px;
+        font-weight: 500;
+        color: #1a1a1a;
+        line-height: 1.75;
+      }
+
+      .section-text h2 {
+        display: none;
+        position: absolute;
+        visibility: hidden;
+      }
+
+      .book-nav .title {
+        font-size: 16px;
+      }
+
+      footer {
+        padding: 2rem 3rem;
+      }
+    }
+
+    /* Mobile */
+    @media (max-width: 600px) {
+      .breadcrumb {
+        display: none;
+      }
+
+      .book-nav {
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: auto auto;
+        align-items: start;
+      }
+
+      .book-nav .prev {
+        grid-column: 1;
+      }
+
+      .book-nav .next {
+        grid-column: 2;
+      }
+
+      .book-nav .toc-center {
+        grid-column: 1 / -1;
+        grid-row: 2;
+        margin-top: 1rem;
+        padding-top: 1rem;
+        border-top: 1px solid #eee;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="header-left">
+      <a href="../index.html" class="logo">οὐθείς</a>
+      <div class="breadcrumb">
+        <span class="separator">/</span>
+        <a href="../contents.html#implementation">Implementierung</a>
+        <span class="separator">/</span>
+        <span class="current">Skills</span>
+      </div>
+    </div>
+    <nav>
+      <a href="../contents.html#implementation">Contents</a>
+      <a href="https://github.com/outheis-labs/outheis-beta">GitHub ↗</a>
+      <span class="lang-switch"></span>
+    </nav>
+  </header>
+
+  <main>
+    <div class="page-header">
+      <h1>Skills</h1>
+      <p class="subtitle">Was Agenten darüber wissen, wie sie handeln sollen.</p>
+    </div>
+
+    <section class="section" id="uberblick">
+      <h2>Überblick</h2>
+      <div class="section-text"><h2>Überblick</h2>
+        <p>Skills sind die internen Fähigkeiten eines Agenten — Strategien, Methoden, Heuristiken zur Erledigung von Aufgaben. Nicht externe Anweisungen (das sind Rules), sondern das eigene Wissen des Agenten darüber, <em>wie</em> Dinge zu tun sind.</p>
+      </div>
+    </section>
+
+    <section class="section" id="die-drei-speicher">
+      <h2>Die drei Speicher</h2>
+      <div class="section-text"><h2>Die drei Speicher</h2>
+        <table>
+<thead>
+<tr>
+<th>Speicher</th>
+<th>Was er enthält</th>
+<th>Wer schreibt</th>
+<th>Beispiel</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>memory</strong></td>
+<td>Fakten, Beobachtungen, Zustand</td>
+<td>Pattern-Agent</td>
+<td>"User lives in Munich"</td>
+</tr>
+<tr>
+<td><strong>rules</strong></td>
+<td>Anweisungen, Beschränkungen</td>
+<td>Benutzer, Pattern-Agent</td>
+<td>"Respond in German"</td>
+</tr>
+<tr>
+<td><strong>skills</strong></td>
+<td>Fähigkeiten, Strategien</td>
+<td>Agent selbst, Pattern-Agent</td>
+<td>"Date formats I recognize: ..."</td>
+</tr>
+</tbody>
+</table>
+      </div>
+    </section>
+
+    <section class="section" id="wie-sie-zusammenwirken">
+      <h2>Wie sie zusammenwirken</h2>
+      <div class="section-text"><h2>Wie sie zusammenwirken</h2>
+        <p>Wenn ein Agent eine Anfrage verarbeitet:</p>
+<pre><code>Agent receives message
+    ↓
+Skills: &quot;How do I approach this?&quot;
+    ↓
+Rules: &quot;What constraints apply?&quot;
+    ↓
+Memory: &quot;What do I know about this user/context?&quot;
+    ↓
+Action
+</code></pre>
+      </div>
+    </section>
+
+    <section class="section" id="verzeichnisstruktur">
+      <h2>Verzeichnisstruktur</h2>
+      <div class="section-text"><h2>Verzeichnisstruktur</h2>
+        <pre><code># System skills (in package, read-only)
+src/outheis/agents/skills/
+├── common.md       # Shared by all agents
+├── relay.md        # Relay-specific
+├── agenda.md       # Agenda-specific
+├── data.md         # Data-specific
+└── pattern.md      # Pattern-specific
+
+# User skills (learned, mutable)
+~/.outheis/human/skills/
+├── common.md       # Learned strategies (all agents)
+├── relay.md        # Relay refinements
+├── agenda.md       # Agenda refinements
+└── data.md         # Data refinements
+</code></pre>
+      </div>
+    </section>
+
+    <section class="section" id="system-skills">
+      <h2>System Skills</h2>
+      <div class="section-text"><h2>System Skills</h2>
+        <p>Vom Entwickler definierte Basisfähigkeiten. Beispiele:</p>
+<p><strong>Agenda-Agent:</strong></p>
+<ul>
+<li>Datumsformate erkennen</li>
+<li>Daily.md-Struktur</li>
+<li>Inbox-Verarbeitungsstrategie</li>
+<li>Exchange.md-Nutzung</li>
+</ul>
+<p><strong>Data-Agent:</strong></p>
+<ul>
+<li>Datei-Suchstrategien</li>
+<li>Tag-Interpretation</li>
+<li>JSON-Struktur-Parsing</li>
+<li>Ergebnis-Ranking</li>
+</ul>
+<p><strong>Relay-Agent:</strong></p>
+<ul>
+<li>Anfragen-Routing</li>
+<li>Tool-Auswahl</li>
+<li>Migrations-Behandlung</li>
+<li>Korrektur-Verarbeitung</li>
+</ul>
+<p><strong>Pattern-Agent:</strong></p>
+<ul>
+<li>Memory-Extraktion</li>
+<li>Rule-Förderung</li>
+<li>Konflikt-Erkennung</li>
+<li>Selbstbewertung</li>
+</ul>
+      </div>
+    </section>
+
+    <section class="section" id="user-skills-gelernt">
+      <h2>User Skills (gelernt)</h2>
+      <div class="section-text"><h2>User Skills (gelernt)</h2>
+        <p>Durch Nutzung und Korrektur verfeinerte Skills. Geschrieben von:</p>
+<ol>
+<li><strong>Agent selbst</strong> — wenn eine Strategie konsistent funktioniert</li>
+<li><strong>Pattern-Agent</strong> — beim Beobachten stabiler Muster</li>
+</ol>
+<p>Beispiel-Evolution:</p>
+<pre><code class="language-markdown"># ~/.outheis/human/skills/agenda.md
+
+## Date Formats
+
+- User writes dates as DD.MM.YYYY, not MM/DD/YYYY
+- &quot;nächste Woche&quot; means Monday, not 7 days from now
+
+## Daily Structure
+
+- User prefers 🧘/🔴/🟠 emoji sections
+- No &quot;Evening&quot; section needed — user doesn't use it
+</code></pre>
+      </div>
+    </section>
+
+    <section class="section" id="skill-vs-rule">
+      <h2>Skill vs. Rule</h2>
+      <div class="section-text"><h2>Skill vs. Rule</h2>
+        <table>
+<thead>
+<tr>
+<th>Aspekt</th>
+<th>Skill</th>
+<th>Rule</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Perspektive</td>
+<td>"Wie ich das angehe"</td>
+<td>"Was ich beachten soll"</td>
+</tr>
+<tr>
+<td>Herkunft</td>
+<td>Vom Agenten gelernt</td>
+<td>Vom Benutzer/Pattern gegeben</td>
+</tr>
+<tr>
+<td>Bereich</td>
+<td>Interne Fähigkeit</td>
+<td>Externe Beschränkung</td>
+</tr>
+<tr>
+<td>Beispiel</td>
+<td>"I recognize dates like..."</td>
+<td>"Always respond in German"</td>
+</tr>
+</tbody>
+</table>
+<p>Rules beschränken Verhalten von außen. Skills ermöglichen Verhalten von innen.</p>
+      </div>
+    </section>
+
+    <section class="section" id="ladereihenfolge">
+      <h2>Ladereihenfolge</h2>
+      <div class="section-text"><h2>Ladereihenfolge</h2>
+        <p>Im System-Prompt:</p>
+<ol>
+<li><strong>Skills</strong> (common + agentenspezifisch)</li>
+<li><strong>Rules</strong> (common + agentenspezifisch)</li>
+<li><strong>Memory-Kontext</strong> (user + feedback + context)</li>
+</ol>
+<p>System-Versionen zuerst, Benutzer-Versionen ergänzen oder überschreiben.</p>
+      </div>
+    </section>
+
+    <section class="section" id="skills-schreiben">
+      <h2>Skills schreiben</h2>
+      <div class="section-text"><h2>Skills schreiben</h2>
+        <p>Ein guter Skill ist:</p>
+<ul>
+<li>
+<p><strong>Konkret</strong>: Spezifische Muster, keine vagen Prinzipien</p>
+</li>
+<li>
+<p><strong>Handlungsorientiert</strong>: Dem Agenten sagen, was zu tun ist</p>
+</li>
+<li>
+<p><strong>Lernbar</strong>: Kann durch Feedback verfeinert werden</p>
+</li>
+</ul>
+<p>Guter Skill:</p>
+<pre><code class="language-markdown">## Date Recognition
+- &quot;morgen&quot; → tomorrow's date
+- &quot;nächsten Montag&quot; → next Monday (not today if today is Monday)
+- &quot;24.03.2026&quot; → parse as YYYY-MM-DD internally
+</code></pre>
+<p>Schwacher Skill:</p>
+<pre><code class="language-markdown">## Dates
+- Understand dates properly
+- Be smart about date parsing
+</code></pre>
+      </div>
+    </section>
+
+    <section class="section" id="skill-verfeinerung">
+      <h2>Skill-Verfeinerung</h2>
+      <div class="section-text"><h2>Skill-Verfeinerung</h2>
+        <p>Wenn du einen Agenten korrigierst:</p>
+<ol>
+<li>Agent speichert Korrektur in Memory (feedback)</li>
+<li>Pattern-Agent beobachtet wiederholte Korrekturen</li>
+<li>Wenn stabil: wird zu User-Skill gefördert</li>
+<li>Skill beeinflusst alle zukünftigen Aktionen</li>
+</ol>
+<p>Das erzeugt eine Lernschleife, bei der Korrekturen zu dauerhaften Verbesserungen werden.</p>
+<h3 id="destillations-ausloser">Destillations-Auslöser</h3>
+<p>Der Pattern-Agent verwendet Urteilsvermögen, keine festen Schwellenwerte. Aber diese Bedingungen zeigen an, dass ein Muster bereit ist:</p>
+<ul>
+<li><strong>3+ ähnliche Beobachtungen</strong> → Muster erkennbar</li>
+<li><strong>Wiederholte Korrekturen</strong> → Prinzip extrahierbar</li>
+<li><strong>Stabile Präferenz</strong> → Bereit für Skill</li>
+</ul>
+<p>Eine einmal klar geäußerte starke Präferenz kann ein Skill werden. Etwas oft beiläufig Erwähntes vielleicht nicht. Explizite Korrekturen haben immer mehr Gewicht als erschlossene Muster.</p>
+<h3 id="qualitatskriterien">Qualitätskriterien</h3>
+<p>Ein guter Skill:</p>
+<ul>
+<li><strong>Lenkt Aufmerksamkeit</strong> — sagt dem Agenten, was zu beachten ist, nicht was zu tun ist</li>
+<li><strong>Verallgemeinert</strong> — gilt über die spezifische Instanz hinaus, die ihn ausgelöst hat</li>
+<li><strong>Ersetzt</strong> — macht einen oder mehrere Memory-Einträge unnötig</li>
+</ul>
+<p>Wenn ein Skill nichts ersetzt, ist er vielleicht zu spezifisch. Wenn er keine Aufmerksamkeit lenkt, ist er vielleicht eine verkleidete Rule.</p>
+      </div>
+    </section>
+
+    <nav class="book-nav">
+      <div class="prev"><a href="../implementation/03-agenda.html">
+          <span class="label">← Zurück</span>
+          <span class="title">Agenda</span>
+        </a></div>
+      <div class="toc-center"><a href="../contents.html#implementation">
+          <span class="label">Inhalt</span>
+          <span class="title">Implementierung</span>
+        </a></div>
+      <div class="next"><a href="../implementation/05-alan.html">
+          <span class="label">Weiter →</span>
+          <span class="title">Code-Agent</span>
+        </a></div>
+    </nav>
+  </main>
+
+  <div class="nav-arrows">
+    <span class="nav-arrow" id="nav-up">↑</span>
+    <span class="nav-arrow" id="nav-down">↓</span>
+  </div>
+
+  <footer>
+    <div class="meta">
+      open source · AGPL-3.0 · <a href="https://github.com/outheis-labs">github.com/outheis-labs</a>
+    </div>
+  </footer>
+
+  <script>
+    (function () {
+      const GAP = 8;
+      function headerH() { var h = document.querySelector('header'); return h ? h.offsetHeight : 60; }
+      function docTop(el) { var t = 0, n = el; while (n) { t += n.offsetTop; n = n.offsetParent; } return t; }
+      function hs() { return Array.from(document.querySelectorAll('h2')).filter(function(h) { return h.offsetHeight > 0; }); }
+
+      function makeHandler(el, single, dbl) {
+        var clicks = 0, timer;
+        el.addEventListener('click', function () {
+          clicks++;
+          clearTimeout(timer);
+          timer = setTimeout(function () { (clicks >= 2 ? dbl : single)(); clicks = 0; }, 250);
+        });
+      }
+
+      makeHandler(document.getElementById('nav-up'),
+        function () {
+          var off = headerH() + GAP, y = Math.round(window.scrollY);
+          var prev = hs().filter(function(h) { return docTop(h) < y + off - 2; }).pop();
+          window.scrollTo({ top: prev ? docTop(prev) - off : 0, behavior: 'smooth' });
+        },
+        function () { window.scrollTo({ top: 0, behavior: 'smooth' }); }
+      );
+
+      makeHandler(document.getElementById('nav-down'),
+        function () {
+          var off = headerH() + GAP, y = Math.round(window.scrollY);
+          var next = hs().find(function(h) { return docTop(h) > y + off + 2; });
+          window.scrollTo({ top: next ? docTop(next) - off : document.body.scrollHeight, behavior: 'smooth' });
+        },
+        function () { window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' }); }
+      );
+    })();
+  </script>
+</body>
+</html>

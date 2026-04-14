@@ -1,0 +1,980 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Modellauswahl · outheis</title>
+  <link rel="icon" type="image/png" href="../favicon-96x96.png" sizes="96x96">
+  <link rel="icon" type="image/svg+xml" href="../favicon.svg">
+  <link rel="shortcut icon" href="../favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="../apple-touch-icon.png">
+  <link rel="manifest" href="../site.webmanifest">
+  <style>
+    @font-face {
+      font-family: 'Inter';
+      src: url('../assets/fonts/InterVariable.woff2') format('woff2');
+      font-weight: 100 900;
+      font-style: normal;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'IBM Plex Sans';
+      src: url('../assets/fonts/IBMPlexSans-Variable.woff2') format('woff2-variations');
+      font-weight: 100 700;
+      font-style: normal;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'IBM Plex Mono';
+      src: url('../assets/fonts/IBMPlexMono-Regular.woff2') format('woff2');
+      font-weight: 400;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'IBM Plex Sans', -apple-system, sans-serif;
+      background: #fff;
+      color: #1a1a1a;
+      line-height: 1.65;
+      -webkit-text-size-adjust: 100%;
+      text-size-adjust: 100%;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .greek {
+      font-family: 'Inter', sans-serif;
+    }
+
+    /* Header with breadcrumb */
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 1.5rem;
+      border-bottom: 1px solid #e0e0e0;
+      position: sticky;
+      top: 0;
+      background: #fff;
+      z-index: 100;
+    }
+
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .logo {
+      font-family: 'Inter', sans-serif;
+      font-size: 20px;
+      font-weight: 500;
+    }
+
+    .breadcrumb {
+      font-size: 14px;
+      color: #888;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .breadcrumb a {
+      color: #666;
+    }
+
+    .breadcrumb a:hover {
+      color: #1a1a1a;
+    }
+
+    .breadcrumb .separator {
+      color: #ccc;
+    }
+
+    .breadcrumb .current {
+      color: #1a1a1a;
+    }
+
+    header nav {
+      font-size: 14px;
+      display: flex;
+      align-items: baseline;
+      gap: 1rem;
+    }
+
+    header nav a {
+      color: #888;
+    }
+
+    header nav a:hover {
+      color: #1a1a1a;
+    }
+
+    .lang-switch {
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-size: 14px;
+      color: #888;
+    }
+
+    .lang-switch a {
+      font-size: 14px;
+      color: #888;
+    }
+
+    .lang-switch a:hover {
+      color: #1a1a1a;
+    }
+
+    .lang-switch .lang-active {
+      color: #1a1a1a;
+      font-weight: 500;
+    }
+
+    /* Main */
+    main {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 3rem 1.5rem;
+    }
+
+    /* Page header */
+    .page-header {
+      margin-bottom: 3rem;
+    }
+
+    .page-header h1 {
+      font-family: 'Inter', sans-serif;
+      font-size: 36px;
+      font-weight: 500;
+      letter-spacing: -0.02em;
+    }
+
+    .page-header .subtitle {
+      font-size: 18px;
+      font-style: italic;
+      color: #555;
+      margin-top: 0.75rem;
+    }
+
+    /* Content sections */
+    .section {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+      padding: 2.5rem 0;
+      border-top: 1px solid #e0e0e0;
+    }
+
+    /* Mobile: hide label h2, show section-text h2 */
+    .section > h2 {
+      display: none;
+    }
+
+    .section-text h2 {
+      font-size: 20px;
+      font-weight: 500;
+      margin-bottom: 1rem;
+    }
+
+    .section-text > *:first-child {
+      margin-top: 0;
+    }
+
+    /* Hidden h2 is first-child on desktop, so target the visible first element */
+    .section-text > h2 + * {
+      margin-top: 0;
+    }
+
+    .section-text > h2 + p {
+      margin-top: 0;
+    }
+
+    .section-text p {
+      font-size: 16px;
+      line-height: 1.75;
+      color: #333;
+      margin-bottom: 1rem;
+    }
+
+    .section-text p:last-child {
+      margin-bottom: 0;
+    }
+
+    .section-text h3 {
+      font-size: 16px;
+      font-weight: 450;
+      color: #1a1a1a;
+      line-height: 1.75;
+      margin-top: 1.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .section-text h3:first-child,
+    .section-text > h2 + h3 {
+      margin-top: 0;
+    }
+
+    .section-text ul {
+      list-style: none;
+      margin-bottom: 1rem;
+    }
+
+    .section-text ul li {
+      font-size: 16px;
+      line-height: 1.65;
+      color: #333;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid #eee;
+    }
+
+    .section-text ul li:last-child {
+      border-bottom: none;
+    }
+
+    .section-text ol {
+      margin-bottom: 1rem;
+      padding-left: 1.5rem;
+    }
+
+    .section-text ol li {
+      font-size: 16px;
+      line-height: 1.65;
+      color: #333;
+      margin-bottom: 0.5rem;
+    }
+
+    .section-text code {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 14px;
+      background: #f5f5f5;
+      padding: 0.15em 0.4em;
+      border-radius: 2px;
+    }
+
+    .section-text pre {
+      background: #f5f5f5;
+      padding: 1rem 1.25rem;
+      overflow-x: auto;
+      margin: 1.5rem 0;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 14px;
+      line-height: 1.5;
+      border-radius: 2px;
+    }
+
+    .section-text pre code {
+      background: none;
+      padding: 0;
+    }
+
+    .section-text table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1.5rem 0;
+      font-size: 14px;
+    }
+
+    .section-text th,
+    .section-text td {
+      text-align: left;
+      padding: 0.5rem 0.75rem;
+      border-bottom: 1px solid #e0e0e0;
+    }
+
+    .section-text th {
+      font-weight: 500;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: #666;
+    }
+
+    .section-text blockquote {
+      border-left: 2px solid #e0e0e0;
+      padding-left: 1.25rem;
+      margin: 1.5rem 0;
+      color: #666;
+      font-style: italic;
+    }
+
+    .section-text a {
+      color: #666;
+    }
+
+    .section-text a:hover {
+      color: #1a1a1a;
+    }
+
+    /* TOC list styling */
+    .toc-list {
+      list-style: none;
+      padding-left: 0;
+    }
+
+    .toc-list li {
+      border-bottom: 1px solid #eee;
+    }
+
+    .toc-list li:last-child {
+      border-bottom: none;
+    }
+
+    .toc-list a {
+      display: block;
+      padding: 1rem 0;
+      color: #1a1a1a;
+    }
+
+    .toc-list li:first-child a {
+      padding-top: 0;
+    }
+
+    .toc-list a:hover {
+      background: #fafafa;
+      margin: 0 -1rem;
+      padding: 1rem;
+    }
+
+    .toc-list .title {
+      font-size: 16px;
+      font-weight: 500;
+      color: #1a1a1a;
+      margin-bottom: 0.25rem;
+    }
+
+    .toc-list .description {
+      font-size: 14px;
+      color: #666;
+      line-height: 1.5;
+    }
+
+    /* Book navigation */
+    .book-nav {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      gap: 1rem;
+      align-items: center;
+      padding: 2rem 0;
+      margin-top: 2rem;
+      border-top: 1px solid #e0e0e0;
+    }
+
+    .book-nav a {
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+      color: #666;
+    }
+
+    .book-nav a:hover {
+      color: #1a1a1a;
+    }
+
+    .book-nav .label {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: #888;
+    }
+
+    .book-nav .title {
+      font-size: 15px;
+      font-weight: 500;
+    }
+
+    .book-nav .prev {
+      text-align: left;
+    }
+
+    .book-nav .toc-center {
+      text-align: center;
+    }
+
+    .book-nav .toc-center a {
+      align-items: center;
+    }
+
+    .book-nav .next {
+      text-align: right;
+    }
+
+    /* Heading navigation arrows */
+    .nav-arrows {
+      position: fixed;
+      right: 1.5rem;
+      bottom: 2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+      z-index: 200;
+    }
+
+    .nav-arrow {
+      display: block;
+      font-size: 18px;
+      color: #ccc;
+      cursor: pointer;
+      line-height: 1;
+      user-select: none;
+      transition: color 0.15s;
+    }
+
+    .nav-arrow:hover { color: #1a1a1a; }
+
+    /* Footer */
+    footer {
+      padding: 2rem 1.5rem;
+      max-width: 1100px;
+      margin: 0 auto;
+      border-top: 1px solid #e0e0e0;
+    }
+
+    footer .meta {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 12px;
+      color: #888;
+    }
+
+    footer .meta a {
+      color: #888;
+    }
+
+    footer .meta a:hover {
+      color: #333;
+    }
+
+    /* Desktop */
+    @media (min-width: 800px) {
+      header {
+        padding: 1.5rem 3rem;
+      }
+
+      main {
+        padding: 4rem 3rem;
+      }
+
+      .page-header h1 {
+        font-size: 48px;
+      }
+
+      .section {
+        grid-template-columns: 180px 1fr;
+        gap: 3rem;
+        padding: 3rem 0;
+        align-items: baseline;
+      }
+
+      .section > h2 {
+        display: block;
+        font-size: 18px;
+        font-weight: 500;
+        color: #1a1a1a;
+        line-height: 1.75;
+      }
+
+      .section-text h2 {
+        display: none;
+        position: absolute;
+        visibility: hidden;
+      }
+
+      .book-nav .title {
+        font-size: 16px;
+      }
+
+      footer {
+        padding: 2rem 3rem;
+      }
+    }
+
+    /* Mobile */
+    @media (max-width: 600px) {
+      .breadcrumb {
+        display: none;
+      }
+
+      .book-nav {
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: auto auto;
+        align-items: start;
+      }
+
+      .book-nav .prev {
+        grid-column: 1;
+      }
+
+      .book-nav .next {
+        grid-column: 2;
+      }
+
+      .book-nav .toc-center {
+        grid-column: 1 / -1;
+        grid-row: 2;
+        margin-top: 1rem;
+        padding-top: 1rem;
+        border-top: 1px solid #eee;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="header-left">
+      <a href="../index.html" class="logo">οὐθείς</a>
+      
+    </div>
+    <nav>
+      <a href="../contents.html">Contents</a>
+      <a href="https://github.com/outheis-labs/outheis-beta">GitHub ↗</a>
+      <span class="lang-switch"></span>
+    </nav>
+  </header>
+
+  <main>
+    <div class="page-header">
+      <h1>Modellauswahl</h1>
+      <p class="subtitle">Welches LLM für outheis — und für welchen Agenten.</p>
+    </div>
+
+    <section class="section"><h2></h2><div class="section-text"><p>outheis unterstützt drei Modellanbieter: Anthropic (Cloud), Ollama (lokal) und OpenAI (Cloud). Jeder Agent hat einen Modell-Alias (<code>fast</code>, <code>capable</code>, <code>reasoning</code> oder ein eigener Name), der in <code>config.json</code> auf ein konkretes Modell zeigt.</p></div></section>
+
+    <section class="section" id="anthropic">
+      <h2>Anthropic</h2>
+      <div class="section-text"><h2>Anthropic</h2>
+        <p>Empfohlener Einstieg. Kein zusätzliches Setup außer einem API-Schlüssel.</p>
+<table>
+<thead>
+<tr>
+<th>Modell</th>
+<th>ID</th>
+<th>Geschwindigkeit</th>
+<th>Kosten</th>
+<th>Kontext</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Claude Haiku 4.5</td>
+<td><code>claude-haiku-4-5-20251001</code></td>
+<td>Schnell</td>
+<td>Niedrig</td>
+<td>200k</td>
+</tr>
+<tr>
+<td>Claude Sonnet 4.5</td>
+<td><code>claude-sonnet-4-5</code></td>
+<td>Mittel</td>
+<td>Mittel</td>
+<td>200k</td>
+</tr>
+<tr>
+<td>Claude Opus 4.5</td>
+<td><code>claude-opus-4-5</code></td>
+<td>Langsam</td>
+<td>Hoch</td>
+<td>200k</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Tool-Use-Zuverlässigkeit:</strong> Ausgezeichnet bei allen Modellen.</p>
+<p><strong>Empfehlung für outheis:</strong>
+- Alias <code>fast</code> → Haiku — für relay, data, agenda (hochfrequent, viel Tool-Use)
+- Alias <code>capable</code> → Sonnet — für pattern, action (anspruchsvolle Aufgaben)
+- Alias <code>reasoning</code> → Opus — optional, für komplexe mehrstufige Analysen</p>
+      </div>
+    </section>
+
+    <section class="section" id="ollama-lokal">
+      <h2>Ollama (lokal)</h2>
+      <div class="section-text"><h2>Ollama (lokal)</h2>
+        <p>Läuft vollständig auf eigener Hardware. Keine API-Kosten, keine Daten verlassen das System. Benötigt <code>ollama</code> installiert und <code>pip install openai</code>.</p>
+<blockquote>
+<p><strong>Testumgebung:</strong> Alle Benchmarks wurden auf einem Apple M4 mit 24 GB Unified Memory gemessen. Die Ergebnisse sind eine gute Grundlage zur Abschätzung der Leistung auf vergleichbarer Hardware.</p>
+</blockquote>
+<p><strong>GPU-Beschleunigung:</strong> Auf Apple Silicon (M-Reihe) nutzt Ollama automatisch Metal — kein Setup erforderlich. Auf Linux/Windows ist Vulkan-Unterstützung für AMD- und Intel-GPUs über <code>OLLAMA_VULKAN=1</code> verfügbar (experimentell). Umgebungsvariablen für den Ollama-Server können in der outheis-Konfiguration unter <code>llm.providers.ollama.env_vars</code> gespeichert und in der Web UI eingesehen und bearbeitet werden.</p>
+<p><strong>Mehrere Modelle gleichzeitig:</strong> Standardmäßig lädt Ollama nur ein Modell zur gleichen Zeit (<code>OLLAMA_MAX_LOADED_MODELS=1</code>). Wenn verschiedene Agenten unterschiedliche Modellnamen verwenden (z.B. <code>gemma4:e4b</code> für Relay, <code>voytas26/...</code> für Agenda), löst jede Agenten-Übergabe einen Modell-Swap aus — das eine Modell wird entladen, das andere geladen. Das verursacht mehrere Sekunden Verzögerung pro Wechsel und macht <code>run_mode: persistent</code> wirkungslos.</p>
+<p>Um zwei Modelle gleichzeitig geladen zu halten, muss <code>OLLAMA_MAX_LOADED_MODELS=2</code> <strong>im Ollama-Server-Prozess</strong> gesetzt sein, bevor er startet. Auf macOS mit der Ollama-App:</p>
+<pre><code class="language-sh">launchctl setenv OLLAMA_MAX_LOADED_MODELS 2
+# dann Ollama neu starten (Menüleiste beenden oder pkill Ollama)
+</code></pre>
+<p>Diese Einstellung geht beim Neustart verloren. Für eine dauerhafte Lösung in <code>~/.zshrc</code> oder <code>~/.profile</code> eintragen und sicherstellen, dass Ollama aus einer Login-Shell gestartet wird, oder den Wert direkt in <code>~/Library/LaunchAgents/com.ollama.ollama.plist</code> setzen.</p>
+<blockquote>
+<p><strong>Hinweis:</strong> <code>llm.providers.ollama.env_vars</code> in <code>config.json</code> ist reine Referenzspeicherung — outheis zeigt diese Werte in der Web UI an, injiziert sie aber nicht in den Ollama-Server-Prozess. Der Server muss mit der Variable in seiner eigenen Umgebung gestartet werden.</p>
+</blockquote>
+<h3 id="code-agent-alan">Code-Agent (alan)</h3>
+<p>Alans System-Prompt enthält nur Source-Root, Rolle und offene Proposals — keine User-Daten. Tool-Use-Zuverlässigkeit ist die zentrale Anforderung. Die Modelle werden über den Ollama-kompatiblen OpenAI-Endpunkt mit realistischen Tool-Schemas getestet.</p>
+<table>
+<thead>
+<tr>
+<th>Modell</th>
+<th>Größe</th>
+<th>Tool-Use</th>
+<th>Geschwindigkeit</th>
+<th>Bewertung</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>llama3.2:3b</strong></td>
+<td>3B</td>
+<td>✓ Zuverlässig</td>
+<td>~2s</td>
+<td>Gut — schnell, korrekte Tool-Calls</td>
+</tr>
+<tr>
+<td><strong>llama3.1:8b</strong></td>
+<td>8B</td>
+<td>✓ Zuverlässig</td>
+<td>~10s</td>
+<td>Gut — solides Tool-Use</td>
+</tr>
+<tr>
+<td><strong>mistral-nemo:12b</strong></td>
+<td>12B</td>
+<td>✓ Zuverlässig</td>
+<td>~13s</td>
+<td>Gut — genaue Antworten</td>
+</tr>
+<tr>
+<td><strong>devstral-small-2:24b</strong></td>
+<td>24B</td>
+<td>✓ Zuverlässig</td>
+<td>~28s</td>
+<td>Beste Qualität, langsamer</td>
+</tr>
+<tr>
+<td>qwen3:14b</td>
+<td>14B</td>
+<td>✗ Keiner</td>
+<td>~22s</td>
+<td>Nicht geeignet</td>
+</tr>
+<tr>
+<td>qwen2.5-coder:14b</td>
+<td>14B</td>
+<td>✗ Keiner</td>
+<td>~12s</td>
+<td>Nicht geeignet — gibt JSON als Text aus</td>
+</tr>
+<tr>
+<td>mistral:7b</td>
+<td>7B</td>
+<td>✗ Keiner</td>
+<td>~9s</td>
+<td>Nicht geeignet</td>
+</tr>
+<tr>
+<td>deepseek-coder:6.7b</td>
+<td>6.7B</td>
+<td>Fehler</td>
+<td>—</td>
+<td>Tools-API nicht unterstützt</td>
+</tr>
+<tr>
+<td>qwen3:4b</td>
+<td>4B</td>
+<td>✗ Keiner</td>
+<td>~7s</td>
+<td>Nicht geeignet</td>
+</tr>
+<tr>
+<td>gemma4:e4b</td>
+<td>4B</td>
+<td>✗ Unzuverlässig</td>
+<td>—</td>
+<td>Nicht geeignet</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Hardware-Anforderungen:</strong> 24B-Modelle benötigen ca. 16 GB RAM. 8B-Modelle laufen auf 8–10 GB. 3B-Modelle auf 2–4 GB.</p>
+<p><strong>Empfehlung für alan:</strong> <code>llama3.1:8b</code> bietet das beste Verhältnis aus Geschwindigkeit und Zuverlässigkeit. <code>llama3.2:3b</code> funktioniert bei RAM-Knappheit. <code>devstral-small-2:24b</code> liefert die beste Qualität, sofern ausreichend RAM vorhanden.</p>
+<p><strong>Test-Tool:</strong> <code>python tools/test_ollama_tool_use.py</code> im outheis-beta-Repository.</p>
+<h3 id="generische-agenten-relay-data-agenda">Generische Agenten (relay, data, agenda)</h3>
+<p>Generische Agenten laufen mit vollem System-Prompt: User-Memory, Vault-Kontext, Spracheinstellung, Skills und Rules. Die Anforderungen gehen über reinen Tool-Use hinaus — das Modell muss Anfragen korrekt zwischen Agenten routen, Ergebnisse über mehrere Tool-Calls hinweg synthetisieren und bei leeren Ergebnissen korrekt antworten, ohne Daten zu erfinden.</p>
+<p>Getestet mit <code>tools/test_agent_capability.py</code> — 9 Szenarien zu Relay-Routing, Vault-Suche, Datei-Lesen, Fehlerbehandlung, Halluzinationserkennung und Agenda-Operationen:</p>
+<table>
+<thead>
+<tr>
+<th>Modell</th>
+<th>Größe</th>
+<th>OK</th>
+<th>Partiell</th>
+<th>Fail</th>
+<th>Anmerkung</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>voytas26/openclaw-oss-20b-deterministic</strong></td>
+<td>20B</td>
+<td>6/9</td>
+<td>2</td>
+<td>1</td>
+<td>Bestes Routing und Fehlerbehandlung</td>
+</tr>
+<tr>
+<td><strong>gpt-oss:20b</strong></td>
+<td>20B</td>
+<td>6/9</td>
+<td>2</td>
+<td>1</td>
+<td>Starke Fehlerbehandlung</td>
+</tr>
+<tr>
+<td><strong>glm-4.7-flash-32k</strong></td>
+<td>17B</td>
+<td>6/9</td>
+<td>1</td>
+<td>2</td>
+<td>Langsamster (~180s gesamt)</td>
+</tr>
+<tr>
+<td><strong>gemma4:e4b</strong></td>
+<td>MoE/4B aktiv</td>
+<td>6/9</td>
+<td>1</td>
+<td>2</td>
+<td>halluziniert bei leerem Input; leere Antwort bei Tool-freier Anfrage; ~133s gesamt</td>
+</tr>
+<tr>
+<td><strong>qwen3:14b</strong></td>
+<td>14B</td>
+<td>6/9</td>
+<td>2</td>
+<td>1</td>
+<td>halluziniert beim Leer-Ergebnis-Test; ~421s gesamt</td>
+</tr>
+<tr>
+<td>devstral-small-2:24b</td>
+<td>24B</td>
+<td>5/9</td>
+<td>3</td>
+<td>1</td>
+<td>halluziniert beim Leer-Ergebnis-Test</td>
+</tr>
+<tr>
+<td>mistral-nemo:12b</td>
+<td>12B</td>
+<td>3/9</td>
+<td>4</td>
+<td>2</td>
+<td>Routing: keine Tool-Calls</td>
+</tr>
+<tr>
+<td>llama3.1:8b</td>
+<td>8B</td>
+<td>2/9</td>
+<td>4</td>
+<td>3</td>
+<td>—</td>
+</tr>
+<tr>
+<td>qwen2.5-coder:14b</td>
+<td>14B</td>
+<td>1/9</td>
+<td>0</td>
+<td>8</td>
+<td>Keine Tool-Calls — nicht geeignet</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Die 20B-Klasse zeigt einen deutlichen Sprung.</strong> Routing, mehrstufige Synthese und Fehlerbehandlung funktionieren zuverlässig. Konsistente Schwäche quer durch alle Modelle: Datumsberechnung bei Agenda-Operationen (Berechnung von "morgen" aus dem System-Prompt-Datum).</p>
+<p><code>gemma4:e4b</code> ist ein Mixture-of-Experts-Modell: 9,6 GB auf Disk, ~4B aktive Parameter pro Token. Es erreicht 6/9 — gleichauf mit der 20B-Klasse — hat aber zwei Fehler: Halluzination beim Leer-Ergebnis-Szenario (erfindet Dateinamen) und eine leere Antwort bei einer Anfrage ohne nötigen Tool-Call. Mit ~15s pro Szenario auf M4/24 GB ist es das effizienteste Modell auf diesem Score-Niveau. Größere gemma4-Varianten sind für M5-Hardware interessant.</p>
+<p><code>qwen3:14b</code> erreicht ebenfalls 6/9 — gleichauf mit den besten Modellen — benötigt dafür aber ~421s gesamt (~47s pro Szenario). Bei dieser Geschwindigkeit wird ein mehrstufiger Agentenaustausch für den interaktiven Einsatz unpraktisch. Zusätzlich halluziniert es beim Leer-Ergebnis-Szenario. Auf M4/24 GB nicht für den Alltagseinsatz empfohlen.</p>
+<p><code>qwen2.5-coder:14b</code> erreicht 1/9: Es ruft in acht von neun Szenarien keine Tools auf und gibt stattdessen Freitext aus. Das einzige erfolgreiche Szenario ist eine Identitätsabfrage ohne Tool-Bedarf. Nicht geeignet für generische Agenten.</p>
+<p><code>devstral-small-2:24b</code> halluziniert beim Leer-Ergebnis-Szenario — das Modell meldete einen Dateinamen, der nur in der "Keine Ergebnisse"-Erklärung des Tools vorkam, nicht als tatsächlichen Treffer.</p>
+<p>Kein Modell schneidet in allen Szenarien vollständig korrekt ab. Die 20B-Klasse (und gemma4:e4b) ist die aktuelle untere Grenze für den praktischen Einsatz als generische Agenten.</p>
+<p><strong>Datenschutz-Hinweis:</strong> Wenn Datenschutz ein Thema ist, müssen alle Agenten, die persönliche Vault-Inhalte verarbeiten (relay, data, agenda), lokale Modelle nutzen — nicht nur der Code-Agent. Das erfordert derzeit einen Cloud-Anbieter oder ein Hardware-Upgrade, das 20B+-Inferenz in akzeptabler Geschwindigkeit ermöglicht.</p>
+<p><strong>Neu-Evaluierung auf M5:</strong> Die 20B-Klasse wird auf M5-Hardware deutlich schneller laufen. Für Re-Tests nach dem Hardware-Upgrade: <code>python tools/test_agent_capability.py</code> — und Erweiterung auf 32B+-Modelle sowie größere gemma4-Varianten.</p>
+<h3 id="pattern-agent-rumi">Pattern-Agent (rumi)</h3>
+<p>rumi läuft nächtlich, kein User wartet — Latenz ist irrelevant. Entscheidend ist Qualität: Memory-Einträge ohne Halluzination extrahieren, Duplikate und Widersprüche bereinigen, Skills aus reifen Einträgen destillieren, stabile Muster zu Regeln promoten und Meta-Learning reflektieren.</p>
+<p>Getestet mit <code>tools/test_pattern_agent.py</code> — 10 Szenarien über alle 5 Phasen von <code>run_scheduled()</code>:</p>
+<table>
+<thead>
+<tr>
+<th>Modell</th>
+<th>Größe</th>
+<th>OK</th>
+<th>Partiell</th>
+<th>Fail</th>
+<th>Anmerkung</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>gemma4:26b</td>
+<td>26B</td>
+<td>6/10</td>
+<td>2</td>
+<td>2</td>
+<td>halluziniert bei extract_empty; distill_quality-Fehler; ~270s gesamt</td>
+</tr>
+<tr>
+<td>qwen2.5-coder:14b</td>
+<td>14B</td>
+<td>5/10</td>
+<td>2</td>
+<td>3</td>
+<td>Extraktionsphase scheitert; Konsolidierung/Promotion solide; ~116s gesamt</td>
+</tr>
+<tr>
+<td>qwen3:14b</td>
+<td>14B</td>
+<td>4/10</td>
+<td>3</td>
+<td>3</td>
+<td>Extraktionsphase scheitert; Halluzination bei extract_empty; ~444s gesamt</td>
+</tr>
+</tbody>
+</table>
+<p><code>gemma4:26b</code> ist ein dichtes 26B-Modell (alle Parameter pro Token aktiv). Es erreicht 6/10 mit zwei Fehlern: Halluzination im Leer-Extraktions-Szenario (erfindet Memory-Einträge aus Smalltalk, wo keine entstehen sollten) und fehlende Destillation trotz reifer Memory-Einträge. Die Konsolidierungsphase findet 0 von 2 Duplikaten (partiell). Mit ~270s Gesamtlaufzeit für alle 10 Szenarien auf M4/24 GB ist der nächtliche Betrieb zeitlich akzeptabel — das Halluzinations-Problem bedeutet aber, dass rumi gelegentlich falsche Memory-Einträge erzeugen würde. Für den produktiven Einsatz als lokaler rumi noch nicht geeignet.</p>
+<p><code>qwen2.5-coder:14b</code> erreicht 5/10 mit einem auffälligen Muster: Konsolidierung und Promotion funktionieren gut (3/3 korrekt oder partiell), aber die Extraktion scheitert vollständig — 0 von 3 Einträgen korrekt klassifiziert, und Halluzination beim Leer-Extraktions-Szenario. Da Extraktion die erste Phase ist, die rumi ausführt, korrumpieren Fehler hier alle nachgelagerten Phasen. Mit ~116s Gesamtlaufzeit das schnellste getestete Modell für rumi — aber wegen der Extraktionsfehler für den produktiven Einsatz nicht geeignet.</p>
+<p><code>qwen3:14b</code> erreicht 4/10 mit denselben Extraktionsfehlern wie qwen2.5-coder:14b, zusätzlich schwächerer Konsolidierung (findet nur 1 von 2 Duplikaten). Mit ~444s Gesamtlaufzeit das langsamste getestete Modell. Nicht geeignet.</p>
+<p><strong>Test-Tool:</strong> <code>python tools/test_pattern_agent.py</code> im outheis-beta-Repository.</p>
+      </div>
+    </section>
+
+    <section class="section" id="openai">
+      <h2>OpenAI</h2>
+      <div class="section-text"><h2>OpenAI</h2>
+        <p>Als Anbieter unterstützt. Konfiguration identisch zu Anthropic — <code>"provider": "openai"</code> setzen und API-Schlüssel angeben.</p>
+<table>
+<thead>
+<tr>
+<th>Modell</th>
+<th>ID</th>
+<th>Geschwindigkeit</th>
+<th>Kosten</th>
+<th>Kontext</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>GPT-4o</td>
+<td><code>gpt-4o</code></td>
+<td>Schnell</td>
+<td>Mittel</td>
+<td>128k</td>
+</tr>
+<tr>
+<td>GPT-4o mini</td>
+<td><code>gpt-4o-mini</code></td>
+<td>Sehr schnell</td>
+<td>Niedrig</td>
+<td>128k</td>
+</tr>
+<tr>
+<td>o1</td>
+<td><code>o1</code></td>
+<td>Langsam</td>
+<td>Hoch</td>
+<td>200k</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Tool-Use-Zuverlässigkeit:</strong> Gut (GPT-4o, GPT-4o mini). o1 hat eingeschränkten Tool-Support.</p>
+<p><strong>Empfehlung:</strong> Viable Alternative zu Anthropic. GPT-4o mini passt gut zum Alias <code>fast</code>. Nicht umfassend mit outheis getestet — Anthropic bleibt der primäre unterstützte Anbieter.</p>
+      </div>
+    </section>
+
+    <section class="section" id="lokaler-fallback">
+      <h2>Lokaler Fallback</h2>
+      <div class="section-text"><h2>Lokaler Fallback</h2>
+        <p>outheis kann automatisch auf ein lokales Ollama-Modell umschalten, wenn ein Cloud-Anbieter wegen aufgebrauchtem Guthaben oder ungültigem API-Schlüssel nicht mehr verfügbar ist.</p>
+<p><strong>Funktionsweise:</strong></p>
+<ol>
+<li>Beim Start überprüft outheis den konfigurierten Cloud-Anbieter mit einem minimalen Aufruf. Schlägt dieser wegen Billing fehl, wird der Fallback-Modus sofort aktiviert.</li>
+<li>Im laufenden Betrieb löst jeder <code>BillingError</code> (HTTP 402/401 oder Fehlermeldungen mit Credit-/Quota-Inhalten) denselben Wechsel aus — mitten in einer Konversation.</li>
+<li>Bei Aktivierung: relay, data, agenda, pattern und code werden auf das Fallback-Modell umgestellt. Der User wird im laufenden Chat und über Signal (falls konfiguriert) benachrichtigt. Der Status-Punkt der Web-UI wird gelb, die Übersicht zeigt das aktive Fallback-Modell und den Grund an.</li>
+</ol>
+<p><strong>Konfiguration:</strong></p>
+<pre><code class="language-json">&quot;llm&quot;: {
+  &quot;local_fallback&quot;: &quot;llama3.1:8b&quot;,
+  &quot;providers&quot;: { ... },
+  &quot;models&quot;: { ... }
+}
+</code></pre>
+<p><code>local_fallback</code> ist ein Modell-Alias — er muss in <code>llm.models</code> definiert sein und auf ein Ollama-Modell zeigen. Die empfohlene Konvention ist, sowohl den Alias als auch den Modelleintrag <code>local-fallback</code> zu nennen, was die Absicht selbst dokumentiert:</p>
+<pre><code class="language-json">&quot;llm&quot;: {
+  &quot;local_fallback&quot;: &quot;local-fallback&quot;,
+  &quot;models&quot;: {
+    &quot;local-fallback&quot;: { &quot;provider&quot;: &quot;ollama&quot;, &quot;name&quot;: &quot;llama3.1:8b&quot; },
+    ...
+  }
+}
+</code></pre>
+<p>Das Zielmodell lässt sich später durch Änderung des <code>name</code>-Felds innerhalb von <code>local-fallback</code> anpassen — der Alias-Verweis bleibt stabil.</p>
+<p>Ist <code>local_fallback</code> nicht gesetzt, protokolliert outheis den Billing-Fehler, schaltet aber nicht um — Anfragen schlagen weiterhin fehl, bis das Guthaben aufgefüllt wird.</p>
+<p><strong>Einschränkung:</strong> Der Fallback-Modus wird nicht automatisch aufgehoben, wenn das Guthaben wieder vorhanden ist. Ein Neustart des Daemons stellt den Cloud-Betrieb wieder her.</p>
+      </div>
+    </section>
+
+    <nav class="book-nav">
+      <div class="prev"></div>
+      <div class="toc-center"><a href="../contents.html#">
+          <span class="label">Inhalt</span>
+          <span class="title"></span>
+        </a></div>
+      <div class="next"></div>
+    </nav>
+  </main>
+
+  <div class="nav-arrows">
+    <span class="nav-arrow" id="nav-up">↑</span>
+    <span class="nav-arrow" id="nav-down">↓</span>
+  </div>
+
+  <footer>
+    <div class="meta">
+      open source · AGPL-3.0 · <a href="https://github.com/outheis-labs">github.com/outheis-labs</a>
+    </div>
+  </footer>
+
+  <script>
+    (function () {
+      const GAP = 8;
+      function headerH() { var h = document.querySelector('header'); return h ? h.offsetHeight : 60; }
+      function docTop(el) { var t = 0, n = el; while (n) { t += n.offsetTop; n = n.offsetParent; } return t; }
+      function hs() { return Array.from(document.querySelectorAll('h2')).filter(function(h) { return h.offsetHeight > 0; }); }
+
+      function makeHandler(el, single, dbl) {
+        var clicks = 0, timer;
+        el.addEventListener('click', function () {
+          clicks++;
+          clearTimeout(timer);
+          timer = setTimeout(function () { (clicks >= 2 ? dbl : single)(); clicks = 0; }, 250);
+        });
+      }
+
+      makeHandler(document.getElementById('nav-up'),
+        function () {
+          var off = headerH() + GAP, y = Math.round(window.scrollY);
+          var prev = hs().filter(function(h) { return docTop(h) < y + off - 2; }).pop();
+          window.scrollTo({ top: prev ? docTop(prev) - off : 0, behavior: 'smooth' });
+        },
+        function () { window.scrollTo({ top: 0, behavior: 'smooth' }); }
+      );
+
+      makeHandler(document.getElementById('nav-down'),
+        function () {
+          var off = headerH() + GAP, y = Math.round(window.scrollY);
+          var next = hs().find(function(h) { return docTop(h) > y + off + 2; });
+          window.scrollTo({ top: next ? docTop(next) - off : document.body.scrollHeight, behavior: 'smooth' });
+        },
+        function () { window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' }); }
+      );
+    })();
+  </script>
+</body>
+</html>

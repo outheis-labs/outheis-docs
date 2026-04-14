@@ -3,7 +3,7 @@
 Build the outheis website from docs/ and docs-de/.
 
 Reads Markdown, converts to HTML, wraps in the layout template,
-and outputs to html/ (EN) and html/de/ (DE).
+and outputs to html/ (EN) and html-de/ (DE).
 
 Usage:
     python scripts/build-site.py
@@ -346,7 +346,7 @@ def build_page(src: Path, src_root: Path, out_root: Path, template: str, lang: s
     
     rel_local = str(src.relative_to(src_root).with_suffix('.html'))
     dst = out_root / rel_local
-    rel_from_html = str(dst.relative_to(DOCS))
+    rel_from_html = str(dst.relative_to(out_root))
     
     depth = len(rel_from_html.split('/')) - 1
     root = '../' * depth if depth > 0 else ''
@@ -378,7 +378,7 @@ def build_page(src: Path, src_root: Path, out_root: Path, template: str, lang: s
     
     dst.parent.mkdir(parents=True, exist_ok=True)
     dst.write_text(page, encoding='utf-8')
-    print(f"  {src.relative_to(src_root)} → {dst.relative_to(DOCS)}")
+    print(f"  {src.relative_to(src_root)} → {dst.relative_to(out_root)}")
 
 
 def build_index_page(src: Path, src_root: Path, out_root: Path, hero_template: str, lang: str):
@@ -408,7 +408,7 @@ def build_index_page(src: Path, src_root: Path, out_root: Path, hero_template: s
     
     rel_local = str(src.relative_to(src_root).with_suffix('.html'))
     dst = out_root / rel_local
-    rel_from_html = str(dst.relative_to(DOCS))
+    rel_from_html = str(dst.relative_to(out_root))
     
     depth = len(rel_from_html.split('/')) - 1
     root = '../' * depth if depth > 0 else ''
@@ -426,7 +426,7 @@ def build_index_page(src: Path, src_root: Path, out_root: Path, hero_template: s
     
     dst.parent.mkdir(parents=True, exist_ok=True)
     dst.write_text(page, encoding='utf-8')
-    print(f"  {src.relative_to(src_root)} → {dst.relative_to(DOCS)} (hero)")
+    print(f"  {src.relative_to(src_root)} → {dst.relative_to(out_root)} (hero)")
 
 
 def copy_assets():
@@ -472,14 +472,15 @@ def main():
         else:
             build_page(md_file, DOCS_SOURCE, DOCS, template, 'en')
     
-    print(f"\nBuilding DE: {DOCS_DE.name}/ → {DOCS.name}/de/")
+    DOCS_DE_OUT = ROOT / "html-de"
+    print(f"\nBuilding DE: {DOCS_DE.name}/ → html-de/")
     for md_file in sorted(DOCS_DE.rglob("*.md")):
         if any(part.startswith('_') for part in md_file.parts):
             continue
         if md_file.name == 'index.md' and md_file.parent == DOCS_DE:
-            build_index_page(md_file, DOCS_DE, DOCS / 'de', hero_template, 'de')
+            build_index_page(md_file, DOCS_DE, DOCS_DE_OUT, hero_template, 'de')
         else:
-            build_page(md_file, DOCS_DE, DOCS / 'de', template, 'de')
+            build_page(md_file, DOCS_DE, DOCS_DE_OUT, template, 'de')
     
     print("\nCopying assets...")
     copy_assets()

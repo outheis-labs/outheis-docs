@@ -1,0 +1,1016 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Memory · outheis</title>
+  <link rel="icon" type="image/png" href="../favicon-96x96.png" sizes="96x96">
+  <link rel="icon" type="image/svg+xml" href="../favicon.svg">
+  <link rel="shortcut icon" href="../favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="../apple-touch-icon.png">
+  <link rel="manifest" href="../site.webmanifest">
+  <style>
+    @font-face {
+      font-family: 'Inter';
+      src: url('../assets/fonts/InterVariable.woff2') format('woff2');
+      font-weight: 100 900;
+      font-style: normal;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'IBM Plex Sans';
+      src: url('../assets/fonts/IBMPlexSans-Variable.woff2') format('woff2-variations');
+      font-weight: 100 700;
+      font-style: normal;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'IBM Plex Mono';
+      src: url('../assets/fonts/IBMPlexMono-Regular.woff2') format('woff2');
+      font-weight: 400;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'IBM Plex Sans', -apple-system, sans-serif;
+      background: #fff;
+      color: #1a1a1a;
+      line-height: 1.65;
+      -webkit-text-size-adjust: 100%;
+      text-size-adjust: 100%;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .greek {
+      font-family: 'Inter', sans-serif;
+    }
+
+    /* Header with breadcrumb */
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 1.5rem;
+      border-bottom: 1px solid #e0e0e0;
+      position: sticky;
+      top: 0;
+      background: #fff;
+      z-index: 100;
+    }
+
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .logo {
+      font-family: 'Inter', sans-serif;
+      font-size: 20px;
+      font-weight: 500;
+    }
+
+    .breadcrumb {
+      font-size: 14px;
+      color: #888;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .breadcrumb a {
+      color: #666;
+    }
+
+    .breadcrumb a:hover {
+      color: #1a1a1a;
+    }
+
+    .breadcrumb .separator {
+      color: #ccc;
+    }
+
+    .breadcrumb .current {
+      color: #1a1a1a;
+    }
+
+    header nav {
+      font-size: 14px;
+      display: flex;
+      align-items: baseline;
+      gap: 1rem;
+    }
+
+    header nav a {
+      color: #888;
+    }
+
+    header nav a:hover {
+      color: #1a1a1a;
+    }
+
+    .lang-switch {
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-size: 14px;
+      color: #888;
+    }
+
+    .lang-switch a {
+      font-size: 14px;
+      color: #888;
+    }
+
+    .lang-switch a:hover {
+      color: #1a1a1a;
+    }
+
+    .lang-switch .lang-active {
+      color: #1a1a1a;
+      font-weight: 500;
+    }
+
+    /* Main */
+    main {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 3rem 1.5rem;
+    }
+
+    /* Page header */
+    .page-header {
+      margin-bottom: 3rem;
+    }
+
+    .page-header h1 {
+      font-family: 'Inter', sans-serif;
+      font-size: 36px;
+      font-weight: 500;
+      letter-spacing: -0.02em;
+    }
+
+    .page-header .subtitle {
+      font-size: 18px;
+      font-style: italic;
+      color: #555;
+      margin-top: 0.75rem;
+    }
+
+    /* Content sections */
+    .section {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+      padding: 2.5rem 0;
+      border-top: 1px solid #e0e0e0;
+    }
+
+    /* Mobile: hide label h2, show section-text h2 */
+    .section > h2 {
+      display: none;
+    }
+
+    .section-text h2 {
+      font-size: 20px;
+      font-weight: 500;
+      margin-bottom: 1rem;
+    }
+
+    .section-text > *:first-child {
+      margin-top: 0;
+    }
+
+    /* Hidden h2 is first-child on desktop, so target the visible first element */
+    .section-text > h2 + * {
+      margin-top: 0;
+    }
+
+    .section-text > h2 + p {
+      margin-top: 0;
+    }
+
+    .section-text p {
+      font-size: 16px;
+      line-height: 1.75;
+      color: #333;
+      margin-bottom: 1rem;
+    }
+
+    .section-text p:last-child {
+      margin-bottom: 0;
+    }
+
+    .section-text h3 {
+      font-size: 16px;
+      font-weight: 450;
+      color: #1a1a1a;
+      line-height: 1.75;
+      margin-top: 1.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .section-text h3:first-child,
+    .section-text > h2 + h3 {
+      margin-top: 0;
+    }
+
+    .section-text ul {
+      list-style: none;
+      margin-bottom: 1rem;
+    }
+
+    .section-text ul li {
+      font-size: 16px;
+      line-height: 1.65;
+      color: #333;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid #eee;
+    }
+
+    .section-text ul li:last-child {
+      border-bottom: none;
+    }
+
+    .section-text ol {
+      margin-bottom: 1rem;
+      padding-left: 1.5rem;
+    }
+
+    .section-text ol li {
+      font-size: 16px;
+      line-height: 1.65;
+      color: #333;
+      margin-bottom: 0.5rem;
+    }
+
+    .section-text code {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 14px;
+      background: #f5f5f5;
+      padding: 0.15em 0.4em;
+      border-radius: 2px;
+    }
+
+    .section-text pre {
+      background: #f5f5f5;
+      padding: 1rem 1.25rem;
+      overflow-x: auto;
+      margin: 1.5rem 0;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 14px;
+      line-height: 1.5;
+      border-radius: 2px;
+    }
+
+    .section-text pre code {
+      background: none;
+      padding: 0;
+    }
+
+    .section-text table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1.5rem 0;
+      font-size: 14px;
+    }
+
+    .section-text th,
+    .section-text td {
+      text-align: left;
+      padding: 0.5rem 0.75rem;
+      border-bottom: 1px solid #e0e0e0;
+    }
+
+    .section-text th {
+      font-weight: 500;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: #666;
+    }
+
+    .section-text blockquote {
+      border-left: 2px solid #e0e0e0;
+      padding-left: 1.25rem;
+      margin: 1.5rem 0;
+      color: #666;
+      font-style: italic;
+    }
+
+    .section-text a {
+      color: #666;
+    }
+
+    .section-text a:hover {
+      color: #1a1a1a;
+    }
+
+    /* TOC list styling */
+    .toc-list {
+      list-style: none;
+      padding-left: 0;
+    }
+
+    .toc-list li {
+      border-bottom: 1px solid #eee;
+    }
+
+    .toc-list li:last-child {
+      border-bottom: none;
+    }
+
+    .toc-list a {
+      display: block;
+      padding: 1rem 0;
+      color: #1a1a1a;
+    }
+
+    .toc-list li:first-child a {
+      padding-top: 0;
+    }
+
+    .toc-list a:hover {
+      background: #fafafa;
+      margin: 0 -1rem;
+      padding: 1rem;
+    }
+
+    .toc-list .title {
+      font-size: 16px;
+      font-weight: 500;
+      color: #1a1a1a;
+      margin-bottom: 0.25rem;
+    }
+
+    .toc-list .description {
+      font-size: 14px;
+      color: #666;
+      line-height: 1.5;
+    }
+
+    /* Book navigation */
+    .book-nav {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      gap: 1rem;
+      align-items: center;
+      padding: 2rem 0;
+      margin-top: 2rem;
+      border-top: 1px solid #e0e0e0;
+    }
+
+    .book-nav a {
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+      color: #666;
+    }
+
+    .book-nav a:hover {
+      color: #1a1a1a;
+    }
+
+    .book-nav .label {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: #888;
+    }
+
+    .book-nav .title {
+      font-size: 15px;
+      font-weight: 500;
+    }
+
+    .book-nav .prev {
+      text-align: left;
+    }
+
+    .book-nav .toc-center {
+      text-align: center;
+    }
+
+    .book-nav .toc-center a {
+      align-items: center;
+    }
+
+    .book-nav .next {
+      text-align: right;
+    }
+
+    /* Heading navigation arrows */
+    .nav-arrows {
+      position: fixed;
+      right: 1.5rem;
+      bottom: 2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+      z-index: 200;
+    }
+
+    .nav-arrow {
+      display: block;
+      font-size: 18px;
+      color: #ccc;
+      cursor: pointer;
+      line-height: 1;
+      user-select: none;
+      transition: color 0.15s;
+    }
+
+    .nav-arrow:hover { color: #1a1a1a; }
+
+    /* Footer */
+    footer {
+      padding: 2rem 1.5rem;
+      max-width: 1100px;
+      margin: 0 auto;
+      border-top: 1px solid #e0e0e0;
+    }
+
+    footer .meta {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 12px;
+      color: #888;
+    }
+
+    footer .meta a {
+      color: #888;
+    }
+
+    footer .meta a:hover {
+      color: #333;
+    }
+
+    /* Desktop */
+    @media (min-width: 800px) {
+      header {
+        padding: 1.5rem 3rem;
+      }
+
+      main {
+        padding: 4rem 3rem;
+      }
+
+      .page-header h1 {
+        font-size: 48px;
+      }
+
+      .section {
+        grid-template-columns: 180px 1fr;
+        gap: 3rem;
+        padding: 3rem 0;
+        align-items: baseline;
+      }
+
+      .section > h2 {
+        display: block;
+        font-size: 18px;
+        font-weight: 500;
+        color: #1a1a1a;
+        line-height: 1.75;
+      }
+
+      .section-text h2 {
+        display: none;
+        position: absolute;
+        visibility: hidden;
+      }
+
+      .book-nav .title {
+        font-size: 16px;
+      }
+
+      footer {
+        padding: 2rem 3rem;
+      }
+    }
+
+    /* Mobile */
+    @media (max-width: 600px) {
+      .breadcrumb {
+        display: none;
+      }
+
+      .book-nav {
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: auto auto;
+        align-items: start;
+      }
+
+      .book-nav .prev {
+        grid-column: 1;
+      }
+
+      .book-nav .next {
+        grid-column: 2;
+      }
+
+      .book-nav .toc-center {
+        grid-column: 1 / -1;
+        grid-row: 2;
+        margin-top: 1rem;
+        padding-top: 1rem;
+        border-top: 1px solid #eee;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="header-left">
+      <a href="../index.html" class="logo">οὐθείς</a>
+      <div class="breadcrumb">
+        <span class="separator">/</span>
+        <a href="../contents.html#implementation">Implementierung</a>
+        <span class="separator">/</span>
+        <span class="current">Memory & Regeln</span>
+      </div>
+    </div>
+    <nav>
+      <a href="../contents.html#implementation">Contents</a>
+      <a href="https://github.com/outheis-labs/outheis-beta">GitHub ↗</a>
+      <span class="lang-switch"></span>
+    </nav>
+  </header>
+
+  <main>
+    <div class="page-header">
+      <h1>Memory</h1>
+      <p class="subtitle">Was outheis über dich erinnert — und wie.</p>
+    </div>
+
+    <section class="section" id="memory-vs-vault">
+      <h2>Memory vs. Vault</h2>
+      <div class="section-text"><h2>Memory vs. Vault</h2>
+        <p>outheis pflegt zwei separate Wissensspeicher:</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Memory</th>
+<th>Vault</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Zweck</strong></td>
+<td>Meta-Wissen über dich</td>
+<td>Deine Arbeitsinhalte</td>
+</tr>
+<tr>
+<td><strong>Enthält</strong></td>
+<td>Fakten, Präferenzen, Kontext</td>
+<td>Dokumente, Notizen, Projekte</td>
+</tr>
+<tr>
+<td><strong>Aktualisiert von</strong></td>
+<td>Agents während Interaktion, Pattern-Agent, explizite Marker</td>
+<td>Von dir direkt</td>
+</tr>
+<tr>
+<td><strong>Format</strong></td>
+<td>Strukturiertes JSON</td>
+<td>Markdown-Dateien</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Memory</strong> beantwortet: <em>Wer ist diese Person? Wie soll ich arbeiten?</em></p>
+<p><strong>Vault</strong> beantwortet: <em>Welche Informationen haben sie?</em></p>
+      </div>
+    </section>
+
+    <section class="section" id="memory-typen">
+      <h2>Memory-Typen</h2>
+      <div class="section-text"><h2>Memory-Typen</h2>
+        <h3 id="user">user</h3>
+<p>Persönliche Fakten, die sich selten ändern.</p>
+<p>Beispiele:</p>
+<ul>
+<li>"User is 35 years old"</li>
+<li>
+<p>"Children: Leo (8) and Emma (5)"</p>
+</li>
+<li>
+<p>"Lives in Munich"</p>
+</li>
+<li>"Works as a software engineer"</li>
+</ul>
+<p><strong>Zerfall:</strong> Dauerhaft (bis korrigiert)</p>
+<h3 id="feedback">feedback</h3>
+<p>Wie du möchtest, dass outheis sich verhält.</p>
+<p>Beispiele:</p>
+<ul>
+<li>"Prefers short, direct answers"</li>
+<li>"Respond in German unless asked otherwise"</li>
+<li>"Don't explain technical concepts — user is an expert"</li>
+</ul>
+<p><strong>Zerfall:</strong> Dauerhaft (bis korrigiert)</p>
+<h3 id="context">context</h3>
+<p>Womit du dich gerade beschäftigst.</p>
+<p>Beispiele:</p>
+<ul>
+<li>"Working on Project Alpha mobile app"</li>
+<li>"Preparing for conference talk next week"</li>
+<li>"Learning Japanese"</li>
+</ul>
+<p><strong>Zerfall:</strong> Standardmäßig 14 Tage (verblasst, wenn nicht mehr relevant)</p>
+      </div>
+    </section>
+
+    <section class="section" id="wie-memory-erstellt-wird">
+      <h2>Wie Memory erstellt wird</h2>
+      <div class="section-text"><h2>Wie Memory erstellt wird</h2>
+        <p>Memory wird über drei Kanäle geschrieben:</p>
+<h3 id="1-expliziter-marker">1. Expliziter Marker (<code>!</code>)</h3>
+<p>Stelle jeder Nachricht <code>!</code> voran, um sie sofort zu speichern:</p>
+<pre><code>! I am 35 years old
+→ Stored in user memory, agent responds with this knowledge
+
+! please always give short answers
+→ Stored in feedback memory, agent adapts immediately
+
+! I'm currently working on Project Alpha
+→ Stored in context memory (14 day decay)
+</code></pre>
+<p>Die Klassifizierung erfolgt automatisch basierend auf dem Inhalt. Der <code>!</code>-Marker ist eine Abkürzung — er entspricht "merke dir das", ist aber kürzer. Der agent speichert die Information UND verwendet sie sofort im aktuellen Gespräch.</p>
+<h3 id="2-agents-wahrend-der-interaktion">2. Agents während der Interaktion</h3>
+<p>Agents können erkennen, wenn du etwas Merkenswürdiges mitteilst:</p>
+<ul>
+<li>Du erwähnst deinen Geburtstag → agent kann es speichern</li>
+<li>Du äußerst eine Präferenz → agent kann sie speichern</li>
+<li>Du beschreibst ein aktuelles Projekt → agent kann es als Kontext speichern</li>
+</ul>
+<p>Das geschieht durch Urteilsvermögen — nicht durch starre Regeln. Agents sind angewiesen, relevante Informationen zu bemerken, aber nicht zu viel zu extrahieren. Nicht jede Aussage wird Memory — nur was für zukünftige Interaktionen wirklich nützlich erscheint.</p>
+<h3 id="3-pattern-agent-extraktion">3. Pattern-Agent-Extraktion</h3>
+<p>rumi läuft nächtlich um 04:00 und:</p>
+<ol>
+<li>überprüft aktuelle Gespräche</li>
+<li>extrahiert merkwürdige Informationen, die agents möglicherweise verpasst haben</li>
+<li>konsolidiert Duplikate und löst Widersprüche auf</li>
+<li>weist Konfidenzwerte zu</li>
+<li>bereinigt abgelaufene Einträge</li>
+<li>erwägt die Förderung stabiler Muster zu User Rules</li>
+</ol>
+<p>Du kannst das manuell auslösen: <code>outheis pattern</code></p>
+      </div>
+    </section>
+
+    <section class="section" id="memory-konsolidierung">
+      <h2>Memory-Konsolidierung</h2>
+      <div class="section-text"><h2>Memory-Konsolidierung</h2>
+        <p>Mit der Zeit sammelt Memory Duplikate oder widersprüchliche Einträge an. rumi behandelt das bei seinem geplanten Lauf:</p>
+<ul>
+<li>
+<p><strong>Duplikate</strong>: "Has pending tasks: X, Y" und "Current pending tasks: X, Y" → behält den neueren</p>
+</li>
+<li>
+<p><strong>Widersprüche</strong>: "User is 35" und "User is 36" → behält den neueren oder explizit markierten</p>
+</li>
+<li>
+<p><strong>Überholte Einträge</strong>: Kontext, der aktualisiert wurde → entfernt die ältere Version</p>
+</li>
+</ul>
+<p>Das ist kein mechanischer Prozess — rumi verwendet Urteilsvermögen, um zu entscheiden, was konsolidiert werden soll, mit einem Bias zum Behalten bei Unsicherheit.</p>
+      </div>
+    </section>
+
+    <section class="section" id="zeitliches-bewusstsein">
+      <h2>Zeitliches Bewusstsein</h2>
+      <div class="section-text"><h2>Zeitliches Bewusstsein</h2>
+        <p>Nicht alles sollte für immer gespeichert werden.</p>
+<p><strong>Als dauerhaftes Fakt gespeichert:</strong></p>
+<ul>
+<li>"User has two children"</li>
+<li>"Prefers formal communication"</li>
+</ul>
+<p><strong>NICHT gespeichert (temporärer Zustand):</strong></p>
+<ul>
+<li>"User seems frustrated today"</li>
+<li>"User is tired"</li>
+<li>"User is stressed about deadline"</li>
+</ul>
+<p>Alle agents unterscheiden stabile Eigenschaften von vorübergehenden Stimmungen. Eine frustrierte Nachricht ist kein Persönlichkeitsmerkmal — es ist ein Moment.</p>
+      </div>
+    </section>
+
+    <section class="section" id="memory-anzeigen-und-bearbeiten">
+      <h2>Memory anzeigen und bearbeiten</h2>
+      <div class="section-text"><h2>Memory anzeigen und bearbeiten</h2>
+        <h3 id="cli">CLI</h3>
+<pre><code class="language-bash"># View all memory
+outheis memory
+
+# Add entry manually
+outheis memory --add &quot;user:My birthday is March 15&quot;
+
+# Clear a type
+outheis memory --clear context
+</code></pre>
+<h3 id="anzeigeformat">Anzeigeformat</h3>
+<pre><code>Memory
+----------------------------------------
+
+[user] (3 entries)
+  1. User is 35 years old
+  2. Children: Leo (8), Emma (5) [!]
+  3. Lives in Munich [90%]
+
+[feedback] (1 entries)
+  1. Prefers short answers [!]
+
+[context] (2 entries)
+  1. Working on Project Alpha [↓12d]
+  2. Preparing conference talk [↓5d]
+</code></pre>
+<p>Marker:</p>
+<ul>
+<li><code>[!]</code> — Explizit über <code>!</code>-Marker gespeichert</li>
+<li><code>[90%]</code> — Konfidenz unter 100 %</li>
+<li><code>[↓12d]</code> — Läuft in 12 Tagen ab</li>
+</ul>
+      </div>
+    </section>
+
+    <section class="section" id="speicherung">
+      <h2>Speicherung</h2>
+      <div class="section-text"><h2>Speicherung</h2>
+        <pre><code>~/.outheis/human/memory/
+├── user.json           # Personal facts
+├── feedback.json       # Working preferences
+├── context.json        # Current focus
+└── pattern/            # Pattern agent's learning
+    └── strategies.md
+</code></pre>
+<p>Jede Memory-Datei enthält zeitgestempelte Einträge mit Metadaten:</p>
+<pre><code class="language-json">{
+  &quot;type&quot;: &quot;user&quot;,
+  &quot;updated_at&quot;: &quot;2025-03-28T14:30:00&quot;,
+  &quot;entries&quot;: [
+    {
+      &quot;content&quot;: &quot;User is 35 years old&quot;,
+      &quot;created_at&quot;: &quot;2025-03-28T14:30:00&quot;,
+      &quot;updated_at&quot;: &quot;2025-03-28T14:30:00&quot;,
+      &quot;confidence&quot;: 1.0,
+      &quot;source_count&quot;: 1,
+      &quot;decay_days&quot;: null,
+      &quot;is_explicit&quot;: true
+    }
+  ]
+}
+</code></pre>
+      </div>
+    </section>
+
+    <section class="section" id="migration">
+      <h2>Migration</h2>
+      <div class="section-text"><h2>Migration</h2>
+        <p>Um bestehendes Wissen von Claude.ai oder anderen Quellen zu importieren, verwende den Migrations-Workflow. Siehe <a href="migration.md">Migration</a> für Details.</p>
+<p>Kurzübersicht:
+1. <code>vault/Migration/</code> mit deinen <code>.json</code>- oder <code>.md</code>-Dateien erstellen
+2. Im Chat "memory migrate" sagen
+3. Einträge in <code>Migration.md</code> prüfen und markieren
+4. Erneut "memory migrate" sagen, um anzuwenden
+5. <code>vault/Migration/</code> löschen, wenn fertig</p>
+      </div>
+    </section>
+
+    <section class="section" id="pattern-agent-meta-memory">
+      <h2>Pattern-Agent-Meta-Memory</h2>
+      <div class="section-text"><h2>Pattern-Agent-Meta-Memory</h2>
+        <p>rumi hat sein eigenes Memory in <code>~/.outheis/human/memory/pattern/</code>. Hier speichert er:</p>
+<ul>
+<li>Welche Extraktionsstrategien für dich funktionieren</li>
+<li>Muster im Kommunikationsstil</li>
+<li>Meta-Insights über seinen eigenen Prozess</li>
+</ul>
+<p>Dieses Memory zerfällt nicht — so wird rumi mit der Zeit besser darin, zu verstehen, was dir wichtig ist.</p>
+      </div>
+    </section>
+
+    <section class="section" id="integration-mit-agents">
+      <h2>Integration mit Agents</h2>
+      <div class="section-text"><h2>Integration mit Agents</h2>
+        <p>Memory wird automatisch in Agenten-System-Prompts injiziert:</p>
+<pre><code># Memory
+
+## About the user
+- User is 35 years old
+- Children: Leo (8), Emma (5)
+
+## Working preferences
+- Prefers short answers
+
+## Current context
+- Working on Project Alpha
+</code></pre>
+<p>Agents nutzen das natürlich — sie kündigen nicht "Ich erinnere mich, dass..." an, sondern wissen es einfach.</p>
+      </div>
+    </section>
+
+    <section class="section" id="korrektur">
+      <h2>Korrektur</h2>
+      <div class="section-text"><h2>Korrektur</h2>
+        <p>Wenn outheis falsche Informationen hat:</p>
+<ol>
+<li><strong>Explizite Korrektur:</strong> <code>! I'm 36, not 35</code></li>
+<li><strong>CLI-Bearbeitung:</strong> <code>outheis memory --clear user</code>, dann neu hinzufügen</li>
+<li><strong>Direkte Dateibearbeitung:</strong> JSON in <code>~/.outheis/human/memory/</code> modifizieren</li>
+</ol>
+<p>Explizite (<code>!</code>)-Einträge haben Vorrang — agents überschreiben sie nicht mit Extraktionen niedrigerer Konfidenz.</p>
+      </div>
+    </section>
+
+    <section class="section" id="rules">
+      <h2>Rules</h2>
+      <div class="section-text"><h2>Rules</h2>
+        <p>Rules sind die stabile Destillation von Memory — Verhaltensprinzipien, die bestimmen, wie outheis mit dir arbeitet.</p>
+<h3 id="zwei-schichten">Zwei Schichten</h3>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>System Rules</th>
+<th>User Rules</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Quelle</strong></td>
+<td>Entwickler</td>
+<td>Entstanden aus Interaktion</td>
+</tr>
+<tr>
+<td><strong>Zweck</strong></td>
+<td>Grenzen, Fähigkeiten</td>
+<td>Stil, Präferenzen</td>
+</tr>
+<tr>
+<td><strong>Ort</strong></td>
+<td><code>src/outheis/agents/rules/</code></td>
+<td><code>~/.outheis/human/rules/</code></td>
+</tr>
+<tr>
+<td><strong>Veränderlichkeit</strong></td>
+<td>Ändert sich mit Code-Updates</td>
+<td>Wächst mit der Zeit</td>
+</tr>
+</tbody>
+</table>
+<p><strong>System Rules</strong> definieren, was ein agent <em>kann</em> — architektonische Beschränkungen.</p>
+<p><strong>User Rules</strong> definieren, wie ein agent es <em>tun soll</em> — dein Arbeitsstil.</p>
+<h3 id="wie-user-rules-entstehen">Wie User Rules entstehen</h3>
+<p>User Rules schreibst du nicht direkt. Sie entstehen aus Memory durch den Pattern-Agenten.</p>
+<p>rumi überprüft Memory bei seinem nächtlichen Lauf und sucht nach Mustern, die stabil genug geworden sind, um als Rules kodifiziert zu werden. Das ist kein mechanischer Prozess mit festen Schwellenwerten — der agent verwendet Urteilsvermögen:</p>
+<ul>
+<li>Eine einmal klar geäußerte starke Präferenz könnte eine Rule werden</li>
+<li>Etwas oft beiläufig Erwähntes vielleicht nicht</li>
+<li>Explizite Korrekturen zählen immer mehr als Inferenzen</li>
+</ul>
+<p>Wenn rumi ein stabiles Muster identifiziert, schreibt er es in <code>~/.outheis/human/rules/{agent}.md</code>:</p>
+<pre><code class="language-markdown"># User Rules for Relay Agent
+
+- User prefers concise responses  &lt;!-- 2026-03-30 --&gt;
+- Respond in German unless the user writes in English  &lt;!-- 2026-03-28 --&gt;
+</code></pre>
+<h3 id="memory-vs-rules">Memory vs. Rules</h3>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Memory</th>
+<th>Rules</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Zeitskala</strong></td>
+<td>Tage bis Wochen</td>
+<td>Monate bis Jahre</td>
+</tr>
+<tr>
+<td><strong>Flüchtigkeit</strong></td>
+<td>Kann ablaufen, häufig aktualisiert</td>
+<td>Stabil einmal etabliert</td>
+</tr>
+<tr>
+<td><strong>Inhalt</strong></td>
+<td>Fakten, Beobachtungen</td>
+<td>Prinzipien, Muster</td>
+</tr>
+<tr>
+<td><strong>Beispiel</strong></td>
+<td>"User is 35 years old"</td>
+<td>"User prefers brevity"</td>
+</tr>
+</tbody>
+</table>
+<p>Memory ist <em>was wir wissen</em>. Rules sind <em>wie wir arbeiten</em>.</p>
+<h3 id="speicherung_1">Speicherung</h3>
+<pre><code>~/.outheis/human/rules/
+├── common.md      # Applies to all agents
+├── relay.md       # Conversation style
+├── data.md        # Search behavior
+├── agenda.md      # Scheduling preferences
+└── pattern.md     # Extraction behavior
+</code></pre>
+<h3 id="cli_1">CLI</h3>
+<pre><code class="language-bash"># View all rules
+outheis rules
+
+# View rules for specific agent
+outheis rules relay
+
+# View only user rules (emergent)
+outheis rules --user
+
+# View only system rules (architectural)
+outheis rules --system
+</code></pre>
+<h3 id="koharente-personlichkeit">Kohärente Persönlichkeit</h3>
+<p>outheis besteht aus fünf agents — du erlebst einen Assistenten. Rules bewahren diese Kohärenz:</p>
+<ul>
+<li><strong>Common rules</strong> sichern konsistentes Verhalten über alle agents</li>
+<li><strong>Agenten-spezifische Rules</strong> ermöglichen angemessene Spezialisierung</li>
+<li><strong>User Rules</strong> passen das gesamte System an deinen Arbeitsstil an</li>
+</ul>
+<p>Mit der Zeit entwickelt outheis eine stabile Persönlichkeit — nicht programmiert, sondern gewachsen aus dem gemeinsamen Arbeiten.</p>
+      </div>
+    </section>
+
+    <nav class="book-nav">
+      <div class="prev"><a href="../implementation/01-architecture.html">
+          <span class="label">← Zurück</span>
+          <span class="title">Aktueller Stand</span>
+        </a></div>
+      <div class="toc-center"><a href="../contents.html#implementation">
+          <span class="label">Inhalt</span>
+          <span class="title">Implementierung</span>
+        </a></div>
+      <div class="next"><a href="../implementation/03-agenda.html">
+          <span class="label">Weiter →</span>
+          <span class="title">Agenda</span>
+        </a></div>
+    </nav>
+  </main>
+
+  <div class="nav-arrows">
+    <span class="nav-arrow" id="nav-up">↑</span>
+    <span class="nav-arrow" id="nav-down">↓</span>
+  </div>
+
+  <footer>
+    <div class="meta">
+      open source · AGPL-3.0 · <a href="https://github.com/outheis-labs">github.com/outheis-labs</a>
+    </div>
+  </footer>
+
+  <script>
+    (function () {
+      const GAP = 8;
+      function headerH() { var h = document.querySelector('header'); return h ? h.offsetHeight : 60; }
+      function docTop(el) { var t = 0, n = el; while (n) { t += n.offsetTop; n = n.offsetParent; } return t; }
+      function hs() { return Array.from(document.querySelectorAll('h2')).filter(function(h) { return h.offsetHeight > 0; }); }
+
+      function makeHandler(el, single, dbl) {
+        var clicks = 0, timer;
+        el.addEventListener('click', function () {
+          clicks++;
+          clearTimeout(timer);
+          timer = setTimeout(function () { (clicks >= 2 ? dbl : single)(); clicks = 0; }, 250);
+        });
+      }
+
+      makeHandler(document.getElementById('nav-up'),
+        function () {
+          var off = headerH() + GAP, y = Math.round(window.scrollY);
+          var prev = hs().filter(function(h) { return docTop(h) < y + off - 2; }).pop();
+          window.scrollTo({ top: prev ? docTop(prev) - off : 0, behavior: 'smooth' });
+        },
+        function () { window.scrollTo({ top: 0, behavior: 'smooth' }); }
+      );
+
+      makeHandler(document.getElementById('nav-down'),
+        function () {
+          var off = headerH() + GAP, y = Math.round(window.scrollY);
+          var next = hs().find(function(h) { return docTop(h) > y + off + 2; });
+          window.scrollTo({ top: next ? docTop(next) - off : document.body.scrollHeight, behavior: 'smooth' });
+        },
+        function () { window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' }); }
+      );
+    })();
+  </script>
+</body>
+</html>
