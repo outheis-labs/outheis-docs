@@ -3,18 +3,21 @@
 
 *Zeitmanagement durch drei einfache Dateien.*
 
+---
+
 ## Die drei Dateien
 
 outheis verwaltet deinen Zeitplan über drei Markdown-Dateien in deinem Vault:
 
 ```
 vault/Agenda/
-├── Daily.md      # Heute: Zeitplan, Aufgaben, Notizen
-├── Inbox.md      # Schnellerfassung: Benutzer → System
-└── Exchange.md   # Asynchroner Dialog: System ↔ Benutzer
+├── Agenda.md     # Heute: Zeitplan, Aufgaben, Notizen
+├── Exchange.md   # Asynchroner Dialog: System ↔ Benutzer
+├── Shadow.md     # Chronologischer Vault-Index (automatisch erstellt)
+└── Backlog.md    # Prioritätssortierte Ansicht von Shadow.md (auf Anfrage)
 ```
 
-### Daily.md
+### Agenda.md
 
 Dein Tag auf einen Blick. Die Standardvorlage:
 
@@ -37,68 +40,30 @@ Dein Tag auf einen Blick. Die Standardvorlage:
 ## 💶 Cashflow
 ```
 
-Die Struktur ist benutzerkonfigurierbar. Sobald du dein bevorzugtes Layout etabliert hast, bewahrt outheis es bei jeder Aktualisierung genau — nur der Inhalt ändert sich, nie die Struktur.
+Die Struktur ist benutzerkonfigurierbar über `DailyTemplate.md` in deinem Vault. Sobald du dein bevorzugtes Layout etabliert hast, bewahrt outheis es bei jeder Aktualisierung genau — nur der Inhalt ändert sich, nie die Struktur.
 
 outheis liest diese Datei, versteht deine Verpflichtungen und beantwortet Fragen wie "bin ich heute nachmittag frei?" oder "was steht morgen an?".
 
-### Inbox.md
-
-Schnellerfassung ohne Struktur. Wenn du einen Gedanken hast, aber nicht darüber nachdenken möchtest, wohin er gehört:
-
-```markdown
-# Inbox
-
-*Drop anything here. outheis processes it hourly.*
-
----
-
-meeting mit X nächste woche, wichtig
-zahnarzt anrufen
-projekt alpha deadline verschoben auf april
-```
-
-outheis verarbeitet dies stündlich:
-
-- Erkennt Aufgaben → verschiebt in Daily.md
-- Unklare Einträge → fragt über Exchange.md
-- Notizen → behält oder archiviert
-
 ### Exchange.md
 
-Asynchroner Dialog zwischen dir und outheis. Wird automatisch beim Start erstellt:
+Asynchroner Dialog zwischen dir und outheis:
 
 ```markdown
 # Exchange
 
-*Asynchronous communication between you and outheis. No pressure to respond immediately — outheis checks hourly and learns from your answers.*
-
 ---
 
-## 2026-03-30T10:15:00 – Konflikt
+## 2026-04-08T10:15:00 – Frage
 
-> Am Freitag hast du:
-> - 10:00 Team-Meeting
-> - 10:00 Zahnarzt
-> - 10:30 Client-Call
->
-> Wie soll ich priorisieren?
+Welcher Tag passt für das Meeting mit X?
 
-**Your response:**
-Zahnarzt ist wichtiger, Team-Meeting verschieben.
-
----
-
-## 2026-03-30T14:00:00 – Rückfrage
-
-> Du hast "Meeting mit X nächste Woche" erwähnt — welcher Tag passt?
-
-**Your response:**
-
+- [ ] Akzeptieren
+- [ ] Ablehnen
 
 ---
 ```
 
-**Wichtig:** Exchange.md ist für Fragen von outheis an dich. Schreibe deine Antworten unter "Your response:". outheis nimmt sie bei der nächsten stündlichen Überprüfung auf.
+Schreibe eine `>`-Antwort direkt unter einem offenen Eintrag oder hake eine Box ab — cato verarbeitet sie beim nächsten Lauf.
 
 ## Stündliche Überprüfung
 
@@ -127,35 +92,34 @@ Wenn sich seit dem letzten Lauf nichts geändert hat, wird kein LLM-Aufruf gemac
 
 ### Anmerkungen
 
-Zeilen, die unmittelbar nach einer Aufgabe mit `>` beginnen, werden als Anweisungen verarbeitet:
+Eine `>`-Zeile unmittelbar unter einem Eintrag ist eine direkte Anweisung an cato:
 
 ```markdown
-- [ ] Report schreiben
-> verschieben auf nächste Woche
+#action-required #topic-admin
+Lieferanten wegen Lieferdatum anrufen
+> erledigt, Bestätigung bis Freitag erwartet
 ```
 
-Unterstützte Aktionen:
+cato klassifiziert jede Anmerkung in einen von drei Typen:
 
-| Anmerkung | Effekt |
-|-----------|--------|
-| `> erledigt` oder `> ✓` | Eintrag entfernen (als erledigt markieren) |
-| `> verschieben auf [Datum]` | Auf das angegebene Datum verschieben |
-| `> wiedervorlage am [Datum]` | Eintrag für dieses Datum einplanen |
-| `> nicht mehr wichtig` | Eintrag löschen |
+| Typ | Erkannt an | Aktion |
+|---|---|---|
+| **Erledigung** | erledigt, fertig, bestätigt, abgeschlossen | Eintrag aus Agenda.md entfernen |
+| **Verschieben** | später, nächste Woche, [zukünftiges Datum] | Aus Agenda.md entfernen, Datum in Shadow.md aktualisieren |
+| **Korrektur** | Erklärung, Umformulierung, neuer Kontext | Eintrag an Ort und Stelle neu schreiben, behalten |
 
-Die `>`-Zeile selbst wird nach der Verarbeitung immer entfernt.
+Die `>`-Zeile wird nach der Verarbeitung immer entfernt.
 
 ### Zeitfenster
 
-Stündliche Überprüfungen laufen standardmäßig nur zwischen 04:55 und 23:55. Keine Überprüfungen nachts (00:55–03:55). In `config.json` konfigurierbar:
+Stündliche Überprüfungen laufen standardmäßig nur zwischen 04:55 und 23:55. Keine Überprüfungen nachts. In `config.json` konfigurierbar:
 
 ```json
 {
   "schedule": {
     "agenda_review": {
-      "hourly_at_minute": 55,
-      "start_hour": 4,
-      "end_hour": 23
+      "enabled": true,
+      "time": ["04:55", "05:55", "06:55", "...", "23:55"]
     }
   }
 }
@@ -174,18 +138,11 @@ Das umgeht die Hash-Prüfung und führt sofort eine vollständige Überprüfung 
 
 ## Struktur erstellen
 
-Wenn outheis startet und der Agenda-Agent aktiviert ist, erstellt er das Verzeichnis mit Vorlagen:
-
-```bash
-outheis start
-# Creates vault/Agenda/ with Daily.md, Inbox.md, Exchange.md
-```
-
-Vorlagen enthalten hilfreiche Struktur und Emoji-Abschnitte. Du kannst auch manuell erstellen:
+Wenn outheis startet und der Agenda-Agent aktiviert ist, erstellt er das Verzeichnis automatisch. Du kannst auch manuell erstellen:
 
 ```bash
 mkdir -p ~/Documents/Vault/Agenda
-touch ~/Documents/Vault/Agenda/{Daily,Inbox,Exchange}.md
+touch ~/Documents/Vault/Agenda/{Agenda,Exchange}.md
 ```
 
 ## Nach deinem Zeitplan fragen
@@ -201,11 +158,11 @@ outheis liest deine Agenda-Dateien und antwortet natürlich.
 
 ### Leseabfragen
 
-Wenn du die Agenda abrufst ("Agenda", "was steht heute an", "gib mir die Agenda"), gibt cato den Inhalt von Daily.md wörtlich zurück — keine Neuformatierung, keine Zusammenfassung. Der Dateiinhalt ist die Antwort. Relay leitet ihn direkt weiter ohne zweiten LLM-Aufruf.
+Wenn du die Agenda abrufst ("Agenda", "was steht heute an", "gib mir die Agenda"), gibt cato den Inhalt von Agenda.md wörtlich zurück — keine Neuformatierung, keine Zusammenfassung. Der Dateiinhalt ist die Antwort. Relay leitet ihn direkt weiter ohne zweiten LLM-Aufruf.
 
 ## Integration mit anderen Agenten
 
-**Relay (ou)** leitet Terminabfragen an Agenda weiter. Leseabfragen ("Agenda", "was steht heute") werden direkt an cato weitergeleitet, der Daily.md wörtlich zurückgibt. Schreib- und Aktualisierungsabfragen durchlaufen die vollständige Tool-Schleife.
+**Relay (ou)** leitet Terminabfragen an Agenda weiter. Leseabfragen ("Agenda", "was steht heute") werden direkt an cato weitergeleitet, der Agenda.md wörtlich zurückgibt. Schreib- und Aktualisierungsabfragen durchlaufen die vollständige Tool-Schleife.
 
 **Data-Agent (zeno)** kann deinen Vault durchsuchen, schreibt aber nicht in Agenda-Dateien.
 
@@ -214,7 +171,6 @@ Wenn du die Agenda abrufst ("Agenda", "was steht heute an", "gib mir die Agenda"
 **Pattern-Agent (rumi)** beobachtet deine Planungsmuster und kann:
 
 - Rules erstellen wie "Benutzer bevorzugt keine Meetings vor 10:00"
-
 - Wiederkehrende Aufgaben bemerken und Automatisierung vorschlagen
 - In Exchange.md schreiben, wenn Seed-Dateien Genehmigung benötigen
 
@@ -222,23 +178,20 @@ Wenn du die Agenda abrufst ("Agenda", "was steht heute an", "gib mir die Agenda"
 
 ```
 vault/Agenda/
-├── Daily.md              # Your working file
-├── Inbox.md              # Quick capture
-├── Exchange.md           # Async dialogue
-└── Shadow.md             # Chronological entries from vault (auto-generated)
+├── Agenda.md             # Deine Arbeitsdatei
+├── Exchange.md           # Asynchroner Dialog
+├── Shadow.md             # Chronologischer Vault-Index (automatisch erstellt)
+└── Backlog.md            # Priorisierte Shadow-Ansicht (auf Anfrage)
 
 ~/.outheis/human/cache/agenda/
-├── hashes.json           # SHA256 hashes for change detection
-├── Daily.md.prev         # Previous version for diff
-├── Inbox.md.prev
-└── Exchange.md.prev
+└── hashes.json           # SHA256-Hashes zur Änderungserkennung
 ```
 
 Der Cache ist neu erstellbar — jederzeit löschen und outheis baut ihn neu auf.
 
 ## Shadow.md
 
-Ein Staging-Bereich für chronologische Einträge, die im Vault erkannt wurden.
+Ein Staging-Bereich für chronologische Einträge aus dem gesamten Vault.
 
 ### Zweck
 
@@ -248,41 +201,36 @@ Dein Vault enthält Daten in vielen Dateien: Projektdeadlines, Geburtstage in Ko
 
 Der Data-Agent (zeno) führt um 03:30 (konfigurierbar) einen nächtlichen Scan durch:
 
-1. **Vault scannen** — Alle Dateien auf datumrelevante Inhalte durchsuchen
-2. **Muster erkennen** — Deadlines, Geburtstage, Termine, wiederkehrende Ereignisse
-3. **Neue Einträge anhängen** — Shadow.md ergänzen ohne bestehende Inhalte zu überschreiben
-4. **Quellverfolgung** — Jeder Eintrag verweist auf seine Ursprungsdatei
+1. **Vault scannen** — Alle Dateien auf datumrelevante Inhalte durchsuchen (per LLM-Extraktion)
+2. **Änderungen erkennen** — Hash-basierter Cache; nur neue oder geänderte Dateien werden neu verarbeitet
+3. **Abschnittsweise aktualisieren** — Jede Quelldatei hat einen eigenen `<!-- BEGIN/END -->`-Block; Abschnitte werden unabhängig ersetzt
+4. **Quellverfolgung** — Jeder Abschnitt ist seiner Ursprungsdatei zugeordnet
 
 ### Format
 
+Shadow.md ist nach Quelldateien gegliedert. Jeder Abschnitt wird durch HTML-Kommentarmarker abgegrenzt, damit einzelne Abschnitte ersetzt werden können, ohne den Rest zu berühren:
+
 ```markdown
-# Shadow
+# Shadow — Vault Chronological Index
+*Last updated: 2026-04-14 21:55*
 
-*Chronological entries detected from vault. Auto-updated nightly.*
+<!-- BEGIN: projects/alpha.md -->
+## projects/alpha.md
+#date-2026-04-15 #action-required
+Project Alpha deadline
 
----
+#date-2026-05-12
+Emma's birthday
+<!-- END: projects/alpha.md -->
 
-## Scan 2026-03-30 03:30
-
-- ⏰ **2026-04-15** Project Alpha deadline `← projects/alpha.md`
-- 🎂 **2026-05-12** Emma's birthday `← contacts/family.md`
-- 🔄 **every Monday** Team standup `← work/routines.md`
-- 📅 **2026-04-01** Tax filing deadline `← admin/taxes.md`
-
-## Scan 2026-03-29 03:30
-
-- ☐ **2026-03-31** Send quarterly report `← work/q1.md`
+<!-- BEGIN: work/routines.md -->
+## work/routines.md
+#recurring-weekly
+Team standup
+<!-- END: work/routines.md -->
 ```
 
-### Icons
-
-| Icon | Typ | Beispiel |
-|------|-----|---------|
-| ⏰ | Deadline | Projektfälligkeiten |
-| 🎂 | Geburtstag | Kontaktgeburtstage |
-| 📅 | Termin | Feste Kalendereinträge |
-| 🔄 | Wiederkehrend | Wöchentliche/monatliche Ereignisse |
-| ☐ | Aufgabe | Zeitgebundene Aufgaben |
+Jeder Eintrag besteht aus zwei Zeilen: einer Tag-Zeile gefolgt von einer Klartextbeschreibung. Die Tag-Zeile trägt den Planungsanker; die Beschreibung ist für sich verständlich — ohne weiteren Kontext.
 
 ### Vollständigkeit von Einträgen
 
@@ -299,11 +247,36 @@ Einträge ohne einen dieser Anker sind semantisch unvollständig: der Agent kann
 
 **Überfällige Einträge** — liegt ein `#date` in der Vergangenheit und wurde keine Entscheidung festgehalten, bleibt der Eintrag sichtbar. Überfällig = muss entschieden werden (erledigen, verschieben oder streichen).
 
+#### Erledigung — `#done-YYYY-MM-DD`
+
+Wenn du einen Eintrag als erledigt markierst (via `> erledigt`-Anmerkung in Agenda.md), speichert outheis das Erledigungsdatum anstatt den Eintrag zu löschen:
+
+```
+#done-2026-04-14 #date-2026-04-10 #action-required
+Alex Smith mailen — Empfehlung zur Weiterbildung
+```
+
+Das `#done-*`-Tag wird in Shadow.md und in die Quell-Vault-Datei geschrieben. Erledigte Einträge werden sofort aus der Agenda gefiltert und tauchen nie wieder auf.
+
+Nach einer konfigurierbaren Aufbewahrungsfrist werden erledigte Einträge automatisch aus Shadow.md entfernt:
+
+```json
+{
+  "agents": {
+    "agenda": {
+      "retention": 90
+    }
+  }
+}
+```
+
+Der Standard ist kein Aufbewahrungslimit (`null`). Setze `retention` auf die Anzahl der Tage, nach denen erledigte Einträge aus Shadow.md entfernt werden.
+
 **Tag-Namen wählst du selbst.** `#action-required` ist der outheis-Standard; du kannst `#attention`, `#priority`, `#open` oder jeden anderen Marker verwenden, den deine Rules-Datei definiert — solange der Agent weiß, welches Tag "immer zeigen" bedeutet.
 
 ### Integration mit Daily
 
-Der Agenda-Agent liest Shadow.md und zeigt relevante Einträge in Daily.md an. Wenn du fragst "was steht diese Woche an?", prüft outheis sowohl deinen expliziten Zeitplan als auch Shadows erkannte Daten.
+Der Agenda-Agent liest Shadow.md und zeigt relevante Einträge in Agenda.md an. Wenn du fragst "was steht diese Woche an?", prüft outheis sowohl deinen expliziten Zeitplan als auch Shadows erkannte Daten.
 
 ### Konfiguration
 
@@ -339,9 +312,9 @@ In `config.json`:
   "schedule": {
     "agenda_review": {
       "enabled": true,
-      "hourly_at_minute": 55,
-      "start_hour": 4,
-      "end_hour": 23
+      "time": ["04:55", "05:55", "06:55", "07:55", "08:55", "09:55", "10:55",
+               "11:55", "12:55", "13:55", "14:55", "15:55", "16:55", "17:55",
+               "18:55", "19:55", "20:55", "21:55", "22:55", "23:55"]
     }
   }
 }
@@ -350,15 +323,12 @@ In `config.json`:
 | Einstellung | Standard | Beschreibung |
 |-------------|---------|--------------|
 | `enabled` | true | Agenda-Agent aktivieren/deaktivieren |
-| `hourly_at_minute` | 55 | Minute jeder Stunde für die Überprüfung |
-| `start_hour` | 4 | Erste Stunde des Tages zum Ausführen (einschließlich) |
-| `end_hour` | 23 | Letzte Stunde des Tages zum Ausführen (einschließlich) |
+| `time` | 04:55–23:55 stündlich | Liste der Ausführungszeiten |
 
 ## Best Practices
 
-1. **Daily.md einfach halten** — 🧘 Morgen + 🔴 Zeitplan + 🟠 Aufgaben reicht
-2. **Inbox für Schnellerfassung nutzen** — Nicht denken, einfach reinschreiben
+1. **Agenda.md einfach halten** — 🧘 Persönlich + 📅 Heute + 🗓️ Diese Woche reicht
+2. **Mit `>` annotieren** — `> verschieben auf ...` oder `> erledigt` verwenden, um cato anzuweisen ohne die Aufgabe selbst zu bearbeiten
 3. **Exchange beantworten wenn möglich** — Kein Druck, aber es hilft outheis zu lernen
-4. **Mit `>` kommentieren** — `> verschieben auf ...` oder `> erledigt` verwenden, um outheis anzuweisen ohne die Aufgabe selbst zu bearbeiten
-5. **outheis die Struktur verwalten lassen** — Auf den Inhalt konzentrieren, nicht die Formatierung
-6. **Manuelle Aktualisierung sparsam nutzen** — Stündlich reicht meistens aus
+4. **outheis die Struktur verwalten lassen** — Auf den Inhalt konzentrieren, nicht die Formatierung
+5. **Manuelle Aktualisierung sparsam nutzen** — Stündlich reicht meistens aus
