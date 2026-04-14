@@ -1,6 +1,6 @@
 # The Hybrid Memory Stack: Where Code Ends and LLM Begins
 
-*The line that's separating the domain of tasks to be handled with deterministic rule-based approaches from ones that require fuzzy AI language-based decisions.*
+*The sharp boundary between deterministic structure and learned meaning — why neither pure code nor pure LLM is sufficient, and how outheis divides responsibility between the two.*
 
 ---
 

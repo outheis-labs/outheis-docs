@@ -1,6 +1,6 @@
 # Data Formats and Conventions
 
-This document specifies the structure and format of data in outheis, enabling agents to make reliable assumptions about content.
+*Structure and format of all data in outheis — enabling agents to make reliable assumptions about content.*
 
 ---
 

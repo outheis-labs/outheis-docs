@@ -14,7 +14,6 @@
 ## Design {#design}
 
 <ul class="toc-list">
-<li><a href="design/index.html"><div class="title">Design</div><div class="description">Technische Grundlagen — die konzeptionelle Architektur vor dem Code.</div></a></li>
 <li><a href="design/01-why-os-principles.html"><div class="title">Warum Betriebssystemprinzipien auf agent-Architekturen zutreffen</div><div class="description">Multi-agent-KI-Systeme stehen vor Herausforderungen, die Betriebssysteme vor Jahrzehnten gelöst...</div></a></li>
 <li><a href="design/02-systems-survey.html"><div class="title">Systemüberblick: Betriebssysteme und anwendbare Konzepte</div><div class="description">Betriebssysteme haben Probleme gelöst, die agent-Architekturen gerade erst entdecken. Dieser...</div></a></li>
 <li><a href="design/03-architecture.html"><div class="title">Architektur</div><div class="description">Die outheis-Architektur ist kein Zufallsprodukt — sie ist aus Betriebssystemprinzipien abgeleitet.</div></a></li>

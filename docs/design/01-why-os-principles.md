@@ -1,6 +1,6 @@
 # Operating System Engineering
 
-*Why Operating System Principles Apply to Agent Architectures*
+*Multi-agent AI systems face the same challenges that operating systems solved decades ago. Message passing, ownership semantics, fault isolation — these aren't arbitrary choices but proven solutions.*
 
 ---
 

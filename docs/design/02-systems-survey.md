@@ -2,6 +2,8 @@
 
 *Operating systems and architectural patterns relevant to multi-agent AI system design.*
 
+Systems covered: **DragonFlyBSD** — **Erlang/OTP** — **seL4** — **Plan 9** — **OpenBSD**
+
 ---
 
 ## DragonFlyBSD

@@ -1,6 +1,6 @@
 # Agent Prompts and Communication Rules
 
-This document specifies how agents communicate—with users, with each other, and with themselves. All prompts are published for transparency.
+*How agents communicate — with users, with each other, and with themselves. All prompts are published for transparency.*
 
 ---
 

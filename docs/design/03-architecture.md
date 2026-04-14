@@ -1,6 +1,6 @@
 # Architecture
 
-This document describes the outheis architecture derived from the operating system principles surveyed in the previous documents.
+*System structure, agent roles, ownership model, message protocol, dispatcher design, vault structure, configuration format.*
 
 ---
 
