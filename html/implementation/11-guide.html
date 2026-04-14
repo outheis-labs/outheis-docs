@@ -732,10 +732,37 @@ outheis rules relay   # Show relay agent rules
 <td>"! I am 54"</td>
 <td>Saves to Memory (explicit marker)</td>
 </tr>
+<tr>
+<td>"@ Call dentist Friday"</td>
+<td>Writes directly to Agenda</td>
+</tr>
 </tbody>
 </table>
+<h3 id="prefixes">Prefixes</h3>
+<table>
+<thead>
+<tr>
+<th>Prefix</th>
+<th>Meaning</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>!</code></td>
+<td>Save to Memory</td>
+<td><code>! I prefer short answers</code></td>
+</tr>
+<tr>
+<td><code>@</code></td>
+<td>Write to Agenda</td>
+<td><code>@ Team meeting Thursday 10am</code></td>
+</tr>
+</tbody>
+</table>
+<p>The <code>@</code> prefix (at-sign followed by a space) bypasses relay entirely — the item is passed directly to the agenda agent without clarifying questions.</p>
 <h3 id="explicit-agent-mentions">Explicit Agent Mentions</h3>
-<p>Use <code>@name</code> for direct delegation:</p>
+<p>Use <code>@name</code> (no space) for direct delegation:</p>
 <table>
 <thead>
 <tr>

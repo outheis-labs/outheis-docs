@@ -179,10 +179,20 @@ Just talk naturally. Relay decides when to use tools:
 | "what's on today?" | Uses check_agenda tool → Agenda agent |
 | "where do I live?" | Uses search_vault tool → Data agent |
 | "! I am 54" | Saves to Memory (explicit marker) |
+| "@ Call dentist Friday" | Writes directly to Agenda |
+
+### Prefixes
+
+| Prefix | Meaning | Example |
+|--------|---------|---------|
+| `! ` | Save to Memory | `! I prefer short answers` |
+| `@ ` | Write to Agenda | `@ Team meeting Thursday 10am` |
+
+The `@ ` prefix (at-sign followed by a space) bypasses relay entirely — the item is passed directly to the agenda agent without clarifying questions.
 
 ### Explicit Agent Mentions
 
-Use `@name` for direct delegation:
+Use `@name` (no space) for direct delegation:
 
 | Mention | Agent | Use for |
 |---------|-------|---------|
