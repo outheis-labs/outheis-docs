@@ -11,6 +11,3 @@ venv/
 *.swp
 *~
 
-# DE build — built locally but not deployed to Pages
-# Remove this line to re-enable DE on GitHub Pages
-html/de/

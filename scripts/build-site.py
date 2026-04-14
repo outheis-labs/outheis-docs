@@ -3,7 +3,7 @@
 Build the outheis website from docs/ and docs-de/.
 
 Reads Markdown, converts to HTML, wraps in the layout template,
-and outputs to html/ (EN) and html-de/ (DE).
+and outputs to html/ (EN) and html/de/ (DE).
 
 Usage:
     python scripts/build-site.py
@@ -472,8 +472,8 @@ def main():
         else:
             build_page(md_file, DOCS_SOURCE, DOCS, template, 'en')
     
-    DOCS_DE_OUT = ROOT / "html-de"
-    print(f"\nBuilding DE: {DOCS_DE.name}/ → html-de/")
+    DOCS_DE_OUT = ROOT / "html" / "de"
+    print(f"\nBuilding DE: {DOCS_DE.name}/ → html/de/")
     for md_file in sorted(DOCS_DE.rglob("*.md")):
         if any(part.startswith('_') for part in md_file.parts):
             continue

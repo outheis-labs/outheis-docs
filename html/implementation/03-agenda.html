@@ -751,66 +751,32 @@ touch ~/Documents/Vault/Agenda/{Agenda,Exchange}.md
 <h3 id="how-it-works">How It Works</h3>
 <p>The Data Agent (zeno) runs a nightly scan at 03:30 (configurable):</p>
 <ol>
-<li><strong>Scan vault</strong> — Parse all files for date-relevant content</li>
-<li><strong>Detect patterns</strong> — Deadlines, birthdays, appointments, recurring events</li>
-<li><strong>Append new entries</strong> — Add to Shadow.md without overwriting existing content</li>
-<li><strong>Source tracking</strong> — Each entry links back to its origin file</li>
+<li><strong>Scan vault</strong> — Read all files for date-relevant content via LLM extraction</li>
+<li><strong>Detect changes</strong> — Hash-based cache; only new or modified files are reprocessed</li>
+<li><strong>Update by section</strong> — Each source file has its own <code>&lt;!-- BEGIN/END --&gt;</code> block; sections are replaced independently</li>
+<li><strong>Source tracking</strong> — Each section is keyed to its origin file path</li>
 </ol>
 <h3 id="format">Format</h3>
-<pre><code class="language-markdown"># Shadow
+<p>Shadow.md is organised by source file. Each section is delimited by HTML comment markers so individual sections can be replaced without touching the rest:</p>
+<pre><code class="language-markdown"># Shadow — Vault Chronological Index
+*Last updated: 2026-04-14 21:55*
 
-*Chronological entries detected from vault. Auto-updated nightly.*
+&lt;!-- BEGIN: projects/alpha.md --&gt;
+## projects/alpha.md
+#date-2026-04-15 #action-required
+Project Alpha deadline
 
----
+#date-2026-05-12
+Emma's birthday
+&lt;!-- END: projects/alpha.md --&gt;
 
-## Scan 2026-03-30 03:30
-
-- ⏰ **2026-04-15** Project Alpha deadline `← projects/alpha.md`
-- 🎂 **2026-05-12** Emma's birthday `← contacts/family.md`
-- 🔄 **every Monday** Team standup `← work/routines.md`
-- 📅 **2026-04-01** Tax filing deadline `← admin/taxes.md`
-
-## Scan 2026-03-29 03:30
-
-- ☐ **2026-03-31** Send quarterly report `← work/q1.md`
+&lt;!-- BEGIN: work/routines.md --&gt;
+## work/routines.md
+#recurring-weekly
+Team standup
+&lt;!-- END: work/routines.md --&gt;
 </code></pre>
-<h3 id="icons">Icons</h3>
-<table>
-<thead>
-<tr>
-<th>Icon</th>
-<th>Type</th>
-<th>Example</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>⏰</td>
-<td>Deadline</td>
-<td>Project due dates</td>
-</tr>
-<tr>
-<td>🎂</td>
-<td>Birthday</td>
-<td>Contact birthdays</td>
-</tr>
-<tr>
-<td>📅</td>
-<td>Appointment</td>
-<td>Fixed calendar events</td>
-</tr>
-<tr>
-<td>🔄</td>
-<td>Recurring</td>
-<td>Weekly/monthly events</td>
-</tr>
-<tr>
-<td>☐</td>
-<td>Task</td>
-<td>Time-bound tasks</td>
-</tr>
-</tbody>
-</table>
+<p>Each entry is two lines: a tag line followed by a plain-text description. The tag line carries the scheduling anchor; the description is self-contained and readable without context.</p>
 <h3 id="item-completeness">Item Completeness</h3>
 <p>For the Agenda agent to reliably schedule an item, every Shadow entry needs one of two anchors:</p>
 <table>
@@ -834,6 +800,22 @@ touch ~/Documents/Vault/Agenda/{Agenda,Exchange}.md
 <p>Items without either anchor are semantically incomplete: the agent cannot know when, or whether, to surface them.</p>
 <p><strong>Reminder date vs. event date</strong> — <code>#date</code> controls <em>when the item appears</em>, not necessarily when the event occurs. For a birthday, both dates are the same. For "remind me on May 3rd about the event on June 30th", <code>#date-2026-05-03</code> is the trigger; June 30th belongs in the item text. When the two dates differ, the event date is plain text; <code>#date</code> is the agenda trigger.</p>
 <p><strong>Overdue items</strong> — if a <code>#date</code> is in the past and no decision has been recorded, the item stays visible. Overdue = must decide (complete, defer, or drop).</p>
+<h4 id="completion-done-yyyy-mm-dd">Completion — <code>#done-YYYY-MM-DD</code></h4>
+<p>When you mark an item done (via a <code>&gt; done</code> annotation in Agenda.md), outheis records the completion date rather than deleting the entry:</p>
+<pre><code>#done-2026-04-14 #date-2026-04-10 #action-required
+Email Alex Smith — recommendation on training track
+</code></pre>
+<p>The <code>#done-*</code> tag is written to Shadow.md and to the source vault file. Done items are filtered out of the agenda immediately and never resurface — the loop of completed items reappearing is explicitly prevented.</p>
+<p>After a configurable retention period, done entries are pruned from Shadow.md automatically:</p>
+<pre><code class="language-json">{
+  &quot;agents&quot;: {
+    &quot;agenda&quot;: {
+      &quot;retention&quot;: 90
+    }
+  }
+}
+</code></pre>
+<p>The default is no retention limit (<code>null</code>). Set <code>retention</code> to the number of days after which completed entries are removed from Shadow.md.</p>
 <p><strong>Tag names are yours to choose.</strong> <code>#action-required</code> is outheis's default; you can use <code>#attention</code>, <code>#priority</code>, <code>#open</code>, or any marker your rules file defines — as long as the agent knows which tag means "always show".</p>
 <h3 id="integration-with-daily">Integration with Daily</h3>
 <p>Agenda agent reads Shadow.md and can surface relevant entries in Daily.md. When you ask "what's on this week?", outheis checks both your explicit schedule and Shadow's detected dates.</p>

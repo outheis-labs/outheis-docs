@@ -200,41 +200,36 @@ Your vault contains dates scattered across many files: project deadlines, birthd
 
 The Data Agent (zeno) runs a nightly scan at 03:30 (configurable):
 
-1. **Scan vault** — Parse all files for date-relevant content
-2. **Detect patterns** — Deadlines, birthdays, appointments, recurring events
-3. **Append new entries** — Add to Shadow.md without overwriting existing content
-4. **Source tracking** — Each entry links back to its origin file
+1. **Scan vault** — Read all files for date-relevant content via LLM extraction
+2. **Detect changes** — Hash-based cache; only new or modified files are reprocessed
+3. **Update by section** — Each source file has its own `<!-- BEGIN/END -->` block; sections are replaced independently
+4. **Source tracking** — Each section is keyed to its origin file path
 
 ### Format
 
+Shadow.md is organised by source file. Each section is delimited by HTML comment markers so individual sections can be replaced without touching the rest:
+
 ```markdown
-# Shadow
+# Shadow — Vault Chronological Index
+*Last updated: 2026-04-14 21:55*
 
-*Chronological entries detected from vault. Auto-updated nightly.*
+<!-- BEGIN: projects/alpha.md -->
+## projects/alpha.md
+#date-2026-04-15 #action-required
+Project Alpha deadline
 
----
+#date-2026-05-12
+Emma's birthday
+<!-- END: projects/alpha.md -->
 
-## Scan 2026-03-30 03:30
-
-- ⏰ **2026-04-15** Project Alpha deadline `← projects/alpha.md`
-- 🎂 **2026-05-12** Emma's birthday `← contacts/family.md`
-- 🔄 **every Monday** Team standup `← work/routines.md`
-- 📅 **2026-04-01** Tax filing deadline `← admin/taxes.md`
-
-## Scan 2026-03-29 03:30
-
-- ☐ **2026-03-31** Send quarterly report `← work/q1.md`
+<!-- BEGIN: work/routines.md -->
+## work/routines.md
+#recurring-weekly
+Team standup
+<!-- END: work/routines.md -->
 ```
 
-### Icons
-
-| Icon | Type | Example |
-|------|------|---------|
-| ⏰ | Deadline | Project due dates |
-| 🎂 | Birthday | Contact birthdays |
-| 📅 | Appointment | Fixed calendar events |
-| 🔄 | Recurring | Weekly/monthly events |
-| ☐ | Task | Time-bound tasks |
+Each entry is two lines: a tag line followed by a plain-text description. The tag line carries the scheduling anchor; the description is self-contained and readable without context.
 
 ### Item Completeness
 
@@ -250,6 +245,31 @@ Items without either anchor are semantically incomplete: the agent cannot know w
 **Reminder date vs. event date** — `#date` controls *when the item appears*, not necessarily when the event occurs. For a birthday, both dates are the same. For "remind me on May 3rd about the event on June 30th", `#date-2026-05-03` is the trigger; June 30th belongs in the item text. When the two dates differ, the event date is plain text; `#date` is the agenda trigger.
 
 **Overdue items** — if a `#date` is in the past and no decision has been recorded, the item stays visible. Overdue = must decide (complete, defer, or drop).
+
+#### Completion — `#done-YYYY-MM-DD`
+
+When you mark an item done (via a `> done` annotation in Agenda.md), outheis records the completion date rather than deleting the entry:
+
+```
+#done-2026-04-14 #date-2026-04-10 #action-required
+Email Alex Smith — recommendation on training track
+```
+
+The `#done-*` tag is written to Shadow.md and to the source vault file. Done items are filtered out of the agenda immediately and never resurface — the loop of completed items reappearing is explicitly prevented.
+
+After a configurable retention period, done entries are pruned from Shadow.md automatically:
+
+```json
+{
+  "agents": {
+    "agenda": {
+      "retention": 90
+    }
+  }
+}
+```
+
+The default is no retention limit (`null`). Set `retention` to the number of days after which completed entries are removed from Shadow.md.
 
 **Tag names are yours to choose.** `#action-required` is outheis's default; you can use `#attention`, `#priority`, `#open`, or any marker your rules file defines — as long as the agent knows which tag means "always show".
 
