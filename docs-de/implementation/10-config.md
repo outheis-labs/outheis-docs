@@ -36,7 +36,14 @@ Wird beim ersten `outheis start` automatisch mit sinnvollen Standardwerten erste
         "api_key": "sk-ant-..."
       },
       "ollama": {
-        "base_url": "http://localhost:11434"
+        "local": {
+          "base_url": "http://localhost:11434",
+          "env_vars": {"OLLAMA_MAX_LOADED_MODELS": "2"}
+        },
+        "cloud": {
+          "api_key": "835a...",
+          "base_url": "https://ollama.com/v1"
+        }
       }
     },
     "models": {
@@ -51,9 +58,14 @@ Wird beim ersten `outheis start` automatisch mit sinnvollen Standardwerten erste
         "run_mode": "on-demand"
       },
       "local": {
-        "provider": "ollama",
-        "name": "llama3.2:3b",
+        "provider": "ollama.local",
+        "name": "gemma4:26b",
         "run_mode": "persistent"
+      },
+      "cloud-gemma": {
+        "provider": "ollama.cloud",
+        "name": "gemma4:31b",
+        "run_mode": "on-demand"
       }
     }
   },
@@ -133,7 +145,26 @@ LLM-Anbieter und Modell-Aliase.
 | `api_key` | string | API-Schlüssel (oder Umgebungsvariable verwenden) |
 | `base_url` | string | Basis-URL überschreiben (für Ollama, benutzerdefinierte Endpunkte) |
 
-Anbieternamen: `anthropic`, `ollama`, `openai`
+Anbieternamen: `anthropic`, `openai`, `ollama.local`, `ollama.cloud`
+
+Der `ollama`-Anbieter ist verschachtelt — `local` und `cloud` sind Unter-Anbieter:
+
+```json
+"ollama": {
+  "local": {
+    "base_url": "http://localhost:11434",
+    "env_vars": {"OLLAMA_MAX_LOADED_MODELS": "2"}
+  },
+  "cloud": {
+    "api_key": "dein-ollama-api-key",
+    "base_url": "https://ollama.com/v1"
+  }
+}
+```
+
+Beide Unter-Anbieter sind optional. Modell-Aliase referenzieren sie als `"provider": "ollama.local"` bzw. `"provider": "ollama.cloud"`.
+
+**Ollama-Server-Lifecycle:** outheis startet `ollama serve` beim Start automatisch, wenn `ollama.local` konfiguriert ist und Ollama noch nicht läuft. Die `env_vars` werden dem Serverprozess mitgegeben.
 
 **API-Schlüssel-Auflösung:**
 1. Konfigurationsdatei (`api_key`-Feld)

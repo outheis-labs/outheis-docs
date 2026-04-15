@@ -38,7 +38,14 @@ Created automatically on first `outheis start` with sensible defaults.
         "api_key": "sk-ant-..."
       },
       "ollama": {
-        "base_url": "http://localhost:11434"
+        "local": {
+          "base_url": "http://localhost:11434",
+          "env_vars": {"OLLAMA_MAX_LOADED_MODELS": "2"}
+        },
+        "cloud": {
+          "api_key": "835a...",
+          "base_url": "https://ollama.com/v1"
+        }
       }
     },
     "models": {
@@ -53,9 +60,14 @@ Created automatically on first `outheis start` with sensible defaults.
         "run_mode": "on-demand"
       },
       "local": {
-        "provider": "ollama",
-        "name": "llama3.2:3b",
+        "provider": "ollama.local",
+        "name": "gemma4:26b",
         "run_mode": "persistent"
+      },
+      "cloud-gemma": {
+        "provider": "ollama.cloud",
+        "name": "gemma4:31b",
+        "run_mode": "on-demand"
       }
     }
   },
@@ -139,7 +151,26 @@ LLM providers and model aliases.
 | `api_key` | string | API key (or use environment variable) |
 | `base_url` | string | Override base URL (for Ollama, custom endpoints) |
 
-Provider names: `anthropic`, `ollama`, `openai`
+Provider names: `anthropic`, `openai`, `ollama.local`, `ollama.cloud`
+
+The `ollama` provider is nested — `local` and `cloud` are sub-providers:
+
+```json
+"ollama": {
+  "local": {
+    "base_url": "http://localhost:11434",
+    "env_vars": {"OLLAMA_MAX_LOADED_MODELS": "2"}
+  },
+  "cloud": {
+    "api_key": "your-ollama-api-key",
+    "base_url": "https://ollama.com/v1"
+  }
+}
+```
+
+Either sub-provider is optional. Model aliases reference them as `"provider": "ollama.local"` or `"provider": "ollama.cloud"`.
+
+**Ollama server lifecycle:** outheis starts `ollama serve` automatically on startup if `ollama.local` is configured and Ollama is not already running. Env vars from `env_vars` are passed to the server process.
 
 **API key resolution:**
 1. Config file (`api_key` field)
@@ -169,7 +200,7 @@ Model aliases used by agents.
 
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
-| `provider` | string | "anthropic" | Which provider to use |
+| `provider` | string | "anthropic" | `anthropic`, `openai`, `ollama.local`, `ollama.cloud` |
 | `name` | string | — | Model identifier |
 | `run_mode` | string | "on-demand" | `on-demand` or `persistent` |
 

@@ -41,6 +41,7 @@
 <li><a href="implementation/12-migration.html"><div class="title">Migration</div><div class="description">How to bring your existing knowledge into outheis.</div></a></li>
 <li><a href="implementation/13-webui.html"><div class="title">Web UI</div><div class="description">Local administration interface for outheis.</div></a></li>
 <li><a href="implementation/14-data-safety.html"><div class="title">Data Safety</div><div class="description">How outheis protects against prompt injection and untrusted content.</div></a></li>
+<li><a href="implementation/15-models.html"><div class="title">Model Evaluation</div><div class="description">Capability benchmarks for local and cloud models.</div></a></li>
 </ul>
 
 ## Installation {#installation}
