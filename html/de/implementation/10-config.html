@@ -586,7 +586,14 @@
         &quot;api_key&quot;: &quot;sk-ant-...&quot;
       },
       &quot;ollama&quot;: {
-        &quot;base_url&quot;: &quot;http://localhost:11434&quot;
+        &quot;local&quot;: {
+          &quot;base_url&quot;: &quot;http://localhost:11434&quot;,
+          &quot;env_vars&quot;: {&quot;OLLAMA_MAX_LOADED_MODELS&quot;: &quot;2&quot;}
+        },
+        &quot;cloud&quot;: {
+          &quot;api_key&quot;: &quot;835a...&quot;,
+          &quot;base_url&quot;: &quot;https://ollama.com/v1&quot;
+        }
       }
     },
     &quot;models&quot;: {
@@ -601,9 +608,14 @@
         &quot;run_mode&quot;: &quot;on-demand&quot;
       },
       &quot;local&quot;: {
-        &quot;provider&quot;: &quot;ollama&quot;,
-        &quot;name&quot;: &quot;llama3.2:3b&quot;,
+        &quot;provider&quot;: &quot;ollama.local&quot;,
+        &quot;name&quot;: &quot;gemma4:26b&quot;,
         &quot;run_mode&quot;: &quot;persistent&quot;
+      },
+      &quot;cloud-gemma&quot;: {
+        &quot;provider&quot;: &quot;ollama.cloud&quot;,
+        &quot;name&quot;: &quot;gemma4:31b&quot;,
+        &quot;run_mode&quot;: &quot;on-demand&quot;
       }
     }
   },
@@ -755,7 +767,21 @@
 </tr>
 </tbody>
 </table>
-<p>Anbieternamen: <code>anthropic</code>, <code>ollama</code>, <code>openai</code></p>
+<p>Anbieternamen: <code>anthropic</code>, <code>openai</code>, <code>ollama.local</code>, <code>ollama.cloud</code></p>
+<p>Der <code>ollama</code>-Anbieter ist verschachtelt — <code>local</code> und <code>cloud</code> sind Unter-Anbieter:</p>
+<pre><code class="language-json">&quot;ollama&quot;: {
+  &quot;local&quot;: {
+    &quot;base_url&quot;: &quot;http://localhost:11434&quot;,
+    &quot;env_vars&quot;: {&quot;OLLAMA_MAX_LOADED_MODELS&quot;: &quot;2&quot;}
+  },
+  &quot;cloud&quot;: {
+    &quot;api_key&quot;: &quot;dein-ollama-api-key&quot;,
+    &quot;base_url&quot;: &quot;https://ollama.com/v1&quot;
+  }
+}
+</code></pre>
+<p>Beide Unter-Anbieter sind optional. Modell-Aliase referenzieren sie als <code>"provider": "ollama.local"</code> bzw. <code>"provider": "ollama.cloud"</code>.</p>
+<p><strong>Ollama-Server-Lifecycle:</strong> outheis startet <code>ollama serve</code> beim Start automatisch, wenn <code>ollama.local</code> konfiguriert ist und Ollama noch nicht läuft. Die <code>env_vars</code> werden dem Serverprozess mitgegeben.</p>
 <p><strong>API-Schlüssel-Auflösung:</strong>
 1. Konfigurationsdatei (<code>api_key</code>-Feld)
 2. Umgebungsvariable (<code>ANTHROPIC_API_KEY</code> usw.)</p>

@@ -3,30 +3,30 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Contents · outheis</title>
-  <link rel="icon" type="image/png" href="favicon-96x96.png" sizes="96x96">
-  <link rel="icon" type="image/svg+xml" href="favicon.svg">
-  <link rel="shortcut icon" href="favicon.ico">
-  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
-  <link rel="manifest" href="site.webmanifest">
+  <title>Model Evaluation · outheis</title>
+  <link rel="icon" type="image/png" href="../favicon-96x96.png" sizes="96x96">
+  <link rel="icon" type="image/svg+xml" href="../favicon.svg">
+  <link rel="shortcut icon" href="../favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="../apple-touch-icon.png">
+  <link rel="manifest" href="../site.webmanifest">
   <style>
     @font-face {
       font-family: 'Inter';
-      src: url('assets/fonts/InterVariable.woff2') format('woff2');
+      src: url('../assets/fonts/InterVariable.woff2') format('woff2');
       font-weight: 100 900;
       font-style: normal;
       font-display: swap;
     }
     @font-face {
       font-family: 'IBM Plex Sans';
-      src: url('assets/fonts/IBMPlexSans-Variable.woff2') format('woff2-variations');
+      src: url('../assets/fonts/IBMPlexSans-Variable.woff2') format('woff2-variations');
       font-weight: 100 700;
       font-style: normal;
       font-display: swap;
     }
     @font-face {
       font-family: 'IBM Plex Mono';
-      src: url('assets/fonts/IBMPlexMono-Regular.woff2') format('woff2');
+      src: url('../assets/fonts/IBMPlexMono-Regular.woff2') format('woff2');
       font-weight: 400;
       font-style: normal;
       font-display: swap;
@@ -531,11 +531,11 @@
 
   <header>
     <div class="header-left">
-      <a href="index.html" class="logo">οὐθείς</a>
+      <a href="../index.html" class="logo">οὐθείς</a>
       
     </div>
     <nav>
-      <a href="contents.html" style="font-weight: 500; color: #1a1a1a;">Contents</a>
+      <a href="../contents.html" style="font-weight: 500; color: #1a1a1a;">Contents</a>
       <a href="https://github.com/outheis-labs/outheis-beta">GitHub ↗</a>
       <span class="lang-switch"></span>
     </nav>
@@ -543,89 +543,485 @@
 
   <main>
     <div class="page-header">
-      <h1>Contents</h1>
-      
+      <h1>Model Evaluation</h1>
+      <p class="subtitle">Capability benchmarks for local and cloud models used in outheis agents.</p>
     </div>
 
-    <section class="section" id="foundations">
-      <h2>Foundations</h2>
-      <div class="section-text"><h2>Foundations</h2>
-        <ul class="toc-list">
-<li><a href="foundations/index.html"><div class="title">Why outheis</div><div class="description">On sovereignty, cognition, and why the extractive model fails.</div></a></li>
-<li><a href="foundations/01-design-principles.html"><div class="title">Design Principles</div><div class="description">On building tools that support life instead of consuming it.</div></a></li>
-<li><a href="foundations/02-semantic-foundations.html"><div class="title">Information and Semantics</div><div class="description">Why information is not data — and what follows from that for a personal AI system.</div></a></li>
-<li><a href="foundations/03-attention-as-architecture.html"><div class="title">Attention as Architecture</div><div class="description">Learned attention mechanisms can replace complex sequential processing</div></a></li>
-<li><a href="foundations/04-annotation-as-ground-truth.html"><div class="title">Annotation as Ground Truth</div><div class="description">On the structural parallel between supervised learning and human correction — and what it...</div></a></li>
-<li><a href="foundations/05-tags-as-scaffolding.html"><div class="title">Tags as Scaffolding: A Deprecation Path</div><div class="description">Full free text analysis is not yet feasible due to general limitations of current models, but...</div></a></li>
-</ul>
+    <section class="section" id="test-suite">
+      <h2>Test Suite</h2>
+      <div class="section-text"><h2>Test Suite</h2>
+        <p>Four capability tests cover the full agent stack:</p>
+<table>
+<thead>
+<tr>
+<th>Test</th>
+<th>What it measures</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>test_ollama_tool_use.py</code></td>
+<td>Correct tool invocation via OpenAI-compatible API</td>
+</tr>
+<tr>
+<td><code>test_agent_capability.py</code></td>
+<td>9 realistic scenarios: routing, vault search, error recovery, hallucination</td>
+</tr>
+<tr>
+<td><code>test_zeno_quality.py</code></td>
+<td>Data agent (zeno) quality: tool calls + answer correctness, scored 0–3 per query</td>
+</tr>
+<tr>
+<td><code>test_pattern_agent.py</code></td>
+<td>Pattern agent (rumi): extract, consolidate, distill, promote, validate</td>
+</tr>
+</tbody>
+</table>
+<p>Run against any model:</p>
+<pre><code class="language-bash"># Local
+python tools/test_agent_capability.py --models gemma4:26b
+
+# Ollama cloud
+python tools/test_agent_capability.py \
+  --url https://ollama.com \
+  --api-key &lt;your-key&gt; \
+  --models gemma4:31b
+</code></pre>
       </div>
     </section>
 
-    <section class="section" id="design">
-      <h2>Design</h2>
-      <div class="section-text"><h2>Design</h2>
-        <ul class="toc-list">
-<li><a href="design/01-why-os-principles.html"><div class="title">Operating System Engineering</div><div class="description">Multi-agent AI systems face the same challenges that operating systems solved decades ago....</div></a></li>
-<li><a href="design/02-systems-survey.html"><div class="title">Systems Survey</div><div class="description">Operating systems and architectural patterns relevant to multi-agent AI system design.</div></a></li>
-<li><a href="design/03-architecture.html"><div class="title">Architecture</div><div class="description">System structure, agent roles, ownership model, message protocol, dispatcher design, vault...</div></a></li>
-<li><a href="design/04-data-formats.html"><div class="title">Data Formats and Conventions</div><div class="description">Structure and format of all data in outheis — enabling agents to make reliable assumptions about...</div></a></li>
-<li><a href="design/05-related-work.html"><div class="title">Related Work</div><div class="description">Survey of existing multi-agent frameworks and how outheis differs.</div></a></li>
-<li><a href="design/06-agent-prompts.html"><div class="title">Agent Prompts and Communication Rules</div><div class="description">How agents communicate — with users, with each other, and with themselves. All prompts are...</div></a></li>
-<li><a href="design/07-hybrid-memory-stack.html"><div class="title">The Hybrid Memory Stack: Where Code Ends and LLM Begins</div><div class="description">The sharp boundary between deterministic structure and learned meaning — why neither pure code...</div></a></li>
-<li><a href="design/08-quality-threshold.html"><div class="title">The Quality Threshold: Why Capability Doesn't Scale Linearly</div><div class="description">On emergent abilities, the limits of parallelism, and the minimum viable model.</div></a></li>
-</ul>
+    <section class="section" id="results">
+      <h2>Results</h2>
+      <div class="section-text"><h2>Results</h2>
+        <h3 id="gemma431b-ollama-cloud-2026-04-15">gemma4:31b (Ollama cloud) — 2026-04-15</h3>
+<p><strong>Tool use</strong></p>
+<table>
+<thead>
+<tr>
+<th>Model</th>
+<th>Result</th>
+<th>Time</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>gemma4:31b</td>
+<td>✓</td>
+<td>6.1s</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Agent capability</strong> (9 scenarios)</p>
+<table>
+<thead>
+<tr>
+<th>Scenario</th>
+<th>Result</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>relay_route_agenda</td>
+<td>✓</td>
+<td></td>
+</tr>
+<tr>
+<td>relay_route_data</td>
+<td>✓</td>
+<td></td>
+</tr>
+<tr>
+<td>relay_no_tool_needed</td>
+<td>✓</td>
+<td></td>
+</tr>
+<tr>
+<td>data_search_by_tag</td>
+<td>✓</td>
+<td></td>
+</tr>
+<tr>
+<td>data_read_file</td>
+<td>✓</td>
+<td></td>
+</tr>
+<tr>
+<td>data_error_recovery</td>
+<td>~</td>
+<td>Missing: hiro, mcp</td>
+</tr>
+<tr>
+<td>data_hallucination_check</td>
+<td>✗</td>
+<td>Did not return "not found"</td>
+</tr>
+<tr>
+<td>agenda_read_today</td>
+<td>✓</td>
+<td></td>
+</tr>
+<tr>
+<td>agenda_add_event</td>
+<td>~</td>
+<td>Event not written to correct date</td>
+</tr>
+</tbody>
+</table>
+<p><strong>6/9 OK, 2 partial, 1 fail</strong></p>
+<p><strong>Zeno quality</strong> (5 queries, max 15 points)</p>
+<table>
+<thead>
+<tr>
+<th>Query</th>
+<th>Score</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>agent-count</td>
+<td>3/3</td>
+</tr>
+<tr>
+<td>billing-location</td>
+<td>3/3</td>
+</tr>
+<tr>
+<td>billing-error-raises</td>
+<td>3/3</td>
+</tr>
+<tr>
+<td>relay-imports</td>
+<td>3/3</td>
+</tr>
+<tr>
+<td>agent-list</td>
+<td>3/3</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Total: 15/15</strong></p>
+<p><strong>Pattern agent</strong> (10 scenarios)</p>
+<table>
+<thead>
+<tr>
+<th>Scenario</th>
+<th>Result</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>extract_basic</td>
+<td>✓</td>
+<td></td>
+</tr>
+<tr>
+<td>extract_empty</td>
+<td>✓</td>
+<td></td>
+</tr>
+<tr>
+<td>consolidate_duplicates</td>
+<td>✓</td>
+<td></td>
+</tr>
+<tr>
+<td>consolidate_contradiction</td>
+<td>~</td>
+<td>Contradiction unresolved (acceptable)</td>
+</tr>
+<tr>
+<td>consolidate_clean</td>
+<td>✓</td>
+<td></td>
+</tr>
+<tr>
+<td>distill_ready</td>
+<td>✓</td>
+<td></td>
+</tr>
+<tr>
+<td>distill_not_ready</td>
+<td>✓</td>
+<td></td>
+</tr>
+<tr>
+<td>distill_quality</td>
+<td>✗</td>
+<td>No output after 336s (timeout)</td>
+</tr>
+<tr>
+<td>promote_rules</td>
+<td>✓</td>
+<td></td>
+</tr>
+<tr>
+<td>validate_meta</td>
+<td>~</td>
+<td>References undisclosed context</td>
+</tr>
+</tbody>
+</table>
+<p><strong>7/10 OK, 2 partial, 1 fail</strong></p>
+<p><strong>Assessment:</strong> gemma4:31b cloud is strong for relay and data work (zeno: 15/15). Weak on hallucination rejection and long-context distillation tasks.</p>
+<h3 id="glm-51-ollama-cloud-2026-04-15">glm-5.1 (Ollama cloud) — 2026-04-15</h3>
+<p><strong>Tool use</strong></p>
+<table>
+<thead>
+<tr>
+<th>Model</th>
+<th>Result</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>glm-5.1</td>
+<td>~</td>
+<td>Loops on list_files (max iterations reached, 68.6s)</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Agent capability</strong> (9 scenarios)</p>
+<table>
+<thead>
+<tr>
+<th>Scenario</th>
+<th>Result</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>relay_route_agenda</td>
+<td>✓</td>
+<td></td>
+</tr>
+<tr>
+<td>relay_route_data</td>
+<td>✓</td>
+<td></td>
+</tr>
+<tr>
+<td>relay_no_tool_needed</td>
+<td>✓</td>
+<td></td>
+</tr>
+<tr>
+<td>data_search_by_tag</td>
+<td>✓</td>
+<td></td>
+</tr>
+<tr>
+<td>data_read_file</td>
+<td>✓</td>
+<td></td>
+</tr>
+<tr>
+<td>data_error_recovery</td>
+<td>✓</td>
+<td>Multi-step recovery worked (84s)</td>
+</tr>
+<tr>
+<td>data_hallucination_check</td>
+<td>✗</td>
+<td>Wrong tool (scan_tags), no "not found"</td>
+</tr>
+<tr>
+<td>agenda_read_today</td>
+<td>✓</td>
+<td></td>
+</tr>
+<tr>
+<td>agenda_add_event</td>
+<td>~</td>
+<td>Event not written correctly</td>
+</tr>
+</tbody>
+</table>
+<p><strong>7/9 OK, 1 partial, 1 fail</strong></p>
+<p><strong>Zeno quality</strong> (5 queries, max 15 points)</p>
+<table>
+<thead>
+<tr>
+<th>Query</th>
+<th>Score</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>agent-count</td>
+<td>1/3</td>
+<td>Tool called, count missing from answer</td>
+</tr>
+<tr>
+<td>billing-location</td>
+<td>3/3</td>
+<td></td>
+</tr>
+<tr>
+<td>billing-error-raises</td>
+<td>3/3</td>
+<td></td>
+</tr>
+<tr>
+<td>relay-imports</td>
+<td>1/3</td>
+<td>Tool called, answer unhelpful</td>
+</tr>
+<tr>
+<td>agent-list</td>
+<td>1/3</td>
+<td>Tool called, agents not extracted</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Total: 9/15</strong></p>
+<p><strong>Pattern agent</strong> (10 scenarios)</p>
+<table>
+<thead>
+<tr>
+<th>Scenario</th>
+<th>Result</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>extract_basic</td>
+<td>✓</td>
+<td></td>
+</tr>
+<tr>
+<td>extract_empty</td>
+<td>~</td>
+<td>1 low-confidence entry</td>
+</tr>
+<tr>
+<td>consolidate_duplicates</td>
+<td>✓</td>
+<td></td>
+</tr>
+<tr>
+<td>consolidate_contradiction</td>
+<td>~</td>
+<td>Contradiction unresolved (acceptable)</td>
+</tr>
+<tr>
+<td>consolidate_clean</td>
+<td>✓</td>
+<td></td>
+</tr>
+<tr>
+<td>distill_ready</td>
+<td>✓</td>
+<td></td>
+</tr>
+<tr>
+<td>distill_not_ready</td>
+<td>✓</td>
+<td></td>
+</tr>
+<tr>
+<td>distill_quality</td>
+<td>✗</td>
+<td>No output (8s — refused)</td>
+</tr>
+<tr>
+<td>promote_rules</td>
+<td>✓</td>
+<td></td>
+</tr>
+<tr>
+<td>validate_meta</td>
+<td>✓</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p><strong>7/10 OK, 2 partial, 1 fail</strong></p>
+<p><strong>Assessment:</strong> glm-5.1 cloud performs well on agent routing and error recovery, but is unreliable for deep code analysis (zeno: 9/15). Tool loops are a concern. Not recommended as primary model for data/zeno tasks.</p>
       </div>
     </section>
 
-    <section class="section" id="implementation">
-      <h2>Implementation</h2>
-      <div class="section-text"><h2>Implementation</h2>
-        <ul class="toc-list">
-<li><a href="implementation/01-architecture.html"><div class="title">Architecture</div><div class="description">How the pieces fit together.</div></a></li>
-<li><a href="implementation/02-memory.html"><div class="title">Memory</div><div class="description">What outheis remembers about you — and how.</div></a></li>
-<li><a href="implementation/03-agenda.html"><div class="title">Agenda</div><div class="description">Time management through three simple files.</div></a></li>
-<li><a href="implementation/04-skills.html"><div class="title">Skills</div><div class="description">What agents know about how to act.</div></a></li>
-<li><a href="implementation/05-alan.html"><div class="title">Alan</div><div class="description">Code intelligence for development environments.</div></a></li>
-<li><a href="implementation/06-hiro.html"><div class="title">Hiro</div><div class="description">External action agent — not yet implemented.</div></a></li>
-<li><a href="implementation/07-signal.html"><div class="title">Signal</div><div class="description">Signal Messenger transport via signal-cli JSON-RPC.</div></a></li>
-<li><a href="implementation/08-annotation-feedback.html"><div class="title">Annotation Feedback Loop</div><div class="description">How `>` annotations route into the memory stack — the current gap and the planned implementation.</div></a></li>
-<li><a href="implementation/09-vault.html"><div class="title">Vault</div><div class="description">How to structure your knowledge so outheis can work with it.</div></a></li>
-<li><a href="implementation/10-config.html"><div class="title">Configuration</div><div class="description">Complete reference for `config.json`.</div></a></li>
-<li><a href="implementation/11-guide.html"><div class="title">Guide</div><div class="description">Getting started with outheis.</div></a></li>
-<li><a href="implementation/12-migration.html"><div class="title">Migration</div><div class="description">How to bring your existing knowledge into outheis.</div></a></li>
-<li><a href="implementation/13-webui.html"><div class="title">Web UI</div><div class="description">Local administration interface for outheis.</div></a></li>
-<li><a href="implementation/14-data-safety.html"><div class="title">Data Safety</div><div class="description">How outheis protects against prompt injection and untrusted content.</div></a></li>
-<li><a href="implementation/15-models.html"><div class="title">Model Evaluation</div><div class="description">Capability benchmarks for local and cloud models used in outheis agents.</div></a></li>
-</ul>
+    <section class="section" id="comparison">
+      <h2>Comparison</h2>
+      <div class="section-text"><h2>Comparison</h2>
+        <table>
+<thead>
+<tr>
+<th></th>
+<th>gemma4:31b</th>
+<th>glm-5.1</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Tool use</td>
+<td>✓</td>
+<td>~ (loops)</td>
+</tr>
+<tr>
+<td>Agent capability</td>
+<td>6/9</td>
+<td>7/9</td>
+</tr>
+<tr>
+<td>Zeno quality</td>
+<td><strong>15/15</strong></td>
+<td>9/15</td>
+</tr>
+<tr>
+<td>Pattern agent</td>
+<td>7/10</td>
+<td>7/10</td>
+</tr>
+<tr>
+<td>Avg response time</td>
+<td>~5s</td>
+<td>~27s</td>
+</tr>
+<tr>
+<td><strong>Recommendation</strong></td>
+<td>relay, zeno, cato</td>
+<td>relay, cato</td>
+</tr>
+</tbody>
+</table>
       </div>
     </section>
 
-    <section class="section" id="installation">
-      <h2>Installation</h2>
-      <div class="section-text"><h2>Installation</h2>
-        <ul class="toc-list">
-<li><a href="installation/01-release-notes.html"><div class="title">Release Notes</div><div class="description">Public beta — April 2026.</div></a></li>
-<li><a href="installation/02-installation.html"><div class="title">Installation</div><div class="description"></div></a></li>
-<li><a href="installation/03-first-steps.html"><div class="title">First Steps</div><div class="description">After `outheis init` and `outheis start`, run through these steps to verify everything works.</div></a></li>
-<li><a href="installation/04-models.html"><div class="title">Model Selection</div><div class="description">Which LLM to use with outheis — and for which agent.</div></a></li>
-<li><a href="installation/05-communication.html"><div class="title">Communicating with outheis</div><div class="description">outheis can be reached through three channels. All channels connect to the same dispatcher and...</div></a></li>
-</ul>
+    <section class="section" id="ollama-cloud-setup">
+      <h2>Ollama Cloud Setup</h2>
+      <div class="section-text"><h2>Ollama Cloud Setup</h2>
+        <p>API keys are managed at <a href="https://ollama.com">ollama.com</a> under <strong>Usage → API keys</strong>.</p>
+<p>Config:</p>
+<pre><code class="language-json">&quot;ollama&quot;: {
+  &quot;cloud&quot;: {
+    &quot;api_key&quot;: &quot;your-key&quot;,
+    &quot;base_url&quot;: &quot;https://ollama.com/v1&quot;
+  }
+}
+</code></pre>
+<p>Model aliases use <code>"provider": "ollama.cloud"</code>. Model names match the Ollama library name without any suffix (e.g. <code>gemma4:31b</code>, not <code>gemma4:31b-cloud</code>).</p>
+<p>Available cloud models: <a href="https://ollama.com/search">ollama.com/search</a></p>
       </div>
     </section>
 
-    <section class="section" id="workflows">
-      <h2>Workflows</h2>
-      <div class="section-text"><h2>Workflows</h2>
-        <ul class="toc-list">
-<li><a href="workflows/index.html"><div class="title">Workflows</div><div class="description">Practical guides — how to work with outheis day to day.</div></a></li>
-<li><a href="workflows/01-tags.html"><div class="title">Working with Tags</div><div class="description">How outheis learns your tag system and works within it.</div></a></li>
+    <section class="section" id="see-also">
+      <h2>See Also</h2>
+      <div class="section-text"><h2>See Also</h2>
+        <ul>
+<li><a href="10-config.html">Configuration</a> — Full config reference including provider setup</li>
 </ul>
       </div>
     </section>
 
     <nav class="book-nav">
       <div class="prev"></div>
-      <div class="toc-center"><a href="contents.html#">
+      <div class="toc-center"><a href="../contents.html#">
           <span class="label">Contents</span>
           <span class="title"></span>
         </a></div>
