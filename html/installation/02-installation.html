@@ -553,16 +553,27 @@
         <ul>
 <li>macOS or Linux</li>
 <li>Python 3.11+</li>
-<li><a href="https://github.com/AsamK/signal-cli">signal-cli</a> — required for Signal transport</li>
 <li>An Anthropic API key — or a locally running <a href="https://ollama.com">Ollama</a> instance</li>
+<li><a href="https://github.com/AsamK/signal-cli">signal-cli</a> — optional, for Signal Messenger integration</li>
 </ul>
       </div>
     </section>
 
-    <section class="section" id="1-install-signal-cli">
-      <h2>1. Install signal-cli</h2>
-      <div class="section-text"><h2>1. Install signal-cli</h2>
-        <p>signal-cli handles Signal messaging. Install it before outheis.</p>
+    <section class="section" id="1-install-outheis">
+      <h2>1. Install outheis</h2>
+      <div class="section-text"><h2>1. Install outheis</h2>
+        <pre><code>pipx install outheis
+</code></pre>
+<blockquote>
+<p><strong>Note:</strong> If pipx warns that <code>~/.local/bin</code> is not on your PATH, run <code>pipx ensurepath</code> and restart your shell.</p>
+</blockquote>
+      </div>
+    </section>
+
+    <section class="section" id="2-install-signal-cli-optional">
+      <h2>2. Install signal-cli (optional)</h2>
+      <div class="section-text"><h2>2. Install signal-cli (optional)</h2>
+        <p>signal-cli enables Signal Messenger as a communication channel. Skip this step if you plan to use the Web UI or CLI only.</p>
 <p><strong>macOS</strong></p>
 <pre><code>brew install signal-cli
 </code></pre>
@@ -570,14 +581,6 @@
 <pre><code>apt install signal-cli
 </code></pre>
 <p>For other systems, see the <a href="https://github.com/AsamK/signal-cli/releases">signal-cli releases</a>.</p>
-      </div>
-    </section>
-
-    <section class="section" id="2-install-outheis">
-      <h2>2. Install outheis</h2>
-      <div class="section-text"><h2>2. Install outheis</h2>
-        <pre><code>pip install outheis
-</code></pre>
       </div>
     </section>
 
@@ -591,7 +594,7 @@
 <li>Your vault directory (where notes and memory are stored)</li>
 <li>Your preferred language</li>
 <li>Your Anthropic API key — or skip if using Ollama locally</li>
-<li>Your Signal phone number</li>
+<li>Your Signal phone number (optional)</li>
 </ul>
       </div>
     </section>
@@ -608,7 +611,21 @@
     <section class="section" id="updating">
       <h2>Updating</h2>
       <div class="section-text"><h2>Updating</h2>
-        <pre><code>pip install --upgrade outheis
+        <pre><code>pipx upgrade outheis
+</code></pre>
+      </div>
+    </section>
+
+    <section class="section" id="multiple-accounts-on-the-same-machine">
+      <h2>Multiple accounts on the same machine</h2>
+      <div class="section-text"><h2>Multiple accounts on the same machine</h2>
+        <p>Each user's data is isolated under <code>~/.outheis/</code>. The only shared resource is the WebUI port (default: 8080). If more than one user runs outheis on the same host, each must use a different port.</p>
+<p>Set <code>webui.port</code> in <code>~/.outheis/human/config.json</code>:</p>
+<pre><code class="language-json">{
+  &quot;webui&quot;: {
+    &quot;port&quot;: 8081
+  }
+}
 </code></pre>
       </div>
     </section>
