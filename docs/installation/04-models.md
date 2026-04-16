@@ -38,7 +38,9 @@ Runs entirely on your hardware. No API costs, no data leaves the system. Require
 
 **GPU acceleration:** On Apple Silicon (M-series), Ollama uses Metal automatically — no configuration needed. On Linux/Windows, Vulkan support is available for AMD and Intel GPUs via `OLLAMA_VULKAN=1` (experimental). Environment variables for the Ollama server can be stored in outheis config under `llm.providers.ollama.env_vars` and are shown in the Web UI as a reference.
 
-**Multiple models simultaneously:** By default, Ollama loads only one model at a time (`OLLAMA_MAX_LOADED_MODELS=1`). If different agents are configured with different model names (e.g., `gemma4:e4b` for relay, `voytas26/...` for agenda), every agent handoff triggers a model swap — unloading one model and loading the other. This causes a delay of several seconds per swap and effectively nullifies the `run_mode: persistent` setting.
+**Warmup at startup:** outheis pre-loads every `ollama.local` model that is assigned to an active agent at daemon startup. This eliminates the load delay on the first call. Models that are configured but not assigned to any agent are not loaded.
+
+**Multiple models simultaneously:** By default, Ollama loads only one model at a time (`OLLAMA_MAX_LOADED_MODELS=1`). If different agents are assigned different model names (e.g., `gemma4:e4b` for relay, `voytas26/...` for agenda), every agent handoff triggers a model swap — unloading one model and loading the other. This causes a delay of several seconds per swap.
 
 To keep two models loaded at the same time, set `OLLAMA_MAX_LOADED_MODELS=2` **on the Ollama server process** before it starts. On macOS with the Ollama app:
 
