@@ -7,14 +7,24 @@
 
 - macOS or Linux
 - Python 3.11+
-- [signal-cli](https://github.com/AsamK/signal-cli) — required for Signal transport
 - An Anthropic API key — or a locally running [Ollama](https://ollama.com) instance
+- [signal-cli](https://github.com/AsamK/signal-cli) — optional, for Signal Messenger integration
 
 ---
 
-## 1. Install signal-cli
+## 1. Install outheis
 
-signal-cli handles Signal messaging. Install it before outheis.
+```
+pipx install outheis
+```
+
+> **Note:** If pipx warns that `~/.local/bin` is not on your PATH, run `pipx ensurepath` and restart your shell.
+
+---
+
+## 2. Install signal-cli (optional)
+
+signal-cli enables Signal Messenger as a communication channel. Skip this step if you plan to use the Web UI or CLI only.
 
 **macOS**
 
@@ -32,14 +42,6 @@ For other systems, see the [signal-cli releases](https://github.com/AsamK/signal
 
 ---
 
-## 2. Install outheis
-
-```
-pip install outheis
-```
-
----
-
 ## 3. Run the setup wizard
 
 ```
@@ -51,7 +53,7 @@ The wizard will ask for:
 - Your vault directory (where notes and memory are stored)
 - Your preferred language
 - Your Anthropic API key — or skip if using Ollama locally
-- Your Signal phone number
+- Your Signal phone number (optional)
 
 ---
 
@@ -68,5 +70,21 @@ The Web UI is available at `http://localhost:8080`.
 ## Updating
 
 ```
-pip install --upgrade outheis
+pipx upgrade outheis
+```
+
+---
+
+## Multiple accounts on the same machine
+
+Each user's data is isolated under `~/.outheis/`. The only shared resource is the WebUI port (default: 8080). If more than one user runs outheis on the same host, each must use a different port.
+
+Set `webui.port` in `~/.outheis/human/config.json`:
+
+```json
+{
+  "webui": {
+    "port": 8081
+  }
+}
 ```
