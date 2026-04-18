@@ -536,7 +536,7 @@
     </div>
     <nav>
       <a href="../contents.html" style="font-weight: 500; color: #1a1a1a;">Contents</a>
-      <a href="https://github.com/outheis-labs/outheis-beta">GitHub ↗</a>
+      <a href="https://github.com/outheis-labs/outheis-beta">GitHub <svg width="10" height="10" viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg" style="display:inline;vertical-align:middle;margin-bottom:1px"><path d="M1 9L9 1M9 1H3M9 1V7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
       <span class="lang-switch"></span>
     </nav>
   </header>
@@ -608,7 +608,8 @@
 <p><strong>Test environment:</strong> All benchmarks were measured on Apple M4, 24 GB unified memory. Results are a good basis for estimating performance on comparable hardware.</p>
 </blockquote>
 <p><strong>GPU acceleration:</strong> On Apple Silicon (M-series), Ollama uses Metal automatically — no configuration needed. On Linux/Windows, Vulkan support is available for AMD and Intel GPUs via <code>OLLAMA_VULKAN=1</code> (experimental). Environment variables for the Ollama server can be stored in outheis config under <code>llm.providers.ollama.env_vars</code> and are shown in the Web UI as a reference.</p>
-<p><strong>Multiple models simultaneously:</strong> By default, Ollama loads only one model at a time (<code>OLLAMA_MAX_LOADED_MODELS=1</code>). If different agents are configured with different model names (e.g., <code>gemma4:e4b</code> for relay, <code>voytas26/...</code> for agenda), every agent handoff triggers a model swap — unloading one model and loading the other. This causes a delay of several seconds per swap and effectively nullifies the <code>run_mode: persistent</code> setting.</p>
+<p><strong>Warmup at startup:</strong> outheis pre-loads every <code>ollama.local</code> model that is assigned to an active agent at daemon startup. This eliminates the load delay on the first call. Models that are configured but not assigned to any agent are not loaded.</p>
+<p><strong>Multiple models simultaneously:</strong> By default, Ollama loads only one model at a time (<code>OLLAMA_MAX_LOADED_MODELS=1</code>). If different agents are assigned different model names (e.g., <code>gemma4:e4b</code> for relay, <code>voytas26/...</code> for agenda), every agent handoff triggers a model swap — unloading one model and loading the other. This causes a delay of several seconds per swap.</p>
 <p>To keep two models loaded at the same time, set <code>OLLAMA_MAX_LOADED_MODELS=2</code> <strong>on the Ollama server process</strong> before it starts. On macOS with the Ollama app:</p>
 <pre><code class="language-sh">launchctl setenv OLLAMA_MAX_LOADED_MODELS 2
 # then restart Ollama (quit from menubar or pkill Ollama)
