@@ -58,6 +58,7 @@ NAV_STRUCTURE = [
         "label": "Implementation",
         "label_de": "Implementierung",
         "items": [
+            {"label": "Overview", "label_de": "Überblick", "url": "implementation/index.html", "match": "^implementation/index", "desc": "Agents, data, configuration, and interfaces.", "desc_de": "Agenten, Daten, Konfiguration und Schnittstellen."},
             {"label": "Current State", "label_de": "Aktueller Stand", "url": "implementation/01-architecture.html", "match": "01-architecture", "desc": "Where we are now.", "desc_de": "Wo wir jetzt stehen."},
             {"label": "Memory & Rules", "label_de": "Memory & Regeln", "url": "implementation/02-memory.html", "match": "02-memory", "desc": "How memory and rules work.", "desc_de": "Wie Memory und Regeln funktionieren."},
             {"label": "Agenda", "label_de": "Agenda", "url": "implementation/03-agenda.html", "match": "03-agenda", "desc": "Task management and scheduling.", "desc_de": "Aufgabenverwaltung und Planung."},
@@ -78,9 +79,13 @@ NAV_STRUCTURE = [
         "label": "Installation",
         "label_de": "Installation",
         "items": [
+            {"label": "Overview", "label_de": "Überblick", "url": "installation/index.html", "match": "^installation/index", "desc": "Getting outheis running.", "desc_de": "outheis zum Laufen bringen."},
             {"label": "Release Notes", "label_de": "Release Notes", "url": "installation/01-release-notes.html", "match": "01-release-notes", "desc": "What's new in each version.", "desc_de": "Was in jeder Version neu ist."},
-            {"label": "Models", "label_de": "Modelle", "url": "installation/02-models.html", "match": "02-models", "desc": "Supported LLM providers.", "desc_de": "Unterstützte LLM-Anbieter."},
-            {"label": "Communication", "label_de": "Kommunikation", "url": "installation/03-communication.html", "match": "03-communication", "desc": "How to talk to outheis.", "desc_de": "Wie man mit outheis spricht."},
+            {"label": "Installation", "label_de": "Installation", "url": "installation/02-installation.html", "match": "02-installation", "desc": "Setup steps.", "desc_de": "Einrichtungsschritte."},
+            {"label": "First Steps", "label_de": "Erste Schritte", "url": "installation/03-first-steps.html", "match": "03-first-steps", "desc": "After install — verify everything works.", "desc_de": "Nach der Installation — alles überprüfen."},
+            {"label": "Model Selection", "label_de": "Modellauswahl", "url": "installation/04-models.html", "match": "04-models", "desc": "Which LLM to use.", "desc_de": "Welches LLM verwenden."},
+            {"label": "Communication", "label_de": "Kommunikation", "url": "installation/05-communication.html", "match": "05-communication", "desc": "How to talk to outheis.", "desc_de": "Wie man mit outheis spricht."},
+            {"label": "Remote Access", "label_de": "Remote-Zugriff", "url": "installation/06-remote-access.html", "match": "06-remote-access", "desc": "WireGuard setup for mobile access.", "desc_de": "WireGuard-Einrichtung für mobilen Zugriff."},
         ],
     },
     {

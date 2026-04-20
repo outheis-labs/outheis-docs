@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Versionshinweise · outheis</title>
+  <title>Design · outheis</title>
   <link rel="icon" type="image/png" href="../favicon-96x96.png" sizes="96x96">
   <link rel="icon" type="image/svg+xml" href="../favicon.svg">
   <link rel="shortcut icon" href="../favicon.ico">
@@ -534,13 +534,13 @@
       <a href="../index.html" class="logo">οὐθείς</a>
       <div class="breadcrumb">
         <span class="separator">/</span>
-        <a href="../contents.html#installation">Installation</a>
+        <a href="../contents.html#design">Design</a>
         <span class="separator">/</span>
-        <span class="current">Release Notes</span>
+        <span class="current">Overview</span>
       </div>
     </div>
     <nav>
-      <a href="../contents.html#installation" style="font-weight: 500; color: #1a1a1a;">Contents</a>
+      <a href="../contents.html#design" style="font-weight: 500; color: #1a1a1a;">Contents</a>
       <a href="https://github.com/outheis-labs/outheis-beta">GitHub <svg width="8" height="8" viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg" style="display:inline;vertical-align:middle;margin-left:3px;margin-bottom:1px"><path d="M1 9L9 1M9 1H3M9 1V7" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
       <span class="lang-switch"></span>
     </nav>
@@ -548,128 +548,33 @@
 
   <main>
     <div class="page-header">
-      <h1>Versionshinweise</h1>
-      <p class="subtitle">Public Beta — April 2026.</p>
+      <h1>Design</h1>
+      <p class="subtitle">How outheis is designed — the principles, structure, and reasoning behind the architecture.</p>
     </div>
 
-    <section class="section" id="was-funktioniert">
-      <h2>Was funktioniert</h2>
-      <div class="section-text"><h2>Was funktioniert</h2>
-        <table>
-<thead>
-<tr>
-<th>Komponente</th>
-<th>Status</th>
-<th>Hinweise</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Dispatcher — Microkernel, Scheduler, Lock-Manager</td>
-<td>✓</td>
-<td></td>
-</tr>
-<tr>
-<td>Relay (ou) — Routing, Memory-Integration</td>
-<td>✓</td>
-<td></td>
-</tr>
-<tr>
-<td>Data (zeno) — Vault-Suche, Tag-Analyse</td>
-<td>✓</td>
-<td></td>
-</tr>
-<tr>
-<td>Agenda (cato) — Daily, Inbox, Exchange, Shadow</td>
-<td>✓</td>
-<td></td>
-</tr>
-<tr>
-<td>Pattern (rumi) — nächtliche Memory-Extraktion</td>
-<td>✓</td>
-<td></td>
-</tr>
-<tr>
-<td>Web UI — Konfig, Memory, Scheduler, Vault, Tags, Migration</td>
-<td>✓</td>
-<td></td>
-</tr>
-<tr>
-<td>Signal-Transport — empfangen, antworten, Sprachtranskription</td>
-<td>✓</td>
-<td></td>
-</tr>
-<tr>
-<td>Vault-Datei-Browser — alle Dateitypen, Bilder, Obsidian-Wikilinks</td>
-<td>✓</td>
-<td></td>
-</tr>
-<tr>
-<td>Tags — scannen, Namensraum-Gruppierung, umbenennen, löschen</td>
-<td>✓</td>
-<td></td>
-</tr>
-<tr>
-<td>Migration — Exchange.md-Genehmigungsworkflow</td>
-<td>✓</td>
-<td></td>
-</tr>
-</tbody>
-</table>
-      </div>
-    </section>
-
-    <section class="section" id="was-nicht-funktioniert">
-      <h2>Was nicht funktioniert</h2>
-      <div class="section-text"><h2>Was nicht funktioniert</h2>
-        <table>
-<thead>
-<tr>
-<th>Komponente</th>
-<th>Status</th>
-<th>Hinweise</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Action (hiro) — externe Aufgaben, E-Mail, Kalender</td>
-<td>nicht implementiert</td>
-<td>Framework vorhanden, keine Fähigkeiten</td>
-</tr>
-<tr>
-<td>Code (alan) — Codebase-Introspektion</td>
-<td>nur Entwicklung</td>
-<td>In Produktion deaktiviert</td>
-</tr>
-</tbody>
-</table>
-<p><strong>hiro ist vorhanden, aber leer.</strong> Der Agent startet und leitet weiter, aber keine externen Integrationen existieren — keine E-Mail, kein Kalender, keine Shell-Ausführung. ihn in config.json zu aktivieren hat noch keine praktische Auswirkung.</p>
-<p><strong>alan erfordert manuelle Aktivierung.</strong> Der Code-Agent bietet Introspektion in die outheis-Codebasis — nützlich für jeden, der erkunden möchte, wie es funktioniert. In <code>config.json</code> aktivieren unter <code>agents.code.enabled: true</code>.</p>
-      </div>
-    </section>
-
-    <section class="section" id="bekannte-lucken">
-      <h2>Bekannte Lücken</h2>
-      <div class="section-text"><h2>Bekannte Lücken</h2>
-        <p><strong>Pattern-Agent benötigt Verlauf.</strong> rumi hat bei einer frischen Installation nichts zu extrahieren. Memory baut sich über Tage auf, nicht sofort.</p>
-<p><strong>Tag-Scan ist auf Anfrage.</strong> Tags werden nicht beim Start indexiert. Über Web UI ausführen (Vault → Tags → Scan) oder im Chat <code>analyze tags</code> sagen.</p>
-<p><strong>Keine mobile UI.</strong> Web-Oberfläche ist nur localhost. Signal-Transport für mobilen Zugriff verwenden.</p>
-<p><strong>Kontext nach Neustart.</strong> Beim Neustart gibt relay die letzten 20 Nachrichten zurück, um den aktuellen Kontext wiederherzustellen. Älterer Gesprächsverlauf wird nicht zurückgespielt.</p>
-      </div>
-    </section>
+    <section class="section"><h2></h2><div class="section-text"><p>The design section bridges theory and implementation. It starts from a concrete observation — that multi-agent AI systems face the same coordination problems operating systems solved decades ago — and follows that thread through architecture, data formats, agent communication, and memory.</p>
+<p>The result is a system designed around explicit structure, clear ownership, and a sharp boundary between what code does and what language models do.</p>
+<p>→ <a href="01-why-os-principles.html">OS Principles</a></p>
+<p>→ <a href="02-systems-survey.html">Systems Survey</a></p>
+<p>→ <a href="03-architecture.html">Architecture</a></p>
+<p>→ <a href="04-data-formats.html">Data Formats</a></p>
+<p>→ <a href="05-related-work.html">Related Work</a></p>
+<p>→ <a href="06-agent-prompts.html">Agent Prompts</a></p>
+<p>→ <a href="07-hybrid-memory-stack.html">Hybrid Memory Stack</a></p>
+<p>→ <a href="08-quality-threshold.html">Quality Threshold</a></p></div></section>
 
     <nav class="book-nav">
-      <div class="prev"><a href="../installation/index.html">
-          <span class="label">← Zurück</span>
-          <span class="title">Überblick</span>
+      <div class="prev"><a href="../foundations/05-tags-as-scaffolding.html">
+          <span class="label">← Previous</span>
+          <span class="title">Tags as Scaffolding</span>
         </a></div>
-      <div class="toc-center"><a href="../contents.html#installation">
-          <span class="label">Inhalt</span>
-          <span class="title">Installation</span>
+      <div class="toc-center"><a href="../contents.html#design">
+          <span class="label">Contents</span>
+          <span class="title">Design</span>
         </a></div>
-      <div class="next"><a href="../installation/02-installation.html">
-          <span class="label">Weiter →</span>
-          <span class="title">Installation</span>
+      <div class="next"><a href="../design/01-why-os-principles.html">
+          <span class="label">Next →</span>
+          <span class="title">OS Principles</span>
         </a></div>
     </nav>
   </main>

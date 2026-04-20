@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Versionshinweise · outheis</title>
+  <title>Installation · outheis</title>
   <link rel="icon" type="image/png" href="../favicon-96x96.png" sizes="96x96">
   <link rel="icon" type="image/svg+xml" href="../favicon.svg">
   <link rel="shortcut icon" href="../favicon.ico">
@@ -536,7 +536,7 @@
         <span class="separator">/</span>
         <a href="../contents.html#installation">Installation</a>
         <span class="separator">/</span>
-        <span class="current">Release Notes</span>
+        <span class="current">Overview</span>
       </div>
     </div>
     <nav>
@@ -548,128 +548,30 @@
 
   <main>
     <div class="page-header">
-      <h1>Versionshinweise</h1>
-      <p class="subtitle">Public Beta — April 2026.</p>
+      <h1>Installation</h1>
+      <p class="subtitle">Getting outheis running — release notes, setup, and configuration.</p>
     </div>
 
-    <section class="section" id="was-funktioniert">
-      <h2>Was funktioniert</h2>
-      <div class="section-text"><h2>Was funktioniert</h2>
-        <table>
-<thead>
-<tr>
-<th>Komponente</th>
-<th>Status</th>
-<th>Hinweise</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Dispatcher — Microkernel, Scheduler, Lock-Manager</td>
-<td>✓</td>
-<td></td>
-</tr>
-<tr>
-<td>Relay (ou) — Routing, Memory-Integration</td>
-<td>✓</td>
-<td></td>
-</tr>
-<tr>
-<td>Data (zeno) — Vault-Suche, Tag-Analyse</td>
-<td>✓</td>
-<td></td>
-</tr>
-<tr>
-<td>Agenda (cato) — Daily, Inbox, Exchange, Shadow</td>
-<td>✓</td>
-<td></td>
-</tr>
-<tr>
-<td>Pattern (rumi) — nächtliche Memory-Extraktion</td>
-<td>✓</td>
-<td></td>
-</tr>
-<tr>
-<td>Web UI — Konfig, Memory, Scheduler, Vault, Tags, Migration</td>
-<td>✓</td>
-<td></td>
-</tr>
-<tr>
-<td>Signal-Transport — empfangen, antworten, Sprachtranskription</td>
-<td>✓</td>
-<td></td>
-</tr>
-<tr>
-<td>Vault-Datei-Browser — alle Dateitypen, Bilder, Obsidian-Wikilinks</td>
-<td>✓</td>
-<td></td>
-</tr>
-<tr>
-<td>Tags — scannen, Namensraum-Gruppierung, umbenennen, löschen</td>
-<td>✓</td>
-<td></td>
-</tr>
-<tr>
-<td>Migration — Exchange.md-Genehmigungsworkflow</td>
-<td>✓</td>
-<td></td>
-</tr>
-</tbody>
-</table>
-      </div>
-    </section>
-
-    <section class="section" id="was-nicht-funktioniert">
-      <h2>Was nicht funktioniert</h2>
-      <div class="section-text"><h2>Was nicht funktioniert</h2>
-        <table>
-<thead>
-<tr>
-<th>Komponente</th>
-<th>Status</th>
-<th>Hinweise</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Action (hiro) — externe Aufgaben, E-Mail, Kalender</td>
-<td>nicht implementiert</td>
-<td>Framework vorhanden, keine Fähigkeiten</td>
-</tr>
-<tr>
-<td>Code (alan) — Codebase-Introspektion</td>
-<td>nur Entwicklung</td>
-<td>In Produktion deaktiviert</td>
-</tr>
-</tbody>
-</table>
-<p><strong>hiro ist vorhanden, aber leer.</strong> Der Agent startet und leitet weiter, aber keine externen Integrationen existieren — keine E-Mail, kein Kalender, keine Shell-Ausführung. ihn in config.json zu aktivieren hat noch keine praktische Auswirkung.</p>
-<p><strong>alan erfordert manuelle Aktivierung.</strong> Der Code-Agent bietet Introspektion in die outheis-Codebasis — nützlich für jeden, der erkunden möchte, wie es funktioniert. In <code>config.json</code> aktivieren unter <code>agents.code.enabled: true</code>.</p>
-      </div>
-    </section>
-
-    <section class="section" id="bekannte-lucken">
-      <h2>Bekannte Lücken</h2>
-      <div class="section-text"><h2>Bekannte Lücken</h2>
-        <p><strong>Pattern-Agent benötigt Verlauf.</strong> rumi hat bei einer frischen Installation nichts zu extrahieren. Memory baut sich über Tage auf, nicht sofort.</p>
-<p><strong>Tag-Scan ist auf Anfrage.</strong> Tags werden nicht beim Start indexiert. Über Web UI ausführen (Vault → Tags → Scan) oder im Chat <code>analyze tags</code> sagen.</p>
-<p><strong>Keine mobile UI.</strong> Web-Oberfläche ist nur localhost. Signal-Transport für mobilen Zugriff verwenden.</p>
-<p><strong>Kontext nach Neustart.</strong> Beim Neustart gibt relay die letzten 20 Nachrichten zurück, um den aktuellen Kontext wiederherzustellen. Älterer Gesprächsverlauf wird nicht zurückgespielt.</p>
-      </div>
-    </section>
+    <section class="section"><h2></h2><div class="section-text"><p>This section covers everything needed to get outheis running: release notes, installation steps, model selection, communication channels, and remote access setup.</p>
+<p>→ <a href="01-release-notes.html">Release Notes</a></p>
+<p>→ <a href="02-installation.html">Installation</a></p>
+<p>→ <a href="03-first-steps.html">First Steps</a></p>
+<p>→ <a href="04-models.html">Model Selection</a></p>
+<p>→ <a href="05-communication.html">Communicating with outheis</a></p>
+<p>→ <a href="06-remote-access.html">Remote Access via WireGuard</a></p></div></section>
 
     <nav class="book-nav">
-      <div class="prev"><a href="../installation/index.html">
-          <span class="label">← Zurück</span>
-          <span class="title">Überblick</span>
+      <div class="prev"><a href="../implementation/13-webui.html">
+          <span class="label">← Previous</span>
+          <span class="title">Web UI</span>
         </a></div>
       <div class="toc-center"><a href="../contents.html#installation">
-          <span class="label">Inhalt</span>
+          <span class="label">Contents</span>
           <span class="title">Installation</span>
         </a></div>
-      <div class="next"><a href="../installation/02-installation.html">
-          <span class="label">Weiter →</span>
-          <span class="title">Installation</span>
+      <div class="next"><a href="../installation/01-release-notes.html">
+          <span class="label">Next →</span>
+          <span class="title">Release Notes</span>
         </a></div>
     </nav>
   </main>
