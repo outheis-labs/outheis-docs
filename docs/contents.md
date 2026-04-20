@@ -14,6 +14,7 @@
 ## Design {#design}
 
 <ul class="toc-list">
+<li><a href="design/index.html"><div class="title">Design</div><div class="description">How outheis is designed — the principles, structure, and reasoning behind the architecture.</div></a></li>
 <li><a href="design/01-why-os-principles.html"><div class="title">Operating System Engineering</div><div class="description">Multi-agent AI systems face the same challenges that operating systems solved decades ago....</div></a></li>
 <li><a href="design/02-systems-survey.html"><div class="title">Systems Survey</div><div class="description">Operating systems and architectural patterns relevant to multi-agent AI system design.</div></a></li>
 <li><a href="design/03-architecture.html"><div class="title">Architecture</div><div class="description">System structure, agent roles, ownership model, message protocol, dispatcher design, vault...</div></a></li>
@@ -27,6 +28,7 @@
 ## Implementation {#implementation}
 
 <ul class="toc-list">
+<li><a href="implementation/index.html"><div class="title">Implementation</div><div class="description">How outheis works in practice — agents, data, configuration, and interfaces.</div></a></li>
 <li><a href="implementation/01-architecture.html"><div class="title">Architecture</div><div class="description">How the pieces fit together.</div></a></li>
 <li><a href="implementation/02-memory.html"><div class="title">Memory</div><div class="description">What outheis remembers about you — and how.</div></a></li>
 <li><a href="implementation/03-agenda.html"><div class="title">Agenda</div><div class="description">Time management through three simple files.</div></a></li>
@@ -47,6 +49,7 @@
 ## Installation {#installation}
 
 <ul class="toc-list">
+<li><a href="installation/index.html"><div class="title">Installation</div><div class="description">Getting outheis running — release notes, setup, and configuration.</div></a></li>
 <li><a href="installation/01-release-notes.html"><div class="title">Release Notes</div><div class="description">Public beta — April 2026.</div></a></li>
 <li><a href="installation/02-installation.html"><div class="title">Installation</div><div class="description"></div></a></li>
 <li><a href="installation/03-first-steps.html"><div class="title">First Steps</div><div class="description">After `outheis init` and `outheis start`, run through these steps to verify everything works.</div></a></li>

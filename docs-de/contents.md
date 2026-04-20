@@ -14,6 +14,7 @@
 ## Design {#design}
 
 <ul class="toc-list">
+<li><a href="design/index.html"><div class="title">Design</div><div class="description">Wie outheis gestaltet ist — Prinzipien, Struktur und die Überlegungen hinter der Architektur.</div></a></li>
 <li><a href="design/01-why-os-principles.html"><div class="title">Warum Betriebssystemprinzipien auf agent-Architekturen zutreffen</div><div class="description">Multi-agent-KI-Systeme stehen vor Herausforderungen, die Betriebssysteme vor Jahrzehnten gelöst...</div></a></li>
 <li><a href="design/02-systems-survey.html"><div class="title">Systemüberblick: Betriebssysteme und anwendbare Konzepte</div><div class="description">Betriebssysteme haben Probleme gelöst, die agent-Architekturen gerade erst entdecken. Dieser...</div></a></li>
 <li><a href="design/03-architecture.html"><div class="title">Architektur</div><div class="description">Die outheis-Architektur ist kein Zufallsprodukt — sie ist aus Betriebssystemprinzipien abgeleitet.</div></a></li>
@@ -27,6 +28,7 @@
 ## Implementierung {#implementation}
 
 <ul class="toc-list">
+<li><a href="implementation/index.html"><div class="title">Implementierung</div><div class="description">Wie outheis in der Praxis funktioniert — Agenten, Daten, Konfiguration und Schnittstellen.</div></a></li>
 <li><a href="implementation/01-architecture.html"><div class="title">Architektur</div><div class="description">Wie die Teile zusammenpassen.</div></a></li>
 <li><a href="implementation/02-memory.html"><div class="title">Memory</div><div class="description">Was outheis über dich erinnert — und wie.</div></a></li>
 <li><a href="implementation/03-agenda.html"><div class="title">Agenda</div><div class="description">Zeitmanagement durch drei einfache Dateien.</div></a></li>
@@ -47,6 +49,7 @@
 ## Installation {#installation}
 
 <ul class="toc-list">
+<li><a href="installation/index.html"><div class="title">Installation</div><div class="description">outheis zum Laufen bringen — Release Notes, Einrichtung und Konfiguration.</div></a></li>
 <li><a href="installation/01-release-notes.html"><div class="title">Versionshinweise</div><div class="description">Public Beta — April 2026.</div></a></li>
 <li><a href="installation/02-installation.html"><div class="title">Installation</div><div class="description"></div></a></li>
 <li><a href="installation/03-first-steps.html"><div class="title">Erste Schritte</div><div class="description">Nach `outheis init` und `outheis start` diese Schritte durchgehen, um sicherzustellen, dass...</div></a></li>
