@@ -41,6 +41,7 @@ Different agents, each responsible for a defined task. Acting like a single enti
   <div class="agent agent-cato"><div class="agent-name">cato</div><div class="agent-role">Agenda Agent</div></div>
   <div class="agent agent-hiro"><div class="agent-name">hiro</div><div class="agent-role">Action Agent</div></div>
   <div class="agent agent-rumi"><div class="agent-name">rumi</div><div class="agent-role">Pattern Agent</div></div>
+  <div class="agent agent-alan"><div class="agent-name">alan</div><div class="agent-role">Code Agent</div></div>
 </div>
 
 ## Read more
