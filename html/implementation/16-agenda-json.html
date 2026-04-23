@@ -3,30 +3,30 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Contents · outheis</title>
-  <link rel="icon" type="image/png" href="favicon-96x96.png" sizes="96x96">
-  <link rel="icon" type="image/svg+xml" href="favicon.svg">
-  <link rel="shortcut icon" href="favicon.ico">
-  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
-  <link rel="manifest" href="site.webmanifest">
+  <title>agenda.json — Syntax Reference v0.1 · outheis</title>
+  <link rel="icon" type="image/png" href="../favicon-96x96.png" sizes="96x96">
+  <link rel="icon" type="image/svg+xml" href="../favicon.svg">
+  <link rel="shortcut icon" href="../favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="../apple-touch-icon.png">
+  <link rel="manifest" href="../site.webmanifest">
   <style>
     @font-face {
       font-family: 'Inter';
-      src: url('assets/fonts/InterVariable.woff2') format('woff2');
+      src: url('../assets/fonts/InterVariable.woff2') format('woff2');
       font-weight: 100 900;
       font-style: normal;
       font-display: swap;
     }
     @font-face {
       font-family: 'IBM Plex Sans';
-      src: url('assets/fonts/IBMPlexSans-Variable.woff2') format('woff2-variations');
+      src: url('../assets/fonts/IBMPlexSans-Variable.woff2') format('woff2-variations');
       font-weight: 100 700;
       font-style: normal;
       font-display: swap;
     }
     @font-face {
       font-family: 'IBM Plex Mono';
-      src: url('assets/fonts/IBMPlexMono-Regular.woff2') format('woff2');
+      src: url('../assets/fonts/IBMPlexMono-Regular.woff2') format('woff2');
       font-weight: 400;
       font-style: normal;
       font-display: swap;
@@ -531,11 +531,11 @@
 
   <header>
     <div class="header-left">
-      <a href="index.html" class="logo">οὐθείς</a>
+      <a href="../index.html" class="logo">οὐθείς</a>
       
     </div>
     <nav>
-      <a href="contents.html" style="font-weight: 500; color: #1a1a1a;">Contents</a>
+      <a href="../contents.html" style="font-weight: 500; color: #1a1a1a;">Contents</a>
       <a href="https://github.com/outheis-labs/outheis-beta">GitHub <svg width="8" height="8" viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg" style="display:inline;vertical-align:middle;margin-left:3px;margin-bottom:1px"><path d="M1 9L9 1M9 1H3M9 1V7" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
       <span class="lang-switch"></span>
     </nav>
@@ -543,94 +543,338 @@
 
   <main>
     <div class="page-header">
-      <h1>Contents</h1>
+      <h1>agenda.json — Syntax Reference v0.1</h1>
       
     </div>
 
-    <section class="section" id="foundations">
-      <h2>Foundations</h2>
-      <div class="section-text"><h2>Foundations</h2>
-        <ul class="toc-list">
-<li><a href="foundations/index.html"><div class="title">Why outheis</div><div class="description">On sovereignty, cognition, and why the extractive model fails.</div></a></li>
-<li><a href="foundations/01-design-principles.html"><div class="title">Design Principles</div><div class="description">On building tools that support life instead of consuming it.</div></a></li>
-<li><a href="foundations/02-semantic-foundations.html"><div class="title">Information and Semantics</div><div class="description">Why information is not data — and what follows from that for a personal AI system.</div></a></li>
-<li><a href="foundations/03-attention-as-architecture.html"><div class="title">Attention as Architecture</div><div class="description">Learned attention mechanisms can replace complex sequential processing</div></a></li>
-<li><a href="foundations/04-annotation-as-ground-truth.html"><div class="title">Annotation as Ground Truth</div><div class="description">On the structural parallel between supervised learning and human correction — and what it...</div></a></li>
-<li><a href="foundations/05-tags-as-scaffolding.html"><div class="title">Tags as Scaffolding: A Deprecation Path</div><div class="description">Full free text analysis is not yet feasible due to general limitations of current models, but...</div></a></li>
-</ul>
+    <section class="section"><h2></h2><div class="section-text"><p>The calendar view in the WebUI is driven by <code>agenda.json</code>, a structured
+projection of all scheduled items. It lives at:</p>
+<pre><code>~/.outheis/human/webui/pages/agenda.json
+</code></pre></div></section>
+
+    <section class="section" id="top-level-structure">
+      <h2>Top-level structure</h2>
+      <div class="section-text"><h2>Top-level structure</h2>
+        <pre><code class="language-json">{
+  &quot;meta&quot;:   { ... },
+  &quot;facets&quot;: [ ... ],
+  &quot;view&quot;:   { ... },
+  &quot;items&quot;:  [ ... ]
+}
+</code></pre>
       </div>
     </section>
 
-    <section class="section" id="design">
-      <h2>Design</h2>
-      <div class="section-text"><h2>Design</h2>
-        <ul class="toc-list">
-<li><a href="design/index.html"><div class="title">Design</div><div class="description">How outheis is designed — the principles, structure, and reasoning behind the architecture.</div></a></li>
-<li><a href="design/01-why-os-principles.html"><div class="title">Operating System Engineering</div><div class="description">Multi-agent AI systems face the same challenges that operating systems solved decades ago....</div></a></li>
-<li><a href="design/02-systems-survey.html"><div class="title">Systems Survey</div><div class="description">Operating systems and architectural patterns relevant to multi-agent AI system design.</div></a></li>
-<li><a href="design/03-architecture.html"><div class="title">Architecture</div><div class="description">System structure, agent roles, ownership model, message protocol, dispatcher design, vault...</div></a></li>
-<li><a href="design/04-data-formats.html"><div class="title">Data Formats and Conventions</div><div class="description">Structure and format of all data in outheis — enabling agents to make reliable assumptions about...</div></a></li>
-<li><a href="design/05-related-work.html"><div class="title">Related Work</div><div class="description">Survey of existing multi-agent frameworks and how outheis differs.</div></a></li>
-<li><a href="design/06-agent-prompts.html"><div class="title">Agent Prompts and Communication Rules</div><div class="description">How agents communicate — with users, with each other, and with themselves. All prompts are...</div></a></li>
-<li><a href="design/07-hybrid-memory-stack.html"><div class="title">The Hybrid Memory Stack: Where Code Ends and LLM Begins</div><div class="description">The sharp boundary between deterministic structure and learned meaning — why neither pure code...</div></a></li>
-<li><a href="design/08-quality-threshold.html"><div class="title">The Quality Threshold: Why Capability Doesn't Scale Linearly</div><div class="description">On emergent abilities, the limits of parallelism, and the minimum viable model.</div></a></li>
-</ul>
+    <section class="section" id="meta">
+      <h2>meta</h2>
+      <div class="section-text"><h2>meta</h2>
+        <pre><code class="language-json">&quot;meta&quot;: {
+  &quot;version&quot;:    &quot;0.1&quot;,
+  &quot;generated&quot;:  &quot;2026-04-23T10:00:00Z&quot;,
+  &quot;base_date&quot;:  &quot;2026-04-23&quot;
+}
+</code></pre>
+<p><code>base_date</code> is the reference day for all relative <code>day</code> offsets.
+Regenerated daily — always today.</p>
       </div>
     </section>
 
-    <section class="section" id="implementation">
-      <h2>Implementation</h2>
-      <div class="section-text"><h2>Implementation</h2>
-        <ul class="toc-list">
-<li><a href="implementation/index.html"><div class="title">Implementation</div><div class="description">How outheis works in practice — agents, data, configuration, and interfaces.</div></a></li>
-<li><a href="implementation/01-architecture.html"><div class="title">Architecture</div><div class="description">How the pieces fit together.</div></a></li>
-<li><a href="implementation/02-memory.html"><div class="title">Memory</div><div class="description">What outheis remembers about you — and how.</div></a></li>
-<li><a href="implementation/03-agenda.html"><div class="title">Agenda</div><div class="description">Time management through three simple files.</div></a></li>
-<li><a href="implementation/04-skills.html"><div class="title">Skills</div><div class="description">What agents know about how to act.</div></a></li>
-<li><a href="implementation/05-alan.html"><div class="title">Alan</div><div class="description">Code intelligence for development environments.</div></a></li>
-<li><a href="implementation/06-hiro.html"><div class="title">Hiro</div><div class="description">External action agent — not yet implemented.</div></a></li>
-<li><a href="implementation/07-signal.html"><div class="title">Signal</div><div class="description">Signal Messenger transport via signal-cli JSON-RPC.</div></a></li>
-<li><a href="implementation/08-annotation-feedback.html"><div class="title">Annotation Feedback Loop</div><div class="description">How `>` annotations route into the memory stack — the current gap and the planned implementation.</div></a></li>
-<li><a href="implementation/09-vault.html"><div class="title">Vault</div><div class="description">How to structure your knowledge so outheis can work with it.</div></a></li>
-<li><a href="implementation/10-config.html"><div class="title">Configuration</div><div class="description">Complete reference for `config.json`.</div></a></li>
-<li><a href="implementation/11-guide.html"><div class="title">Guide</div><div class="description">Getting started with outheis.</div></a></li>
-<li><a href="implementation/12-migration.html"><div class="title">Migration</div><div class="description">How to bring your existing knowledge into outheis.</div></a></li>
-<li><a href="implementation/13-webui.html"><div class="title">Web UI</div><div class="description">Local administration interface for outheis.</div></a></li>
-<li><a href="implementation/14-data-safety.html"><div class="title">Data Safety</div><div class="description">How outheis protects against prompt injection and untrusted content.</div></a></li>
-<li><a href="implementation/15-models.html"><div class="title">Model Evaluation</div><div class="description">Capability benchmarks for local and cloud models used in outheis agents.</div></a></li>
-<li><a href="implementation/16-agenda-json.html"><div class="title">agenda.json — Syntax Reference v0.1</div><div class="description">The calendar view in the WebUI is driven by `agenda.json`, a structured</div></a></li>
-</ul>
+    <section class="section" id="facets">
+      <h2>facets</h2>
+      <div class="section-text"><h2>facets</h2>
+        <pre><code class="language-json">&quot;facets&quot;: [
+  { &quot;id&quot;: &quot;cato&quot;, &quot;label&quot;: &quot;Arbeit&quot;,   &quot;hex&quot;: &quot;#FF2E00&quot; },
+  { &quot;id&quot;: &quot;hiro&quot;, &quot;label&quot;: &quot;senswork&quot;, &quot;hex&quot;: &quot;#FFB400&quot; },
+  { &quot;id&quot;: &quot;rumi&quot;, &quot;label&quot;: &quot;Self&quot;,     &quot;hex&quot;: &quot;#460A46&quot; },
+  { &quot;id&quot;: &quot;zeno&quot;, &quot;label&quot;: &quot;OFC&quot;,      &quot;hex&quot;: &quot;#97EAD2&quot; },
+  { &quot;id&quot;: &quot;ou&quot;,   &quot;label&quot;: &quot;Privat&quot;,   &quot;hex&quot;: &quot;#218380&quot; },
+  { &quot;id&quot;: &quot;misc&quot;, &quot;label&quot;: &quot;Misc&quot;,     &quot;hex&quot;: &quot;#7A7676&quot; }
+]
+</code></pre>
+<p><code>hex</code> = CI color as a hex code. Hue and saturation are derived automatically
+by the renderer via HSL conversion — no manual entry required.
+The legend is built solely from this array.</p>
       </div>
     </section>
 
-    <section class="section" id="installation">
-      <h2>Installation</h2>
-      <div class="section-text"><h2>Installation</h2>
-        <ul class="toc-list">
-<li><a href="installation/index.html"><div class="title">Installation</div><div class="description">Getting outheis running — release notes, setup, and configuration.</div></a></li>
-<li><a href="installation/01-release-notes.html"><div class="title">Release Notes</div><div class="description">Public beta — April 2026.</div></a></li>
-<li><a href="installation/02-installation.html"><div class="title">Installation</div><div class="description"></div></a></li>
-<li><a href="installation/03-first-steps.html"><div class="title">First Steps</div><div class="description">After `outheis init` and `outheis start`, run through these steps to verify everything works.</div></a></li>
-<li><a href="installation/04-models.html"><div class="title">Model Selection</div><div class="description">Which LLM to use with outheis — and for which agent.</div></a></li>
-<li><a href="installation/05-communication.html"><div class="title">Communicating with outheis</div><div class="description">outheis can be reached through three channels. All channels connect to the same dispatcher and...</div></a></li>
-<li><a href="installation/06-remote-access.html"><div class="title">Remote Access via WireGuard (iPhone → Mac Mini)</div><div class="description">This guide documents how to set up secure remote access to the outheis WebUI from an iPhone...</div></a></li>
-</ul>
+    <section class="section" id="view">
+      <h2>view</h2>
+      <div class="section-text"><h2>view</h2>
+        <pre><code class="language-json">&quot;view&quot;: {
+  &quot;range&quot;: 7,
+  &quot;params&quot;: {
+    &quot;peak_amp&quot;:      0.9,
+    &quot;decay&quot;:         10.0,
+    &quot;ghost_pull&quot;:    0.04,
+    &quot;overlay_alpha&quot;: 0.09
+  }
+}
+</code></pre>
+<p><code>range</code> = visible days (7 / 14 / 30).
+<code>params</code> control the gravitational field rendering and are applied to the UI
+sliders on load.</p>
       </div>
     </section>
 
-    <section class="section" id="workflows">
-      <h2>Workflows</h2>
-      <div class="section-text"><h2>Workflows</h2>
-        <ul class="toc-list">
-<li><a href="workflows/index.html"><div class="title">Workflows</div><div class="description">Practical guides — how to work with outheis day to day.</div></a></li>
-<li><a href="workflows/01-tags.html"><div class="title">Working with Tags</div><div class="description">How outheis learns your tag system and works within it.</div></a></li>
-</ul>
+    <section class="section" id="items">
+      <h2>items</h2>
+      <div class="section-text"><h2>items</h2>
+        <p>Every item carries a Snowflake ID and a <code>type</code>.</p>
+<h3 id="fixed-time-boxed-event">fixed — time-boxed event</h3>
+<pre><code class="language-json">{
+  &quot;id&quot;:      &quot;7430000000000001&quot;,
+  &quot;type&quot;:    &quot;fixed&quot;,
+  &quot;facet&quot;:   &quot;cato&quot;,
+  &quot;title&quot;:   &quot;outheis Architecture&quot;,
+  &quot;day&quot;:     0,
+  &quot;start&quot;:   &quot;09:00&quot;,
+  &quot;end&quot;:     &quot;11:00&quot;,
+  &quot;density&quot;: &quot;high&quot;,
+  &quot;layer&quot;:   0,
+  &quot;source&quot;:  &quot;projects/alpha.md&quot;,
+  &quot;note&quot;:    &quot;optional&quot;
+}
+</code></pre>
+<h3 id="fixed-multi-day-iso-datetime">fixed — multi-day (ISO datetime)</h3>
+<pre><code class="language-json">{
+  &quot;id&quot;:     &quot;7430000000000041&quot;,
+  &quot;type&quot;:   &quot;fixed&quot;,
+  &quot;facet&quot;:  &quot;zeno&quot;,
+  &quot;title&quot;:  &quot;Family gathering&quot;,
+  &quot;start&quot;:  &quot;2026-04-28T12:00&quot;,
+  &quot;end&quot;:    &quot;2026-04-30T18:00&quot;,
+  &quot;source&quot;: &quot;projects/travel.md&quot;
+}
+</code></pre>
+<p>No <code>day</code> field — computed automatically from the date.
+Rendered as a connected bar spanning all affected rows.</p>
+<h3 id="volatile-undated-floating-item">volatile — undated floating item</h3>
+<pre><code class="language-json">{
+  &quot;id&quot;:     &quot;7430000000000006&quot;,
+  &quot;type&quot;:   &quot;volatile&quot;,
+  &quot;facet&quot;:  &quot;cato&quot;,
+  &quot;title&quot;:  &quot;Substack draft&quot;,
+  &quot;day&quot;:    0,
+  &quot;size&quot;:   &quot;m&quot;,
+  &quot;source&quot;: &quot;cato&quot;
+}
+</code></pre>
+      </div>
+    </section>
+
+    <section class="section" id="field-reference">
+      <h2>Field reference</h2>
+      <div class="section-text"><h2>Field reference</h2>
+        <table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>fixed</th>
+<th>volatile</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>id</code></td>
+<td>string (Snowflake)</td>
+<td>✓</td>
+<td>✓</td>
+<td>Unique, chronologically sortable</td>
+</tr>
+<tr>
+<td><code>type</code></td>
+<td><code>"fixed"</code> | <code>"volatile"</code></td>
+<td>✓</td>
+<td>✓</td>
+<td></td>
+</tr>
+<tr>
+<td><code>facet</code></td>
+<td>string → <code>facets[].id</code></td>
+<td>✓</td>
+<td>✓</td>
+<td>Determines color and field behavior</td>
+</tr>
+<tr>
+<td><code>title</code></td>
+<td>string</td>
+<td>✓</td>
+<td>✓</td>
+<td></td>
+</tr>
+<tr>
+<td><code>day</code></td>
+<td>int (offset from <code>base_date</code>)</td>
+<td>✓*</td>
+<td>✓</td>
+<td>*omitted for multi-day ISO events</td>
+</tr>
+<tr>
+<td><code>start</code></td>
+<td><code>"HH:MM"</code> or <code>"YYYY-MM-DDTHH:MM"</code></td>
+<td>✓</td>
+<td>–</td>
+<td>ISO format = multi-day</td>
+</tr>
+<tr>
+<td><code>end</code></td>
+<td><code>"HH:MM"</code> or <code>"YYYY-MM-DDTHH:MM"</code></td>
+<td>✓</td>
+<td>–</td>
+<td></td>
+</tr>
+<tr>
+<td><code>density</code></td>
+<td><code>"high"</code> | <code>"low"</code></td>
+<td>–</td>
+<td>–</td>
+<td>Field weight; absent = default</td>
+</tr>
+<tr>
+<td><code>layer</code></td>
+<td><code>0</code> | <code>1</code></td>
+<td>–</td>
+<td>–</td>
+<td><code>1</code> = overlay on top of another event</td>
+</tr>
+<tr>
+<td><code>size</code></td>
+<td><code>"s"</code> | <code>"m"</code> | <code>"l"</code></td>
+<td>–</td>
+<td>✓</td>
+<td>Effort estimate; determines visual width</td>
+</tr>
+<tr>
+<td><code>note</code></td>
+<td>string</td>
+<td>–</td>
+<td>–</td>
+<td>Shown in tooltip only</td>
+</tr>
+<tr>
+<td><code>pos</code></td>
+<td><code>{"x": 0.42, "y": 0.38}</code></td>
+<td>–</td>
+<td>–</td>
+<td>Last drag position, written by the view</td>
+</tr>
+<tr>
+<td><code>source</code></td>
+<td>string</td>
+<td>✓</td>
+<td>✓</td>
+<td>Origin: vault file path, <code>"cato"</code>, <code>"webui"</code>, <code>"signal"</code>, <code>"cli"</code></td>
+</tr>
+<tr>
+<td><code>done</code></td>
+<td><code>"YYYY-MM-DD"</code></td>
+<td>–</td>
+<td>–</td>
+<td>Set when item is completed; triggers retention countdown</td>
+</tr>
+</tbody>
+</table>
+      </div>
+    </section>
+
+    <section class="section" id="source-values">
+      <h2>source values</h2>
+      <div class="section-text"><h2>source values</h2>
+        <table>
+<thead>
+<tr>
+<th>Value</th>
+<th>Set by</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>"path/to/file.md"</code></td>
+<td>zeno</td>
+<td>Extracted from this vault file</td>
+</tr>
+<tr>
+<td><code>"cato"</code></td>
+<td>cato</td>
+<td>Created or managed by the agenda agent</td>
+</tr>
+<tr>
+<td><code>"webui"</code></td>
+<td>WebUI</td>
+<td>Added or modified via the calendar view</td>
+</tr>
+<tr>
+<td><code>"signal"</code></td>
+<td>signal.py</td>
+<td>Received via Signal message</td>
+</tr>
+<tr>
+<td><code>"cli"</code></td>
+<td>relay/ou</td>
+<td>Added via CLI / TUI</td>
+</tr>
+</tbody>
+</table>
+      </div>
+    </section>
+
+    <section class="section" id="mapping-from-shadow-tag-format">
+      <h2>Mapping from Shadow tag format</h2>
+      <div class="section-text"><h2>Mapping from Shadow tag format</h2>
+        <p>Items map directly from the two-line tag format used in Shadow.md:</p>
+<table>
+<thead>
+<tr>
+<th>Shadow tag line</th>
+<th>agenda.json</th>
+<th>Calendar</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>#date-D #time-S-E #facet-X</code></td>
+<td><code>type: fixed, day: N, start: S, end: E</code></td>
+<td>Time-boxed block</td>
+</tr>
+<tr>
+<td><code>#date-D #facet-X</code></td>
+<td><code>type: volatile, day: N</code></td>
+<td>Floating label</td>
+</tr>
+<tr>
+<td><code>#action-required #facet-X</code></td>
+<td><code>type: volatile, day: null</code></td>
+<td>Floating, undated</td>
+</tr>
+<tr>
+<td><code>#date-D1 #date-D2 #time-S-E #facet-X</code></td>
+<td><code>type: fixed, start: D1TS, end: D2TE</code></td>
+<td>Multi-day block</td>
+</tr>
+<tr>
+<td><code>#date-D #time-HH:MM #facet-X</code></td>
+<td><code>type: volatile, day: N, duration: "HH:MM"</code></td>
+<td>Bounded floating box</td>
+</tr>
+<tr>
+<td><code>#action-required #time-HH:MM #facet-X</code></td>
+<td><code>type: volatile, day: 0, duration: "HH:MM"</code></td>
+<td>Bounded floating box</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong><code>#time-</code> forms:</strong> <code>#time-HH:MM-HH:MM</code> = start/end → <code>fixed</code>; <code>#time-HH:MM</code> (single time) = duration → <code>volatile</code> with <code>duration</code> field.</p>
+</blockquote>
       </div>
     </section>
 
     <nav class="book-nav">
       <div class="prev"></div>
-      <div class="toc-center"><a href="contents.html#">
+      <div class="toc-center"><a href="../contents.html#">
           <span class="label">Contents</span>
           <span class="title"></span>
         </a></div>

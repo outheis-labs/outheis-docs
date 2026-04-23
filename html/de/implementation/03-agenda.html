@@ -838,14 +838,22 @@ Alex Smith mailen — Empfehlung zur Weiterbildung
 <td>Mehrtätig — beginnt 28. April 12:00, endet 30. April 18:00</td>
 </tr>
 <tr>
+<td><code>#action-required #time-00:35</code></td>
+<td>Volatil mit Dauer — schwebt frei, im Kalender als begrenzte Box (35 min breit)</td>
+</tr>
+<tr>
 <td><code>#action-required</code></td>
 <td>Dauerhaft volatil — kein Datum, immer sichtbar</td>
 </tr>
 </tbody>
 </table>
+<p><strong><code>#time-</code> hat zwei Formen:</strong>
+- <code>#time-HH:MM-HH:MM</code> — Start- und Endzeit → erzeugt ein <code>fixed</code>-Item, zeitlich verankert
+- <code>#time-HH:MM</code> — nur Dauer → Item bleibt <code>volatile</code>, wird aber als begrenzte Box mit der angegebenen Breite im Kalender dargestellt; nützlich für wiederkehrende Aktivitäten mit bekannter Dauer ohne feste Startzeit</p>
 <p>Regeln:
-- <code>#time-</code> steht immer zusammen mit mindestens einem <code>#date-</code> — nie allein
-- Zwei <code>#date-</code>-Tags definieren eine mehrtägige Spanne; <code>#time-</code> verankert die Startzeit am ersten und die Endzeit am letzten Datum
+- <code>#time-HH:MM-HH:MM</code> erfordert mindestens ein <code>#date-</code> auf derselben Zeile
+- <code>#time-HH:MM</code> (Dauer) kann mit oder ohne <code>#date-</code> stehen; ohne Datum wird das Item auf heute gesetzt
+- Zwei <code>#date-</code>-Tags definieren eine mehrtägige Spanne; <code>#time-HH:MM-HH:MM</code> verankert die Startzeit am ersten und die Endzeit am letzten Datum
 - <code>#date-</code> ohne <code>#time-</code> erzeugt ein volatiles Item, das sich frei im entsprechenden Tag der Kalenderansicht bewegt</p>
 <h3 id="item-identitat">Item-Identität</h3>
 <p>Jedes Shadow-Item trägt eine stabile Snowflake-UUID auf seiner Tag-Zeile:</p>
@@ -918,6 +926,16 @@ Workshop
 <td><code>#date-D1 #date-D2 #time-S-E #facet-X</code></td>
 <td><code>type: fixed, start: D1TS, end: D2TE</code></td>
 <td>Mehrtägiger Block</td>
+</tr>
+<tr>
+<td><code>#date-D #time-HH:MM #facet-X</code></td>
+<td><code>type: volatile, day: N, duration: "HH:MM"</code></td>
+<td>Begrenzte schwebende Box</td>
+</tr>
+<tr>
+<td><code>#action-required #time-HH:MM #facet-X</code></td>
+<td><code>type: volatile, day: 0, duration: "HH:MM"</code></td>
+<td>Begrenzte schwebende Box</td>
 </tr>
 </tbody>
 </table>
