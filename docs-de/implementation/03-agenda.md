@@ -283,11 +283,17 @@ Items ohne feste Uhrzeit sind *volatil* — sie erscheinen am richtigen Tag, hab
 | `#date-2026-04-28` | Volatil — erscheint am 28. April, keine feste Zeit |
 | `#date-2026-04-28 #time-09:00-10:30` | Fest — 28. April, 09:00–10:30 |
 | `#date-2026-04-28 #date-2026-04-30 #time-12:00-18:00` | Mehrtätig — beginnt 28. April 12:00, endet 30. April 18:00 |
+| `#action-required #time-00:35` | Volatil mit Dauer — schwebt frei, im Kalender als begrenzte Box (35 min breit) |
 | `#action-required` | Dauerhaft volatil — kein Datum, immer sichtbar |
 
+**`#time-` hat zwei Formen:**
+- `#time-HH:MM-HH:MM` — Start- und Endzeit → erzeugt ein `fixed`-Item, zeitlich verankert
+- `#time-HH:MM` — nur Dauer → Item bleibt `volatile`, wird aber als begrenzte Box mit der angegebenen Breite im Kalender dargestellt; nützlich für wiederkehrende Aktivitäten mit bekannter Dauer ohne feste Startzeit
+
 Regeln:
-- `#time-` steht immer zusammen mit mindestens einem `#date-` — nie allein
-- Zwei `#date-`-Tags definieren eine mehrtägige Spanne; `#time-` verankert die Startzeit am ersten und die Endzeit am letzten Datum
+- `#time-HH:MM-HH:MM` erfordert mindestens ein `#date-` auf derselben Zeile
+- `#time-HH:MM` (Dauer) kann mit oder ohne `#date-` stehen; ohne Datum wird das Item auf heute gesetzt
+- Zwei `#date-`-Tags definieren eine mehrtägige Spanne; `#time-HH:MM-HH:MM` verankert die Startzeit am ersten und die Endzeit am letzten Datum
 - `#date-` ohne `#time-` erzeugt ein volatiles Item, das sich frei im entsprechenden Tag der Kalenderansicht bewegt
 
 ### Item-Identität
@@ -353,6 +359,8 @@ Das WebUI enthält einen interaktiven Kalender-Tab, der den Zeitplan visuell dar
 | `#date-D #facet-X` | `type: volatile, day: N` | Schwebende Beschriftung |
 | `#action-required #facet-X` | `type: volatile, day: null` | Schwebend, ohne Datum |
 | `#date-D1 #date-D2 #time-S-E #facet-X` | `type: fixed, start: D1TS, end: D2TE` | Mehrtägiger Block |
+| `#date-D #time-HH:MM #facet-X` | `type: volatile, day: N, duration: "HH:MM"` | Begrenzte schwebende Box |
+| `#action-required #time-HH:MM #facet-X` | `type: volatile, day: 0, duration: "HH:MM"` | Begrenzte schwebende Box |
 
 ### Sync-Modell
 

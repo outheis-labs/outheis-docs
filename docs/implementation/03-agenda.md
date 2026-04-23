@@ -282,11 +282,17 @@ Items without a fixed time are *volatile* — they surface on the right day but 
 | `#date-2026-04-28` | Volatile — surfaces on April 28, no fixed time |
 | `#date-2026-04-28 #time-09:00-10:30` | Fixed — April 28, 09:00–10:30 |
 | `#date-2026-04-28 #date-2026-04-30 #time-12:00-18:00` | Multi-day — starts April 28 at 12:00, ends April 30 at 18:00 |
+| `#action-required #time-00:35` | Volatile with duration — floats freely, shown as bounded box (35 min wide) |
 | `#action-required` | Permanently volatile — no date, always visible |
 
+**`#time-` has two forms:**
+- `#time-HH:MM-HH:MM` — start and end time → produces a `fixed` item anchored on the timeline
+- `#time-HH:MM` — duration only → item stays `volatile` but is rendered as a bounded box with the given width on the calendar; useful for recurring activities with a known duration but no fixed start time
+
 Rules:
-- `#time-` is always accompanied by at least one `#date-` — never standalone
-- Two `#date-` tags define a multi-day span; `#time-` anchors the start time on the first date and the end time on the last
+- `#time-HH:MM-HH:MM` requires at least one `#date-` on the same line
+- `#time-HH:MM` (duration) may appear with or without `#date-`; without a date the item is undated and placed on today
+- Two `#date-` tags define a multi-day span; `#time-HH:MM-HH:MM` anchors the start time on the first date and the end time on the last
 - `#date-` without `#time-` produces a volatile item that floats freely within its day in the calendar view
 
 ### Item Identity
@@ -447,6 +453,7 @@ No `day` field — computed automatically from the date. Rendered as a connected
 | `size`    | `"s"` \| `"m"` \| `"l"`           | –     | ✓        | Effort estimate; determines visual width |
 | `note`    | string                              | –     | –        | Shown in tooltip only                    |
 | `pos`     | `{"x": 0.42, "y": 0.38}`          | –     | –        | Last drag position, written by the view  |
+| `source`  | string                              | –     | –        | Origin: vault file path, `"signal"`, `"cli"`, `"webui"` |
 
 **Items** map directly from Shadow entries:
 
@@ -456,6 +463,8 @@ No `day` field — computed automatically from the date. Rendered as a connected
 | `#date-D #facet-X` | `type: volatile, day: N` | Floating label |
 | `#action-required #facet-X` | `type: volatile, day: null` | Floating, undated |
 | `#date-D1 #date-D2 #time-S-E #facet-X` | `type: fixed, start: D1TS, end: D2TE` | Multi-day block |
+| `#date-D #time-HH:MM #facet-X` | `type: volatile, day: N, duration: "HH:MM"` | Bounded floating box |
+| `#action-required #time-HH:MM #facet-X` | `type: volatile, day: 0, duration: "HH:MM"` | Bounded floating box, undated |
 
 ### Sync Model
 
