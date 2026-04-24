@@ -62,6 +62,15 @@ The legend is built solely from this array.
 ```json
 "view": {
   "range": 7,
+  "day_start": 5,
+  "time_axis": [
+    { "from": "05:00", "to": "09:00", "weight": 0.5 },
+    { "from": "09:00", "to": "13:00", "weight": 2.2 },
+    { "from": "13:00", "to": "17:00", "weight": 1.8 },
+    { "from": "17:00", "to": "21:00", "weight": 1.0 },
+    { "from": "21:00", "to": "01:00", "weight": 0.5 },
+    { "from": "01:00", "to": "05:00", "weight": 0.3 }
+  ],
   "params": {
     "peak_amp":      0.9,
     "decay":         10.0,
@@ -72,8 +81,16 @@ The legend is built solely from this array.
 ```
 
 `range` = visible days (7 / 14 / 30).
-`params` control the gravitational field rendering and are applied to the UI
-sliders on load.
+`day_start` = first hour of the timeline (integer, 0–23). Default: 5.
+`time_axis` = non-linear time axis: 6 segments of 4 hours each, covering exactly 24 hours starting at `day_start`. `weight` controls relative screen width — higher weight means more visual resolution for that time range. Segments without `time_axis` fall back to linear 24-hour distribution.
+`params` control the gravitational field rendering and are applied to the UI sliders on load.
+
+### Spread panel (UI)
+
+The **Spread** button in the top bar opens a configuration panel for `day_start` and `time_axis`. Changes take effect immediately and are persisted on the next Save.
+
+- **Tag ab** — time input (whole hours only) that sets `day_start`; updates all segment boundaries automatically
+- **Six segment rows** — each shows its `from–to` range (computed from `day_start` in 4-hour steps) and a weight slider (0.1–5.0)
 
 ---
 
