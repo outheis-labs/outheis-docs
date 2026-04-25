@@ -82,7 +82,7 @@ The `[rule:agenda]` and `[skill]` types extend the existing type vocabulary.
 
 ## Implementation
 
-Implemented in `agenda.py` on branch `annotation-loop` (2026-04-08).
+Implemented in `agenda.py`. The `propose_memory` tool is available to cato during hourly review runs.
 
 ### propose_memory tool
 
@@ -138,5 +138,7 @@ migration sessions.
 ## Status
 
 - `>` annotation processing: **implemented** (`agenda.py`)
-- `propose_memory` tool + system prompt: **implemented** (`annotation-loop` branch)
+- `propose_memory` tool + system prompt: **implemented** (`agenda.py`)
 - rumi Phase A pickup: **works without changes** — format is identical
+
+All components are merged to main and deployed.

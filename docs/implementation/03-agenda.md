@@ -12,9 +12,10 @@ outheis manages your schedule through three Markdown files in your vault:
 ```
 vault/Agenda/
 ├── Agenda.md     # Today: schedule, tasks, notes
-├── Exchange.md   # Async dialogue: system ↔ user
-├── Shadow.md     # Chronological vault index (auto-generated)
-└── Backlog.md    # Priority-sorted view of Shadow.md (on-demand)
+└── Exchange.md   # Async dialogue: system ↔ user
+
+~/.outheis/human/webui/pages/
+└── agenda.json   # Single source of truth for calendar
 ```
 
 ### Agenda.md
@@ -46,7 +47,9 @@ outheis reads this file, understands your commitments, and can answer questions 
 
 ### Exchange.md
 
-Asynchronous dialogue between you and outheis:
+Asynchronous dialogue between you and outheis. Two modes:
+
+**Mode 1: System questions** — cato asks, you answer:
 
 ```markdown
 # Exchange
@@ -64,6 +67,17 @@ Which day works for the meeting with X?
 ```
 
 Write a `>` reply directly below an open item, or check a box — cato processes it on the next run.
+
+**Mode 2: Quick inputs** — you write, cato processes:
+
+```markdown
+# Exchange
+
+Call supplier about delivery
+Draft email to client about proposal
+```
+
+Plain lines without `---` separators or checkboxes. cato reads these on the next run and moves them into Agenda.md in the appropriate section.
 
 ## Hourly Review
 
@@ -178,9 +192,10 @@ When asked to show the agenda ("Agenda", "what's on today", "show my agenda"), c
 ```
 vault/Agenda/
 ├── Agenda.md             # Your working file
-├── Exchange.md           # Async dialogue
-├── Shadow.md             # Chronological vault index (auto-generated)
-└── Backlog.md            # Priority-sorted Shadow view (on-demand)
+└── Exchange.md           # Async dialogue
+
+~/.outheis/human/webui/pages/
+└── agenda.json           # Single source of truth for calendar view
 
 ~/.outheis/human/cache/agenda/
 └── hashes.json           # SHA256 hashes for change detection
@@ -188,13 +203,13 @@ vault/Agenda/
 
 The cache is regenerable — delete it anytime and outheis will rebuild.
 
-## Shadow.md
+## agenda.json
 
-A staging area for chronological entries detected across your vault.
+The calendar view is driven by `agenda.json` — a structured JSON file that serves as the single source of truth for all scheduled items. This file is maintained by the Agenda agent (cato) and the Data agent (zeno), and rendered by the WebUI calendar.
 
 ### Purpose
 
-Your vault contains dates scattered across many files: project deadlines, birthdays in contact notes, recurring events in project docs. Shadow.md collects these automatically so Agenda can surface them at the right time.
+Your vault contains dates scattered across many files: project deadlines, birthdays in contact notes, recurring events in project docs. The Data agent (zeno) scans these during nightly runs and writes detected items to `agenda.json`. The Agenda agent (cato) also writes user-created items directly. The WebUI allows interactive editing.
 
 ### How It Works
 
@@ -202,43 +217,45 @@ The Data Agent (zeno) runs a nightly scan at 03:30 (configurable):
 
 1. **Scan vault** — Read all files for date-relevant content via LLM extraction
 2. **Detect changes** — Hash-based cache; only new or modified files are reprocessed
-3. **Update by section** — Each source file has its own `<!-- BEGIN/END -->` block; sections are replaced independently
-4. **Source tracking** — Each section is keyed to its origin file path
+3. **Write items** — Detected items are written to `agenda.json` with their source file path
+4. **Source tracking** — Each item carries a `source` field indicating its origin
+
+The Agenda Agent (cato) runs hourly (by default at :55 past each hour) and:
+1. Reads `agenda.json` and `Agenda.md` to understand current state
+2. Processes user annotations (lines starting with `>` in Agenda.md)
+3. Updates items in `agenda.json` based on user decisions
+4. Writes the updated `Agenda.md`
+
+The WebUI allows direct manipulation of items in `agenda.json` via drag-and-drop, resize, and edit operations.
 
 ### Format
 
-Shadow.md is organised by source file. Each section is delimited by HTML comment markers so individual sections can be replaced without touching the rest:
+Items in `agenda.json` use a structured format with Snowflake IDs:
 
-```markdown
-# Shadow — Vault Chronological Index
-*Last updated: 2026-04-14 21:55*
-
-<!-- BEGIN: projects/alpha.md -->
-## projects/alpha.md
-#date-2026-04-15 #action-required
-Project Alpha deadline
-
-#date-2026-05-12
-Emma's birthday
-<!-- END: projects/alpha.md -->
-
-<!-- BEGIN: work/routines.md -->
-## work/routines.md
-#recurring-weekly
-Team standup
-<!-- END: work/routines.md -->
+```json
+{
+  "id": "7430000000000001",
+  "type": "fixed",
+  "facet": "work",
+  "title": "Project Alpha deadline",
+  "day": 0,
+  "start": "09:00",
+  "end": "11:00",
+  "tags": ["#date-2026-04-15", "#action-required"],
+  "source": "projects/alpha.md"
+}
 ```
 
-Each entry is two lines: a tag line followed by a plain-text description. The tag line carries the scheduling anchor; the description is self-contained and readable without context.
+For the complete schema reference, see [agenda.json Reference](16-agenda-json.html).
 
 ### Item Completeness
 
-For the Agenda agent to reliably schedule an item, every Shadow entry needs one of two anchors:
+For the Agenda agent to reliably schedule an item, every `agenda.json` entry needs one of two anchors:
 
 | Anchor | Meaning |
 |--------|---------|
-| `#date-YYYY-MM-DD` | Temporal anchor — show this item in the agenda from this date onwards |
-| attention marker (e.g. `#action-required`) | No date — permanently visible until explicitly decided |
+| `#date-YYYY-MM-DD` in tags | Temporal anchor — show this item in the agenda from this date onwards |
+| `#action-required` in tags | No date — permanently visible until explicitly decided |
 
 Items without either anchor are semantically incomplete: the agent cannot know when, or whether, to surface them.
 
@@ -277,7 +294,7 @@ The default is no retention limit (`null`). Set `retention` to the number of day
 
 Items without a fixed time are *volatile* — they surface on the right day but have no position on the timeline. To place an item at a specific time, add `#time-HH:MM-HH:MM` on the same tag line:
 
-| Shadow tag line | Meaning |
+| Tags in agenda.json | Meaning |
 |---|---|
 | `#date-2026-04-28` | Volatile — surfaces on April 28, no fixed time |
 | `#date-2026-04-28 #time-09:00-10:30` | Fixed — April 28, 09:00–10:30 |
@@ -295,30 +312,64 @@ Rules:
 - Two `#date-` tags define a multi-day span; `#time-HH:MM-HH:MM` anchors the start time on the first date and the end time on the last
 - `#date-` without `#time-` produces a volatile item that floats freely within its day in the calendar view
 
+### Recurring Tags
+
+Recurring events use `#recurring-*` tags to specify repetition. Only one anchor item is stored in `agenda.json`; the calendar generates display instances for each occurrence.
+
+| Tag | Meaning |
+|-----|---------|
+| `#recurring-daily` | Every day |
+| `#recurring-weekly` | Same weekday as anchor |
+| `#recurring-monthly` | Same day of month as anchor |
+| `#recurring-yearly` | Same month + day as anchor |
+| `#recurring-mon` | Every Monday |
+| `#recurring-tue`, `#recurring-wed`, `#recurring-thu`, `#recurring-fri`, `#recurring-sat`, `#recurring-sun` | Specific weekday |
+| `#recurring-mon-wed-fri` | Multiple weekdays (combine with hyphens) |
+| `#recurring-monthly-1-15` | Specific days of month (1st and 15th) |
+
+Example:
+```json
+{
+  "id": "7430000000000010",
+  "type": "fixed",
+  "title": "Daily Standup",
+  "day": 0,
+  "start": "09:00",
+  "end": "09:30",
+  "tags": ["#date-2026-04-24", "#time-09:00-09:30", "#recurring-daily"]
+}
+```
+
+**Important:** Recurring items are protected from overwrite. When `agenda.json` is updated from vault scans, items with `#recurring-*` tags are never replaced — the recurring tag is the authoritative flag that preserves user-defined recurring events.
+
 ### Item Identity
 
-Every Shadow item carries a stable snowflake UUID on its tag line:
+Every item in `agenda.json` carries a stable Snowflake ID:
 
-```
-#date-2026-04-28 #time-09:00-10:30 #facet-work #id-744f3a2b8c1e0d9f
-Workshop
+```json
+{
+  "id": "744f3a2b8c1e0d9f",
+  "title": "Workshop",
+  "tags": ["#date-2026-04-28", "#time-09:00-10:30", "#facet-work"]
+}
 ```
 
-The `#id-` tag links the item across Shadow.md, Agenda.md, and agenda.json. It enables precise change tracking and conflict detection when multiple input channels modify the same item.
+The ID links the item across `agenda.json`, `Agenda.md`, and source files. It enables precise change tracking and conflict detection when multiple input channels modify the same item.
 
 ### Integration with Daily
 
-Agenda agent reads Shadow.md and can surface relevant entries in Daily.md. When you ask "what's on this week?", outheis checks both your explicit schedule and Shadow's detected dates.
+The Agenda agent reads `agenda.json` to understand what's scheduled. When you ask "what's on this week?", cato checks both `Agenda.md` and `agenda.json` to provide a complete picture.
 
 ### Configuration
+
+The nightly vault scan is configured in `config.json`:
 
 ```json
 {
   "schedule": {
     "shadow_scan": {
       "enabled": true,
-      "hour": 3,
-      "minute": 30
+      "time": ["03:30"]
     }
   }
 }
@@ -326,7 +377,7 @@ Agenda agent reads Shadow.md and can surface relevant entries in Daily.md. When 
 
 ### Manual Trigger
 
-You can ask: "scan vault for dates" or "update shadow" to run the scan immediately.
+You can ask: "scan vault for dates" or "update agenda" to trigger a scan immediately.
 
 ## Calendar View
 

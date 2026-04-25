@@ -150,6 +150,8 @@ outheis memory --clear context
 
 ### Display Format
 
+Memory files are rendered in a readable format when displayed:
+
 ```
 Memory
 ----------------------------------------
@@ -168,41 +170,38 @@ Memory
 ```
 
 Markers:
-
 - `[!]` — Explicitly stored via `!` marker
 - `[90%]` — Confidence below 100%
-- `[↓12d]` — Expires in 12 days
+- `[↓12d]` — Expires in 12 days (context type only)
 
 ## Storage
 
 ```
 ~/.outheis/human/memory/
-├── user.json           # Personal facts
-├── feedback.json       # Working preferences
-├── context.json        # Current focus
-└── pattern/            # Pattern agent's learning
-    └── strategies.md
+├── user.md             # Personal facts
+├── feedback.md         # Working preferences
+├── context.md          # Current focus
+└── patterns.md         # Pattern agent's learning
 ```
 
-Each memory file contains timestamped entries with metadata:
+Each memory file is a Markdown file with frontmatter and timestamped entries:
 
-```json
-{
-  "type": "user",
-  "updated_at": "2025-03-28T14:30:00",
-  "entries": [
-    {
-      "content": "User is 35 years old",
-      "created_at": "2025-03-28T14:30:00",
-      "updated_at": "2025-03-28T14:30:00",
-      "confidence": 1.0,
-      "source_count": 1,
-      "decay_days": null,
-      "is_explicit": true
-    }
-  ]
-}
+```markdown
+---
+name: user facts
+description: Stable personal information about the user
+type: user
+---
+
+- User is 35 years old [2025-03-28]
+- Children: Leo (8), Emma (5) [2025-03-28] [!]
+- Lives in Munich [2025-03-28] [90%]
 ```
+
+Markers:
+- `[!]` — Explicitly stored via `!` marker
+- `[90%]` — Confidence below 100%
+- `[↓12d]` — Expires in 12 days (for context entries)
 
 ## Migration
 
@@ -217,7 +216,7 @@ Quick summary:
 
 ## Pattern Agent Meta-Memory
 
-The Pattern agent has its own memory in `~/.outheis/human/memory/pattern/`. This is where it stores:
+The Pattern agent has its own memory in `~/.outheis/human/memory/patterns.md`. This is where it stores:
 
 - What extraction strategies work for this user
 - Patterns in communication style
@@ -251,7 +250,7 @@ If outheis has wrong information:
 
 1. **Explicit correction:** `! I'm 36, not 35`
 2. **CLI edit:** `outheis memory --clear user` then re-add
-3. **Direct file edit:** Modify JSON in `~/.outheis/human/memory/`
+3. **Direct file edit:** Modify Markdown files in `~/.outheis/human/memory/`
 
 Explicit (`!`) entries take precedence — agents won't override them with lower-confidence extractions.
 
