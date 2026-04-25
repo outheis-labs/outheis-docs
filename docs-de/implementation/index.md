@@ -35,3 +35,7 @@ Der Implementierungsabschnitt dokumentiert das laufende System: was jeder Agent 
 → [Datensicherheit](14-data-safety.html)
 
 → [Modell-Evaluation](15-models.html)
+
+→ [agenda.json Referenz](16-agenda-json.html)
+
+→ [Kalender](17-calendar.html)

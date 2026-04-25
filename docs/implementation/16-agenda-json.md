@@ -1,5 +1,5 @@
 
-# agenda.json — Syntax Reference v0.1
+# agenda.json — Syntax Reference v0.2
 
 The calendar view in the WebUI is driven by `agenda.json`, a structured
 projection of all scheduled items. It lives at:
@@ -147,6 +147,36 @@ Rendered as a connected bar spanning all affected rows.
 }
 ```
 
+### recurring — repeating event
+
+Recurring events are stored as **a single anchor item** with a `#recurring-*` tag. The frontend generates display instances for all matching days in the visible range, but never writes them back as individual items into `agenda.json`.
+
+```json
+{
+  "id":    "7430000000000010",
+  "type":  "fixed",
+  "facet": "cato",
+  "title": "Daily Standup",
+  "day":   0,
+  "start": "09:00",
+  "end":   "09:30",
+  "tags":  ["#date-2026-04-24", "#time-09:00-09:30", "#facet-cato", "#recurring-daily"]
+}
+```
+
+Supported `#recurring-*` tags:
+
+| Tag | Meaning |
+|-----|---------|
+| `#recurring-daily` | Every day |
+| `#recurring-weekly` | Same weekday as anchor |
+| `#recurring-monthly` | Same day of month as anchor |
+| `#recurring-yearly` | Same month + day as anchor |
+| `#recurring-mon`, `#recurring-mon-wed-fri` | Specific weekdays |
+| `#recurring-monthly-1-15` | Specific days of month |
+
+> **Important:** cato must not write individual instances of recurring events into `agenda.json`. Only the anchor item (with `#recurring-*` tag) belongs in `items`.
+
 ---
 
 ## Field reference
@@ -167,6 +197,9 @@ Rendered as a connected bar spanning all affected rows.
 | `pos`     | `{"x": 0.42, "y": 0.38}`          | –     | –        | Last drag position, written by the view  |
 | `source`  | string                              | ✓     | ✓        | Origin: vault file path, `"cato"`, `"webui"`, `"signal"`, `"cli"` |
 | `done`    | `"YYYY-MM-DD"`                     | –     | –        | Set when item is completed; triggers retention countdown |
+| `follows`  | string[]                           | ✓     | ✓        | IDs of items this item waits for (predecessor IDs)      |
+| `precedes` | string[]                           | ✓     | ✓        | IDs of items this item blocks (successor IDs)           |
+| `relates`  | string[]                           | ✓     | ✓        | IDs of associated items — no ordering implied           |
 
 ---
 
@@ -196,3 +229,39 @@ Items map directly from the two-line tag format used in Shadow.md:
 | `#action-required #time-HH:MM #facet-X`        | `type: volatile, day: 0, duration: "HH:MM"`      | Bounded floating box   |
 
 > **`#time-` forms:** `#time-HH:MM-HH:MM` = start/end → `fixed`; `#time-HH:MM` (single time) = duration → `volatile` with `duration` field.
+
+---
+
+## Dependencies
+
+Items can declare ordering relationships with other items. All three fields hold arrays of Snowflake IDs.
+
+```json
+{
+  "id":       "7430000000000020",
+  "type":     "volatile",
+  "title":    "Project Start",
+  "day":      5,
+  "follows":  ["7430000000000018", "7430000000000019"],
+  "precedes": [],
+  "relates":  ["7430000000000010"]
+}
+```
+
+| Field | Direction | Meaning |
+|-------|-----------|---------|
+| `follows`  | this item ← predecessors | This item waits for the listed items to be done |
+| `precedes` | this item → successors   | This item blocks the listed items |
+| `relates`  | associative              | Associated items — no ordering implied |
+
+`follows` and `precedes` are independent primitives that express the same relationship from opposite perspectives. Either can be set without the other. The calendar resolves both when computing `effectiveDay`.
+
+**effectiveDay** — the calendar pushes items forward when their predecessors are incomplete:
+
+```
+effectiveDay(item) = max(effectiveDay(predecessor) + 1, item.day)
+```
+
+Computed recursively with cycle detection. A predecessor with `done` set does not block. The computed day is never written back to `agenda.json`; `day` always holds the intended/planned day.
+
+For calendar rendering details see [Calendar](17-calendar.html).

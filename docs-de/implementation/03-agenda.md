@@ -331,64 +331,9 @@ Du kannst fragen: "scanne den vault nach terminen" oder "aktualisiere shadow", u
 
 ## Kalenderansicht
 
-Das WebUI enthält einen interaktiven Kalender-Tab, der den Zeitplan visuell darstellt. Er wird von `agenda.json` angetrieben — einer strukturierten Projektion von Shadow.md, die cato bei jedem stündlichen Lauf zusammen mit Agenda.md erzeugt.
+Das WebUI enthält einen interaktiven Kalender-Tab, der den Zeitplan visuell darstellt. Er wird von `agenda.json` angetrieben — einer strukturierten Projektion, die cato bei jedem stündlichen Lauf zusammen mit Agenda.md erzeugt.
 
-### Format von agenda.json
-
-```json
-{
-  "meta": { "version": "0.1", "generated": "...", "base_date": "YYYY-MM-DD" },
-  "facets": [
-    { "id": "work", "label": "work", "h": 42, "s": 100 }
-  ],
-  "view": { "range": 7, "params": { "peak_amp": 0.9, "decay": 10.0 } },
-  "items": [
-    { "id": "744f3a...", "day": 0, "type": "fixed", "facet": "work",
-      "title": "Workshop", "start": "09:00", "end": "10:30" }
-  ]
-}
-```
-
-**Facets** werden ausschließlich aus den `#facet-*`-Tags der Shadow-Einträge abgeleitet — keine separate Definition oder Konfiguration nötig. Farben werden dynamisch je Facet-ID vergeben.
-
-**Items** werden direkt aus Shadow-Einträgen abgebildet:
-
-| Shadow-Tags | agenda.json | Kalender |
-|---|---|---|
-| `#date-D #time-S-E #facet-X` | `type: fixed, day: N, start: S, end: E` | Zeitgebundener Block |
-| `#date-D #facet-X` | `type: volatile, day: N` | Schwebende Beschriftung |
-| `#action-required #facet-X` | `type: volatile, day: null` | Schwebend, ohne Datum |
-| `#date-D1 #date-D2 #time-S-E #facet-X` | `type: fixed, start: D1TS, end: D2TE` | Mehrtägiger Block |
-| `#date-D #time-HH:MM #facet-X` | `type: volatile, day: N, duration: "HH:MM"` | Begrenzte schwebende Box |
-| `#action-required #time-HH:MM #facet-X` | `type: volatile, day: 0, duration: "HH:MM"` | Begrenzte schwebende Box |
-
-### Sync-Modell
-
-Shadow.md ist die einzige Wahrheitsquelle. Drei Eingabekanäle speisen sie mit unterschiedlicher Latenz:
-
-| Kanal | Latenz | Mechanismus |
-|---|---|---|
-| Kalender-UI (agenda.json PUT) | Sofort | WebUI schreibt direkt in Shadow.md via `#id-` |
-| Exchange.md (bare entry) | Nächster stündlicher Lauf | cato verarbeitet und aktualisiert Shadow.md |
-| Agenda.md (`>` Annotation) | Nächster stündlicher Lauf | cato verarbeitet und aktualisiert Shadow.md |
-
-Wenn ein Eintrag im Kalender verschoben, vergrößert oder von volatil auf fest gesetzt wird, sendet das WebUI einen PUT an den Server, der das zugehörige Shadow-Item per UUID aktualisiert — noch vor catons nächstem Lauf.
-
-### Konflikterkennung
-
-Stellt cato seit der letzten Agenda.md-Erzeugung fest, dass:
-- Shadow.md für ein Item via Kalender-PUT aktualisiert wurde, **und**
-- Agenda.md eine `>`-Annotation für dasselbe Item enthält (per `#id-` abgeglichen)
-
-schreibt cato einen Konflikthinweis unterhalb des Items — ohne bestehende Annotationen zu löschen:
-
-```markdown
-Workshop #id-744f3a...
-> auf Freitag verschieben
-⚠ Kalender: bereits auf Mo 09:00 verschoben. Bitte bestätigen oder korrigieren.
-```
-
-Der User löst den Konflikt per weiterer Annotation. Keine bestehende Eingabe wird automatisch gelöscht.
+Zur vollständigen Dokumentation der Kalender-Features: [Kalender](17-calendar.html). Zum Datenformat: [agenda.json Referenz](16-agenda-json.html).
 
 ## Konfiguration
 

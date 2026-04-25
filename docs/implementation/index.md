@@ -35,3 +35,7 @@ The implementation section documents the system as it runs: what each agent does
 → [Data Safety](14-data-safety.html)
 
 → [Model Evaluation](15-models.html)
+
+→ [agenda.json Reference](16-agenda-json.html)
+
+→ [Calendar](17-calendar.html)

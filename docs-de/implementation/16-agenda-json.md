@@ -191,5 +191,43 @@ Unterstützte `#recurring-*`-Tags:
 | `size`    | `"s"` \| `"m"` \| `"l"`            | –     | ✓        | Aufwandsschätzung; bestimmt visuelle Breite   |
 | `note`    | string                               | –     | –        | Nur im Tooltip sichtbar                       |
 | `source`  | string                               | ✓     | ✓        | Herkunft: Vault-Pfad, `"cato"`, `"webui"` …  |
-| `done`    | `"YYYY-MM-DD"`                      | –     | –        | Gesetzt wenn abgeschlossen                    |
-| `tags`    | string[]                             | ✓     | ✓        | Strukturelle Tags (`#date-`, `#time-`, etc.)  |
+| `done`     | `"YYYY-MM-DD"`                     | –     | –        | Gesetzt wenn abgeschlossen                              |
+| `follows`  | string[]                           | ✓     | ✓        | IDs der Items, auf die dieses Item wartet               |
+| `precedes` | string[]                           | ✓     | ✓        | IDs der Items, die dieses Item blockiert                |
+| `relates`  | string[]                           | ✓     | ✓        | IDs assoziierter Items — kein Ordering                  |
+| `tags`     | string[]                           | ✓     | ✓        | Strukturelle Tags (`#date-`, `#time-`, etc.)            |
+
+---
+
+## Abhängigkeiten
+
+Items können Reihenfolgebeziehungen zu anderen Items deklarieren. Alle drei Felder enthalten Arrays von Snowflake-IDs.
+
+```json
+{
+  "id":       "7430000000000020",
+  "type":     "volatile",
+  "title":    "Projektstart",
+  "day":      5,
+  "follows":  ["7430000000000018", "7430000000000019"],
+  "relates":  ["7430000000000010"]
+}
+```
+
+| Feld | Richtung | Bedeutung |
+|------|----------|-----------|
+| `follows`  | dieses Item ← Vorgänger | Dieses Item wartet auf den Abschluss der gelisteten Items |
+| `precedes` | dieses Item → Nachfolger | Dieses Item blockiert die gelisteten Items |
+| `relates`  | assoziativ               | Verknüpfte Items — kein Ordering                          |
+
+`follows` und `precedes` sind eigenständige Primitive, die dieselbe Beziehung aus entgegengesetzten Perspektiven ausdrücken. Keines setzt das andere voraus.
+
+**effectiveDay** — der Kalender verschiebt Items nach vorne, wenn ihre Vorgänger noch offen sind:
+
+```
+effectiveDay(item) = max(effectiveDay(Vorgänger) + 1, item.day)
+```
+
+Rekursiv berechnet mit Zyklenerkennung. Erledigte Vorgänger (`done` gesetzt) blockieren nicht mehr. Das berechnete Datum wird nie in `agenda.json` zurückgeschrieben; `day` enthält immer den geplanten Tag.
+
+Zur Darstellung im Kalender: [Kalender](17-calendar.html).
