@@ -15,7 +15,6 @@ The only required subdirectory is `Agenda/`, which outheis manages:
 vault/
 ├── Agenda/
 │   ├── Agenda.md     # Today — schedule, tasks, notes
-│   ├── Inbox.md      # Quick capture, unprocessed
 │   └── Exchange.md   # Async communication with outheis
 └── ... your files
 ```
@@ -103,19 +102,13 @@ Agenda.md is regenerated each day by the agenda agent. The default template:
 ## 💶 Cashflow
 ```
 
-The agenda agent populates this from `agenda.json` and your vault: scheduled events, recurring items, tasks due today, items from Inbox.md. If your vault contains a timetable, a recurring schedule, or date-tagged entries, they appear here automatically.
+The agenda agent populates this from `agenda.json` and your vault: scheduled events, recurring items, tasks due today. If your vault contains a timetable, a recurring schedule, or date-tagged entries, they appear here automatically.
 
 You can modify the template. Put your preferred structure in `rules/agenda.md`:
 
 ```markdown
 Agenda.md should use these sections: [your sections here]
 ```
-
-## Inbox.md
-
-Quick capture without friction. Write anything — voice, typed, dictated. The agenda agent processes Inbox items during the hourly review: moves them to Daily.md, creates vault notes, or asks in Exchange.md if something needs clarification.
-
-Format is free. One line per item is enough.
 
 ## Exchange.md
 

@@ -7,14 +7,15 @@
 
 ## Die drei Dateien
 
-outheis verwaltet deinen Zeitplan über drei Markdown-Dateien in deinem Vault:
+outheis verwaltet deinen Zeitplan über zwei Markdown-Dateien in deinem Vault:
 
 ```
 vault/Agenda/
 ├── Agenda.md     # Heute: Zeitplan, Aufgaben, Notizen
-├── Exchange.md   # Asynchroner Dialog: System ↔ Benutzer
-├── Shadow.md     # Chronologischer Vault-Index (automatisch erstellt)
-└── Backlog.md    # Prioritätssortierte Ansicht von Shadow.md (auf Anfrage)
+└── Exchange.md   # Asynchroner Dialog: System ↔ Benutzer
+
+~/.outheis/human/webui/pages/
+└── agenda.json    # Single source of truth für Kalenderansicht
 ```
 
 ### Agenda.md

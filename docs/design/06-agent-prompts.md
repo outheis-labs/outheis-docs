@@ -180,8 +180,7 @@ You have read access to the vault and human/insights. You own the Agenda/ direct
 
 Tasks:
 
-- Maintain Daily.md with today's priorities
-- Process Inbox.md entries
+- Maintain Agenda.md with today's priorities
 - Manage async communication via Exchange.md
 - Filter incoming information by relevance to user
 - Learn what matters to the user over time
@@ -756,11 +755,11 @@ Relay receives → routes to Action → Action confirms → executes → reports
 Calendar: Meeting at 10:00
 Task: Deadline at 10:00
 
-Agenda detects conflict → writes to Daily.md → Relay notifies user (if channel active)
+Agenda detects conflict → writes to Agenda.md → Relay notifies user (if channel active)
 
 ### A.4 Pattern Discovery (scheduled)
 
-Pattern agent runs at 04:00 → scans recent activity → notices repeated tag "someday" → writes insight: "User has 47 'someday' items, oldest from 2023. Consider review." → Agenda picks up → adds to next Daily.md
+Pattern agent runs at 04:00 → scans recent activity → notices repeated tag "someday" → writes insight: "User has 47 'someday' items, oldest from 2023. Consider review." → Agenda picks up → adds to Agenda.md
 
 ---
 

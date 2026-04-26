@@ -59,8 +59,7 @@ Base capabilities defined by the developer. Examples:
 **Agenda Agent:**
 
 - Date format recognition
-- Daily.md structure
-- Inbox processing strategy
+- Agenda.md structure
 - Exchange.md usage
 
 **Data Agent:**

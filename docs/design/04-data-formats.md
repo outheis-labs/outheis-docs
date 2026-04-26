@@ -40,8 +40,7 @@ No user data is stored anywhere else. Removing these directories erases all user
     ├── tag-weights.jsonl        # Learned tag importance
     ├── cache/                   # Cached data
     │   └── agenda/              # Previous versions for diff
-    │       ├── Daily.md.prev
-    │       ├── Inbox.md.prev
+    │       ├── Agenda.md.prev
     │       └── Exchange.md.prev
     ├── imports/                 # Imported external data
     │   ├── calendar/
@@ -60,8 +59,7 @@ Vaults can be anywhere on the filesystem. Multiple vaults are supported.
 ```
 ~/Documents/MyVault/             # Example: user's primary vault
 ├── Agenda/                      # Special directory (required in primary vault)
-│   ├── Daily.md
-│   ├── Inbox.md
+│   ├── Agenda.md
 │   └── Exchange.md
 ├── notes/
 │   └── project-alpha.md
@@ -845,22 +843,20 @@ The primary vault contains a special `Agenda/` directory that serves as the stru
 
 ```
 vault/Agenda/
-├── Daily.md
-├── Inbox.md
+├── Agenda.md
 └── Exchange.md
 ```
 
-Three files, no subdirectories.
+Two files, no subdirectories.
 
 ### Purpose
 
 | File | Direction | Purpose |
 |------|-----------|---------|
-| `Daily.md` | Bidirectional | Today: appointments, tasks, notes |
-| `Inbox.md` | User → System | Quick input, unstructured thoughts |
+| `Agenda.md` | Bidirectional | Today: appointments, tasks, notes |
 | `Exchange.md` | System ↔ User | Questions, clarifications, learning |
 
-### Daily.md
+### Agenda.md
 
 The current day. Agenda agent maintains structure, user adds content.
 
@@ -877,22 +873,6 @@ The current day. Agenda agent maintains structure, user adds content.
 - [ ] Review proposal
 
 ## Notes
-
-```
-
-### Inbox.md
-
-Quick capture. User writes, system processes.
-
-```markdown
-meeting with X next week, important
-
-remember to call Y about the contract
-
-#idea redesign the onboarding flow
-```
-
-Agenda agent reads, classifies, routes to appropriate agents.
 
 ### Exchange.md
 
@@ -940,8 +920,7 @@ This enables the Agenda agent to understand *what* changed, not just *that* some
 
 ```
 ~/.outheis/human/cache/agenda/
-├── Daily.md.prev
-├── Inbox.md.prev
+├── Agenda.md.prev
 └── Exchange.md.prev
 ```
 

@@ -98,11 +98,10 @@ If nothing changed since the last run, no LLM call is made. This saves API costs
 ### Processing Steps
 
 1. **Hash check** — Compare current files with stored hashes
-2. **Process Inbox** — Parse items, move tasks to Daily, unclear → Exchange
-3. **Check Exchange** — Look for your responses, extract learnings
-4. **Review Daily** — Notice annotations, comments, completions
-5. **Update hashes** — Store new file hashes for next comparison
-6. **Cache diffs** — Save `.prev` versions for debugging
+2. **Check Exchange** — Look for your responses, extract learnings
+3. **Review Daily** — Notice annotations, comments, completions
+4. **Update hashes** — Store new file hashes for next comparison
+5. **Cache diffs** — Save `.prev` versions for debugging
 
 ### Annotations
 

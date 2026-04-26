@@ -129,7 +129,6 @@ Your vault is your primary knowledge store. outheis reads from it, writes to it 
 vault/
 └── Agenda/
     ├── Agenda.md     # Today's schedule — written by cato
-    ├── Inbox.md      # Your quick capture — processed hourly
     └── Exchange.md   # Async back-and-forth with cato
 ```
 
@@ -221,7 +220,6 @@ Status update...
 vault/
 ├── Agenda/
 │   ├── Agenda.md     # Today's schedule
-│   ├── Inbox.md      # Unprocessed items
 │   └── Exchange.md   # External sync
 ├── projects/
 ├── notes/

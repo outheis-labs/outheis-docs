@@ -12,7 +12,7 @@
 | Dispatcher — Microkernel, Scheduler, Lock-Manager | ✓ | |
 | Relay (ou) — Routing, Memory-Integration | ✓ | |
 | Data (zeno) — Vault-Suche, Tag-Analyse | ✓ | |
-| Agenda (cato) — Daily, Inbox, Exchange, Shadow | ✓ | |
+| Agenda (cato) — Agenda.md, Exchange, Kalender | ✓ | |
 | Pattern (rumi) — nächtliche Memory-Extraktion | ✓ | |
 | Web UI — Konfig, Memory, Scheduler, Vault, Tags, Migration | ✓ | |
 | Signal-Transport — empfangen, antworten, Sprachtranskription | ✓ | |

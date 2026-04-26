@@ -84,14 +84,15 @@ cato verwaltet drei Dateien in `vault/Agenda/`:
 
 | Datei | Richtung | Zweck |
 |-------|----------|-------|
-| Daily.md | Bidirektional | Heutiger Zeitplan, Aufgaben, Notizen |
-| Inbox.md | Benutzer → System | Schnellerfassung, unverarbeitete Einträge |
+| Agenda.md | Bidirektional | Heutiger Zeitplan, Aufgaben, Notizen |
 | Exchange.md | System ↔ Benutzer | Asynchrone Fragen, kein Antwortzwang |
+
+Die Kalenderansicht im WebUI wird von `agenda.json` gesteuert — der Single Source of Truth für alle geplanten Einträge.
 
 **Befehle:**
 
-- "aktualisiere daily" / "update agenda" → löst manuelle Aktualisierung aus
-- Verarbeitet Inbox-Einträge, prüft Exchange-Antworten, aktualisiert Daily
+- "aktualisiere agenda" / "update agenda" → löst manuelle Aktualisierung aus
+- Prüft Exchange-Antworten, aktualisiert Agenda.md
 
 **Stündliche Überprüfung (bedingt):**
 

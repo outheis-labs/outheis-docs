@@ -87,7 +87,6 @@ The Agenda agent manages files in `vault/Agenda/`:
 | File | Direction | Purpose |
 |------|-----------|---------|
 | Agenda.md | Bidirectional | Today's schedule, tasks, notes |
-| Inbox.md | User → System | Quick capture, unprocessed items |
 | Exchange.md | System ↔ User | Async questions, no pressure to respond |
 
 The calendar view in the WebUI is driven by `agenda.json` — the single source of truth for all scheduled items. See [agenda.json](16-agenda-json.md) for the schema.
@@ -95,7 +94,7 @@ The calendar view in the WebUI is driven by `agenda.json` — the single source 
 **Commands:**
 
 - "update agenda" → triggers manual refresh
-- Processes Inbox items, checks Exchange responses, updates Daily
+- Checks Exchange responses, updates Agenda.md
 
 **Hourly Review (conditional):**
 
@@ -194,7 +193,6 @@ The vault is a directory of Markdown files with YAML frontmatter:
 vault/
 ├── Agenda/
 │   ├── Agenda.md     # Today's schedule
-│   ├── Inbox.md      # Unprocessed items
 │   └── Exchange.md   # Async communication
 ├── projects/
 │   └── *.md
@@ -235,8 +233,7 @@ Append-only. Versioned. Recoverable.
     │   │   └── Vault.jsonl
     │   ├── agenda/       # Agenda file state
     │   │   ├── hashes.json       # Quick change detection
-    │   │   ├── Daily.md.prev     # For diff
-    │   │   ├── Inbox.md.prev
+    │   │   ├── Agenda.md.prev     # For diff
     │   │   └── Exchange.md.prev
     │   └── sessions/     # Session replay logs
     ├── rules/            # User-defined rules (external)
@@ -337,7 +334,7 @@ Four strategies in use or planned:
 ## Further Reading
 
 - [Memory](memory.md) — How persistent memory works
-- [Agenda](agenda.md) — Time management with Daily, Inbox, Exchange
+- [Agenda](agenda.md) — Time management with Daily, Exchange
 - [Migration](migration.md) — Seeding memory from external sources
 - [Code Agent (alan)](alan.md) — Development-time code intelligence
 - [Web UI](webui.md) — Browser-based administration interface

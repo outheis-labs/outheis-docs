@@ -72,7 +72,6 @@ outheis is a multi-agent system where specialized agents communicate via message
 ~/Documents/MyVault/             # External vault (user-managed, anywhere)
 ├── Agenda/
 │   ├── Agenda.md
-│   ├── Inbox.md
 │   └── Exchange.md
 ├── notes/
 ├── projects/
@@ -305,7 +304,7 @@ Each agent owns its domain exclusively. Others request access via messages.
 | Agent | Owns |
 |-------|------|
 | Relay | Routing decisions, response composition, channel formatting |
-| Agenda | User preferences, rules, Agenda/Inbox/Exchange |
+| Agenda | User preferences, rules, Agenda/Exchange |
 | Data | Vault, knowledge synthesis, index |
 | Action | Task execution, external imports |
 | Pattern | Insights generation, tag learning |
@@ -668,7 +667,6 @@ Structured JSON for programmatic access.
 | File | User attention |
 |------|----------------|
 | `Agenda.md` | Primary — checked regularly |
-| `Inbox.md` | Write-only from user perspective |
 | `Exchange.md` | Occasional — when Agenda references it |
 
 Conflicts and urgent items must surface in `Agenda.md`, not hidden in Exchange.

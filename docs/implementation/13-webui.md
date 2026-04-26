@@ -85,7 +85,7 @@ ssh -fNL 8080:localhost:8080 user@your-server
 | View | Purpose |
 |------|---------|
 | **Files** | Full vault browser — all configured vaults, directory tree, edit and delete |
-| **Agenda** | View/edit files in `vault/Agenda/` (Daily.md, Inbox.md, Exchange.md) |
+| **Agenda** | View/edit files in `vault/Agenda/` (Agenda.md, Exchange.md) |
 | **Codebase** | View files in `vault/Codebase/` (alan's proposals) |
 | **Migration** | Upload migration files (drop zone), view and edit files, manage Migration/ directory |
 | **Tags** | Scan vault for #tags, list by namespace group, rename or delete tags across all files |
