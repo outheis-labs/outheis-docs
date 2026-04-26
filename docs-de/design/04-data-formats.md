@@ -40,8 +40,7 @@ Keine Benutzerdaten werden anderswo gespeichert. Das Entfernen dieser Verzeichni
     ├── tag-weights.jsonl        # Learned tag importance
     ├── cache/                   # Cached data
     │   └── agenda/              # Previous versions for diff
-    │       ├── Daily.md.prev
-    │       ├── Inbox.md.prev
+    │       ├── Agenda.md.prev
     │       └── Exchange.md.prev
     ├── imports/                 # Imported external data
     │   ├── calendar/
@@ -60,8 +59,7 @@ Vaults können sich überall im Dateisystem befinden. Mehrere Vaults werden unte
 ```
 ~/Documents/MyVault/             # Example: user's primary vault
 ├── Agenda/                      # Special directory (required in primary vault)
-│   ├── Daily.md
-│   ├── Inbox.md
+│   ├── Agenda.md
 │   └── Exchange.md
 ├── notes/
 │   └── project-alpha.md

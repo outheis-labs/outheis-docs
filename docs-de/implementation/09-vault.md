@@ -12,10 +12,9 @@ Das einzige erforderliche Unterverzeichnis ist `Agenda/`, das outheis verwaltet:
 ```
 vault/
 ├── Agenda/
-│   ├── Daily.md      # Today — schedule, tasks, notes
-│   ├── Inbox.md      # Quick capture, unprocessed
-│   └── Exchange.md   # Async communication with outheis
-└── ... your files
+│   ├── Agenda.md    # Heute — Zeitplan, Aufgaben, Notizen
+│   └── Exchange.md  # Asynchrone Kommunikation mit outheis
+└── ... deine Dateien
 ```
 
 Alles andere gehört dir.
@@ -82,37 +81,36 @@ Der Data-Agent scannt den Vault, extrahiert die Tag-Taxonomie und reflektiert si
 
 Wenn der Data-Agent später Inkonsistenzen oder mögliche Vereinfachungen bemerkt — eine Kategorie mit nur einem Wert, zwei Tags die immer gemeinsam auftauchen, ein Benennungsmuster das vereinheitlicht werden könnte — bringt er das direkt im Gespräch auf. Ohne deine Zustimmung werden keine Änderungen gemacht.
 
-## Daily.md
+## Agenda.md
 
-Daily.md wird täglich frisch vom Agenda-Agenten erstellt. Die Standardstruktur:
+Agenda.md wird täglich frisch vom Agenda-Agenten erstellt. Die Standardstruktur:
 
 ```markdown
-# [Weekday], [Date]
+⛅ [Weekday, DD.MM.YYYY]
+*Refresh: HH:MM*
 
-## Morning
+---
+## 🧘 Persönlich
 
-## Schedule
+- [ ]
 
-## Tasks
+---
+## 📅 Heute
 
-## Notes
+---
+## 🗓️ Diese Woche
 
-## Evening
+---
+## 💶 Cashflow
 ```
 
-Der Agenda-Agent füllt dies aus deinem Vault: geplante Termine, wiederkehrende Einträge, heute fällige Aufgaben, Einträge aus Inbox.md. Wenn dein Vault einen Terminplan, einen wiederkehrenden Zeitplan oder datum-markierte Einträge enthält, erscheinen sie hier automatisch.
+Der Agenda-Agent füllt dies aus `agenda.json` und deinem Vault: geplante Termine, wiederkehrende Einträge, heute fällige Aufgaben. Wenn dein Vault einen Terminplan, einen wiederkehrenden Zeitplan oder datum-markierte Einträge enthält, erscheinen sie hier automatisch.
 
 Du kannst die Vorlage ändern. Gib deine bevorzugte Struktur in `rules/agenda.md` an:
 
 ```markdown
-Daily.md should use these sections: [your sections here]
+Agenda.md should use these sections: [your sections here]
 ```
-
-## Inbox.md
-
-Schnellerfassung ohne Reibung. Schreibe alles — getippt, diktiert, beliebiges Format. Der Agenda-Agent verarbeitet Inbox-Einträge bei der stündlichen Überprüfung: verschiebt sie nach Daily.md, erstellt Vault-Notizen oder fragt in Exchange.md nach, wenn etwas Klärung benötigt.
-
-Format ist frei. Eine Zeile pro Eintrag reicht.
 
 ## Exchange.md
 

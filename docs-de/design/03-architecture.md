@@ -71,8 +71,7 @@ outheis ist ein Multi-Agenten-System, in dem spezialisierte agents über Nachric
 
 ~/Documents/MyVault/             # External vault (user-managed, anywhere)
 ├── Agenda/
-│   ├── Daily.md
-│   ├── Inbox.md
+│   ├── Agenda.md
 │   └── Exchange.md
 ├── notes/
 ├── projects/

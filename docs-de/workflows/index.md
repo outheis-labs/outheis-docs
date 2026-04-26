@@ -11,7 +11,7 @@ Die Absicht: aufgabenorientierte Anleitungen, die reale Nutzungsmuster beschreib
 
 Geplante Inhalte:
 
-- **Tagesplanung** — wie die Morgenüberprüfung funktioniert, wie man Inbox.md für Schnellerfassung nutzt, wie man Daily.md liest und kommentiert
+- **Tagesplanung** — wie die Morgenüberprüfung funktioniert, wie man Agenda.md liest und kommentiert
 - **Vault-basierte Recherche** — zeno verwenden, um Verbindungen zwischen Notizen zu finden, Tagging, Migration von anderen Systemen
 - **Memory und Korrektur** — outheis explizit Dinge sagen, es korrigieren, überprüfen was es weiß
 - **Signal als Schnittstelle** — outheis ausschließlich vom Telefon nutzen, Sprachnachrichten, schnelle Updates unterwegs

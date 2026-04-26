@@ -126,12 +126,11 @@ Dein Vault ist dein primärer Wissensspeicher. outheis liest daraus, schreibt da
 ```
 vault/
 └── Agenda/
-    ├── Daily.md      # Today's schedule — written by cato
-    ├── Inbox.md      # Your quick capture — processed hourly
-    └── Exchange.md   # Async back-and-forth with cato
+    ├── Agenda.md     # Heutiger Zeitplan — von cato geschrieben
+    └── Exchange.md   # Asynchroner Austausch mit cato
 ```
 
-Erstelle das `Agenda/`-Verzeichnis und leere Dateien. cato generiert `Daily.md` beim ersten Lauf.
+Erstelle das `Agenda/`-Verzeichnis und leere Dateien. cato generiert `Agenda.md` beim ersten Lauf.
 
 ## CLI-Befehle
 
@@ -208,9 +207,8 @@ Status update...
 ```
 vault/
 ├── Agenda/
-│   ├── Daily.md      # Today's schedule
-│   ├── Inbox.md      # Unprocessed items
-│   └── Exchange.md   # External sync
+│   ├── Agenda.md     # Heutiger Zeitplan
+│   └── Exchange.md   # Externe Synchronisation
 ├── projects/
 ├── notes/
 └── references/

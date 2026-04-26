@@ -180,8 +180,7 @@ You have read access to the vault and human/insights. You own the Agenda/ direct
 
 Tasks:
 
-- Maintain Daily.md with today's priorities
-- Process Inbox.md entries
+- Maintain Agenda.md with today's priorities
 - Manage async communication via Exchange.md
 - Filter incoming information by relevance to user
 - Learn what matters to the user over time

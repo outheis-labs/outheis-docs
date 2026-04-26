@@ -57,8 +57,7 @@ Vom Entwickler definierte Basisfähigkeiten. Beispiele:
 **Agenda-Agent:**
 
 - Datumsformate erkennen
-- Daily.md-Struktur
-- Inbox-Verarbeitungsstrategie
+- Agenda.md-Struktur
 - Exchange.md-Nutzung
 
 **Data-Agent:**
