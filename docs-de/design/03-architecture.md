@@ -332,7 +332,7 @@ Jeder agent besitzt seine Domain exklusiv. Andere fordern Zugriff über Nachrich
 | Agent | Besitzt |
 |-------|---------|
 | Relay | Routing-Entscheidungen, Antwortzusammenstellung, Kanalformatierung |
-| Agenda | Benutzerpräferenzen, Regeln, Daily/Inbox/Exchange |
+| Agenda | Benutzerpräferenzen, Regeln, Agenda/Exchange |
 | Data | vault, Wissenssynthese, Index |
 | Action | Aufgabenausführung, externe Importe |
 | Pattern | Insight-Generierung, Tag-Lernen |
@@ -717,11 +717,10 @@ Strukturiertes JSON für programmatischen Zugriff.
 
 | Datei | Benutzeraufmerksamkeit |
 |-------|------------------------|
-| `Daily.md` | Primär — regelmäßig geprüft |
-| `Inbox.md` | Aus Benutzersicht nur Schreiben |
-| `Exchange.md` | Gelegentlich — wenn Daily darauf verweist |
+| `Agenda.md` | Primär — regelmäßig geprüft |
+| `Exchange.md` | Gelegentlich — wenn Agenda darauf verweist |
 
-Konflikte und dringende Punkte erscheinen in `Daily.md`, nicht versteckt in Exchange.
+Konflikte und dringende Punkte erscheinen in `Agenda.md`.
 
 ---
 

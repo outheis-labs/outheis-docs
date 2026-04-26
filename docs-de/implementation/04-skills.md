@@ -98,7 +98,7 @@ Beispiel-Evolution:
 - User writes dates as DD.MM.YYYY, not MM/DD/YYYY
 - "nächste Woche" means Monday, not 7 days from now
 
-## Daily Structure
+## Agenda Structure
 
 - User prefers 🧘/🔴/🟠 emoji sections
 - No "Evening" section needed — user doesn't use it

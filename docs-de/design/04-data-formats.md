@@ -839,22 +839,20 @@ Der primäre vault enthält ein spezielles `Agenda/`-Verzeichnis — strukturier
 
 ```
 vault/Agenda/
-├── Daily.md
-├── Inbox.md
+├── Agenda.md
 └── Exchange.md
 ```
 
-Drei Dateien, keine Unterverzeichnisse.
+Zwei Dateien, keine Unterverzeichnisse.
 
 ### Zweck
 
 | Datei | Richtung | Zweck |
 |-------|----------|-------|
-| `Daily.md` | Bidirektional | Heute: Termine, Aufgaben, Notizen |
-| `Inbox.md` | Benutzer → System | Schnelleingabe, unstrukturierte Gedanken |
+| `Agenda.md` | Bidirektional | Heute: Termine, Aufgaben, Notizen |
 | `Exchange.md` | System ↔ Benutzer | Fragen, Klärungen, Lernen |
 
-### Daily.md
+### Agenda.md
 
 Der aktuelle Tag. Agenda-Agent pflegt die Struktur, Benutzer fügt Inhalte hinzu.
 
@@ -873,20 +871,6 @@ Der aktuelle Tag. Agenda-Agent pflegt die Struktur, Benutzer fügt Inhalte hinzu
 ## Notes
 
 ```
-
-### Inbox.md
-
-Schnellerfassung. Benutzer schreibt, System verarbeitet.
-
-```markdown
-meeting with X next week, important
-
-remember to call Y about the contract
-
-#idea redesign the onboarding flow
-```
-
-Der Agenda-Agent liest, klassifiziert und leitet an passende agents weiter.
 
 ### Exchange.md
 
@@ -932,8 +916,7 @@ Das ermöglicht dem Agenda-Agenten zu verstehen, *was* sich geändert hat — ni
 
 ```
 ~/.outheis/human/cache/agenda/
-├── Daily.md.prev
-├── Inbox.md.prev
+├── Agenda.md.prev
 └── Exchange.md.prev
 ```
 

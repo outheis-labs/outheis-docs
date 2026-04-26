@@ -710,13 +710,12 @@ Agents erhalten ihren relevanten Kontext beim Aufruf — nicht durch Tool-Aufruf
 
 ```python
 # Wrong: agent gathers context through tools during the run
-read_daily()
-read_inbox()
+read_agenda()
 read_exchange()
 # then decide what to do
 
 # Right: agent gets context upfront, acts immediately
-context = load_agenda_context()  # daily + inbox + exchange + shadow
+context = load_agenda_context()  # agenda + exchange
 # decide and act
 ```
 
@@ -755,11 +754,11 @@ Relay empfängt → leitet an Action weiter → Action bestätigt → führt aus
 Kalender: Meeting um 10:00
 Aufgabe: Deadline um 10:00
 
-Agenda erkennt Konflikt → schreibt in Daily.md → Relay benachrichtigt Benutzer (wenn Kanal aktiv)
+Agenda erkennt Konflikt → schreibt in Agenda.md → Relay benachrichtigt Benutzer (wenn Kanal aktiv)
 
 ### A.4 Mustererkennung (geplant)
 
-Pattern-Agent läuft um 04:00 → scannt aktuelle Aktivität → bemerkt wiederholten Tag "someday" → schreibt Insight: "Benutzer hat 47 'someday'-Einträge, ältester von 2023. Überprüfung empfehlen." → Agenda greift auf → fügt zum nächsten Daily.md hinzu
+Pattern-Agent läuft um 04:00 → scannt aktuelle Aktivität → bemerkt wiederholten Tag "someday" → schreibt Insight: "Benutzer hat 47 'someday'-Einträge, ältester von 2023. Überprüfung empfehlen." → Agenda greift auf → fügt zum nächsten Agenda.md hinzu
 
 ---
 

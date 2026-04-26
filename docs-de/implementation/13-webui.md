@@ -19,7 +19,7 @@ Die Web-Oberfläche bietet eine browserbasierte Schnittstelle zur Konfiguration 
 │             │                                               │
 │ Knowledge   │  Recent messages                              │
 │  Memory     │  ┌─────────────────────────────────────────┐ │
-│  Skills     │  │ 14:32  cato → relay  Daily updated      │ │
+│  Skills     │  │ 14:32  cato → relay  Agenda updated     │ │
 │  Rules      │  │ 14:30  scheduler     agenda_review      │ │
 │  Patterns   │  │ 14:15  zeno → relay  Found 3 matches    │ │
 │             │  └─────────────────────────────────────────┘ │
@@ -68,7 +68,7 @@ ssh -fNL 8080:localhost:8080 user@your-server
 | **Overview** | Dashboard mit Dispatcher-Status, aktiven Agenten, Nachrichtenanzahl, aktuellen Nachrichten |
 | **Configuration** | Vollständiger Konfig-Editor mit Tabs: General, Providers, Models, Agents, Signal |
 | **Messages** | Live-Ansicht von `messages.jsonl` mit WebSocket-Updates |
-| **Scheduler** | Geplante Aufgaben verwalten (agenda_review, shadow_scan, pattern_nightly) |
+| **Scheduler** | Geplante Aufgaben verwalten (agenda_review, vault_scan, pattern_nightly) |
 
 ### Knowledge
 
@@ -174,7 +174,7 @@ Geplante Aufgaben verwalten:
 ```
 ┌─ Task Type ─────────┬─ Times ──────────────┬─ Enabled ─┐
 │ agenda_review       │ 06:00 12:00 18:00 +  │    ✓      │
-│ shadow_scan         │ 03:30              +  │    ✓      │
+│ vault_scan          │ 03:30              +  │    ✓      │
 │ pattern_nightly     │ 04:00              +  │    ✓      │
 └─────────────────────┴──────────────────────┴───────────┘
 ```

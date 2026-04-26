@@ -87,7 +87,7 @@ Wenn `type` fehlt, erschließt outheis ihn aus dem Inhalt.
 
 ## rule:agenda
 
-- MAX 10 Items in Daily.md
+- MAX 10 Items in Agenda.md
 - Keine Meetings vor 10 Uhr
 
 ## rule:data

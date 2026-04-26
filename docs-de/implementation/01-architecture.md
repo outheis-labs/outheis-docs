@@ -290,7 +290,7 @@ In `config.json`:
     "pattern_nightly": {"enabled": true, "times": ["04:00"]},
     "index_rebuild":   {"enabled": true, "times": ["04:30"]},
     "archive_rotation":{"enabled": true, "times": ["05:00"]},
-    "shadow_scan":     {"enabled": true, "times": ["03:30"]},
+    "vault_scan":      {"enabled": true, "times": ["03:30"]},
     "agenda_review": {
       "enabled": true,
       "times": ["04:55","05:55","06:55","07:55","08:55","09:55",

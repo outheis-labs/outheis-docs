@@ -302,7 +302,7 @@ Items ohne feste Uhrzeit sind *volatil* — sie erscheinen am richtigen Tag, hab
 
 ### Manueller Auslöser
 
-Du kannst fragen: "scanne den vault nach terminen" oder "aktualisiere shadow", um den Scan sofort auszuführen.
+Du kannst fragen: "scanne den vault nach terminen" oder "aktualisiere agenda", um den Scan sofort auszuführen.
 
 ## Kalenderansicht
 
