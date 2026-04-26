@@ -190,9 +190,8 @@ Der vault ist ein Verzeichnis mit Markdown-Dateien und YAML-Frontmatter:
 ```
 vault/
 ├── Agenda/
-│   ├── Daily.md      # Today's schedule
-│   ├── Inbox.md      # Unprocessed items
-│   └── Exchange.md   # Async communication
+│   ├── Agenda.md      # Today's schedule
+│   └── Exchange.md    # Async communication
 ├── projects/
 │   └── *.md
 └── notes/
@@ -232,8 +231,7 @@ Append-only. Versioniert. Wiederherstellbar.
     │   │   └── Vault.jsonl
     │   ├── agenda/       # Agenda file state
     │   │   ├── hashes.json       # Quick change detection
-    │   │   ├── Daily.md.prev     # For diff
-    │   │   ├── Inbox.md.prev
+    │   │   ├── Agenda.md.prev     # For diff
     │   │   └── Exchange.md.prev
     │   └── sessions/     # Session replay logs
     ├── rules/            # User-defined rules (external)
@@ -274,7 +272,7 @@ Der dispatcher führt periodische Aufgaben über den integrierten Scheduler aus.
 | `pattern_nightly` | 04:00 | Memory extrahieren, konsolidieren, Rules fördern |
 | `index_rebuild` | 04:30 | vault-Suchindizes neu erstellen |
 | `archive_rotation` | 05:00 | Alte Nachrichten archivieren |
-| `shadow_scan` | 03:30 | vault nach chronologischen Einträgen scannen → Shadow.md |
+| `vault_scan` | 03:30 | vault nach chronologischen Einträgen scannen → agenda.json |
 | `agenda_review` | xx:55 (04-23) | Agenda-Dateien parsen (bedingt bei Änderungen) |
 | `action_tasks` | alle 15 Min. | Fällige geplante Aufgaben ausführen |
 | `session_summary` | alle 6 Stunden | Sitzungs-Insights extrahieren |
@@ -321,7 +319,7 @@ Vier Strategien in Nutzung oder geplant:
 
 **1. Index mit Aktualitätsgewichtung** — Der Data-Agent pflegt einen Suchindex. Agents sehen einen kompakten Index, nicht rohe Dateien. Der Index enthält Zugriffshäufigkeit und Aktualitätssignale.
 
-**2. Shadow.md als chronologischer Vorfilter** — Der Data-Agent führt einen nächtlichen vault-Scan durch und schreibt alle zeitrelevanten Einträge in eine einzelne strukturierte Datei (`Agenda/Shadow.md`). cato lädt diese statt bei jeder stündlichen Überprüfung den gesamten vault zu scannen.
+**2. agenda.json als chronologischer Index** — Der Data-Agent führt einen nächtlichen vault-Scan durch und schreibt alle zeitrelevanten Einträge in `agenda.json`. cato und das WebUI-Kalender lesen diese strukturierten Daten statt bei jeder Überprüfung den gesamten vault zu scannen.
 
 **3. Progressives Laden** — Überblick zuerst, Details auf Anfrage. Der `load_skill(topic)`-Mechanismus funktioniert wie kontrolliertes Demand Paging: Der agent hat eine Zusammenfassung im Kontext und fordert Details nur bei Bedarf an.
 
@@ -332,7 +330,7 @@ Vier Strategien in Nutzung oder geplant:
 ## Weiterführende Lektüre
 
 - [Memory](memory.md) — Wie dauerhaftes Memory funktioniert
-- [Agenda](agenda.md) — Zeitmanagement mit Daily, Inbox, Exchange
+- [Agenda](agenda.md) — Zeitmanagement mit Agenda.md und Exchange
 - [Migration](migration.md) — Memory aus externen Quellen einpflegen
 - [Code-Agent (alan)](alan.md) — Code-Intelligenz zur Entwicklungszeit
 - [Web UI](webui.md) — Browser-basierte Verwaltungsoberfläche
