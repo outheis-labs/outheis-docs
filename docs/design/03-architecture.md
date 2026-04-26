@@ -73,9 +73,7 @@ outheis is a multi-agent system where specialized agents communicate via message
 ├── Agenda/
 │   ├── Agenda.md
 │   ├── Inbox.md
-│   ├── Exchange.md
-│   ├── Shadow.md
-│   └── Backlog.md
+│   └── Exchange.md
 ├── notes/
 ├── projects/
 └── ...
@@ -307,7 +305,7 @@ Each agent owns its domain exclusively. Others request access via messages.
 | Agent | Owns |
 |-------|------|
 | Relay | Routing decisions, response composition, channel formatting |
-| Agenda | User preferences, rules, Agenda/Inbox/Exchange/Shadow |
+| Agenda | User preferences, rules, Agenda/Inbox/Exchange |
 | Data | Vault, knowledge synthesis, index |
 | Action | Task execution, external imports |
 | Pattern | Insights generation, tag learning |

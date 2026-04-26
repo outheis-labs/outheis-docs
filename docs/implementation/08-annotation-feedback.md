@@ -116,7 +116,7 @@ The `[type]` tag uses the existing vocabulary: `user`, `rule:agenda`, `skill`.
 ```
 User annotates Agenda.md with > line
     ↓
-cato processes annotation (rewrite / remove / update Shadow.md)
+cato processes annotation (rewrite / remove / update agenda.json)
     ↓
 cato calls propose_memory if annotation reveals something worth keeping
     ↓

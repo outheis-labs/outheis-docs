@@ -82,15 +82,15 @@ Complex queries still use LLM for intelligent search and synthesis.
 
 ### Agenda Agent (cato)
 
-The Agenda agent manages three files in `vault/Agenda/`:
+The Agenda agent manages files in `vault/Agenda/`:
 
 | File | Direction | Purpose |
 |------|-----------|---------|
 | Agenda.md | Bidirectional | Today's schedule, tasks, notes |
 | Inbox.md | User → System | Quick capture, unprocessed items |
 | Exchange.md | System ↔ User | Async questions, no pressure to respond |
-| Shadow.md | System → User | Chronological vault index (auto-generated) |
-| Backlog.md | System → User | Priority-sorted view of Shadow.md (on-demand) |
+
+The calendar view in the WebUI is driven by `agenda.json` — the single source of truth for all scheduled items. See [agenda.json](16-agenda-json.md) for the schema.
 
 **Commands:**
 
@@ -195,9 +195,7 @@ vault/
 ├── Agenda/
 │   ├── Agenda.md     # Today's schedule
 │   ├── Inbox.md      # Unprocessed items
-│   ├── Exchange.md   # Async communication
-│   ├── Shadow.md     # Chronological vault index (auto-generated)
-│   └── Backlog.md    # Priority-sorted Shadow view (on-demand)
+│   └── Exchange.md   # Async communication
 ├── projects/
 │   └── *.md
 └── notes/
@@ -280,7 +278,7 @@ The dispatcher runs periodic tasks via built-in scheduler. All times configurabl
 | `memory_migrate` | 04:00 (disabled) | Process seed files from vault/Migration/ |
 | `index_rebuild` | 04:30 | Rebuild vault search indices |
 | `archive_rotation` | 05:00 | Archive old messages |
-| `shadow_scan` | 03:30 | Scan vault for chronological entries → Shadow.md |
+| `vault_scan` | 03:30 | Scan vault for chronological entries → agenda.json |
 | `agenda_review` | xx:55 (04-23) | Parse Agenda files (conditional on changes) |
 | `agenda_midnight` | 00:00 | Regenerate Agenda.md for the new day |
 | `action_tasks` | every 15 min | Run due scheduled tasks |
@@ -299,7 +297,7 @@ In `config.json`:
     "pattern_infer":   {"enabled": true, "time": ["04:00"]},
     "index_rebuild":   {"enabled": true, "time": ["04:30"]},
     "archive_rotation":{"enabled": true, "time": ["05:00"]},
-    "shadow_scan":     {"enabled": true, "time": ["03:30"]},
+    "vault_scan":      {"enabled": true, "time": ["03:30"]},
     "agenda_review": {
       "enabled": true,
       "time": ["04:55","05:55","06:55","07:55","08:55","09:55",
@@ -328,7 +326,7 @@ Four strategies in use or planned:
 
 **1. Index with recency weighting** — The Data agent maintains a search index. Agents see a compact index, not raw files. The index includes access frequency and recency signals.
 
-**2. Shadow.md as chronological pre-filter** — The Data agent runs a nightly vault scan and writes all time-relevant entries into a single structured file (`Agenda/Shadow.md`). The Agenda agent loads this instead of scanning the full vault on every hourly review.
+**2. agenda.json as chronological index** — The Data agent runs a nightly vault scan and writes all time-relevant entries into `agenda.json`. The Agenda agent and WebUI calendar read this structured data instead of scanning the full vault on every run.
 
 **3. Progressive loading** — Overview first, detail on demand. The `load_skill(topic)` mechanism works like controlled demand paging: the agent has a summary in context and requests detail only when needed.
 

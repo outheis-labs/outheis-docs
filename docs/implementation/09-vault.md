@@ -103,7 +103,7 @@ Agenda.md is regenerated each day by the agenda agent. The default template:
 ## 💶 Cashflow
 ```
 
-The agenda agent populates this from Shadow.md and your vault: scheduled events, recurring items, tasks due today, items from Inbox.md. If your vault contains a timetable, a recurring schedule, or date-tagged entries, they appear here automatically.
+The agenda agent populates this from `agenda.json` and your vault: scheduled events, recurring items, tasks due today, items from Inbox.md. If your vault contains a timetable, a recurring schedule, or date-tagged entries, they appear here automatically.
 
 You can modify the template. Put your preferred structure in `rules/agenda.md`:
 

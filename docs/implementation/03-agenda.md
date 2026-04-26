@@ -119,7 +119,7 @@ cato classifies each annotation into one of three types:
 | Type | Identified by | Action |
 |---|---|---|
 | **Completion** | done, finished, confirmed, resolved | Remove item from Agenda.md |
-| **Postpone** | later, next week, [future date] | Remove from Agenda.md, update date in Shadow.md |
+| **Postpone** | later, next week, [future date] | Remove from Agenda.md, update date in agenda.json |
 | **Correction** | explanation, rephrasing, new context | Rewrite item in place, keep it |
 
 The `>` line is always removed after processing. See [Annotation Feedback Loop](annotation-feedback.html) for how annotations feed into long-term memory.
@@ -272,9 +272,9 @@ When you mark an item done (via a `> done` annotation in Agenda.md), outheis rec
 Email Alex Smith — recommendation on training track
 ```
 
-The `#done-*` tag is written to Shadow.md and to the source vault file. Done items are filtered out of the agenda immediately and never resurface — the loop of completed items reappearing is explicitly prevented.
+The `#done-*` tag is written to `agenda.json` and to the source vault file. Done items are filtered out of the agenda immediately and never resurface — the loop of completed items reappearing is explicitly prevented.
 
-After a configurable retention period, done entries are pruned from Shadow.md automatically:
+After a configurable retention period, done entries are pruned from `agenda.json` automatically:
 
 ```json
 {
@@ -286,7 +286,7 @@ After a configurable retention period, done entries are pruned from Shadow.md au
 }
 ```
 
-The default is no retention limit (`null`). Set `retention` to the number of days after which completed entries are removed from Shadow.md.
+The default is no retention limit (`null`). Set `retention` to the number of days after which completed entries are removed from `agenda.json`.
 
 **Tag names are yours to choose.** `#action-required` is outheis's default; you can use `#attention`, `#priority`, `#open`, or any marker your rules file defines — as long as the agent knows which tag means "always show".
 
@@ -367,7 +367,7 @@ The nightly vault scan is configured in `config.json`:
 ```json
 {
   "schedule": {
-    "shadow_scan": {
+    "vault_scan": {
       "enabled": true,
       "time": ["03:30"]
     }

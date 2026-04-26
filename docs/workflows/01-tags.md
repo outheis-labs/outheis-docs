@@ -48,7 +48,7 @@ show everything tagged #unit-work and #action-waiting
 what's tagged #recurring this week?
 ```
 
-**Shadow.md** — the nightly vault scan uses your tags to identify time-relevant entries. Items with `#recurring`, `#date-*`, or action tags appear in the chronological index the agenda agent reads each morning.
+**agenda.json** — the nightly vault scan uses your tags to identify time-relevant entries. Items with `#recurring`, `#date-*`, or action tags appear in the calendar index.
 
 ## Tag systems vary
 

@@ -215,11 +215,11 @@ Supported `#recurring-*` tags:
 
 ---
 
-## Mapping from Shadow tag format
+## Tag Format
 
-Items map directly from the two-line tag format used in Shadow.md:
+Items use a two-line tag format for LLM context and interchange:
 
-| Shadow tag line                                  | agenda.json                                       | Calendar               |
+| Tag line                                         | agenda.json                                       | Calendar               |
 |--------------------------------------------------|---------------------------------------------------|------------------------|
 | `#date-D #time-S-E #facet-X`                    | `type: fixed, day: N, start: S, end: E`          | Time-boxed block       |
 | `#date-D #facet-X`                              | `type: volatile, day: N`                         | Floating label         |

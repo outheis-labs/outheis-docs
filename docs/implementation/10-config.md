@@ -252,7 +252,7 @@ All scheduled tasks use the `"time"` field (list of `"HH:MM"` strings) for time-
 |------|---------|-------------|
 | `pattern_infer` | 04:00 | Memory extraction, consolidation, rule promotion |
 | `memory_migrate` | 04:00 (disabled) | Process seed files from vault/Migration/ |
-| `shadow_scan` | 03:30 | Scan vault for chronological entries → Shadow.md |
+| `vault_scan` | 03:30 | Scan vault for chronological entries → agenda.json |
 | `index_rebuild` | 04:30 | Rebuild vault search indices |
 | `archive_rotation` | 05:00 | Archive old messages |
 
