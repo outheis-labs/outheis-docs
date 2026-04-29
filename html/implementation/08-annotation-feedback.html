@@ -622,7 +622,7 @@ rumi promotes stable patterns → Rules  ✗
     <section class="section" id="implementation">
       <h2>Implementation</h2>
       <div class="section-text"><h2>Implementation</h2>
-        <p>Implemented in <code>agenda.py</code> on branch <code>annotation-loop</code> (2026-04-08).</p>
+        <p>Implemented in <code>agenda.py</code>. The <code>propose_memory</code> tool is available to cato during hourly review runs.</p>
 <h3 id="propose_memory-tool">propose_memory tool</h3>
 <p>cato has a new tool <code>propose_memory(content, type)</code> that appends a proposal to
 <code>Migration/Exchange.md</code> in the same <code>---</code> separated, checkbox format that
@@ -675,7 +675,7 @@ Called the supplier yesterday, confirmation expected by Friday. [user]
 <h3 id="data-flow">Data flow</h3>
 <pre><code>User annotates Agenda.md with &gt; line
     ↓
-cato processes annotation (rewrite / remove / update Shadow.md)
+cato processes annotation (rewrite / remove / update agenda.json)
     ↓
 cato calls propose_memory if annotation reveals something worth keeping
     ↓
@@ -699,9 +699,10 @@ migration sessions.</p>
       <div class="section-text"><h2>Status</h2>
         <ul>
 <li><code>&gt;</code> annotation processing: <strong>implemented</strong> (<code>agenda.py</code>)</li>
-<li><code>propose_memory</code> tool + system prompt: <strong>implemented</strong> (<code>annotation-loop</code> branch)</li>
+<li><code>propose_memory</code> tool + system prompt: <strong>implemented</strong> (<code>agenda.py</code>)</li>
 <li>rumi Phase A pickup: <strong>works without changes</strong> — format is identical</li>
 </ul>
+<p>All components are merged to main and deployed.</p>
       </div>
     </section>
 

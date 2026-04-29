@@ -555,12 +555,13 @@
     <section class="section" id="die-drei-dateien">
       <h2>Die drei Dateien</h2>
       <div class="section-text"><h2>Die drei Dateien</h2>
-        <p>outheis verwaltet deinen Zeitplan über drei Markdown-Dateien in deinem Vault:</p>
+        <p>outheis verwaltet deinen Zeitplan über zwei Markdown-Dateien in deinem Vault:</p>
 <pre><code>vault/Agenda/
 ├── Agenda.md     # Heute: Zeitplan, Aufgaben, Notizen
-├── Exchange.md   # Asynchroner Dialog: System ↔ Benutzer
-├── Shadow.md     # Chronologischer Vault-Index (automatisch erstellt)
-└── Backlog.md    # Prioritätssortierte Ansicht von Shadow.md (auf Anfrage)
+└── Exchange.md   # Asynchroner Dialog: System ↔ Benutzer
+
+~/.outheis/human/webui/pages/
+└── agenda.json    # Single source of truth für Kalenderansicht
 </code></pre>
 <h3 id="agendamd">Agenda.md</h3>
 <p>Dein Tag auf einen Blick. Die Standardvorlage:</p>
@@ -615,9 +616,8 @@ Welcher Tag passt für das Meeting mit X?
 <h3 id="verarbeitungsschritte">Verarbeitungsschritte</h3>
 <ol>
 <li><strong>Hash-Prüfung</strong> — Aktuelle Dateien mit gespeicherten Hashes vergleichen</li>
-<li><strong>Inbox verarbeiten</strong> — Einträge parsen, Aufgaben nach Daily verschieben, Unklares → Exchange</li>
 <li><strong>Exchange prüfen</strong> — Nach deinen Antworten suchen, Lernfortschritte extrahieren</li>
-<li><strong>Daily überprüfen</strong> — Anmerkungen, Kommentare, Erledigungen bemerken</li>
+<li><strong>Agenda überprüfen</strong> — Anmerkungen, Kommentare, Erledigungen bemerken</li>
 <li><strong>Hashes aktualisieren</strong> — Neue Datei-Hashes für nächsten Vergleich speichern</li>
 <li><strong>Diffs cachen</strong> — <code>.prev</code>-Versionen für Debugging speichern</li>
 </ol>
@@ -645,7 +645,7 @@ Lieferanten wegen Lieferdatum anrufen
 <tr>
 <td><strong>Verschieben</strong></td>
 <td>später, nächste Woche, [zukünftiges Datum]</td>
-<td>Aus Agenda.md entfernen, Datum in Shadow.md aktualisieren</td>
+<td>Aus Agenda.md entfernen, Datum in agenda.json aktualisieren</td>
 </tr>
 <tr>
 <td><strong>Korrektur</strong></td>
@@ -729,9 +729,10 @@ touch ~/Documents/Vault/Agenda/{Agenda,Exchange}.md
       <div class="section-text"><h2>Speicherung</h2>
         <pre><code>vault/Agenda/
 ├── Agenda.md             # Deine Arbeitsdatei
-├── Exchange.md           # Asynchroner Dialog
-├── Shadow.md             # Chronologischer Vault-Index (automatisch erstellt)
-└── Backlog.md            # Priorisierte Shadow-Ansicht (auf Anfrage)
+└── Exchange.md           # Asynchroner Dialog
+
+~/.outheis/human/webui/pages/
+└── agenda.json           # Single source of truth für Kalenderansicht
 
 ~/.outheis/human/cache/agenda/
 └── hashes.json           # SHA256-Hashes zur Änderungserkennung
@@ -740,43 +741,43 @@ touch ~/Documents/Vault/Agenda/{Agenda,Exchange}.md
       </div>
     </section>
 
-    <section class="section" id="shadowmd">
-      <h2>Shadow.md</h2>
-      <div class="section-text"><h2>Shadow.md</h2>
-        <p>Ein Staging-Bereich für chronologische Einträge aus dem gesamten Vault.</p>
+    <section class="section" id="agendajson">
+      <h2>agenda.json</h2>
+      <div class="section-text"><h2>agenda.json</h2>
+        <p>Die Kalenderansicht wird von <code>agenda.json</code> gesteuert — einer strukturierten JSON-Datei, die als Single Source of Truth für alle geplanten Einträge dient.</p>
 <h3 id="zweck">Zweck</h3>
-<p>Dein Vault enthält Daten in vielen Dateien: Projektdeadlines, Geburtstage in Kontaktnotizen, wiederkehrende Ereignisse in Projektdokumenten. Shadow.md sammelt diese automatisch, damit Agenda sie zur richtigen Zeit anzeigen kann.</p>
+<p>Dein Vault enthält Daten in vielen Dateien: Projektdeadlines, Geburtstage in Kontaktnotizen, wiederkehrende Ereignisse in Projektdokumenten. Der Data-Agent (zeno) scannt diese nächtlich und schreibt erkannte Einträge nach <code>agenda.json</code>. Der Agenda-Agent (cato) schreibt auch benutzererstellte Einträge direkt. Das WebUI erlaubt interaktives Bearbeiten.</p>
 <h3 id="funktionsweise">Funktionsweise</h3>
 <p>Der Data-Agent (zeno) führt um 03:30 (konfigurierbar) einen nächtlichen Scan durch:</p>
 <ol>
 <li><strong>Vault scannen</strong> — Alle Dateien auf datumrelevante Inhalte durchsuchen (per LLM-Extraktion)</li>
 <li><strong>Änderungen erkennen</strong> — Hash-basierter Cache; nur neue oder geänderte Dateien werden neu verarbeitet</li>
-<li><strong>Abschnittsweise aktualisieren</strong> — Jede Quelldatei hat einen eigenen <code>&lt;!-- BEGIN/END --&gt;</code>-Block; Abschnitte werden unabhängig ersetzt</li>
-<li><strong>Quellverfolgung</strong> — Jeder Abschnitt ist seiner Ursprungsdatei zugeordnet</li>
+<li><strong>Einträge schreiben</strong> — Erkannte Einträge werden nach <code>agenda.json</code> geschrieben mit Quelldateipfad</li>
+<li><strong>Quellverfolgung</strong> — Jeder Eintrag trägt ein <code>source</code>-Feld das seine Herkunft angibt</li>
 </ol>
+<p>Der Agenda-Agent (cato) läuft stündlich (standardmäßig um :55 jeder Stunde) und:
+1. Liest <code>agenda.json</code> und <code>Agenda.md</code> um den aktuellen Stand zu verstehen
+2. Verarbeitet Benutzeranmerkungen (Zeilen beginnend mit <code>&gt;</code> in Agenda.md)
+3. Aktualisiert Einträge in <code>agenda.json</code> basierend auf Benutzerentscheidungen
+4. Schreibt das aktualisierte <code>Agenda.md</code></p>
+<p>Das WebUI erlaubt direkte Manipulation von Einträgen in <code>agenda.json</code> via Drag-and-Drop, Größenänderung und Bearbeitung.</p>
 <h3 id="format">Format</h3>
-<p>Shadow.md ist nach Quelldateien gegliedert. Jeder Abschnitt wird durch HTML-Kommentarmarker abgegrenzt, damit einzelne Abschnitte ersetzt werden können, ohne den Rest zu berühren:</p>
-<pre><code class="language-markdown"># Shadow — Vault Chronological Index
-*Last updated: 2026-04-14 21:55*
-
-&lt;!-- BEGIN: projects/alpha.md --&gt;
-## projects/alpha.md
-#date-2026-04-15 #action-required
-Project Alpha deadline
-
-#date-2026-05-12
-Emma's birthday
-&lt;!-- END: projects/alpha.md --&gt;
-
-&lt;!-- BEGIN: work/routines.md --&gt;
-## work/routines.md
-#recurring-weekly
-Team standup
-&lt;!-- END: work/routines.md --&gt;
+<p>Einträge in <code>agenda.json</code> verwenden ein strukturiertes Format mit Snowflake-IDs:</p>
+<pre><code class="language-json">{
+  &quot;id&quot;: &quot;7430000000000001&quot;,
+  &quot;type&quot;: &quot;fixed&quot;,
+  &quot;facet&quot;: &quot;work&quot;,
+  &quot;title&quot;: &quot;Project Alpha Deadline&quot;,
+  &quot;day&quot;: 0,
+  &quot;start&quot;: &quot;09:00&quot;,
+  &quot;end&quot;: &quot;11:00&quot;,
+  &quot;tags&quot;: [&quot;#date-2026-04-15&quot;, &quot;#action-required&quot;],
+  &quot;source&quot;: &quot;projects/alpha.md&quot;
+}
 </code></pre>
-<p>Jeder Eintrag besteht aus zwei Zeilen: einer Tag-Zeile gefolgt von einer Klartextbeschreibung. Die Tag-Zeile trägt den Planungsanker; die Beschreibung ist für sich verständlich — ohne weiteren Kontext.</p>
+<p>Für die vollständige Schemareferenz siehe <a href="16-agenda-json.html">agenda.json Referenz</a>.</p>
 <h3 id="vollstandigkeit-von-eintragen">Vollständigkeit von Einträgen</h3>
-<p>Damit der Agenda-Agent einen Eintrag zuverlässig einplanen kann, braucht jeder Shadow-Eintrag einen von zwei Ankern:</p>
+<p>Damit der Agenda-Agent einen Eintrag zuverlässig einplanen kann, braucht jeder Eintrag einen von zwei Ankern:</p>
 <table>
 <thead>
 <tr>
@@ -786,25 +787,25 @@ Team standup
 </thead>
 <tbody>
 <tr>
-<td><code>#date-YYYY-MM-DD</code></td>
+<td><code>#date-YYYY-MM-DD</code> in tags</td>
 <td>Zeitlicher Anker — zeige diesen Eintrag ab diesem Datum in der Agenda</td>
 </tr>
 <tr>
-<td>Aufmerksamkeitsmarker (z. B. <code>#action-required</code>)</td>
+<td><code>#action-required</code> in tags</td>
 <td>Kein Datum — dauerhaft sichtbar bis explizit entschieden</td>
 </tr>
 </tbody>
 </table>
 <p>Einträge ohne einen dieser Anker sind semantisch unvollständig: der Agent kann nicht wissen, wann oder ob er sie anzeigen soll.</p>
-<p><strong>Erinnerungsdatum vs. Ereignisdatum</strong> — <code>#date</code> steuert <em>wann der Eintrag erscheint</em>, nicht zwingend wann das Ereignis stattfindet. Bei einem Geburtstag fallen beide zusammen. Bei "erinnere mich am 3. Mai an die Veranstaltung am 30. Juni" ist <code>#date-2026-05-03</code> der Trigger; der 30. Juni gehört in den Eintragstext. Wenn beide Daten abweichen, steht das Ereignisdatum im Fließtext; <code>#date</code> ist der Agenda-Trigger.</p>
-<p><strong>Überfällige Einträge</strong> — liegt ein <code>#date</code> in der Vergangenheit und wurde keine Entscheidung festgehalten, bleibt der Eintrag sichtbar. Überfällig = muss entschieden werden (erledigen, verschieben oder streichen).</p>
+<p><strong>Erinnerungsdatum vs. Ereignisdatum</strong> — <code>#date</code> steuert <em>wann der Eintrag erscheint</em>, nicht zwingend wann das Ereignis stattfindet. Bei einem Geburtstag fallen beide zusammen. Bei "erinnere mich am 3. Mai an die Veranstaltung am 30. Juni" ist <code>#date-2026-05-03</code> der Trigger; der 30. Juni gehört in den Eintragstext.</p>
+<p><strong>Überfällige Einträge</strong> — liegt ein <code>#date</code> in der Vergangenheit und wurde keine Entscheidung festgehalten, bleibt der Eintrag sichtbar. Überfällig = muss entschieden werden.</p>
 <h4 id="erledigung-done-yyyy-mm-dd">Erledigung — <code>#done-YYYY-MM-DD</code></h4>
-<p>Wenn du einen Eintrag als erledigt markierst (via <code>&gt; erledigt</code>-Anmerkung in Agenda.md), speichert outheis das Erledigungsdatum anstatt den Eintrag zu löschen:</p>
+<p>Wenn du einen Eintrag als erledigt markierst (via <code>&gt; erledigt</code>-Anmerkung in Agenda.md), speichert outheis das Erledigungsdatum:</p>
 <pre><code>#done-2026-04-14 #date-2026-04-10 #action-required
 Alex Smith mailen — Empfehlung zur Weiterbildung
 </code></pre>
-<p>Das <code>#done-*</code>-Tag wird in Shadow.md und in die Quell-Vault-Datei geschrieben. Erledigte Einträge werden sofort aus der Agenda gefiltert und tauchen nie wieder auf.</p>
-<p>Nach einer konfigurierbaren Aufbewahrungsfrist werden erledigte Einträge automatisch aus Shadow.md entfernt:</p>
+<p>Das <code>#done-*</code>-Tag wird in <code>agenda.json</code> und in die Quell-Vault-Datei geschrieben. Erledigte Einträge werden sofort aus der Agenda gefiltert und tauchen nie wieder auf.</p>
+<p>Nach einer konfigurierbaren Aufbewahrungsfrist werden erledigte Einträge automatisch aus <code>agenda.json</code> entfernt:</p>
 <pre><code class="language-json">{
   &quot;agents&quot;: {
     &quot;agenda&quot;: {
@@ -813,14 +814,13 @@ Alex Smith mailen — Empfehlung zur Weiterbildung
   }
 }
 </code></pre>
-<p>Der Standard ist kein Aufbewahrungslimit (<code>null</code>). Setze <code>retention</code> auf die Anzahl der Tage, nach denen erledigte Einträge aus Shadow.md entfernt werden.</p>
-<p><strong>Tag-Namen wählst du selbst.</strong> <code>#action-required</code> ist der outheis-Standard; du kannst <code>#attention</code>, <code>#priority</code>, <code>#open</code> oder jeden anderen Marker verwenden, den deine Rules-Datei definiert — solange der Agent weiß, welches Tag "immer zeigen" bedeutet.</p>
+<p>Der Standard ist kein Aufbewahrungslimit (<code>null</code>). Setze <code>retention</code> auf die Anzahl der Tage, nach denen erledigte Einträge entfernt werden.</p>
 <h3 id="zeit-tags">Zeit-Tags</h3>
-<p>Items ohne feste Uhrzeit sind <em>volatil</em> — sie erscheinen am richtigen Tag, haben aber keine Position auf dem Zeitstrahl. Um ein Item zeitlich zu verankern, wird <code>#time-HH:MM-HH:MM</code> auf derselben Tag-Zeile ergänzt:</p>
+<p>Items ohne feste Uhrzeit sind <em>volatil</em> — sie erscheinen am richtigen Tag, haben aber keine Position auf dem Zeitstrahl. Um ein Item zeitlich zu verankern, wird <code>#time-HH:MM-HH:MM</code> ergänzt:</p>
 <table>
 <thead>
 <tr>
-<th>Shadow-Tag-Zeile</th>
+<th>Tags in agenda.json</th>
 <th>Bedeutung</th>
 </tr>
 </thead>
@@ -839,7 +839,7 @@ Alex Smith mailen — Empfehlung zur Weiterbildung
 </tr>
 <tr>
 <td><code>#action-required #time-00:35</code></td>
-<td>Volatil mit Dauer — schwebt frei, im Kalender als begrenzte Box (35 min breit)</td>
+<td>Volatil mit Dauer — schwebt frei, im Kalender als begrenzte Box</td>
 </tr>
 <tr>
 <td><code>#action-required</code></td>
@@ -847,137 +847,26 @@ Alex Smith mailen — Empfehlung zur Weiterbildung
 </tr>
 </tbody>
 </table>
-<p><strong><code>#time-</code> hat zwei Formen:</strong>
-- <code>#time-HH:MM-HH:MM</code> — Start- und Endzeit → erzeugt ein <code>fixed</code>-Item, zeitlich verankert
-- <code>#time-HH:MM</code> — nur Dauer → Item bleibt <code>volatile</code>, wird aber als begrenzte Box mit der angegebenen Breite im Kalender dargestellt; nützlich für wiederkehrende Aktivitäten mit bekannter Dauer ohne feste Startzeit</p>
-<p>Regeln:
-- <code>#time-HH:MM-HH:MM</code> erfordert mindestens ein <code>#date-</code> auf derselben Zeile
-- <code>#time-HH:MM</code> (Dauer) kann mit oder ohne <code>#date-</code> stehen; ohne Datum wird das Item auf heute gesetzt
-- Zwei <code>#date-</code>-Tags definieren eine mehrtägige Spanne; <code>#time-HH:MM-HH:MM</code> verankert die Startzeit am ersten und die Endzeit am letzten Datum
-- <code>#date-</code> ohne <code>#time-</code> erzeugt ein volatiles Item, das sich frei im entsprechenden Tag der Kalenderansicht bewegt</p>
-<h3 id="item-identitat">Item-Identität</h3>
-<p>Jedes Shadow-Item trägt eine stabile Snowflake-UUID auf seiner Tag-Zeile:</p>
-<pre><code>#date-2026-04-28 #time-09:00-10:30 #facet-work #id-744f3a2b8c1e0d9f
-Workshop
-</code></pre>
-<p>Das <code>#id-</code>-Tag verknüpft das Item über Shadow.md, Agenda.md und agenda.json hinweg. Es ermöglicht präzises Änderungs-Tracking und Konflikterkennung, wenn mehrere Eingabekanäle dasselbe Item bearbeiten.</p>
-<h3 id="integration-mit-daily">Integration mit Daily</h3>
-<p>Der Agenda-Agent liest Shadow.md und zeigt relevante Einträge in Agenda.md an. Wenn du fragst "was steht diese Woche an?", prüft outheis sowohl deinen expliziten Zeitplan als auch Shadows erkannte Daten.</p>
 <h3 id="konfiguration">Konfiguration</h3>
 <pre><code class="language-json">{
   &quot;schedule&quot;: {
-    &quot;shadow_scan&quot;: {
+    &quot;vault_scan&quot;: {
       &quot;enabled&quot;: true,
-      &quot;hour&quot;: 3,
-      &quot;minute&quot;: 30
+      &quot;time&quot;: [&quot;03:30&quot;]
     }
   }
 }
 </code></pre>
 <h3 id="manueller-ausloser">Manueller Auslöser</h3>
-<p>Du kannst fragen: "scanne den vault nach terminen" oder "aktualisiere shadow", um den Scan sofort auszuführen.</p>
+<p>Du kannst fragen: "scanne den vault nach terminen" oder "aktualisiere agenda", um den Scan sofort auszuführen.</p>
       </div>
     </section>
 
     <section class="section" id="kalenderansicht">
       <h2>Kalenderansicht</h2>
       <div class="section-text"><h2>Kalenderansicht</h2>
-        <p>Das WebUI enthält einen interaktiven Kalender-Tab, der den Zeitplan visuell darstellt. Er wird von <code>agenda.json</code> angetrieben — einer strukturierten Projektion von Shadow.md, die cato bei jedem stündlichen Lauf zusammen mit Agenda.md erzeugt.</p>
-<h3 id="format-von-agendajson">Format von agenda.json</h3>
-<pre><code class="language-json">{
-  &quot;meta&quot;: { &quot;version&quot;: &quot;0.1&quot;, &quot;generated&quot;: &quot;...&quot;, &quot;base_date&quot;: &quot;YYYY-MM-DD&quot; },
-  &quot;facets&quot;: [
-    { &quot;id&quot;: &quot;work&quot;, &quot;label&quot;: &quot;work&quot;, &quot;h&quot;: 42, &quot;s&quot;: 100 }
-  ],
-  &quot;view&quot;: { &quot;range&quot;: 7, &quot;params&quot;: { &quot;peak_amp&quot;: 0.9, &quot;decay&quot;: 10.0 } },
-  &quot;items&quot;: [
-    { &quot;id&quot;: &quot;744f3a...&quot;, &quot;day&quot;: 0, &quot;type&quot;: &quot;fixed&quot;, &quot;facet&quot;: &quot;work&quot;,
-      &quot;title&quot;: &quot;Workshop&quot;, &quot;start&quot;: &quot;09:00&quot;, &quot;end&quot;: &quot;10:30&quot; }
-  ]
-}
-</code></pre>
-<p><strong>Facets</strong> werden ausschließlich aus den <code>#facet-*</code>-Tags der Shadow-Einträge abgeleitet — keine separate Definition oder Konfiguration nötig. Farben werden dynamisch je Facet-ID vergeben.</p>
-<p><strong>Items</strong> werden direkt aus Shadow-Einträgen abgebildet:</p>
-<table>
-<thead>
-<tr>
-<th>Shadow-Tags</th>
-<th>agenda.json</th>
-<th>Kalender</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>#date-D #time-S-E #facet-X</code></td>
-<td><code>type: fixed, day: N, start: S, end: E</code></td>
-<td>Zeitgebundener Block</td>
-</tr>
-<tr>
-<td><code>#date-D #facet-X</code></td>
-<td><code>type: volatile, day: N</code></td>
-<td>Schwebende Beschriftung</td>
-</tr>
-<tr>
-<td><code>#action-required #facet-X</code></td>
-<td><code>type: volatile, day: null</code></td>
-<td>Schwebend, ohne Datum</td>
-</tr>
-<tr>
-<td><code>#date-D1 #date-D2 #time-S-E #facet-X</code></td>
-<td><code>type: fixed, start: D1TS, end: D2TE</code></td>
-<td>Mehrtägiger Block</td>
-</tr>
-<tr>
-<td><code>#date-D #time-HH:MM #facet-X</code></td>
-<td><code>type: volatile, day: N, duration: "HH:MM"</code></td>
-<td>Begrenzte schwebende Box</td>
-</tr>
-<tr>
-<td><code>#action-required #time-HH:MM #facet-X</code></td>
-<td><code>type: volatile, day: 0, duration: "HH:MM"</code></td>
-<td>Begrenzte schwebende Box</td>
-</tr>
-</tbody>
-</table>
-<h3 id="sync-modell">Sync-Modell</h3>
-<p>Shadow.md ist die einzige Wahrheitsquelle. Drei Eingabekanäle speisen sie mit unterschiedlicher Latenz:</p>
-<table>
-<thead>
-<tr>
-<th>Kanal</th>
-<th>Latenz</th>
-<th>Mechanismus</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Kalender-UI (agenda.json PUT)</td>
-<td>Sofort</td>
-<td>WebUI schreibt direkt in Shadow.md via <code>#id-</code></td>
-</tr>
-<tr>
-<td>Exchange.md (bare entry)</td>
-<td>Nächster stündlicher Lauf</td>
-<td>cato verarbeitet und aktualisiert Shadow.md</td>
-</tr>
-<tr>
-<td>Agenda.md (<code>&gt;</code> Annotation)</td>
-<td>Nächster stündlicher Lauf</td>
-<td>cato verarbeitet und aktualisiert Shadow.md</td>
-</tr>
-</tbody>
-</table>
-<p>Wenn ein Eintrag im Kalender verschoben, vergrößert oder von volatil auf fest gesetzt wird, sendet das WebUI einen PUT an den Server, der das zugehörige Shadow-Item per UUID aktualisiert — noch vor catons nächstem Lauf.</p>
-<h3 id="konflikterkennung">Konflikterkennung</h3>
-<p>Stellt cato seit der letzten Agenda.md-Erzeugung fest, dass:
-- Shadow.md für ein Item via Kalender-PUT aktualisiert wurde, <strong>und</strong>
-- Agenda.md eine <code>&gt;</code>-Annotation für dasselbe Item enthält (per <code>#id-</code> abgeglichen)</p>
-<p>schreibt cato einen Konflikthinweis unterhalb des Items — ohne bestehende Annotationen zu löschen:</p>
-<pre><code class="language-markdown">Workshop #id-744f3a...
-&gt; auf Freitag verschieben
-⚠ Kalender: bereits auf Mo 09:00 verschoben. Bitte bestätigen oder korrigieren.
-</code></pre>
-<p>Der User löst den Konflikt per weiterer Annotation. Keine bestehende Eingabe wird automatisch gelöscht.</p>
+        <p>Das WebUI enthält einen interaktiven Kalender-Tab, der den Zeitplan visuell darstellt. Er wird von <code>agenda.json</code> angetrieben — einer strukturierten Projektion, die cato bei jedem stündlichen Lauf zusammen mit Agenda.md erzeugt.</p>
+<p>Zur vollständigen Dokumentation der Kalender-Features: <a href="17-calendar.html">Kalender</a>. Zum Datenformat: <a href="16-agenda-json.html">agenda.json Referenz</a>.</p>
       </div>
     </section>
 

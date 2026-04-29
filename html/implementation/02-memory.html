@@ -720,6 +720,7 @@ outheis memory --add &quot;user:My birthday is March 15&quot;
 outheis memory --clear context
 </code></pre>
 <h3 id="display-format">Display Format</h3>
+<p>Memory files are rendered in a readable format when displayed:</p>
 <pre><code>Memory
 ----------------------------------------
 
@@ -735,12 +736,10 @@ outheis memory --clear context
   1. Working on Project Alpha [↓12d]
   2. Preparing conference talk [↓5d]
 </code></pre>
-<p>Markers:</p>
-<ul>
-<li><code>[!]</code> — Explicitly stored via <code>!</code> marker</li>
-<li><code>[90%]</code> — Confidence below 100%</li>
-<li><code>[↓12d]</code> — Expires in 12 days</li>
-</ul>
+<p>Markers:
+- <code>[!]</code> — Explicitly stored via <code>!</code> marker
+- <code>[90%]</code> — Confidence below 100%
+- <code>[↓12d]</code> — Expires in 12 days (context type only)</p>
       </div>
     </section>
 
@@ -748,29 +747,26 @@ outheis memory --clear context
       <h2>Storage</h2>
       <div class="section-text"><h2>Storage</h2>
         <pre><code>~/.outheis/human/memory/
-├── user.json           # Personal facts
-├── feedback.json       # Working preferences
-├── context.json        # Current focus
-└── pattern/            # Pattern agent's learning
-    └── strategies.md
+├── user.md             # Personal facts
+├── feedback.md         # Working preferences
+├── context.md          # Current focus
+└── patterns.md         # Pattern agent's learning
 </code></pre>
-<p>Each memory file contains timestamped entries with metadata:</p>
-<pre><code class="language-json">{
-  &quot;type&quot;: &quot;user&quot;,
-  &quot;updated_at&quot;: &quot;2025-03-28T14:30:00&quot;,
-  &quot;entries&quot;: [
-    {
-      &quot;content&quot;: &quot;User is 35 years old&quot;,
-      &quot;created_at&quot;: &quot;2025-03-28T14:30:00&quot;,
-      &quot;updated_at&quot;: &quot;2025-03-28T14:30:00&quot;,
-      &quot;confidence&quot;: 1.0,
-      &quot;source_count&quot;: 1,
-      &quot;decay_days&quot;: null,
-      &quot;is_explicit&quot;: true
-    }
-  ]
-}
+<p>Each memory file is a Markdown file with frontmatter and timestamped entries:</p>
+<pre><code class="language-markdown">---
+name: user facts
+description: Stable personal information about the user
+type: user
+---
+
+- User is 35 years old [2025-03-28]
+- Children: Leo (8), Emma (5) [2025-03-28] [!]
+- Lives in Munich [2025-03-28] [90%]
 </code></pre>
+<p>Markers:
+- <code>[!]</code> — Explicitly stored via <code>!</code> marker
+- <code>[90%]</code> — Confidence below 100%
+- <code>[↓12d]</code> — Expires in 12 days (for context entries)</p>
       </div>
     </section>
 
@@ -790,7 +786,7 @@ outheis memory --clear context
     <section class="section" id="pattern-agent-meta-memory">
       <h2>Pattern Agent Meta-Memory</h2>
       <div class="section-text"><h2>Pattern Agent Meta-Memory</h2>
-        <p>The Pattern agent has its own memory in <code>~/.outheis/human/memory/pattern/</code>. This is where it stores:</p>
+        <p>The Pattern agent has its own memory in <code>~/.outheis/human/memory/patterns.md</code>. This is where it stores:</p>
 <ul>
 <li>What extraction strategies work for this user</li>
 <li>Patterns in communication style</li>
@@ -827,7 +823,7 @@ outheis memory --clear context
 <ol>
 <li><strong>Explicit correction:</strong> <code>! I'm 36, not 35</code></li>
 <li><strong>CLI edit:</strong> <code>outheis memory --clear user</code> then re-add</li>
-<li><strong>Direct file edit:</strong> Modify JSON in <code>~/.outheis/human/memory/</code></li>
+<li><strong>Direct file edit:</strong> Modify Markdown files in <code>~/.outheis/human/memory/</code></li>
 </ol>
 <p>Explicit (<code>!</code>) entries take precedence — agents won't override them with lower-confidence extractions.</p>
       </div>

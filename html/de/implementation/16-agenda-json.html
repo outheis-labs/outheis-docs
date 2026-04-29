@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Versionshinweise · outheis</title>
+  <title>agenda.json — Syntax-Referenz v0.2 · outheis</title>
   <link rel="icon" type="image/png" href="../favicon-96x96.png" sizes="96x96">
   <link rel="icon" type="image/svg+xml" href="../favicon.svg">
   <link rel="shortcut icon" href="../favicon.ico">
@@ -532,15 +532,10 @@
   <header>
     <div class="header-left">
       <a href="../index.html" class="logo">οὐθείς</a>
-      <div class="breadcrumb">
-        <span class="separator">/</span>
-        <a href="../contents.html#installation">Installation</a>
-        <span class="separator">/</span>
-        <span class="current">Release Notes</span>
-      </div>
+      
     </div>
     <nav>
-      <a href="../contents.html#installation" style="font-weight: 500; color: #1a1a1a;">Contents</a>
+      <a href="../contents.html" style="font-weight: 500; color: #1a1a1a;">Contents</a>
       <a href="https://github.com/outheis-labs/outheis-beta">GitHub <svg width="8" height="8" viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg" style="display:inline;vertical-align:middle;margin-left:3px;margin-bottom:1px"><path d="M1 9L9 1M9 1H3M9 1V7" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
       <span class="lang-switch"></span>
     </nav>
@@ -548,129 +543,381 @@
 
   <main>
     <div class="page-header">
-      <h1>Versionshinweise</h1>
-      <p class="subtitle">Public Beta — April 2026.</p>
+      <h1>agenda.json — Syntax-Referenz v0.2</h1>
+      
     </div>
 
-    <section class="section" id="was-funktioniert">
-      <h2>Was funktioniert</h2>
-      <div class="section-text"><h2>Was funktioniert</h2>
-        <table>
+    <section class="section"><h2></h2><div class="section-text"><p>Die Kalenderansicht im WebUI wird durch <code>agenda.json</code> gesteuert, die strukturierte
+Projektion aller geplanten Einträge. Speicherort:</p>
+<pre><code>~/.outheis/human/webui/pages/agenda.json
+</code></pre></div></section>
+
+    <section class="section" id="struktur-auf-oberster-ebene">
+      <h2>Struktur auf oberster Ebene</h2>
+      <div class="section-text"><h2>Struktur auf oberster Ebene</h2>
+        <pre><code class="language-json">{
+  &quot;meta&quot;:   { ... },
+  &quot;facets&quot;: [ ... ],
+  &quot;view&quot;:   { ... },
+  &quot;items&quot;:  [ ... ]
+}
+</code></pre>
+      </div>
+    </section>
+
+    <section class="section" id="meta">
+      <h2>meta</h2>
+      <div class="section-text"><h2>meta</h2>
+        <pre><code class="language-json">&quot;meta&quot;: {
+  &quot;version&quot;:    &quot;0.2&quot;,
+  &quot;generated&quot;:  &quot;2026-04-24T10:00:00Z&quot;,
+  &quot;base_date&quot;:  &quot;2026-04-24&quot;
+}
+</code></pre>
+<p><code>base_date</code> ist der Referenztag für alle relativen <code>day</code>-Offsets. Wird täglich neu gesetzt.</p>
+      </div>
+    </section>
+
+    <section class="section" id="facets">
+      <h2>facets</h2>
+      <div class="section-text"><h2>facets</h2>
+        <pre><code class="language-json">&quot;facets&quot;: [
+  { &quot;id&quot;: &quot;cato&quot;, &quot;label&quot;: &quot;Arbeit&quot;,   &quot;hex&quot;: &quot;#FF2E00&quot; },
+  { &quot;id&quot;: &quot;hiro&quot;, &quot;label&quot;: &quot;senswork&quot;, &quot;hex&quot;: &quot;#FFB400&quot; },
+  { &quot;id&quot;: &quot;rumi&quot;, &quot;label&quot;: &quot;Self&quot;,     &quot;hex&quot;: &quot;#460A46&quot; },
+  { &quot;id&quot;: &quot;ou&quot;,   &quot;label&quot;: &quot;Privat&quot;,   &quot;hex&quot;: &quot;#218380&quot; },
+  { &quot;id&quot;: &quot;zeno&quot;, &quot;label&quot;: &quot;OFC&quot;,      &quot;hex&quot;: &quot;#97EAD2&quot; },
+  { &quot;id&quot;: &quot;misc&quot;, &quot;label&quot;: &quot;Misc&quot;,     &quot;hex&quot;: &quot;#C490D1&quot; }
+]
+</code></pre>
+<p><code>hex</code> = CI-Farbe als Hex-Code. Farbton und Sättigung werden automatisch berechnet.
+Die Legende wird ausschließlich aus diesem Array gebaut.</p>
+      </div>
+    </section>
+
+    <section class="section" id="view">
+      <h2>view</h2>
+      <div class="section-text"><h2>view</h2>
+        <pre><code class="language-json">&quot;view&quot;: {
+  &quot;range&quot;: 7,
+  &quot;day_start&quot;: 5,
+  &quot;time_axis&quot;: [
+    { &quot;from&quot;: &quot;05:00&quot;, &quot;to&quot;: &quot;09:00&quot;, &quot;weight&quot;: 0.5 },
+    { &quot;from&quot;: &quot;09:00&quot;, &quot;to&quot;: &quot;13:00&quot;, &quot;weight&quot;: 2.2 },
+    { &quot;from&quot;: &quot;13:00&quot;, &quot;to&quot;: &quot;17:00&quot;, &quot;weight&quot;: 1.8 },
+    { &quot;from&quot;: &quot;17:00&quot;, &quot;to&quot;: &quot;21:00&quot;, &quot;weight&quot;: 1.0 },
+    { &quot;from&quot;: &quot;21:00&quot;, &quot;to&quot;: &quot;01:00&quot;, &quot;weight&quot;: 0.5 },
+    { &quot;from&quot;: &quot;01:00&quot;, &quot;to&quot;: &quot;05:00&quot;, &quot;weight&quot;: 0.3 }
+  ],
+  &quot;params&quot;: {
+    &quot;peak_amp&quot;:      0.9,
+    &quot;decay&quot;:         10.0,
+    &quot;ghost_pull&quot;:    0.04,
+    &quot;overlay_alpha&quot;: 0.09
+  }
+}
+</code></pre>
+<p><code>range</code> = sichtbare Tage (7 / 14 / 30).
+<code>day_start</code> = erste Stunde der Zeitleiste (ganzzahlig, 0–23). Standard: 5.
+<code>time_axis</code> = nicht-lineare Zeitachse: 6 Segmente à 4 Stunden, die genau 24 Stunden ab <code>day_start</code> abdecken. <code>weight</code> steuert die relative Bildschirmbreite — ein höheres Gewicht bedeutet mehr visuelle Auflösung für diesen Zeitbereich. Fehlt <code>time_axis</code>, wird linear über 24 Stunden verteilt.
+<code>params</code> steuern das Gravitationsfeld-Rendering und werden beim Laden auf die UI-Schieberegler angewendet.</p>
+<h3 id="spread-panel-ui">Spread-Panel (UI)</h3>
+<p>Der <strong>Spread</strong>-Button in der oberen Leiste öffnet ein Konfigurationspanel für <code>day_start</code> und <code>time_axis</code>. Änderungen wirken sofort und werden beim nächsten Speichern übernommen.</p>
+<ul>
+<li><strong>Tag ab</strong> — Zeitfeld (nur ganze Stunden) für <code>day_start</code>; aktualisiert alle Segmentgrenzen automatisch</li>
+<li><strong>Sechs Segment-Zeilen</strong> — jede zeigt ihren <code>von–bis</code>-Bereich (berechnet aus <code>day_start</code> in 4-Stunden-Schritten) und einen Gewichts-Regler (0,1–5,0)</li>
+</ul>
+      </div>
+    </section>
+
+    <section class="section" id="items">
+      <h2>items</h2>
+      <div class="section-text"><h2>items</h2>
+        <p>Jeder Eintrag trägt eine Snowflake-ID und einen <code>type</code>.</p>
+<h3 id="fixed-zeitgebundenes-event">fixed — zeitgebundenes Event</h3>
+<pre><code class="language-json">{
+  &quot;id&quot;:      &quot;7430000000000001&quot;,
+  &quot;type&quot;:    &quot;fixed&quot;,
+  &quot;facet&quot;:   &quot;cato&quot;,
+  &quot;title&quot;:   &quot;outheis Architektur&quot;,
+  &quot;day&quot;:     0,
+  &quot;start&quot;:   &quot;09:00&quot;,
+  &quot;end&quot;:     &quot;11:00&quot;,
+  &quot;density&quot;: &quot;high&quot;
+}
+</code></pre>
+<h3 id="fixed-mehrtagig-iso-datetime">fixed — mehrtägig (ISO-Datetime)</h3>
+<pre><code class="language-json">{
+  &quot;id&quot;:    &quot;7430000000000041&quot;,
+  &quot;type&quot;:  &quot;fixed&quot;,
+  &quot;facet&quot;: &quot;zeno&quot;,
+  &quot;title&quot;: &quot;ALP Dillingen&quot;,
+  &quot;start&quot;: &quot;2026-07-20T09:00&quot;,
+  &quot;end&quot;:   &quot;2026-07-22T17:00&quot;
+}
+</code></pre>
+<p>Kein <code>day</code>-Feld — wird automatisch aus dem Datum berechnet.
+Wird als verbundener Balken über alle betroffenen Zeilen gerendert.</p>
+<h3 id="volatile-freischwebender-eintrag">volatile — freischwebender Eintrag</h3>
+<pre><code class="language-json">{
+  &quot;id&quot;:    &quot;7430000000000006&quot;,
+  &quot;type&quot;:  &quot;volatile&quot;,
+  &quot;facet&quot;: &quot;cato&quot;,
+  &quot;title&quot;: &quot;Substack Entwurf&quot;,
+  &quot;day&quot;:   0,
+  &quot;size&quot;:  &quot;m&quot;
+}
+</code></pre>
+<h3 id="recurring-wiederkehrendes-event">recurring — wiederkehrendes Event</h3>
+<p>Wiederkehrende Events werden als <strong>ein einziger Eintrag</strong> mit einem <code>#recurring-*</code>-Tag gespeichert.
+Das Frontend generiert Anzeigeinstanzen für alle betroffenen Tage, schreibt sie aber <strong>nicht</strong> als
+einzelne Items zurück in <code>agenda.json</code>.</p>
+<pre><code class="language-json">{
+  &quot;id&quot;:    &quot;7430000000000010&quot;,
+  &quot;type&quot;:  &quot;fixed&quot;,
+  &quot;facet&quot;: &quot;cato&quot;,
+  &quot;title&quot;: &quot;Daily Standup&quot;,
+  &quot;day&quot;:   0,
+  &quot;start&quot;: &quot;09:00&quot;,
+  &quot;end&quot;:   &quot;09:30&quot;,
+  &quot;tags&quot;:  [&quot;#date-2026-04-24&quot;, &quot;#time-09:00-09:30&quot;, &quot;#facet-cato&quot;, &quot;#recurring-daily&quot;]
+}
+</code></pre>
+<p>Unterstützte <code>#recurring-*</code>-Tags:</p>
+<table>
 <thead>
 <tr>
-<th>Komponente</th>
-<th>Status</th>
-<th>Hinweise</th>
+<th>Tag</th>
+<th>Bedeutung</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>Dispatcher — Microkernel, Scheduler, Lock-Manager</td>
+<td><code>#recurring-daily</code></td>
+<td>Täglich</td>
+</tr>
+<tr>
+<td><code>#recurring-weekly</code></td>
+<td>Wöchentlich (selber Wochentag wie Anker)</td>
+</tr>
+<tr>
+<td><code>#recurring-monthly</code></td>
+<td>Monatlich (selber Tag des Monats)</td>
+</tr>
+<tr>
+<td><code>#recurring-yearly</code></td>
+<td>Jährlich</td>
+</tr>
+<tr>
+<td><code>#recurring-mon</code>, <code>#recurring-mon-wed-fri</code></td>
+<td>Bestimmte Wochentage</td>
+</tr>
+<tr>
+<td><code>#recurring-monthly-1-15</code></td>
+<td>Bestimmte Tage des Monats</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>Wichtig:</strong> Cato darf wiederkehrende Einträge nicht als Einzelinstanzen in <code>agenda.json</code> schreiben.
+Nur der Anker-Eintrag (mit <code>#recurring-*</code>-Tag) gehört in <code>items</code>.</p>
+</blockquote>
+      </div>
+    </section>
+
+    <section class="section" id="feldubersicht">
+      <h2>Feldübersicht</h2>
+      <div class="section-text"><h2>Feldübersicht</h2>
+        <table>
+<thead>
+<tr>
+<th>Feld</th>
+<th>Typ</th>
+<th>fixed</th>
+<th>volatile</th>
+<th>Beschreibung</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>id</code></td>
+<td>string (Snowflake)</td>
+<td>✓</td>
+<td>✓</td>
+<td>Eindeutig, chronologisch sortierbar</td>
+</tr>
+<tr>
+<td><code>type</code></td>
+<td><code>"fixed"</code> | <code>"volatile"</code></td>
+<td>✓</td>
 <td>✓</td>
 <td></td>
 </tr>
 <tr>
-<td>Relay (ou) — Routing, Memory-Integration</td>
+<td><code>facet</code></td>
+<td>string → <code>facets[].id</code></td>
+<td>✓</td>
+<td>✓</td>
+<td>Bestimmt Farbe und Feldverhalten</td>
+</tr>
+<tr>
+<td><code>title</code></td>
+<td>string</td>
+<td>✓</td>
 <td>✓</td>
 <td></td>
 </tr>
 <tr>
-<td>Data (zeno) — Vault-Suche, Tag-Analyse</td>
+<td><code>day</code></td>
+<td>int (Offset von <code>base_date</code>)</td>
+<td>✓*</td>
 <td>✓</td>
+<td>*entfällt bei mehrtägigen ISO-Events</td>
+</tr>
+<tr>
+<td><code>start</code></td>
+<td><code>"HH:MM"</code> oder <code>"YYYY-MM-DDTHH:MM"</code></td>
+<td>✓</td>
+<td>–</td>
+<td>ISO-Format = mehrtägig</td>
+</tr>
+<tr>
+<td><code>end</code></td>
+<td><code>"HH:MM"</code> oder <code>"YYYY-MM-DDTHH:MM"</code></td>
+<td>✓</td>
+<td>–</td>
 <td></td>
 </tr>
 <tr>
-<td>Agenda (cato) — Agenda.md, Exchange, Kalender</td>
-<td>✓</td>
-<td></td>
+<td><code>density</code></td>
+<td><code>"high"</code> | <code>"low"</code></td>
+<td>–</td>
+<td>–</td>
+<td>Feldgewicht; fehlt = Standard</td>
 </tr>
 <tr>
-<td>Pattern (rumi) — nächtliche Memory-Extraktion</td>
-<td>✓</td>
-<td></td>
+<td><code>layer</code></td>
+<td><code>0</code> | <code>1</code></td>
+<td>–</td>
+<td>–</td>
+<td><code>1</code> = Overlay über einem anderen Event</td>
 </tr>
 <tr>
-<td>Web UI — Konfig, Memory, Scheduler, Vault, Tags, Migration</td>
+<td><code>size</code></td>
+<td><code>"s"</code> | <code>"m"</code> | <code>"l"</code></td>
+<td>–</td>
 <td>✓</td>
-<td></td>
+<td>Aufwandsschätzung; bestimmt visuelle Breite</td>
 </tr>
 <tr>
-<td>Signal-Transport — empfangen, antworten, Sprachtranskription</td>
-<td>✓</td>
-<td></td>
+<td><code>note</code></td>
+<td>string</td>
+<td>–</td>
+<td>–</td>
+<td>Nur im Tooltip sichtbar</td>
 </tr>
 <tr>
-<td>Vault-Datei-Browser — alle Dateitypen, Bilder, Obsidian-Wikilinks</td>
+<td><code>source</code></td>
+<td>string</td>
 <td>✓</td>
-<td></td>
+<td>✓</td>
+<td>Herkunft: Vault-Pfad, <code>"cato"</code>, <code>"webui"</code> …</td>
 </tr>
 <tr>
-<td>Tags — scannen, Namensraum-Gruppierung, umbenennen, löschen</td>
-<td>✓</td>
-<td></td>
+<td><code>done</code></td>
+<td><code>"YYYY-MM-DD"</code></td>
+<td>–</td>
+<td>–</td>
+<td>Gesetzt wenn abgeschlossen</td>
 </tr>
 <tr>
-<td>Migration — Exchange.md-Genehmigungsworkflow</td>
+<td><code>follows</code></td>
+<td>string[]</td>
 <td>✓</td>
-<td></td>
+<td>✓</td>
+<td>IDs der Items, auf die dieses Item wartet</td>
+</tr>
+<tr>
+<td><code>precedes</code></td>
+<td>string[]</td>
+<td>✓</td>
+<td>✓</td>
+<td>IDs der Items, die dieses Item blockiert</td>
+</tr>
+<tr>
+<td><code>relates</code></td>
+<td>string[]</td>
+<td>✓</td>
+<td>✓</td>
+<td>IDs assoziierter Items — kein Ordering</td>
+</tr>
+<tr>
+<td><code>tags</code></td>
+<td>string[]</td>
+<td>✓</td>
+<td>✓</td>
+<td>Strukturelle Tags (<code>#date-</code>, <code>#time-</code>, etc.)</td>
 </tr>
 </tbody>
 </table>
       </div>
     </section>
 
-    <section class="section" id="was-nicht-funktioniert">
-      <h2>Was nicht funktioniert</h2>
-      <div class="section-text"><h2>Was nicht funktioniert</h2>
-        <table>
+    <section class="section" id="abhangigkeiten">
+      <h2>Abhängigkeiten</h2>
+      <div class="section-text"><h2>Abhängigkeiten</h2>
+        <p>Items können Reihenfolgebeziehungen zu anderen Items deklarieren. Alle drei Felder enthalten Arrays von Snowflake-IDs.</p>
+<pre><code class="language-json">{
+  &quot;id&quot;:       &quot;7430000000000020&quot;,
+  &quot;type&quot;:     &quot;volatile&quot;,
+  &quot;title&quot;:    &quot;Projektstart&quot;,
+  &quot;day&quot;:      5,
+  &quot;follows&quot;:  [&quot;7430000000000018&quot;, &quot;7430000000000019&quot;],
+  &quot;relates&quot;:  [&quot;7430000000000010&quot;]
+}
+</code></pre>
+<table>
 <thead>
 <tr>
-<th>Komponente</th>
-<th>Status</th>
-<th>Hinweise</th>
+<th>Feld</th>
+<th>Richtung</th>
+<th>Bedeutung</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>Action (hiro) — externe Aufgaben, E-Mail, Kalender</td>
-<td>nicht implementiert</td>
-<td>Framework vorhanden, keine Fähigkeiten</td>
+<td><code>follows</code></td>
+<td>dieses Item ← Vorgänger</td>
+<td>Dieses Item wartet auf den Abschluss der gelisteten Items</td>
 </tr>
 <tr>
-<td>Code (alan) — Codebase-Introspektion</td>
-<td>nur Entwicklung</td>
-<td>In Produktion deaktiviert</td>
+<td><code>precedes</code></td>
+<td>dieses Item → Nachfolger</td>
+<td>Dieses Item blockiert die gelisteten Items</td>
+</tr>
+<tr>
+<td><code>relates</code></td>
+<td>assoziativ</td>
+<td>Verknüpfte Items — kein Ordering</td>
 </tr>
 </tbody>
 </table>
-<p><strong>hiro ist vorhanden, aber leer.</strong> Der Agent startet und leitet weiter, aber keine externen Integrationen existieren — keine E-Mail, kein Kalender, keine Shell-Ausführung. ihn in config.json zu aktivieren hat noch keine praktische Auswirkung.</p>
-<p><strong>alan erfordert manuelle Aktivierung.</strong> Der Code-Agent bietet Introspektion in die outheis-Codebasis — nützlich für jeden, der erkunden möchte, wie es funktioniert. In <code>config.json</code> aktivieren unter <code>agents.code.enabled: true</code>.</p>
-      </div>
-    </section>
-
-    <section class="section" id="bekannte-lucken">
-      <h2>Bekannte Lücken</h2>
-      <div class="section-text"><h2>Bekannte Lücken</h2>
-        <p><strong>Pattern-Agent benötigt Verlauf.</strong> rumi hat bei einer frischen Installation nichts zu extrahieren. Memory baut sich über Tage auf, nicht sofort.</p>
-<p><strong>Tag-Scan ist auf Anfrage.</strong> Tags werden nicht beim Start indexiert. Über Web UI ausführen (Vault → Tags → Scan) oder im Chat <code>analyze tags</code> sagen.</p>
-<p><strong>Keine mobile UI.</strong> Web-Oberfläche ist nur localhost. Signal-Transport für mobilen Zugriff verwenden.</p>
-<p><strong>Kontext nach Neustart.</strong> Beim Neustart gibt relay die letzten 20 Nachrichten zurück, um den aktuellen Kontext wiederherzustellen. Älterer Gesprächsverlauf wird nicht zurückgespielt.</p>
+<p><code>follows</code> und <code>precedes</code> sind eigenständige Primitive, die dieselbe Beziehung aus entgegengesetzten Perspektiven ausdrücken. Keines setzt das andere voraus.</p>
+<p><strong>effectiveDay</strong> — der Kalender verschiebt Items nach vorne, wenn ihre Vorgänger noch offen sind:</p>
+<pre><code>effectiveDay(item) = max(effectiveDay(Vorgänger) + 1, item.day)
+</code></pre>
+<p>Rekursiv berechnet mit Zyklenerkennung. Erledigte Vorgänger (<code>done</code> gesetzt) blockieren nicht mehr. Das berechnete Datum wird nie in <code>agenda.json</code> zurückgeschrieben; <code>day</code> enthält immer den geplanten Tag.</p>
+<p>Zur Darstellung im Kalender: <a href="17-calendar.html">Kalender</a>.</p>
       </div>
     </section>
 
     <nav class="book-nav">
-      <div class="prev"><a href="../installation/index.html">
-          <span class="label">← Zurück</span>
-          <span class="title">Überblick</span>
-        </a></div>
-      <div class="toc-center"><a href="../contents.html#installation">
+      <div class="prev"></div>
+      <div class="toc-center"><a href="../contents.html#">
           <span class="label">Inhalt</span>
-          <span class="title">Installation</span>
+          <span class="title"></span>
         </a></div>
-      <div class="next"><a href="../installation/02-installation.html">
-          <span class="label">Weiter →</span>
-          <span class="title">Installation</span>
-        </a></div>
+      <div class="next"></div>
     </nav>
   </main>
 

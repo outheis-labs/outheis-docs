@@ -697,7 +697,7 @@
 </table>
 <p>Complex queries still use LLM for intelligent search and synthesis.</p>
 <h3 id="agenda-agent-cato">Agenda Agent (cato)</h3>
-<p>The Agenda agent manages three files in <code>vault/Agenda/</code>:</p>
+<p>The Agenda agent manages files in <code>vault/Agenda/</code>:</p>
 <table>
 <thead>
 <tr>
@@ -713,31 +713,17 @@
 <td>Today's schedule, tasks, notes</td>
 </tr>
 <tr>
-<td>Inbox.md</td>
-<td>User → System</td>
-<td>Quick capture, unprocessed items</td>
-</tr>
-<tr>
 <td>Exchange.md</td>
 <td>System ↔ User</td>
 <td>Async questions, no pressure to respond</td>
 </tr>
-<tr>
-<td>Shadow.md</td>
-<td>System → User</td>
-<td>Chronological vault index (auto-generated)</td>
-</tr>
-<tr>
-<td>Backlog.md</td>
-<td>System → User</td>
-<td>Priority-sorted view of Shadow.md (on-demand)</td>
-</tr>
 </tbody>
 </table>
+<p>The calendar view in the WebUI is driven by <code>agenda.json</code> — the single source of truth for all scheduled items. See <a href="16-agenda-json.md">agenda.json</a> for the schema.</p>
 <p><strong>Commands:</strong></p>
 <ul>
 <li>"update agenda" → triggers manual refresh</li>
-<li>Processes Inbox items, checks Exchange responses, updates Daily</li>
+<li>Checks Exchange responses, updates Agenda.md</li>
 </ul>
 <p><strong>Hourly Review (conditional):</strong></p>
 <ul>
@@ -886,10 +872,7 @@
 <pre><code>vault/
 ├── Agenda/
 │   ├── Agenda.md     # Today's schedule
-│   ├── Inbox.md      # Unprocessed items
-│   ├── Exchange.md   # Async communication
-│   ├── Shadow.md     # Chronological vault index (auto-generated)
-│   └── Backlog.md    # Priority-sorted Shadow view (on-demand)
+│   └── Exchange.md   # Async communication
 ├── projects/
 │   └── *.md
 └── notes/
@@ -930,8 +913,7 @@
     │   │   └── Vault.jsonl
     │   ├── agenda/       # Agenda file state
     │   │   ├── hashes.json       # Quick change detection
-    │   │   ├── Daily.md.prev     # For diff
-    │   │   ├── Inbox.md.prev
+    │   │   ├── Agenda.md.prev     # For diff
     │   │   └── Exchange.md.prev
     │   └── sessions/     # Session replay logs
     ├── rules/            # User-defined rules (external)
@@ -1031,9 +1013,9 @@
 <td>Archive old messages</td>
 </tr>
 <tr>
-<td><code>shadow_scan</code></td>
+<td><code>vault_scan</code></td>
 <td>03:30</td>
-<td>Scan vault for chronological entries → Shadow.md</td>
+<td>Scan vault for chronological entries → agenda.json</td>
 </tr>
 <tr>
 <td><code>agenda_review</code></td>
@@ -1070,7 +1052,7 @@
     &quot;pattern_infer&quot;:   {&quot;enabled&quot;: true, &quot;time&quot;: [&quot;04:00&quot;]},
     &quot;index_rebuild&quot;:   {&quot;enabled&quot;: true, &quot;time&quot;: [&quot;04:30&quot;]},
     &quot;archive_rotation&quot;:{&quot;enabled&quot;: true, &quot;time&quot;: [&quot;05:00&quot;]},
-    &quot;shadow_scan&quot;:     {&quot;enabled&quot;: true, &quot;time&quot;: [&quot;03:30&quot;]},
+    &quot;vault_scan&quot;:      {&quot;enabled&quot;: true, &quot;time&quot;: [&quot;03:30&quot;]},
     &quot;agenda_review&quot;: {
       &quot;enabled&quot;: true,
       &quot;time&quot;: [&quot;04:55&quot;,&quot;05:55&quot;,&quot;06:55&quot;,&quot;07:55&quot;,&quot;08:55&quot;,&quot;09:55&quot;,
@@ -1095,7 +1077,7 @@
 <p><strong>Right:</strong> better abstractions — an index the agent can query, with on-demand detail.</p>
 <p>Four strategies in use or planned:</p>
 <p><strong>1. Index with recency weighting</strong> — The Data agent maintains a search index. Agents see a compact index, not raw files. The index includes access frequency and recency signals.</p>
-<p><strong>2. Shadow.md as chronological pre-filter</strong> — The Data agent runs a nightly vault scan and writes all time-relevant entries into a single structured file (<code>Agenda/Shadow.md</code>). The Agenda agent loads this instead of scanning the full vault on every hourly review.</p>
+<p><strong>2. agenda.json as chronological index</strong> — The Data agent runs a nightly vault scan and writes all time-relevant entries into <code>agenda.json</code>. The Agenda agent and WebUI calendar read this structured data instead of scanning the full vault on every run.</p>
 <p><strong>3. Progressive loading</strong> — Overview first, detail on demand. The <code>load_skill(topic)</code> mechanism works like controlled demand paging: the agent has a summary in context and requests detail only when needed.</p>
 <p><strong>4. Skill-based compression</strong> — Skills replace lengthy instructions. "Use ISO dates" instead of ten examples. Better skills mean smaller prompts and more room for user content.</p>
       </div>
@@ -1106,7 +1088,7 @@
       <div class="section-text"><h2>Further Reading</h2>
         <ul>
 <li><a href="memory.md">Memory</a> — How persistent memory works</li>
-<li><a href="agenda.md">Agenda</a> — Time management with Daily, Inbox, Exchange</li>
+<li><a href="agenda.md">Agenda</a> — Time management with Daily, Exchange</li>
 <li><a href="migration.md">Migration</a> — Seeding memory from external sources</li>
 <li><a href="alan.md">Code Agent (alan)</a> — Development-time code intelligence</li>
 <li><a href="webui.md">Web UI</a> — Browser-based administration interface</li>

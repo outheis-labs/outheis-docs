@@ -708,14 +708,9 @@
 </thead>
 <tbody>
 <tr>
-<td>Daily.md</td>
+<td>Agenda.md</td>
 <td>Bidirektional</td>
 <td>Heutiger Zeitplan, Aufgaben, Notizen</td>
-</tr>
-<tr>
-<td>Inbox.md</td>
-<td>Benutzer → System</td>
-<td>Schnellerfassung, unverarbeitete Einträge</td>
 </tr>
 <tr>
 <td>Exchange.md</td>
@@ -724,10 +719,11 @@
 </tr>
 </tbody>
 </table>
+<p>Die Kalenderansicht im WebUI wird von <code>agenda.json</code> gesteuert — der Single Source of Truth für alle geplanten Einträge.</p>
 <p><strong>Befehle:</strong></p>
 <ul>
-<li>"aktualisiere daily" / "update agenda" → löst manuelle Aktualisierung aus</li>
-<li>Verarbeitet Inbox-Einträge, prüft Exchange-Antworten, aktualisiert Daily</li>
+<li>"aktualisiere agenda" / "update agenda" → löst manuelle Aktualisierung aus</li>
+<li>Prüft Exchange-Antworten, aktualisiert Agenda.md</li>
 </ul>
 <p><strong>Stündliche Überprüfung (bedingt):</strong></p>
 <ul>
@@ -875,9 +871,8 @@
 <p>Der vault ist ein Verzeichnis mit Markdown-Dateien und YAML-Frontmatter:</p>
 <pre><code>vault/
 ├── Agenda/
-│   ├── Daily.md      # Today's schedule
-│   ├── Inbox.md      # Unprocessed items
-│   └── Exchange.md   # Async communication
+│   ├── Agenda.md      # Today's schedule
+│   └── Exchange.md    # Async communication
 ├── projects/
 │   └── *.md
 └── notes/
@@ -918,8 +913,7 @@
     │   │   └── Vault.jsonl
     │   ├── agenda/       # Agenda file state
     │   │   ├── hashes.json       # Quick change detection
-    │   │   ├── Daily.md.prev     # For diff
-    │   │   ├── Inbox.md.prev
+    │   │   ├── Agenda.md.prev     # For diff
     │   │   └── Exchange.md.prev
     │   └── sessions/     # Session replay logs
     ├── rules/            # User-defined rules (external)
@@ -1014,9 +1008,9 @@
 <td>Alte Nachrichten archivieren</td>
 </tr>
 <tr>
-<td><code>shadow_scan</code></td>
+<td><code>vault_scan</code></td>
 <td>03:30</td>
-<td>vault nach chronologischen Einträgen scannen → Shadow.md</td>
+<td>vault nach chronologischen Einträgen scannen → agenda.json</td>
 </tr>
 <tr>
 <td><code>agenda_review</code></td>
@@ -1048,7 +1042,7 @@
     &quot;pattern_nightly&quot;: {&quot;enabled&quot;: true, &quot;times&quot;: [&quot;04:00&quot;]},
     &quot;index_rebuild&quot;:   {&quot;enabled&quot;: true, &quot;times&quot;: [&quot;04:30&quot;]},
     &quot;archive_rotation&quot;:{&quot;enabled&quot;: true, &quot;times&quot;: [&quot;05:00&quot;]},
-    &quot;shadow_scan&quot;:     {&quot;enabled&quot;: true, &quot;times&quot;: [&quot;03:30&quot;]},
+    &quot;vault_scan&quot;:      {&quot;enabled&quot;: true, &quot;times&quot;: [&quot;03:30&quot;]},
     &quot;agenda_review&quot;: {
       &quot;enabled&quot;: true,
       &quot;times&quot;: [&quot;04:55&quot;,&quot;05:55&quot;,&quot;06:55&quot;,&quot;07:55&quot;,&quot;08:55&quot;,&quot;09:55&quot;,
@@ -1073,7 +1067,7 @@
 <p><strong>Richtig:</strong> Bessere Abstraktionen — ein Index, den der agent abfragen kann, mit Details auf Abruf.</p>
 <p>Vier Strategien in Nutzung oder geplant:</p>
 <p><strong>1. Index mit Aktualitätsgewichtung</strong> — Der Data-Agent pflegt einen Suchindex. Agents sehen einen kompakten Index, nicht rohe Dateien. Der Index enthält Zugriffshäufigkeit und Aktualitätssignale.</p>
-<p><strong>2. Shadow.md als chronologischer Vorfilter</strong> — Der Data-Agent führt einen nächtlichen vault-Scan durch und schreibt alle zeitrelevanten Einträge in eine einzelne strukturierte Datei (<code>Agenda/Shadow.md</code>). cato lädt diese statt bei jeder stündlichen Überprüfung den gesamten vault zu scannen.</p>
+<p><strong>2. agenda.json als chronologischer Index</strong> — Der Data-Agent führt einen nächtlichen vault-Scan durch und schreibt alle zeitrelevanten Einträge in <code>agenda.json</code>. cato und das WebUI-Kalender lesen diese strukturierten Daten statt bei jeder Überprüfung den gesamten vault zu scannen.</p>
 <p><strong>3. Progressives Laden</strong> — Überblick zuerst, Details auf Anfrage. Der <code>load_skill(topic)</code>-Mechanismus funktioniert wie kontrolliertes Demand Paging: Der agent hat eine Zusammenfassung im Kontext und fordert Details nur bei Bedarf an.</p>
 <p><strong>4. Skill-basierte Kompression</strong> — Skills ersetzen ausführliche Anweisungen. "ISO-Datumsformat verwenden" statt zehn Beispiele. Bessere Skills bedeuten kleinere Prompts und mehr Platz für Benutzerinhalte.</p>
       </div>
@@ -1084,7 +1078,7 @@
       <div class="section-text"><h2>Weiterführende Lektüre</h2>
         <ul>
 <li><a href="memory.md">Memory</a> — Wie dauerhaftes Memory funktioniert</li>
-<li><a href="agenda.md">Agenda</a> — Zeitmanagement mit Daily, Inbox, Exchange</li>
+<li><a href="agenda.md">Agenda</a> — Zeitmanagement mit Agenda.md und Exchange</li>
 <li><a href="migration.md">Migration</a> — Memory aus externen Quellen einpflegen</li>
 <li><a href="alan.md">Code-Agent (alan)</a> — Code-Intelligenz zur Entwicklungszeit</li>
 <li><a href="webui.md">Web UI</a> — Browser-basierte Verwaltungsoberfläche</li>

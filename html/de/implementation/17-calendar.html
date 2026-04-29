@@ -1,0 +1,915 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kalender · outheis</title>
+  <link rel="icon" type="image/png" href="../favicon-96x96.png" sizes="96x96">
+  <link rel="icon" type="image/svg+xml" href="../favicon.svg">
+  <link rel="shortcut icon" href="../favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="../apple-touch-icon.png">
+  <link rel="manifest" href="../site.webmanifest">
+  <style>
+    @font-face {
+      font-family: 'Inter';
+      src: url('../assets/fonts/InterVariable.woff2') format('woff2');
+      font-weight: 100 900;
+      font-style: normal;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'IBM Plex Sans';
+      src: url('../assets/fonts/IBMPlexSans-Variable.woff2') format('woff2-variations');
+      font-weight: 100 700;
+      font-style: normal;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'IBM Plex Mono';
+      src: url('../assets/fonts/IBMPlexMono-Regular.woff2') format('woff2');
+      font-weight: 400;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'IBM Plex Sans', -apple-system, sans-serif;
+      background: #fff;
+      color: #1a1a1a;
+      line-height: 1.65;
+      -webkit-text-size-adjust: 100%;
+      text-size-adjust: 100%;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .greek {
+      font-family: 'Inter', sans-serif;
+    }
+
+    /* Header with breadcrumb */
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 1.5rem;
+      border-bottom: 1px solid #e0e0e0;
+      position: sticky;
+      top: 0;
+      background: #fff;
+      z-index: 100;
+    }
+
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .logo {
+      font-family: 'Inter', sans-serif;
+      font-size: 20px;
+      font-weight: 500;
+    }
+
+    .breadcrumb {
+      font-size: 14px;
+      color: #888;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .breadcrumb a {
+      color: #666;
+    }
+
+    .breadcrumb a:hover {
+      color: #1a1a1a;
+    }
+
+    .breadcrumb .separator {
+      color: #ccc;
+    }
+
+    .breadcrumb .current {
+      color: #1a1a1a;
+    }
+
+    header nav {
+      font-size: 14px;
+      display: flex;
+      align-items: baseline;
+      gap: 1rem;
+    }
+
+    header nav a {
+      color: #888;
+    }
+
+    header nav a:hover {
+      color: #1a1a1a;
+    }
+
+    .lang-switch {
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-size: 14px;
+      color: #888;
+    }
+
+    .lang-switch a {
+      font-size: 14px;
+      color: #888;
+    }
+
+    .lang-switch a:hover {
+      color: #1a1a1a;
+    }
+
+    .lang-switch .lang-active {
+      color: #1a1a1a;
+      font-weight: 500;
+    }
+
+    /* Main */
+    main {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 3rem 1.5rem;
+    }
+
+    /* Page header */
+    .page-header {
+      margin-bottom: 3rem;
+    }
+
+    .page-header h1 {
+      font-family: 'Inter', sans-serif;
+      font-size: 36px;
+      font-weight: 500;
+      letter-spacing: -0.02em;
+    }
+
+    .page-header .subtitle {
+      font-size: 18px;
+      font-style: italic;
+      color: #555;
+      margin-top: 0.75rem;
+    }
+
+    /* Content sections */
+    .section {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+      padding: 2.5rem 0;
+      border-top: 1px solid #e0e0e0;
+    }
+
+    /* Mobile: hide label h2, show section-text h2 */
+    .section > h2 {
+      display: none;
+    }
+
+    .section-text h2 {
+      font-size: 20px;
+      font-weight: 500;
+      margin-bottom: 1rem;
+    }
+
+    .section-text > *:first-child {
+      margin-top: 0;
+    }
+
+    /* Hidden h2 is first-child on desktop, so target the visible first element */
+    .section-text > h2 + * {
+      margin-top: 0;
+    }
+
+    .section-text > h2 + p {
+      margin-top: 0;
+    }
+
+    .section-text p {
+      font-size: 16px;
+      line-height: 1.75;
+      color: #333;
+      margin-bottom: 1rem;
+    }
+
+    .section-text p:last-child {
+      margin-bottom: 0;
+    }
+
+    .section-text h3 {
+      font-size: 16px;
+      font-weight: 450;
+      color: #1a1a1a;
+      line-height: 1.75;
+      margin-top: 1.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .section-text h3:first-child,
+    .section-text > h2 + h3 {
+      margin-top: 0;
+    }
+
+    .section-text ul {
+      list-style: none;
+      margin-bottom: 1rem;
+    }
+
+    .section-text ul li {
+      font-size: 16px;
+      line-height: 1.65;
+      color: #333;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid #eee;
+    }
+
+    .section-text ul li:last-child {
+      border-bottom: none;
+    }
+
+    .section-text ol {
+      margin-bottom: 1rem;
+      padding-left: 1.5rem;
+    }
+
+    .section-text ol li {
+      font-size: 16px;
+      line-height: 1.65;
+      color: #333;
+      margin-bottom: 0.5rem;
+    }
+
+    .section-text code {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 14px;
+      background: #f5f5f5;
+      padding: 0.15em 0.4em;
+      border-radius: 2px;
+    }
+
+    .section-text pre {
+      background: #f5f5f5;
+      padding: 1rem 1.25rem;
+      overflow-x: auto;
+      margin: 1.5rem 0;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 14px;
+      line-height: 1.5;
+      border-radius: 2px;
+    }
+
+    .section-text pre code {
+      background: none;
+      padding: 0;
+    }
+
+    .section-text table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1.5rem 0;
+      font-size: 14px;
+    }
+
+    .section-text th,
+    .section-text td {
+      text-align: left;
+      padding: 0.5rem 0.75rem;
+      border-bottom: 1px solid #e0e0e0;
+    }
+
+    .section-text th {
+      font-weight: 500;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: #666;
+    }
+
+    .section-text blockquote {
+      border-left: 2px solid #e0e0e0;
+      padding-left: 1.25rem;
+      margin: 1.5rem 0;
+      color: #666;
+      font-style: italic;
+    }
+
+    .section-text a {
+      color: #666;
+    }
+
+    .section-text a:hover {
+      color: #1a1a1a;
+    }
+
+    /* TOC list styling */
+    .toc-list {
+      list-style: none;
+      padding-left: 0;
+    }
+
+    .toc-list li {
+      border-bottom: 1px solid #eee;
+    }
+
+    .toc-list li:last-child {
+      border-bottom: none;
+    }
+
+    .toc-list a {
+      display: block;
+      padding: 1rem 0;
+      color: #1a1a1a;
+    }
+
+    .toc-list li:first-child a {
+      padding-top: 0;
+    }
+
+    .toc-list a:hover {
+      background: #fafafa;
+      margin: 0 -1rem;
+      padding: 1rem;
+    }
+
+    .toc-list .title {
+      font-size: 16px;
+      font-weight: 500;
+      color: #1a1a1a;
+      margin-bottom: 0.25rem;
+    }
+
+    .toc-list .description {
+      font-size: 14px;
+      color: #666;
+      line-height: 1.5;
+    }
+
+    /* Book navigation */
+    .book-nav {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      gap: 1rem;
+      align-items: center;
+      padding: 2rem 0;
+      margin-top: 2rem;
+      border-top: 1px solid #e0e0e0;
+    }
+
+    .book-nav a {
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+      color: #666;
+    }
+
+    .book-nav a:hover {
+      color: #1a1a1a;
+    }
+
+    .book-nav .label {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: #888;
+    }
+
+    .book-nav .title {
+      font-size: 15px;
+      font-weight: 500;
+    }
+
+    .book-nav .prev {
+      text-align: left;
+    }
+
+    .book-nav .toc-center {
+      text-align: center;
+    }
+
+    .book-nav .toc-center a {
+      align-items: center;
+    }
+
+    .book-nav .next {
+      text-align: right;
+    }
+
+    /* Heading navigation arrows */
+    .nav-arrows {
+      position: fixed;
+      right: 1.5rem;
+      bottom: 2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+      z-index: 200;
+    }
+
+    .nav-arrow {
+      display: block;
+      font-size: 18px;
+      color: #ccc;
+      cursor: pointer;
+      line-height: 1;
+      user-select: none;
+      transition: color 0.15s;
+    }
+
+    .nav-arrow:hover { color: #1a1a1a; }
+
+    /* Footer */
+    footer {
+      padding: 2rem 1.5rem;
+      max-width: 1100px;
+      margin: 0 auto;
+      border-top: 1px solid #e0e0e0;
+    }
+
+    footer .meta {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 12px;
+      color: #888;
+    }
+
+    footer .meta a {
+      color: #888;
+    }
+
+    footer .meta a:hover {
+      color: #333;
+    }
+
+    /* Desktop */
+    @media (min-width: 800px) {
+      header {
+        padding: 1.5rem 3rem;
+      }
+
+      main {
+        padding: 4rem 3rem;
+      }
+
+      .page-header h1 {
+        font-size: 48px;
+      }
+
+      .section {
+        grid-template-columns: 180px 1fr;
+        gap: 3rem;
+        padding: 3rem 0;
+        align-items: baseline;
+      }
+
+      .section > h2 {
+        display: block;
+        font-size: 18px;
+        font-weight: 500;
+        color: #1a1a1a;
+        line-height: 1.75;
+      }
+
+      .section-text h2 {
+        display: none;
+        position: absolute;
+        visibility: hidden;
+      }
+
+      .book-nav .title {
+        font-size: 16px;
+      }
+
+      footer {
+        padding: 2rem 3rem;
+      }
+    }
+
+    /* Mobile */
+    @media (max-width: 600px) {
+      .breadcrumb {
+        display: none;
+      }
+
+      .book-nav {
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: auto auto;
+        align-items: start;
+      }
+
+      .book-nav .prev {
+        grid-column: 1;
+      }
+
+      .book-nav .next {
+        grid-column: 2;
+      }
+
+      .book-nav .toc-center {
+        grid-column: 1 / -1;
+        grid-row: 2;
+        margin-top: 1rem;
+        padding-top: 1rem;
+        border-top: 1px solid #eee;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="header-left">
+      <a href="../index.html" class="logo">οὐθείς</a>
+      
+    </div>
+    <nav>
+      <a href="../contents.html" style="font-weight: 500; color: #1a1a1a;">Contents</a>
+      <a href="https://github.com/outheis-labs/outheis-beta">GitHub <svg width="8" height="8" viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg" style="display:inline;vertical-align:middle;margin-left:3px;margin-bottom:1px"><path d="M1 9L9 1M9 1H3M9 1V7" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+      <span class="lang-switch"></span>
+    </nav>
+  </header>
+
+  <main>
+    <div class="page-header">
+      <h1>Kalender</h1>
+      <p class="subtitle">Die visuelle Terminansicht im outheis WebUI.</p>
+    </div>
+
+    <section class="section"><h2></h2><div class="section-text"><p>Der Kalender ist der <code>agenda</code>-Tab im WebUI. Er stellt deinen Zeitplan als interaktive Zeitleiste dar — zeitgebundene Termine als Blöcke, freischwebende Aufgaben als frei positionierbare Labels und einen kontinuierlichen farbigen Hintergrund, der das Gewicht des Geplanten widerspiegelt.</p>
+<p>Der Kalender liest aus und schreibt in <code>agenda.json</code>:</p>
+<pre><code>~/.outheis/human/webui/pages/agenda.json
+</code></pre>
+<p>Diese Datei wird von cato bei jedem Stundenlauf erzeugt und kann auch direkt vom Kalender gespeichert werden. Zum Datenformat siehe <a href="16-agenda-json.html">agenda.json Referenz</a>.</p></div></section>
+
+    <section class="section" id="eintragstypen">
+      <h2>Eintragstypen</h2>
+      <div class="section-text"><h2>Eintragstypen</h2>
+        <h3 id="fixe-termine">Fixe Termine</h3>
+<p>Ein fixer Termin belegt ein definiertes Zeitfenster auf der Zeitleiste. Er wird als Block dargestellt, der genau das Start-Ende-Intervall abdeckt.</p>
+<ul>
+<li>Horizontal ziehen zum Verschieben (innerhalb desselben Tags oder tagesübergreifend)</li>
+<li>Größe ändern über die linken und rechten Handles an den Blockrändern</li>
+<li>Doppelklick öffnet das Bearbeitungspopup</li>
+</ul>
+<p><strong>Mehrtägige Termine</strong> (ISO-Datetime-Format) erstrecken sich über mehrere Tagesstreifen mit einem verbundenen Balken. Der erste Streifen zeigt Titel und Daten; die Folgestreifen zeigen die Fortsetzung.</p>
+<h3 id="volatile-items">Volatile Items</h3>
+<p>Ein volatiles Item hat einen Tag, aber keine feste Uhrzeit. Es schwebt frei als Label innerhalb seines Tagesstreifens.</p>
+<ul>
+<li>In 2D ziehen: innerhalb eines Tags neu positionieren oder vertikal auf einen anderen Tag ziehen</li>
+<li>Doppelklick öffnet das Bearbeitungspopup</li>
+<li>Items mit einer <strong>Dauer</strong> (<code>#time-HH:MM</code>) werden als begrenztes Feld mit gestricheltem Rand dargestellt, proportional zur Dauer</li>
+</ul>
+<p>Volatile Items ohne gespeicherte Drag-Position werden automatisch auf drei Y-Bänder innerhalb des Tagesstreifens verteilt, mittels deterministischem Hash aus Titel + Tag — das Layout ist so über Neuladen hinweg stabil.</p>
+<h3 id="wiederkehrende-termine">Wiederkehrende Termine</h3>
+<p>Wiederkehrende Termine werden als einzelner Anker-Eintrag in <code>agenda.json</code> gespeichert, der einen <code>#recurring-*</code>-Tag trägt. Der Kalender erzeugt Anzeige-Instanzen für alle sichtbaren Tage, die dem Wiederholungsmuster entsprechen — diese werden nie als einzelne Items zurückgeschrieben.</p>
+<p>Unterstützte Wiederholungsmuster: siehe <a href="16-agenda-json.html#recurring">agenda.json Referenz</a>.</p>
+      </div>
+    </section>
+
+    <section class="section" id="visuelles-modell">
+      <h2>Visuelles Modell</h2>
+      <div class="section-text"><h2>Visuelles Modell</h2>
+        <h3 id="gravitationsfeld">Gravitationsfeld</h3>
+<p>Jeder Tagesstreifen hat einen kontinuierlichen farbigen Hintergrund, der aus einem Gravitationsfeld berechnet wird. Fixe Termine sind Segmentmassen; volatile Items sind Punktmassen. Ihre Felder überlagern und vermischen sich und erzeugen einen Farbverlauf, der das Gewicht und die Verteilung deines Zeitplans widerspiegelt.</p>
+<p>Wo keine Termine vorhanden sind, halten gleichmäßig verteilte Geistermassen einen neutralen Farbton aufrecht. Der Übergang zwischen farbig und neutral ist fließend — keine Schwellenwerte, keine harten Kanten.</p>
+<p>Vier Parameter steuern das Rendering (zugänglich über das <strong>Gradients</strong>-Panel):</p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Reglerbeschriftung</th>
+<th>Wirkung</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>peak_amp</code></td>
+<td>Intensity</td>
+<td>Farbintensität an Terminhöhepunkten</td>
+</tr>
+<tr>
+<td><code>decay</code></td>
+<td>Range</td>
+<td>Wie weit sich der Feldeinfluss seitlich ausdehnt</td>
+</tr>
+<tr>
+<td><code>ghost_pull</code></td>
+<td>Ghost pull</td>
+<td>Gewicht des neutralen Hintergrundfelds</td>
+</tr>
+<tr>
+<td><code>overlay_alpha</code></td>
+<td>Blocks</td>
+<td>Deckkraft der soliden Block-Füllung</td>
+</tr>
+</tbody>
+</table>
+<h3 id="facetten-und-farben">Facetten und Farben</h3>
+<p>Facetten repräsentieren Lebensbereiche oder Agenten-Domänen. Jede Facette hat eine CI-Farbe, die in <code>agenda.json</code> definiert ist. Die Legende am oberen Rand des Kalenders wird aus dem <code>facets</code>-Array aufgebaut; Klick auf eine Facette dämpft oder aktiviert sie.</p>
+<p>Der Kalender rendert nur im Light Mode. Kein Grau — die Palette verwendet die sechs outheis-Markenfarben.</p>
+      </div>
+    </section>
+
+    <section class="section" id="zeitachse">
+      <h2>Zeitachse</h2>
+      <div class="section-text"><h2>Zeitachse</h2>
+        <p>Die Zeitachse ist <strong>nichtlinear</strong>: Jeder Tag ist in sechs 4-Stunden-Segmente unterteilt, jeweils mit einem eigenen visuellen Gewicht. Ein höheres Gewicht gibt diesem Zeitbereich mehr Bildschirmplatz — mehr Pixel pro Stunde — und macht Termine leichter lesbar.</p>
+<pre><code class="language-json">&quot;time_axis&quot;: [
+  { &quot;from&quot;: &quot;05:00&quot;, &quot;to&quot;: &quot;09:00&quot;, &quot;weight&quot;: 0.5 },
+  { &quot;from&quot;: &quot;09:00&quot;, &quot;to&quot;: &quot;13:00&quot;, &quot;weight&quot;: 2.2 },
+  { &quot;from&quot;: &quot;13:00&quot;, &quot;to&quot;: &quot;17:00&quot;, &quot;weight&quot;: 1.8 },
+  { &quot;from&quot;: &quot;17:00&quot;, &quot;to&quot;: &quot;21:00&quot;, &quot;weight&quot;: 1.0 },
+  { &quot;from&quot;: &quot;21:00&quot;, &quot;to&quot;: &quot;01:00&quot;, &quot;weight&quot;: 0.5 },
+  { &quot;from&quot;: &quot;01:00&quot;, &quot;to&quot;: &quot;05:00&quot;, &quot;weight&quot;: 0.3 }
+]
+</code></pre>
+<p>Fehlt <code>time_axis</code>, fällt der Kalender auf eine lineare 24-Stunden-Verteilung zurück.</p>
+<p>Der <strong>Tagesstart</strong> (<code>day_start</code>) definiert die erste sichtbare Stunde. Standard: 5 (05:00). Alle Segmentgrenzen verschieben sich automatisch, wenn sich der Tagesstart ändert.</p>
+<h3 id="spread-panel">Spread-Panel</h3>
+<p>Klicke <strong>Spread</strong> in der oberen Leiste, um das Zeitachsen-Konfigurationspanel zu öffnen:</p>
+<ul>
+<li><strong>Tag ab</strong> — setzt <code>day_start</code> (nur ganze Stunden); alle Segmentgrenzen werden automatisch aktualisiert</li>
+<li><strong>Sechs Segment-Zeilen</strong> — jede zeigt ihren <code>von–bis</code>-Bereich und einen Gewichts-Regler (0,1–5,0)</li>
+</ul>
+<p>Änderungen gelten sofort für das sichtbare Layout und werden beim nächsten Speichern gespeichert.</p>
+      </div>
+    </section>
+
+    <section class="section" id="interaktion">
+      <h2>Interaktion</h2>
+      <div class="section-text"><h2>Interaktion</h2>
+        <h3 id="obere-leiste">Obere Leiste</h3>
+<table>
+<thead>
+<tr>
+<th>Steuerelement</th>
+<th>Funktion</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>↻</td>
+<td><code>agenda.json</code> vom Disk neu laden</td>
+</tr>
+<tr>
+<td>7 / 14 / 30</td>
+<td>Sichtbaren Tagesbereich einstellen</td>
+</tr>
+<tr>
+<td>Add item</td>
+<td>Erstell-Popup öffnen</td>
+</tr>
+<tr>
+<td>Save</td>
+<td>Aktuellen Stand in <code>agenda.json</code> schreiben</td>
+</tr>
+<tr>
+<td>Colors</td>
+<td>Facetten-Farbzuweisungen wechseln (CI-Palette-Permutationen)</td>
+</tr>
+<tr>
+<td>Gradients</td>
+<td>Gravitationsfeld-Parameter-Panel öffnen</td>
+</tr>
+<tr>
+<td>Spread</td>
+<td>Zeitachsen-Konfigurationspanel öffnen</td>
+</tr>
+</tbody>
+</table>
+<h3 id="ziehen-und-groe-andern-fixe-termine">Ziehen und Größe ändern (fixe Termine)</h3>
+<ul>
+<li><strong>Ziehen</strong>: Klicken und halten auf dem Block, links/rechts ziehen. Tagesübergreifende Drops werden unterstützt — der Block wechselt in den Ziel-Tagesstreifen.</li>
+<li><strong>Größe ändern</strong>: Den linken oder rechten Handle greifen (erscheint beim Hover oder wenn der Block entsperrt ist). Der Blockrand folgt dem Cursor; das Zeitlabel wird live aktualisiert.</li>
+<li><strong>× Schaltfläche</strong>: Termin zu volatil degradieren (erscheint beim Hover). Erfordert Bestätigung.</li>
+</ul>
+<h3 id="ziehen-volatile-items">Ziehen (volatile Items)</h3>
+<p>Klicken und halten auf einem volatilen Label, an eine beliebige Position im aktuellen Tagesstreifen oder in einen anderen Tagesstreifen ziehen. Die Position wird beim nächsten Speichern in <code>agenda.json</code> gespeichert.</p>
+<h3 id="volatil-fix-befordern">Volatil → fix befördern</h3>
+<p>Bearbeitungspopup öffnen (Doppelklick) und Start-/Endzeiten eintragen. Das Item wird zu einem fixen Termin befördert.</p>
+      </div>
+    </section>
+
+    <section class="section" id="bearbeitungspopup">
+      <h2>Bearbeitungspopup</h2>
+      <div class="section-text"><h2>Bearbeitungspopup</h2>
+        <p>Doppelklick auf ein beliebiges Item öffnet das Bearbeitungspopup.</p>
+<table>
+<thead>
+<tr>
+<th>Feld</th>
+<th>Beschreibung</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Title</td>
+<td>3-zeiliges Textarea — unterstützt mehrzeilige Titel</td>
+</tr>
+<tr>
+<td>Start / End</td>
+<td>Zeiteingaben (HH:MM)</td>
+</tr>
+<tr>
+<td>Date / End date</td>
+<td>Datumseingaben; zwei Daten erzeugen einen mehrtägigen Termin</td>
+</tr>
+<tr>
+<td>× (Zeit)</td>
+<td>Zeitfelder leeren (befördert zu volatil)</td>
+</tr>
+<tr>
+<td>× (Enddatum)</td>
+<td>Enddatum leeren</td>
+</tr>
+<tr>
+<td>Facet</td>
+<td>Aus verfügbaren Facetten auswählen</td>
+</tr>
+<tr>
+<td>Size</td>
+<td>S / M / L — visuelles Gewicht für volatile Items</td>
+</tr>
+<tr>
+<td>Tags</td>
+<td>Rohe Tag-Eingabe — strukturelle Tags werden beim Speichern neu aufgebaut</td>
+</tr>
+<tr>
+<td>follows</td>
+<td>Kommagetrennte Titel von Items, auf die dieses Item wartet</td>
+</tr>
+<tr>
+<td>precedes</td>
+<td>Kommagetrennte Titel von Items, die dieses Item blockiert</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Schaltflächen:</strong></p>
+<ul>
+<li><strong>Save</strong> — Änderungen übernehmen, automatisch speichern</li>
+<li><strong>Done ✓</strong> — zeigt ein optionales Kommentarfeld; Bestätigung markiert das Item als erledigt mit dem heutigen Datum und speichert</li>
+<li><strong>Cancel</strong> — Änderungen verwerfen</li>
+<li><strong>Delete</strong> — Item nach Bestätigung entfernen</li>
+</ul>
+      </div>
+    </section>
+
+    <section class="section" id="item-hinzufugen">
+      <h2>Item hinzufügen</h2>
+      <div class="section-text"><h2>Item hinzufügen</h2>
+        <p>Klicke <strong>Add item</strong> in der oberen Leiste. Felder: Title, Start, End, Date, End date, Facet, Size, Tags. Das Item wird sofort hinzugefügt und gespeichert.</p>
+      </div>
+    </section>
+
+    <section class="section" id="abhangigkeiten">
+      <h2>Abhängigkeiten</h2>
+      <div class="section-text"><h2>Abhängigkeiten</h2>
+        <p>Items können Reihenfolgebeziehungen zu anderen Items deklarieren.</p>
+<table>
+<thead>
+<tr>
+<th>Feld</th>
+<th>Richtung</th>
+<th>Bedeutung</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>follows</code></td>
+<td>dieses Item → Vorgänger</td>
+<td>„Ich warte darauf, dass diese Items abgeschlossen sind, bevor ich beginne"</td>
+</tr>
+<tr>
+<td><code>precedes</code></td>
+<td>dieses Item → Nachfolger</td>
+<td>„Ich blockiere diese Items — sie können erst beginnen, wenn ich fertig bin"</td>
+</tr>
+<tr>
+<td><code>relates</code></td>
+<td>assoziativ</td>
+<td>„Ich bin mit diesen Items verbunden" — kein Ordering</td>
+</tr>
+</tbody>
+</table>
+<p>Beide Felder <code>follows</code> und <code>precedes</code> sind eigenständige Primitive, die dieselbe Beziehung aus entgegengesetzten Perspektiven ausdrücken. Verwende dasjenige, das zur Planungsrichtung passt: gehe zum blockierten Item und trage <code>follows</code> ein, oder gehe zum blockierenden Item und trage <code>precedes</code> ein.</p>
+<h3 id="effectiveday">effectiveDay</h3>
+<p>Wenn ein Vorgänger noch nicht erledigt ist, schiebt der Kalender das abhängige Item automatisch auf einen späteren Anzeige-Tag:</p>
+<pre><code>effectiveDay(item) = max(effectiveDay(Vorgänger) + 1, item.day)
+</code></pre>
+<p>Dies wird rekursiv mit Zyklenerkennung berechnet. Erledigte Vorgänger (<code>done</code>-Feld gesetzt) blockieren nicht mehr.</p>
+<p><strong>Zurückgestellte Items</strong> — über ihren geplanten Tag hinausgeschoben — zeigen einen türkisen linken Rand (fixe Termine) oder eine gepunktete Unterstreichung (volatile Items). Der in <code>agenda.json</code> gespeicherte geplante Tag wird nicht verändert; die Verschiebung wird zur Renderzeit berechnet.</p>
+<p>Abhängigkeit setzen: Bearbeitungspopup öffnen → genauen Titel des Ziel-Items in <code>follows</code> oder <code>precedes</code> eingeben → Speichern. Mehrere Items werden durch Komma getrennt.</p>
+      </div>
+    </section>
+
+    <section class="section" id="speichern-und-synchronisierung">
+      <h2>Speichern und Synchronisierung</h2>
+      <div class="section-text"><h2>Speichern und Synchronisierung</h2>
+        <table>
+<thead>
+<tr>
+<th>Auslöser</th>
+<th>Verhalten</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Save-Schaltfläche</td>
+<td>Schreibt den aktuellen Stand sofort in <code>agenda.json</code></td>
+</tr>
+<tr>
+<td>Auto-Save</td>
+<td>Speichert automatisch alle 60 Sekunden bei ungespeicherten Änderungen</td>
+</tr>
+<tr>
+<td>Tab versteckt</td>
+<td>Speichert, wenn der Browser-Tab den Fokus verliert</td>
+</tr>
+<tr>
+<td>Server-Merge</td>
+<td>Beim Speichern werden Server-Items, die nicht in der aktuellen Ansicht sind, erhalten</td>
+</tr>
+</tbody>
+</table>
+<p>Die Save-Schaltfläche zeigt <strong>✓</strong>, wenn der aktuelle Stand mit dem Disk-Stand übereinstimmt. Jede Bearbeitung setzt sie auf <strong>Save</strong> zurück.</p>
+<p>Server-seitige Items (von cato oder über die CLI zwischen Seitenladevorgängen hinzugefügt) werden beim Speichern zurückgelesen und in die Ausgabe gemischt — sie werden nicht überschrieben. Wiederkehrende Items werden über ihren <code>#recurring-*</code>-Tag identifiziert und als einzelne Anker-Items erhalten.</p>
+      </div>
+    </section>
+
+    <section class="section" id="bereich">
+      <h2>Bereich</h2>
+      <div class="section-text"><h2>Bereich</h2>
+        <p>Die Schaltflächen <strong>7 / 14 / 30</strong> in der oberen Leiste setzen den sichtbaren Tagesbereich. Heute ist immer die erste Zeile. Der gewählte Bereich wird in <code>agenda.json</code> gespeichert und beim nächsten Laden wiederhergestellt.</p>
+      </div>
+    </section>
+
+    <nav class="book-nav">
+      <div class="prev"></div>
+      <div class="toc-center"><a href="../contents.html#">
+          <span class="label">Inhalt</span>
+          <span class="title"></span>
+        </a></div>
+      <div class="next"></div>
+    </nav>
+  </main>
+
+  <div class="nav-arrows">
+    <span class="nav-arrow" id="nav-up">↑</span>
+    <span class="nav-arrow" id="nav-down">↓</span>
+  </div>
+
+  <footer>
+    <div class="meta">
+      open source · AGPL-3.0 · <a href="https://github.com/outheis-labs">github.com/outheis-labs</a>
+    </div>
+  </footer>
+
+  <script>
+    (function () {
+      const GAP = 8;
+      function headerH() { var h = document.querySelector('header'); return h ? h.offsetHeight : 60; }
+      function docTop(el) { var t = 0, n = el; while (n) { t += n.offsetTop; n = n.offsetParent; } return t; }
+      function hs() { return Array.from(document.querySelectorAll('h2')).filter(function(h) { return h.offsetHeight > 0; }); }
+
+      function makeHandler(el, single, dbl) {
+        var clicks = 0, timer;
+        el.addEventListener('click', function () {
+          clicks++;
+          clearTimeout(timer);
+          timer = setTimeout(function () { (clicks >= 2 ? dbl : single)(); clicks = 0; }, 250);
+        });
+      }
+
+      makeHandler(document.getElementById('nav-up'),
+        function () {
+          var off = headerH() + GAP, y = Math.round(window.scrollY);
+          var prev = hs().filter(function(h) { return docTop(h) < y + off - 2; }).pop();
+          window.scrollTo({ top: prev ? docTop(prev) - off : 0, behavior: 'smooth' });
+        },
+        function () { window.scrollTo({ top: 0, behavior: 'smooth' }); }
+      );
+
+      makeHandler(document.getElementById('nav-down'),
+        function () {
+          var off = headerH() + GAP, y = Math.round(window.scrollY);
+          var next = hs().find(function(h) { return docTop(h) > y + off + 2; });
+          window.scrollTo({ top: next ? docTop(next) - off : document.body.scrollHeight, behavior: 'smooth' });
+        },
+        function () { window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' }); }
+      );
+    })();
+  </script>
+</body>
+</html>

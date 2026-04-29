@@ -754,8 +754,7 @@ You have read access to the vault and human/insights. You own the Agenda/ direct
 
 Tasks:
 
-- Maintain Daily.md with today's priorities
-- Process Inbox.md entries
+- Maintain Agenda.md with today's priorities
 - Manage async communication via Exchange.md
 - Filter incoming information by relevance to user
 - Learn what matters to the user over time
@@ -1440,9 +1439,9 @@ context = load_agenda_context()  # daily + inbox + exchange + shadow
 <h3 id="a3-priority-conflict-via-agenda">A.3 Priority Conflict (via Agenda)</h3>
 <p>Calendar: Meeting at 10:00
 Task: Deadline at 10:00</p>
-<p>Agenda detects conflict → writes to Daily.md → Relay notifies user (if channel active)</p>
+<p>Agenda detects conflict → writes to Agenda.md → Relay notifies user (if channel active)</p>
 <h3 id="a4-pattern-discovery-scheduled">A.4 Pattern Discovery (scheduled)</h3>
-<p>Pattern agent runs at 04:00 → scans recent activity → notices repeated tag "someday" → writes insight: "User has 47 'someday' items, oldest from 2023. Consider review." → Agenda picks up → adds to next Daily.md</p>
+<p>Pattern agent runs at 04:00 → scans recent activity → notices repeated tag "someday" → writes insight: "User has 47 'someday' items, oldest from 2023. Consider review." → Agenda picks up → adds to Agenda.md</p>
 <p><em>This document is part of the outheis specification and subject to change.</em></p>
       </div>
     </section>

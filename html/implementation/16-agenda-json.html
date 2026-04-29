@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>agenda.json — Syntax Reference v0.1 · outheis</title>
+  <title>agenda.json — Syntax Reference v0.2 · outheis</title>
   <link rel="icon" type="image/png" href="../favicon-96x96.png" sizes="96x96">
   <link rel="icon" type="image/svg+xml" href="../favicon.svg">
   <link rel="shortcut icon" href="../favicon.ico">
@@ -543,7 +543,7 @@
 
   <main>
     <div class="page-header">
-      <h1>agenda.json — Syntax Reference v0.1</h1>
+      <h1>agenda.json — Syntax Reference v0.2</h1>
       
     </div>
 
@@ -602,6 +602,15 @@ The legend is built solely from this array.</p>
       <div class="section-text"><h2>view</h2>
         <pre><code class="language-json">&quot;view&quot;: {
   &quot;range&quot;: 7,
+  &quot;day_start&quot;: 5,
+  &quot;time_axis&quot;: [
+    { &quot;from&quot;: &quot;05:00&quot;, &quot;to&quot;: &quot;09:00&quot;, &quot;weight&quot;: 0.5 },
+    { &quot;from&quot;: &quot;09:00&quot;, &quot;to&quot;: &quot;13:00&quot;, &quot;weight&quot;: 2.2 },
+    { &quot;from&quot;: &quot;13:00&quot;, &quot;to&quot;: &quot;17:00&quot;, &quot;weight&quot;: 1.8 },
+    { &quot;from&quot;: &quot;17:00&quot;, &quot;to&quot;: &quot;21:00&quot;, &quot;weight&quot;: 1.0 },
+    { &quot;from&quot;: &quot;21:00&quot;, &quot;to&quot;: &quot;01:00&quot;, &quot;weight&quot;: 0.5 },
+    { &quot;from&quot;: &quot;01:00&quot;, &quot;to&quot;: &quot;05:00&quot;, &quot;weight&quot;: 0.3 }
+  ],
   &quot;params&quot;: {
     &quot;peak_amp&quot;:      0.9,
     &quot;decay&quot;:         10.0,
@@ -611,8 +620,15 @@ The legend is built solely from this array.</p>
 }
 </code></pre>
 <p><code>range</code> = visible days (7 / 14 / 30).
-<code>params</code> control the gravitational field rendering and are applied to the UI
-sliders on load.</p>
+<code>day_start</code> = first hour of the timeline (integer, 0–23). Default: 5.
+<code>time_axis</code> = non-linear time axis: 6 segments of 4 hours each, covering exactly 24 hours starting at <code>day_start</code>. <code>weight</code> controls relative screen width — higher weight means more visual resolution for that time range. Segments without <code>time_axis</code> fall back to linear 24-hour distribution.
+<code>params</code> control the gravitational field rendering and are applied to the UI sliders on load.</p>
+<h3 id="spread-panel-ui">Spread panel (UI)</h3>
+<p>The <strong>Spread</strong> button in the top bar opens a configuration panel for <code>day_start</code> and <code>time_axis</code>. Changes take effect immediately and are persisted on the next Save.</p>
+<ul>
+<li><strong>Tag ab</strong> — time input (whole hours only) that sets <code>day_start</code>; updates all segment boundaries automatically</li>
+<li><strong>Six segment rows</strong> — each shows its <code>from–to</code> range (computed from <code>day_start</code> in 4-hour steps) and a weight slider (0.1–5.0)</li>
+</ul>
       </div>
     </section>
 
@@ -659,6 +675,57 @@ Rendered as a connected bar spanning all affected rows.</p>
   &quot;source&quot;: &quot;cato&quot;
 }
 </code></pre>
+<h3 id="recurring-repeating-event">recurring — repeating event</h3>
+<p>Recurring events are stored as <strong>a single anchor item</strong> with a <code>#recurring-*</code> tag. The frontend generates display instances for all matching days in the visible range, but never writes them back as individual items into <code>agenda.json</code>.</p>
+<pre><code class="language-json">{
+  &quot;id&quot;:    &quot;7430000000000010&quot;,
+  &quot;type&quot;:  &quot;fixed&quot;,
+  &quot;facet&quot;: &quot;cato&quot;,
+  &quot;title&quot;: &quot;Daily Standup&quot;,
+  &quot;day&quot;:   0,
+  &quot;start&quot;: &quot;09:00&quot;,
+  &quot;end&quot;:   &quot;09:30&quot;,
+  &quot;tags&quot;:  [&quot;#date-2026-04-24&quot;, &quot;#time-09:00-09:30&quot;, &quot;#facet-cato&quot;, &quot;#recurring-daily&quot;]
+}
+</code></pre>
+<p>Supported <code>#recurring-*</code> tags:</p>
+<table>
+<thead>
+<tr>
+<th>Tag</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>#recurring-daily</code></td>
+<td>Every day</td>
+</tr>
+<tr>
+<td><code>#recurring-weekly</code></td>
+<td>Same weekday as anchor</td>
+</tr>
+<tr>
+<td><code>#recurring-monthly</code></td>
+<td>Same day of month as anchor</td>
+</tr>
+<tr>
+<td><code>#recurring-yearly</code></td>
+<td>Same month + day as anchor</td>
+</tr>
+<tr>
+<td><code>#recurring-mon</code>, <code>#recurring-mon-wed-fri</code></td>
+<td>Specific weekdays</td>
+</tr>
+<tr>
+<td><code>#recurring-monthly-1-15</code></td>
+<td>Specific days of month</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>Important:</strong> cato must not write individual instances of recurring events into <code>agenda.json</code>. Only the anchor item (with <code>#recurring-*</code> tag) belongs in <code>items</code>.</p>
+</blockquote>
       </div>
     </section>
 
@@ -774,6 +841,48 @@ Rendered as a connected bar spanning all affected rows.</p>
 <td>–</td>
 <td>Set when item is completed; triggers retention countdown</td>
 </tr>
+<tr>
+<td><code>follows</code></td>
+<td>string[]</td>
+<td>✓</td>
+<td>✓</td>
+<td>IDs of items this item waits for (predecessor IDs)</td>
+</tr>
+<tr>
+<td><code>precedes</code></td>
+<td>string[]</td>
+<td>✓</td>
+<td>✓</td>
+<td>IDs of items this item blocks (successor IDs)</td>
+</tr>
+<tr>
+<td><code>relates</code></td>
+<td>string[]</td>
+<td>✓</td>
+<td>✓</td>
+<td>IDs of associated items — no ordering implied</td>
+</tr>
+<tr>
+<td><code>unrelated</code></td>
+<td>string[]</td>
+<td>✓</td>
+<td>✓</td>
+<td>IDs of explicitly unlinked items (tombstones)</td>
+</tr>
+<tr>
+<td><code>deleted</code></td>
+<td>boolean</td>
+<td>✓</td>
+<td>✓</td>
+<td>Soft-delete marker; item hidden from views</td>
+</tr>
+<tr>
+<td><code>deleted_at</code></td>
+<td>string (<code>YYYY-MM-DD</code>)</td>
+<td>✓</td>
+<td>✓</td>
+<td>Date when item was soft-deleted</td>
+</tr>
 </tbody>
 </table>
       </div>
@@ -821,14 +930,14 @@ Rendered as a connected bar spanning all affected rows.</p>
       </div>
     </section>
 
-    <section class="section" id="mapping-from-shadow-tag-format">
-      <h2>Mapping from Shadow tag format</h2>
-      <div class="section-text"><h2>Mapping from Shadow tag format</h2>
-        <p>Items map directly from the two-line tag format used in Shadow.md:</p>
+    <section class="section" id="tag-format">
+      <h2>Tag Format</h2>
+      <div class="section-text"><h2>Tag Format</h2>
+        <p>Items use a two-line tag format for LLM context and interchange:</p>
 <table>
 <thead>
 <tr>
-<th>Shadow tag line</th>
+<th>Tag line</th>
 <th>agenda.json</th>
 <th>Calendar</th>
 </tr>
@@ -869,6 +978,148 @@ Rendered as a connected bar spanning all affected rows.</p>
 <blockquote>
 <p><strong><code>#time-</code> forms:</strong> <code>#time-HH:MM-HH:MM</code> = start/end → <code>fixed</code>; <code>#time-HH:MM</code> (single time) = duration → <code>volatile</code> with <code>duration</code> field.</p>
 </blockquote>
+      </div>
+    </section>
+
+    <section class="section" id="dependencies">
+      <h2>Dependencies</h2>
+      <div class="section-text"><h2>Dependencies</h2>
+        <p>Items can declare ordering relationships with other items. All three fields hold arrays of Snowflake IDs.</p>
+<pre><code class="language-json">{
+  &quot;id&quot;:       &quot;7430000000000020&quot;,
+  &quot;type&quot;:     &quot;volatile&quot;,
+  &quot;title&quot;:    &quot;Project Start&quot;,
+  &quot;day&quot;:      5,
+  &quot;follows&quot;:  [&quot;7430000000000018&quot;, &quot;7430000000000019&quot;],
+  &quot;precedes&quot;: [],
+  &quot;relates&quot;:  [&quot;7430000000000010&quot;]
+}
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Direction</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>follows</code></td>
+<td>this item ← predecessors</td>
+<td>This item waits for the listed items to be done</td>
+</tr>
+<tr>
+<td><code>precedes</code></td>
+<td>this item → successors</td>
+<td>This item blocks the listed items</td>
+</tr>
+<tr>
+<td><code>relates</code></td>
+<td>associative</td>
+<td>Associated items — no ordering implied</td>
+</tr>
+</tbody>
+</table>
+<p><code>follows</code> and <code>precedes</code> are independent primitives that express the same relationship from opposite perspectives. Either can be set without the other. The calendar resolves both when computing <code>effectiveDay</code>.</p>
+<p><strong>effectiveDay</strong> — the calendar pushes items forward when their predecessors are incomplete:</p>
+<pre><code>effectiveDay(item) = max(effectiveDay(predecessor) + 1, item.day)
+</code></pre>
+<p>Computed recursively with cycle detection. A predecessor with <code>done</code> set does not block. The computed day is never written back to <code>agenda.json</code>; <code>day</code> always holds the intended/planned day.</p>
+      </div>
+    </section>
+
+    <section class="section" id="relation-lifecycle">
+      <h2>Relation Lifecycle</h2>
+      <div class="section-text"><h2>Relation Lifecycle</h2>
+        <p>Bidirectional relations (<code>follows</code>/<code>precedes</code>, <code>relates</code>) are synchronized automatically:</p>
+<ul>
+<li><strong>Linking A → B:</strong> Both sides are updated. <code>A.follows.push(B.id)</code> triggers <code>B.precedes.push(A.id)</code>.</li>
+<li><strong>Unlinking A → B:</strong> Both sides are removed, and a <strong>tombstone</strong> is recorded to prevent auto-relinking.</li>
+</ul>
+<h3 id="tombstones-unrelated">Tombstones (<code>unrelated</code>)</h3>
+<p>When a relation is explicitly removed, the ID is added to <code>unrelated</code> on both items:</p>
+<pre><code class="language-json">{
+  &quot;id&quot;: &quot;item-a&quot;,
+  &quot;relates&quot;: [&quot;item-c&quot;],
+  &quot;unrelated&quot;: [&quot;item-b&quot;]
+}
+</code></pre>
+<p>This prevents the bidirectional sync from recreating the link. Tombstones are cleared when:
+- The relation is explicitly re-added
+- Either item is permanently deleted</p>
+<h3 id="soft-delete">Soft Delete</h3>
+<p>Items can be soft-deleted instead of removed entirely:</p>
+<pre><code class="language-json">{
+  &quot;id&quot;: &quot;item-a&quot;,
+  &quot;deleted&quot;: true,
+  &quot;deleted_at&quot;: &quot;2026-04-30&quot;,
+  &quot;relates&quot;: null,
+  &quot;unrelated&quot;: [&quot;item-b&quot;, &quot;item-c&quot;]
+}
+</code></pre>
+<p>Soft-deleted items:
+- Are hidden from all views (calendar, flow)
+- Are excluded from LLM context (<code>items_to_tag_text</code>)
+- Retain their relations in storage (for potential undelete)
+- Add their ID to <code>unrelated</code> on all related items</p>
+<h3 id="undelete">Undelete</h3>
+<p>Calling <code>unDeleteItem(id)</code>:
+- Sets <code>deleted: false</code>, clears <code>deleted_at</code>
+- Removes the item's ID from all <code>unrelated</code> arrays
+- Relations must be re-established manually</p>
+<h3 id="permanent-delete">Permanent Delete</h3>
+<p><code>permanentlyDeleteItem(id)</code> removes the item completely:
+- Removes from <code>items</code> array
+- Cleans up all references in <code>follows</code>, <code>precedes</code>, <code>relates</code>, <code>unrelated</code></p>
+      </div>
+    </section>
+
+    <section class="section" id="field-reference-extended">
+      <h2>Field Reference (Extended)</h2>
+      <div class="section-text"><h2>Field Reference (Extended)</h2>
+        <table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Behavior</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>unrelated</code></td>
+<td>Array of IDs that were explicitly unlinked. Prevents auto-relinking during sync. Cleared on re-link.</td>
+</tr>
+<tr>
+<td><code>deleted</code></td>
+<td>When <code>true</code>, item is hidden from views but retained in <code>items</code>.</td>
+</tr>
+<tr>
+<td><code>deleted_at</code></td>
+<td>ISO date string set when <code>deleted</code> becomes <code>true</code>. Used for retention/cleanup.</td>
+</tr>
+</tbody>
+</table>
+      </div>
+    </section>
+
+    <section class="section" id="javascript-api">
+      <h2>JavaScript API</h2>
+      <div class="section-text"><h2>JavaScript API</h2>
+        <p>The WebUI provides these functions for relation management:</p>
+<pre><code class="language-javascript">// Bidirectional sync with tombstone support
+syncRelations(itemId, oldFollows, oldPrecedes, oldRelates, newFollows, newPrecedes, newRelates)
+
+// Soft delete - hides item, preserves relations
+softDeleteItem(itemId)
+
+// Restore soft-deleted item
+unDeleteItem(itemId)
+
+// Permanent removal - cleans all references
+permanentlyDeleteItem(itemId)
+</code></pre>
+<p>For calendar rendering details see <a href="17-calendar.html">Calendar</a>.</p>
       </div>
     </section>
 

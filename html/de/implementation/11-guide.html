@@ -670,11 +670,10 @@ outheis stop         # Stop daemon
         <p>Dein Vault ist dein primärer Wissensspeicher. outheis liest daraus, schreibt darin (über cato und die Web-Oberfläche) und lernt im Laufe der Zeit daraus. Die Struktur ist flexibel — beliebige Markdown-Dateien funktionieren. Das empfohlene Agenda-Layout:</p>
 <pre><code>vault/
 └── Agenda/
-    ├── Daily.md      # Today's schedule — written by cato
-    ├── Inbox.md      # Your quick capture — processed hourly
-    └── Exchange.md   # Async back-and-forth with cato
+    ├── Agenda.md     # Heutiger Zeitplan — von cato geschrieben
+    └── Exchange.md   # Asynchroner Austausch mit cato
 </code></pre>
-<p>Erstelle das <code>Agenda/</code>-Verzeichnis und leere Dateien. cato generiert <code>Daily.md</code> beim ersten Lauf.</p>
+<p>Erstelle das <code>Agenda/</code>-Verzeichnis und leere Dateien. cato generiert <code>Agenda.md</code> beim ersten Lauf.</p>
       </div>
     </section>
 
@@ -781,9 +780,8 @@ Status update...
 <h3 id="empfohlene-struktur">Empfohlene Struktur</h3>
 <pre><code>vault/
 ├── Agenda/
-│   ├── Daily.md      # Today's schedule
-│   ├── Inbox.md      # Unprocessed items
-│   └── Exchange.md   # External sync
+│   ├── Agenda.md     # Heutiger Zeitplan
+│   └── Exchange.md   # Externe Synchronisation
 ├── projects/
 ├── notes/
 └── references/

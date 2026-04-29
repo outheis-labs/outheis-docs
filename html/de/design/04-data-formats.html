@@ -605,8 +605,7 @@
     ├── tag-weights.jsonl        # Learned tag importance
     ├── cache/                   # Cached data
     │   └── agenda/              # Previous versions for diff
-    │       ├── Daily.md.prev
-    │       ├── Inbox.md.prev
+    │       ├── Agenda.md.prev
     │       └── Exchange.md.prev
     ├── imports/                 # Imported external data
     │   ├── calendar/
@@ -621,8 +620,7 @@
 <p>Vaults können sich überall im Dateisystem befinden. Mehrere Vaults werden unterstützt.</p>
 <pre><code>~/Documents/MyVault/             # Example: user's primary vault
 ├── Agenda/                      # Special directory (required in primary vault)
-│   ├── Daily.md
-│   ├── Inbox.md
+│   ├── Agenda.md
 │   └── Exchange.md
 ├── notes/
 │   └── project-alpha.md
@@ -1759,11 +1757,10 @@ outheis migrate --apply --quiet
         <p>Der primäre vault enthält ein spezielles <code>Agenda/</code>-Verzeichnis — strukturierte Schnittstelle zwischen Benutzer und System.</p>
 <h3 id="struktur_1">Struktur</h3>
 <pre><code>vault/Agenda/
-├── Daily.md
-├── Inbox.md
+├── Agenda.md
 └── Exchange.md
 </code></pre>
-<p>Drei Dateien, keine Unterverzeichnisse.</p>
+<p>Zwei Dateien, keine Unterverzeichnisse.</p>
 <h3 id="zweck">Zweck</h3>
 <table>
 <thead>
@@ -1775,14 +1772,9 @@ outheis migrate --apply --quiet
 </thead>
 <tbody>
 <tr>
-<td><code>Daily.md</code></td>
+<td><code>Agenda.md</code></td>
 <td>Bidirektional</td>
 <td>Heute: Termine, Aufgaben, Notizen</td>
-</tr>
-<tr>
-<td><code>Inbox.md</code></td>
-<td>Benutzer → System</td>
-<td>Schnelleingabe, unstrukturierte Gedanken</td>
 </tr>
 <tr>
 <td><code>Exchange.md</code></td>
@@ -1791,7 +1783,7 @@ outheis migrate --apply --quiet
 </tr>
 </tbody>
 </table>
-<h3 id="dailymd">Daily.md</h3>
+<h3 id="agendamd">Agenda.md</h3>
 <p>Der aktuelle Tag. Agenda-Agent pflegt die Struktur, Benutzer fügt Inhalte hinzu.</p>
 <pre><code class="language-markdown"># 2025-03-27
 
@@ -1807,15 +1799,6 @@ outheis migrate --apply --quiet
 ## Notes
 
 </code></pre>
-<h3 id="inboxmd">Inbox.md</h3>
-<p>Schnellerfassung. Benutzer schreibt, System verarbeitet.</p>
-<pre><code class="language-markdown">meeting with X next week, important
-
-remember to call Y about the contract
-
-#idea redesign the onboarding flow
-</code></pre>
-<p>Der Agenda-Agent liest, klassifiziert und leitet an passende agents weiter.</p>
 <h3 id="exchangemd">Exchange.md</h3>
 <p>Asynchroner Dialog. System fragt, Benutzer antwortet wenn es passt. Kein Druck.</p>
 <pre><code class="language-markdown"># Open
@@ -1871,8 +1854,7 @@ Learned: #in-progress → #wip
 <p>Das ermöglicht dem Agenda-Agenten zu verstehen, <em>was</em> sich geändert hat — nicht nur <em>dass</em> sich etwas geändert hat.</p>
 <h3 id="cache-ort">Cache-Ort</h3>
 <pre><code>~/.outheis/human/cache/agenda/
-├── Daily.md.prev
-├── Inbox.md.prev
+├── Agenda.md.prev
 └── Exchange.md.prev
 </code></pre>
 <p>Vorherige Versionen werden im Systemverzeichnis gecacht, um Diffs zu berechnen.</p>

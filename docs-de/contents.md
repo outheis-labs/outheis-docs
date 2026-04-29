@@ -44,6 +44,8 @@
 <li><a href="implementation/13-webui.html"><div class="title">Web UI</div><div class="description">Lokale Verwaltungsoberfläche für outheis.</div></a></li>
 <li><a href="implementation/14-data-safety.html"><div class="title">Datensicherheit</div><div class="description">Wie outheis sich gegen Prompt-Injection und unvertrauenswürdige Inhalte schützt.</div></a></li>
 <li><a href="implementation/15-models.html"><div class="title">Modell-Evaluation</div><div class="description">Fähigkeits-Benchmarks für lokale und Cloud-Modelle in outheis-Agenten.</div></a></li>
+<li><a href="implementation/16-agenda-json.html"><div class="title">agenda.json — Syntax-Referenz v0.2</div><div class="description">Die Kalenderansicht im WebUI wird durch `agenda.json` gesteuert, die strukturierte</div></a></li>
+<li><a href="implementation/17-calendar.html"><div class="title">Kalender</div><div class="description">Die visuelle Terminansicht im outheis WebUI.</div></a></li>
 </ul>
 
 ## Installation {#installation}

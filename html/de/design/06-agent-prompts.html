@@ -756,8 +756,7 @@ You have read access to the vault and human/insights. You own the Agenda/ direct
 
 Tasks:
 
-- Maintain Daily.md with today's priorities
-- Process Inbox.md entries
+- Maintain Agenda.md with today's priorities
 - Manage async communication via Exchange.md
 - Filter incoming information by relevance to user
 - Learn what matters to the user over time
@@ -1392,13 +1391,12 @@ Other agents read insights on next session
         <h3 id="kontext-beim-start-nicht-uber-tools">Kontext beim Start, nicht über Tools</h3>
 <p>Agents erhalten ihren relevanten Kontext beim Aufruf — nicht durch Tool-Aufrufe, die während eines Laufs gesammelt werden.</p>
 <pre><code class="language-python"># Wrong: agent gathers context through tools during the run
-read_daily()
-read_inbox()
+read_agenda()
 read_exchange()
 # then decide what to do
 
 # Right: agent gets context upfront, acts immediately
-context = load_agenda_context()  # daily + inbox + exchange + shadow
+context = load_agenda_context()  # agenda + exchange
 # decide and act
 </code></pre>
 <p>Das spiegelt das OS-Prozessmodell wider: Ein Prozess erhält seinen Speicherbereich beim Start. Er fordert Speicher nicht stückweise während der Ausführung an. Tools sind für <strong>Ausgabe</strong> (schreiben, anhängen, auslösen) — nicht für das Sammeln von Daten, die beim Start bereitgestellt werden könnten.</p>
@@ -1442,9 +1440,9 @@ context = load_agenda_context()  # daily + inbox + exchange + shadow
 <h3 id="a3-prioritatskonflikt-uber-agenda">A.3 Prioritätskonflikt (über Agenda)</h3>
 <p>Kalender: Meeting um 10:00
 Aufgabe: Deadline um 10:00</p>
-<p>Agenda erkennt Konflikt → schreibt in Daily.md → Relay benachrichtigt Benutzer (wenn Kanal aktiv)</p>
+<p>Agenda erkennt Konflikt → schreibt in Agenda.md → Relay benachrichtigt Benutzer (wenn Kanal aktiv)</p>
 <h3 id="a4-mustererkennung-geplant">A.4 Mustererkennung (geplant)</h3>
-<p>Pattern-Agent läuft um 04:00 → scannt aktuelle Aktivität → bemerkt wiederholten Tag "someday" → schreibt Insight: "Benutzer hat 47 'someday'-Einträge, ältester von 2023. Überprüfung empfehlen." → Agenda greift auf → fügt zum nächsten Daily.md hinzu</p>
+<p>Pattern-Agent läuft um 04:00 → scannt aktuelle Aktivität → bemerkt wiederholten Tag "someday" → schreibt Insight: "Benutzer hat 47 'someday'-Einträge, ältester von 2023. Überprüfung empfehlen." → Agenda greift auf → fügt zum nächsten Agenda.md hinzu</p>
 <p><em>Dieses Dokument ist Teil der outheis-Spezifikation und kann sich ändern.</em></p>
       </div>
     </section>

@@ -559,10 +559,9 @@
 <p>Das einzige erforderliche Unterverzeichnis ist <code>Agenda/</code>, das outheis verwaltet:</p>
 <pre><code>vault/
 ├── Agenda/
-│   ├── Daily.md      # Today — schedule, tasks, notes
-│   ├── Inbox.md      # Quick capture, unprocessed
-│   └── Exchange.md   # Async communication with outheis
-└── ... your files
+│   ├── Agenda.md    # Heute — Zeitplan, Aufgaben, Notizen
+│   └── Exchange.md  # Asynchrone Kommunikation mit outheis
+└── ... deine Dateien
 </code></pre>
 <p>Alles andere gehört dir.</p>
       </div>
@@ -608,34 +607,31 @@
       </div>
     </section>
 
-    <section class="section" id="dailymd">
-      <h2>Daily.md</h2>
-      <div class="section-text"><h2>Daily.md</h2>
-        <p>Daily.md wird täglich frisch vom Agenda-Agenten erstellt. Die Standardstruktur:</p>
-<pre><code class="language-markdown"># [Weekday], [Date]
+    <section class="section" id="agendamd">
+      <h2>Agenda.md</h2>
+      <div class="section-text"><h2>Agenda.md</h2>
+        <p>Agenda.md wird täglich frisch vom Agenda-Agenten erstellt. Die Standardstruktur:</p>
+<pre><code class="language-markdown">⛅ [Weekday, DD.MM.YYYY]
+*Refresh: HH:MM*
 
-## Morning
+---
+## 🧘 Persönlich
 
-## Schedule
+- [ ]
 
-## Tasks
+---
+## 📅 Heute
 
-## Notes
+---
+## 🗓️ Diese Woche
 
-## Evening
+---
+## 💶 Cashflow
 </code></pre>
-<p>Der Agenda-Agent füllt dies aus deinem Vault: geplante Termine, wiederkehrende Einträge, heute fällige Aufgaben, Einträge aus Inbox.md. Wenn dein Vault einen Terminplan, einen wiederkehrenden Zeitplan oder datum-markierte Einträge enthält, erscheinen sie hier automatisch.</p>
+<p>Der Agenda-Agent füllt dies aus <code>agenda.json</code> und deinem Vault: geplante Termine, wiederkehrende Einträge, heute fällige Aufgaben. Wenn dein Vault einen Terminplan, einen wiederkehrenden Zeitplan oder datum-markierte Einträge enthält, erscheinen sie hier automatisch.</p>
 <p>Du kannst die Vorlage ändern. Gib deine bevorzugte Struktur in <code>rules/agenda.md</code> an:</p>
-<pre><code class="language-markdown">Daily.md should use these sections: [your sections here]
+<pre><code class="language-markdown">Agenda.md should use these sections: [your sections here]
 </code></pre>
-      </div>
-    </section>
-
-    <section class="section" id="inboxmd">
-      <h2>Inbox.md</h2>
-      <div class="section-text"><h2>Inbox.md</h2>
-        <p>Schnellerfassung ohne Reibung. Schreibe alles — getippt, diktiert, beliebiges Format. Der Agenda-Agent verarbeitet Inbox-Einträge bei der stündlichen Überprüfung: verschiebt sie nach Daily.md, erstellt Vault-Notizen oder fragt in Exchange.md nach, wenn etwas Klärung benötigt.</p>
-<p>Format ist frei. Eine Zeile pro Eintrag reicht.</p>
       </div>
     </section>
 

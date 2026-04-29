@@ -603,8 +603,7 @@
     ├── tag-weights.jsonl        # Learned tag importance
     ├── cache/                   # Cached data
     │   └── agenda/              # Previous versions for diff
-    │       ├── Daily.md.prev
-    │       ├── Inbox.md.prev
+    │       ├── Agenda.md.prev
     │       └── Exchange.md.prev
     ├── imports/                 # Imported external data
     │   ├── calendar/
@@ -619,8 +618,7 @@
 <p>Vaults can be anywhere on the filesystem. Multiple vaults are supported.</p>
 <pre><code>~/Documents/MyVault/             # Example: user's primary vault
 ├── Agenda/                      # Special directory (required in primary vault)
-│   ├── Daily.md
-│   ├── Inbox.md
+│   ├── Agenda.md
 │   └── Exchange.md
 ├── notes/
 │   └── project-alpha.md
@@ -1759,11 +1757,10 @@ outheis migrate --apply --quiet
         <p>The primary vault contains a special <code>Agenda/</code> directory that serves as the structured interface between user and system.</p>
 <h3 id="structure_1">Structure</h3>
 <pre><code>vault/Agenda/
-├── Daily.md
-├── Inbox.md
+├── Agenda.md
 └── Exchange.md
 </code></pre>
-<p>Three files, no subdirectories.</p>
+<p>Two files, no subdirectories.</p>
 <h3 id="purpose">Purpose</h3>
 <table>
 <thead>
@@ -1775,14 +1772,9 @@ outheis migrate --apply --quiet
 </thead>
 <tbody>
 <tr>
-<td><code>Daily.md</code></td>
+<td><code>Agenda.md</code></td>
 <td>Bidirectional</td>
 <td>Today: appointments, tasks, notes</td>
-</tr>
-<tr>
-<td><code>Inbox.md</code></td>
-<td>User → System</td>
-<td>Quick input, unstructured thoughts</td>
 </tr>
 <tr>
 <td><code>Exchange.md</code></td>
@@ -1791,7 +1783,7 @@ outheis migrate --apply --quiet
 </tr>
 </tbody>
 </table>
-<h3 id="dailymd">Daily.md</h3>
+<h3 id="agendamd">Agenda.md</h3>
 <p>The current day. Agenda agent maintains structure, user adds content.</p>
 <pre><code class="language-markdown"># 2025-03-27
 
@@ -1806,19 +1798,12 @@ outheis migrate --apply --quiet
 
 ## Notes
 
-</code></pre>
-<h3 id="inboxmd">Inbox.md</h3>
-<p>Quick capture. User writes, system processes.</p>
-<pre><code class="language-markdown">meeting with X next week, important
+### Exchange.md
 
-remember to call Y about the contract
+Asynchronous dialogue. System asks, user answers when convenient. No pressure.
 
-#idea redesign the onboarding flow
-</code></pre>
-<p>Agenda agent reads, classifies, routes to appropriate agents.</p>
-<h3 id="exchangemd">Exchange.md</h3>
-<p>Asynchronous dialogue. System asks, user answers when convenient. No pressure.</p>
-<pre><code class="language-markdown"># Open
+```markdown
+# Open
 
 ## Scheduling conflict
 &gt; Friday 28.03 you have:
@@ -1872,8 +1857,7 @@ Learned: #in-progress → #wip
 <p>This enables the Agenda agent to understand <em>what</em> changed, not just <em>that</em> something changed.</p>
 <h3 id="cache-location">Cache Location</h3>
 <pre><code>~/.outheis/human/cache/agenda/
-├── Daily.md.prev
-├── Inbox.md.prev
+├── Agenda.md.prev
 └── Exchange.md.prev
 </code></pre>
 <p>Previous versions are cached in the system directory to compute diffs.</p>
