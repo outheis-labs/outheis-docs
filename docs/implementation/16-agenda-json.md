@@ -200,6 +200,9 @@ Supported `#recurring-*` tags:
 | `follows`  | string[]                           | ✓     | ✓        | IDs of items this item waits for (predecessor IDs)      |
 | `precedes` | string[]                           | ✓     | ✓        | IDs of items this item blocks (successor IDs)           |
 | `relates`  | string[]                           | ✓     | ✓        | IDs of associated items — no ordering implied           |
+| `unrelated` | string[]                          | ✓     | ✓        | IDs of explicitly unlinked items (tombstones)           |
+| `deleted`  | boolean                            | ✓     | ✓        | Soft-delete marker; item hidden from views             |
+| `deleted_at` | string (`YYYY-MM-DD`)             | ✓     | ✓        | Date when item was soft-deleted                         |
 
 ---
 
@@ -263,5 +266,93 @@ effectiveDay(item) = max(effectiveDay(predecessor) + 1, item.day)
 ```
 
 Computed recursively with cycle detection. A predecessor with `done` set does not block. The computed day is never written back to `agenda.json`; `day` always holds the intended/planned day.
+
+---
+
+## Relation Lifecycle
+
+Bidirectional relations (`follows`/`precedes`, `relates`) are synchronized automatically:
+
+- **Linking A → B:** Both sides are updated. `A.follows.push(B.id)` triggers `B.precedes.push(A.id)`.
+- **Unlinking A → B:** Both sides are removed, and a **tombstone** is recorded to prevent auto-relinking.
+
+### Tombstones (`unrelated`)
+
+When a relation is explicitly removed, the ID is added to `unrelated` on both items:
+
+```json
+{
+  "id": "item-a",
+  "relates": ["item-c"],
+  "unrelated": ["item-b"]
+}
+```
+
+This prevents the bidirectional sync from recreating the link. Tombstones are cleared when:
+- The relation is explicitly re-added
+- Either item is permanently deleted
+
+### Soft Delete
+
+Items can be soft-deleted instead of removed entirely:
+
+```json
+{
+  "id": "item-a",
+  "deleted": true,
+  "deleted_at": "2026-04-30",
+  "relates": null,
+  "unrelated": ["item-b", "item-c"]
+}
+```
+
+Soft-deleted items:
+- Are hidden from all views (calendar, flow)
+- Are excluded from LLM context (`items_to_tag_text`)
+- Retain their relations in storage (for potential undelete)
+- Add their ID to `unrelated` on all related items
+
+### Undelete
+
+Calling `unDeleteItem(id)`:
+- Sets `deleted: false`, clears `deleted_at`
+- Removes the item's ID from all `unrelated` arrays
+- Relations must be re-established manually
+
+### Permanent Delete
+
+`permanentlyDeleteItem(id)` removes the item completely:
+- Removes from `items` array
+- Cleans up all references in `follows`, `precedes`, `relates`, `unrelated`
+
+---
+
+## Field Reference (Extended)
+
+| Field | Behavior |
+|-------|----------|
+| `unrelated` | Array of IDs that were explicitly unlinked. Prevents auto-relinking during sync. Cleared on re-link. |
+| `deleted` | When `true`, item is hidden from views but retained in `items`. |
+| `deleted_at` | ISO date string set when `deleted` becomes `true`. Used for retention/cleanup. |
+
+---
+
+## JavaScript API
+
+The WebUI provides these functions for relation management:
+
+```javascript
+// Bidirectional sync with tombstone support
+syncRelations(itemId, oldFollows, oldPrecedes, oldRelates, newFollows, newPrecedes, newRelates)
+
+// Soft delete - hides item, preserves relations
+softDeleteItem(itemId)
+
+// Restore soft-deleted item
+unDeleteItem(itemId)
+
+// Permanent removal - cleans all references
+permanentlyDeleteItem(itemId)
+```
 
 For calendar rendering details see [Calendar](17-calendar.html).
